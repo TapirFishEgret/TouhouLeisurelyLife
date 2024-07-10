@@ -1,0 +1,4 @@
+repository "TouhouLeisurelyLife@yz-nelson@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
