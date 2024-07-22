@@ -72,6 +72,7 @@ namespace THLL.LocationSystem
             base.Editor_SetName(name);
             //重建全名
             GenerateFullName();
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定父级数据
         public void Editor_SetParent(LocUnitData parentData)
@@ -79,11 +80,13 @@ namespace THLL.LocationSystem
             _parentLocUnitData = parentData;
             //父级数据设定更改时生成全名
             GenerateFullName();
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定背景
         public void Editor_SetBackground(Sprite background)
         {
             _background = background;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         //复制数据
         public void Editor_CopyTo(LocUnitData otherData)

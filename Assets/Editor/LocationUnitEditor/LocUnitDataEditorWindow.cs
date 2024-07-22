@@ -88,15 +88,17 @@ namespace THLL.GameEditor
             //设置数据源
             _locUnitDataTreeView.SetRootItems(_rootItemCache);
             //设置树形图面板
-            _locUnitDataTreeView.makeItem = () => new Label();
+            _locUnitDataTreeView.makeItem = () =>
+            {
+                Label label = new();
+                label.AddToClassList("treeview-item");
+                return label;
+            };
             _locUnitDataTreeView.bindItem = (element, i) =>
             {
                 LocUnitData locUnitData = _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(i);
                 Label label = element as Label;
                 label.text = locUnitData.name;
-                label.style.color = ChineseColor.Purple_墨紫;
-                label.style.borderLeftColor = Color.black;
-                label.style.borderLeftWidth = 2;
             };
 
             //生成树形图数据
@@ -309,9 +311,7 @@ namespace THLL.GameEditor
         private void CreateTreeViewItemData()
         {
             //显示输入窗口
-            TextInputWindow.ShowWindow
-                (
-                newName =>
+            TextInputWindow.ShowWindow(newName =>
             {
                 //计时
                 using ExecutionTimer timer = new("新增地点数据");
@@ -347,7 +347,7 @@ namespace THLL.GameEditor
                 );
 
             //确认结果
-            if (!confirmWnd )
+            if (!confirmWnd)
             {
                 //若不确认，直接返回
                 return;
@@ -394,6 +394,13 @@ namespace THLL.GameEditor
                 {
                     //计时
                     using ExecutionTimer timer = new("重命名地点数据");
+
+                    //检测新名称
+                    if (newName.Equals(selectedData.name))
+                    {
+                        //若未发生更改，返回
+                        return;
+                    }
 
                     //更改文件名
                     RenameLocUnitData(selectedData, newName);
@@ -613,8 +620,6 @@ namespace THLL.GameEditor
         //编辑器面板中重命名物体数据
         private void RenameLocUnitData(LocUnitData renamedData, string newDataName)
         {
-            //获取原物体
-            TreeViewItemData<LocUnitData> originalItem = _itemDicCache[renamedData.GetAssetHashCode()];
             //获取当前文件及文件夹路径
             string assetPath = AssetDatabase.GetAssetPath(renamedData);
             string assetFolderPath = Path.GetDirectoryName(assetPath);
@@ -630,23 +635,8 @@ namespace THLL.GameEditor
             AssetDatabase.RenameAsset(assetPath, newDataName);
             AssetDatabase.RenameAsset(assetFolderPath, newDataName);
 
-            //已被确定的内容
-            //重命名会导致缓存出错，所以需要修改缓存中与重命名文件相关的各类数据
-            //重新生成树形图数据
-            TreeViewItemData<LocUnitData> newItem = new(renamedData.GetAssetHashCode(), renamedData, _childrenDicCache[renamedData.GetAssetHashCode()]);
-            //重设缓存数据
-            _itemDicCache[renamedData.GetAssetHashCode()] = newItem;
-            _childrenDicCache[renamedData.GetAssetHashCode()] = newItem.children.ToList();
-            if (renamedData.ParentLocUnitData != null)
-            {
-                _childrenDicCache[renamedData.ParentLocUnitData.GetAssetHashCode()].Remove(originalItem);
-                _childrenDicCache[renamedData.ParentLocUnitData.GetAssetHashCode()].Add(newItem);
-            }
-            else
-            {
-                _rootItemCache.Remove(originalItem);
-                _rootItemCache.Add(newItem);
-            }
+            //标记为脏
+            EditorUtility.SetDirty(renamedData);
 
             //保存更改
             AssetDatabase.SaveAssets();
@@ -689,8 +679,6 @@ namespace THLL.GameEditor
                 string sourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(movedData));
                 //目标父级文件夹
                 string targetFolderPath;
-                //是否需要重命名
-                bool needRename = false;
 
                 //更新缓存
                 //获取被移动的数据对应的树形图物体
@@ -743,23 +731,22 @@ namespace THLL.GameEditor
                     //判断新文件夹路径是否存在
                     if (AssetDatabase.IsValidFolder(finalFolderPath))
                     {
-                        //若存在，则需要进行重命名
-                        needRename = true;
                         //提示
                         Debug.LogWarning("目标文件夹内有同名文件，请进行重命名！");
-                        //重设目标路径
-                        finalFolderPath = Path.Combine(targetFolderPath, "需要重命名_" + folderName).Replace("\\", "/");
+                        //重设资源名称
+                        string newName = "需要重命名_" + folderName;
+                        //重命名文件
+                        RenameLocUnitData(movedData, newName);
+                        //更改原地址
+                        sourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(movedData));
                     }
 
                     //移动文件夹
                     AssetDatabase.MoveAsset(sourceFolderPath, finalFolderPath);
-
-                    //检测是否需要重命名
-                    if (needRename)
-                    {
-                        RenameLocUnitData(targetData, "需要重命名_" + folderName);
-                    }
                 }
+
+                //标记资源为脏
+                EditorUtility.SetDirty(movedData);
             }
 
             //保存更改
@@ -908,6 +895,8 @@ namespace THLL.GameEditor
             string jsonString = JsonUtility.ToJson(persistentData, prettyPrint: true);
             //写入文件中
             File.WriteAllText(AssetDatabase.GetAssetPath(_persistentDataFile), jsonString);
+            //标记为脏
+            EditorUtility.SetDirty(_persistentDataFile);
             //保存更改
             AssetDatabase.SaveAssets();
             //刷新数据

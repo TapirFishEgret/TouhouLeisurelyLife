@@ -29,27 +29,32 @@ namespace THLL.BaseSystem
         public string Category { get => _category; protected set => _category = value; }
         #endregion
 
-        #if UNITY_EDITOR 
+#if UNITY_EDITOR
         public virtual void Editor_SetName(string name)
         {
             _name = name;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetDescription(string description)
         {
             _description = description;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetAuthor(string author)
         {
             _author = author;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetPackage(string package)
         {
             _package = package;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetCategory(string category)
         {
             _category = category;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
-        #endif
+#endif
     }
 }
