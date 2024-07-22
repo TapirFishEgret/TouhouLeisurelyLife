@@ -1,5 +1,4 @@
 ﻿using THLL.BaseSystem;
-using UnityEngine;
 
 namespace THLL.LocationSystem.Tags
 {

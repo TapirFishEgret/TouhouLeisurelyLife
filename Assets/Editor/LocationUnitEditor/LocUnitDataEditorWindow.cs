@@ -667,7 +667,7 @@ namespace THLL.GameEditor
             {
                 //若无父级，重排根数据子级
                 _rootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
-            }    
+            }
 
             //重构树形图
             RefreshLocUnitDataTreeView();
