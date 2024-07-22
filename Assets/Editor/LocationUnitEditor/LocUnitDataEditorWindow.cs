@@ -19,9 +19,8 @@ namespace THLL.GameEditor
         private TextAsset _persistentDataFile;
 
         //UI元素
-        //包、分类、作者输入框
+        //包、作者输入框
         private TextField _packageTextField;
-        private TextField _categoryTextField;
         private TextField _authorTextField;
         //树形图
         private TreeView _locUnitDataTreeView;
@@ -59,7 +58,6 @@ namespace THLL.GameEditor
             //属性面板
             //获取与绑定
             _packageTextField = rootVisualElement.Q<TextField>("PackageTextField");
-            _categoryTextField = rootVisualElement.Q<TextField>("CategoryTextField");
             _authorTextField = rootVisualElement.Q<TextField>("AuthorTextField");
 
             //左侧面板
@@ -523,7 +521,7 @@ namespace THLL.GameEditor
             {
                 //若为空，正常设置所需要的元素
                 newData.Editor_SetPackage(_packageTextField.text);
-                newData.Editor_SetCategory(_categoryTextField.text);
+                newData.Editor_SetCategory("Location");
                 newData.Editor_SetAuthor(_authorTextField.text);
             }
             //更改文件名
@@ -922,7 +920,6 @@ namespace THLL.GameEditor
             {
                 //设置其数值
                 Package = _packageTextField.text,
-                Category = _categoryTextField.text,
                 Author = _authorTextField.text,
                 ExpandedState = _expandedStateCache.ToList()
             };
@@ -947,7 +944,6 @@ namespace THLL.GameEditor
             //分配数据
             //属性
             _packageTextField.SetValueWithoutNotify(persistentData.Package);
-            _categoryTextField.SetValueWithoutNotify(persistentData.Category);
             _authorTextField.SetValueWithoutNotify(persistentData.Author);
             //缓存
             //展开状态数据
@@ -978,12 +974,8 @@ namespace THLL.GameEditor
                 }
                 else
                 {
-                    //若无父级，则检测分类属性栏是否有数据
-                    if (!string.IsNullOrEmpty(_categoryTextField.text))
-                    {
-                        //若有，扩展路径
-                        assetFolderPath += $"\\{_categoryTextField.text}";
-                    }
+                    //扩展路径为
+                    assetFolderPath += "\\Location";
                 }
 
                 //扩展自身地址为父级路径加上子级名称文件夹
@@ -991,12 +983,8 @@ namespace THLL.GameEditor
             }
             else
             {
-                //若传入为空，则检测属性栏是否有数据
-                if (!string.IsNullOrEmpty(_categoryTextField.text))
-                {
-                    //若有，扩展路径
-                    assetFolderPath += $"\\{_categoryTextField.text}";
-                }
+                //若传入为空，扩展路径为
+                assetFolderPath += "\\Location";
             }
 
             //检查路径是否存在
