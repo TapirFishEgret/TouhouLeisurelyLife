@@ -9,14 +9,14 @@ namespace THLL.BaseSystem
         //数据存储
         protected readonly Dictionary<TKey, TValue> store;
         //过滤器存储
-        protected readonly Dictionary<QueryKeywordEnum, FilterDelegate<TValue>> filters;
+        protected readonly Dictionary<QueryKeywordEnum, FilterDelegate<TValue, object>> filters;
         //查询缓存
-        private readonly Dictionary<string, IEnumerable<TValue>> _queryCache;
+        private readonly Dictionary<object, IEnumerable<TValue>> _queryCache;
         #endregion
 
         #region 基础操作方法
         //增添
-        public virtual void AddData(TKey key, TValue value)
+        public virtual void AddValue(TKey key, TValue value)
         {
             //添加数据
             store[key] = value;
@@ -24,13 +24,13 @@ namespace THLL.BaseSystem
             _queryCache.Clear();
         }
         //获取
-        public TValue GetData(TKey key)
+        public virtual TValue GetValue(TKey key)
         {
             store.TryGetValue(key, out TValue value);
             return value;
         }
         //关键字查询
-        public IEnumerable<TValue> QueryByKeywords(Dictionary<QueryKeywordEnum, string> queryParameters)
+        public IEnumerable<TValue> QueryByKeywords(Dictionary<QueryKeywordEnum, object> queryParameters)
         {
             //获取本次查询缓存查询键
             string cacheKey = GenerateCacheKey(queryParameters);
@@ -49,7 +49,7 @@ namespace THLL.BaseSystem
             {
                 //获取关键词与查询语句
                 QueryKeywordEnum keyword = queryParameter.Key;
-                string queryValue = queryParameter.Value;
+                object queryValue = queryParameter.Value;
 
                 //进行筛选
                 if (filters.TryGetValue(keyword, out var filter))
@@ -68,7 +68,7 @@ namespace THLL.BaseSystem
             return result;
         }
         //获取所有值
-        public IEnumerable<TValue> GetAllData()
+        public IEnumerable<TValue> GetAllValues()
         {
             return store.Values;
         }
@@ -82,7 +82,7 @@ namespace THLL.BaseSystem
         {
             get
             {
-                return GetData(key);
+                return GetValue(key);
             }
         }
         #endregion
@@ -93,13 +93,13 @@ namespace THLL.BaseSystem
         {
             //初始化数据
             store = new Dictionary<TKey, TValue>();
-            filters = new Dictionary<QueryKeywordEnum, FilterDelegate<TValue>>();
-            _queryCache = new Dictionary<string, IEnumerable<TValue>>();
+            filters = new Dictionary<QueryKeywordEnum, FilterDelegate<TValue, object>>();
+            _queryCache = new Dictionary<object, IEnumerable<TValue>>();
             //初始化过滤器
             InitFilters();
         }
         //生成缓存Key
-        private string GenerateCacheKey(Dictionary<QueryKeywordEnum, string> queryParameters)
+        private string GenerateCacheKey(Dictionary<QueryKeywordEnum, object> queryParameters)
         {
             return string.Join(";", queryParameters.Select(p => $"{p.Key}:{p.Value}"));
         }

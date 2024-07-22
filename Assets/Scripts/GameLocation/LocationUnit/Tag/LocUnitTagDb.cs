@@ -10,8 +10,16 @@ namespace THLL.LocationSystem.Tags
         protected override void InitFilters()
         {
             base.InitFilters();
-            //新增“是否可被继承”过滤器
-            filters[QueryKeywordEnum.LT_IsInherited] = (datas, queryValue) => datas.Where(d => d.IsInherited);
+            //新增“次级类型过滤器”
+            filters[QueryKeywordEnum.LT_TagCategory] = (datas, queryValue) =>
+            {
+                //检查类型
+                if (queryValue is string subCategory)
+                {
+                    return datas.Where(d => d.SubCategory == subCategory);
+                }
+                return datas;
+            };
         }
         #endregion
     }

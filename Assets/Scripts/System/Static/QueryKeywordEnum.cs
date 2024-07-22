@@ -10,9 +10,10 @@ namespace THLL.BaseSystem
         B_Author,
         B_Name,
         L_ParentName,
-        LT_IsInherited
+        LT_TagCategory,
+        LT_IsInherited,
     }
 
-    //委托，用于表示过滤函数
-    public delegate IEnumerable<T> FilterDelegate<T>(IEnumerable<T> datas, string queryValue);
+    //委托，用于表示过滤函数，可传入多种类型
+    public delegate IEnumerable<TValue> FilterDelegate<TValue, TQueryValue>(IEnumerable<TValue> datas, TQueryValue queryValue);
 }

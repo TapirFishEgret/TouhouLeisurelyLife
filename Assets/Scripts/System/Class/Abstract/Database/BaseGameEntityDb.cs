@@ -10,10 +10,42 @@ namespace THLL.BaseSystem
         protected override void InitFilters()
         {
             //基础过滤器
-            filters[QueryKeywordEnum.B_Package] = (datas, queryValue) => datas.Where(d => d.Package == queryValue);
-            filters[QueryKeywordEnum.B_Category] = (datas, queryValue) => datas.Where(d => d.Category == queryValue);
-            filters[QueryKeywordEnum.B_Author] = (datas, queryValue) => datas.Where(d => d.Author == queryValue);
-            filters[QueryKeywordEnum.B_Name] = (datas, queryValue) => datas.Where(d => d.Name == queryValue);
+            filters[QueryKeywordEnum.B_Package] = (datas, queryValue) =>
+            {
+                //类型检查
+                if (queryValue is string package)
+                {
+                    return datas.Where(x => x.Package == package);
+                }
+                return datas;
+            };
+            filters[QueryKeywordEnum.B_Category] = (datas, queryValue) =>
+            {
+                //类型检查
+                if (queryValue is string category)
+                {
+                    return datas.Where(d => d.Category == category);
+                }
+                return datas;
+            };
+            filters[QueryKeywordEnum.B_Author] = (datas, queryValue) =>
+            {
+                //类型检查
+                if (queryValue is string author)
+                {
+                    return datas.Where(d => d.Author == author);
+                }
+                return datas;
+            };
+            filters[QueryKeywordEnum.B_Name] = (datas, queryValue) =>
+            {
+                //类型检查
+                if (queryValue is string name)
+                {
+                    return datas.Where(d => d.Name == name);
+                }
+                return datas;
+            };
         }
         #endregion
     }

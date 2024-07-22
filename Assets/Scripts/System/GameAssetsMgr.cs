@@ -15,7 +15,7 @@ namespace THLL.BaseSystem
             //加载资源
             using (ExecutionTimer timer = new("地点资源加载"))
             {
-                LoadLocUnitResource("LocUnit");
+                LoadLocUnitResource("Location");
             }
         }
         #endregion
@@ -36,7 +36,7 @@ namespace THLL.BaseSystem
                     //加载
                     //生成实例并移交至数据库中
                     LocUnit locUnit = new(resource);
-                    GameLocation.LocUnitDb.AddData(resource, locUnit);
+                    GameLocation.LocUnitDb.AddValue(resource, locUnit);
                     //计数
                     number++;
                 }

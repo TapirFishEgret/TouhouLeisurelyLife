@@ -14,7 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 881bd03c94b1d8f47bc370bee4e9a530
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 740d9e3056912484f89244a351c582c3
+    m_Address: Assets/GameData/Location
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Location
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 28e3aecf5f024e14ea4abb5cd35fa69c, type: 2}
   m_SchemaSet:

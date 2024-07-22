@@ -31,9 +31,9 @@ namespace THLL.TimeSystem
         #endregion
 
         #region 游戏内周期函数
-        protected override void OnSecondChanged(int currentSecond)
+        protected override void OnMinuteChanged(int currentMinute)
         {
-            base.OnSecondChanged(currentSecond);
+            base.OnMinuteChanged(currentMinute);
             Debug.Log(GameTime.TestMethod());
         }
         #endregion

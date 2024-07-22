@@ -17,40 +17,35 @@ namespace THLL.LocationSystem
         public List<string> FullName => _fullName;
         //父级单元
         [SerializeField]
-        private LocUnitData _parentLocUnitData;
-        public LocUnitData ParentLocUnitData => _parentLocUnitData;
+        private LocUnitData _parentData;
+        public LocUnitData ParentData => _parentData;
         //地点背景图
         [SerializeField]
         private Sprite _background;
         public Sprite Background => _background;
         //地点相连情况
         [SerializeField]
-        private List<LocUnitDataConn> _locUnitDataConns;
-        public List<LocUnitDataConn> LocUnitDataConns => _locUnitDataConns;
-        //是否为本层级出入口
-        [SerializeField]
-        private bool isGateway;
-        public bool IsGateway => isGateway;
+        private List<LocUnitDataConn> _connections;
+        public List<LocUnitDataConn> LocUnitDataConns => _connections;
         //标签列表
         [SerializeField]
-        private List<LocUnitTag> _locUnitDataTags;
-        public List<LocUnitTag> LocUnitDataTags => _locUnitDataTags;
+        private List<LocUnitTag> _tags;
+        public List<LocUnitTag> Tags => _tags;
         #endregion
 
         #region 函数
         //构建函数
         public LocUnitData()
         {
-            //设置默认属性
-            Package = "Core";
-            Category = "Location";
-            Author = "TapirFishEgret";
             //初始化
-            _locUnitDataConns = new();
-            _locUnitDataTags = new();
+            _connections = new();
+            _tags = new();
         }
+        #endregion
+
+#if UNITY_EDITOR
         //生成全名
-        public void GenerateFullName()
+        public void Editor_GenerateFullName()
         {
             List<string> fullName = new();
             LocUnitData current = this;
@@ -58,28 +53,25 @@ namespace THLL.LocationSystem
             while (current != null)
             {
                 fullName.Insert(0, current.Name);
-                current = current.ParentLocUnitData;
+                current = current.ParentData;
             }
 
             _fullName = fullName;
         }
-        #endregion
-
-#if UNITY_EDITOR
         //设定名称时
         public override void Editor_SetName(string name)
         {
             base.Editor_SetName(name);
             //重建全名
-            GenerateFullName();
+            Editor_GenerateFullName();
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定父级数据
         public void Editor_SetParent(LocUnitData parentData)
         {
-            _parentLocUnitData = parentData;
+            _parentData = parentData;
             //父级数据设定更改时生成全名
-            GenerateFullName();
+            Editor_GenerateFullName();
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定背景
@@ -96,7 +88,7 @@ namespace THLL.LocationSystem
             otherData.Editor_SetAuthor(Author);
             otherData.Editor_SetDescription(Description);
             otherData.Editor_SetName(Name);
-            otherData.Editor_SetParent(ParentLocUnitData);
+            otherData.Editor_SetParent(ParentData);
             otherData.Editor_SetBackground(Background);
         }
 #endif

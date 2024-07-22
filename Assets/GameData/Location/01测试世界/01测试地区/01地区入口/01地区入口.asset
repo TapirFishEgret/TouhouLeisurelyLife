@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
+  m_Name: "01\u5730\u533A\u5165\u53E3"
+  m_EditorClassIdentifier: 
+  dataName: 01
+  dataDescription: 
+  dataAuthor: TapirFishEgret
+  dataPackage: Core
+  dataCategory: Location
+  _parentData: {fileID: 11400000, guid: c87ecec6906c6bc43985127cc432eaf6, type: 2}
+  _background: {fileID: 0}
+  _connections: []
+  _tags: []

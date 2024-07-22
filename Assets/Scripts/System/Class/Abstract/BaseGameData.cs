@@ -9,50 +9,50 @@ namespace THLL.BaseSystem
         public virtual string ID => string.Join("_", new string[] { Package, Category, Author, Name });
         //Name
         [SerializeField]
-        private string _name;
-        public string Name { get => _name; protected set => _name = value; }
+        protected string dataName;
+        public virtual string Name => dataName;
         //Description
         [SerializeField]
-        private string _description;
-        public string Description { get => _description; protected set => _description = value; }
+        protected string dataDescription;
+        public virtual string Description => dataDescription;
         //Author
         [SerializeField]
-        private string _author;
-        public string Author { get => _author; protected set => _author = value; }
+        protected string dataAuthor;
+        public virtual string Author => dataAuthor;
         //Package
         [SerializeField]
-        private string _package;
-        public string Package { get => _package; protected set => _package = value; }
+        protected string dataPackage;
+        public virtual string Package => dataPackage;
         //Category
         [SerializeField]
-        private string _category;
-        public string Category { get => _category; protected set => _category = value; }
+        protected string dataCategory;
+        public virtual string Category => dataCategory;
         #endregion
 
 #if UNITY_EDITOR
         public virtual void Editor_SetName(string name)
         {
-            _name = name;
+            dataName = name;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetDescription(string description)
         {
-            _description = description;
+            dataDescription = description;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetAuthor(string author)
         {
-            _author = author;
+            dataAuthor = author;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetPackage(string package)
         {
-            _package = package;
+            dataPackage = package;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         public virtual void Editor_SetCategory(string category)
         {
-            _category = category;
+            dataCategory = category;
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif

@@ -115,12 +115,12 @@ namespace THLL.TimeSystem
             {
                 //计算秒(防止时间流速过快导致现实一秒对应游戏多秒)
                 int seconds = Mathf.FloorToInt(Millisecond / TimePerSecond);
-                //触发事件
-                SecondChangedEvent?.Invoke(Second);
                 //触发下一个方法
                 AddSeconds(seconds);
                 //重置毫秒数
                 Millisecond -= seconds * TimePerSecond;
+                //触发事件
+                SecondChangedEvent?.Invoke(Second);
             }
         }
         //增加秒数
@@ -134,12 +134,12 @@ namespace THLL.TimeSystem
             {
                 //计算分钟
                 int minutes = Mathf.FloorToInt(Second / SecondsPerMinute);
-                //触发事件
-                MinuteChangedEvent?.Invoke(Minute);
                 //触发下一个方法
                 AddMinutes(minutes);
                 //重置秒数
                 Second -= minutes * SecondsPerMinute;
+                //触发事件
+                MinuteChangedEvent?.Invoke(Minute);
             }
         }
         //增加分钟
@@ -153,12 +153,12 @@ namespace THLL.TimeSystem
             {
                 //计算小时
                 int hours = Mathf.FloorToInt(Minute / MinutesPerHour);
-                //触发事件
-                HourChangedEvent?.Invoke(Hour);
                 //触发下一个方法
                 AddHours(hours);
                 //重置分钟
                 Minute -= hours * MinutesPerHour;
+                //触发事件
+                HourChangedEvent?.Invoke(Hour);
             }
         }
         //增加小时
@@ -172,12 +172,12 @@ namespace THLL.TimeSystem
             {
                 //计算天数
                 int days = Mathf.FloorToInt(Hour / HoursPerDay);
-                //触发事件
-                DayChangedEvent?.Invoke(Day);
                 //触发下一个方法
                 AddDays(days);
                 //重置小时
                 Hour -= hours * HoursPerDay;
+                //触发事件
+                DayChangedEvent?.Invoke(Day);
             }
         }
         //增加天数
@@ -192,10 +192,10 @@ namespace THLL.TimeSystem
             {
                 //计算星期
                 int weeks = Mathf.FloorToInt(DayOfWeek / DaysPerWeek);
-                //触发事件
-                WeekChangedEvent?.Invoke();
                 //重置星期
                 DayOfWeek -= weeks * DaysPerWeek;
+                //触发事件
+                WeekChangedEvent?.Invoke();
             }
 
             //检测月份
@@ -203,12 +203,12 @@ namespace THLL.TimeSystem
             {
                 //计算月份数
                 int months = Mathf.FloorToInt(Day / DaysPerMonth);
-                //触发事件
-                MonthChangedEvent?.Invoke(Month);
                 //触发下一个方法
                 AddMonths(months);
                 //重置日期
                 Day -= months * DaysPerMonth;
+                //触发事件
+                MonthChangedEvent?.Invoke(Month);
             }
         }
         //增加月份
@@ -222,12 +222,12 @@ namespace THLL.TimeSystem
             {
                 //计算年份
                 int years = Mathf.FloorToInt(Month / MonthsPerYear);
-                //触发事件
-                YearChangedEvent?.Invoke(Year);
                 //触发下一个方法
                 AddYears(years);
                 //重置月份
                 Month -= years * MonthsPerYear;
+                //触发事件
+                YearChangedEvent?.Invoke(Year);
             }
         }
         //增加年份
@@ -249,7 +249,7 @@ namespace THLL.TimeSystem
         //初始化
         public static void Init()
         {
-            TimeScale = 1;
+            TimeScale = 24;
             Millisecond = 0;
             Second = 0;
             Minute = 0;
