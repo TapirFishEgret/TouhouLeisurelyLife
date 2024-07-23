@@ -9,6 +9,8 @@ namespace THLL.GameEditor
         //要保存的数据
         public string DefaultPackage;
         public string DefaultAuthor;
+        public bool TimerDebugLogState;
+        public bool IsDataEditorPanelOpen;
         public List<int> ExpandedState;
     }
 }
