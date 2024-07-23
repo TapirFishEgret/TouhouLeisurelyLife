@@ -1,0 +1,18 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/UnityEditorStyles.uss?fileID=7433441132597879392&amp;guid=9b5e0ee7822030d4b80394fec071fef2&amp;type=3#UnityEditorStyles" />
+    <engine:VisualElement name="Root" style="width: 100%; height: 100%;">
+        <engine:ScrollView name="DataContainer">
+            <engine:VisualElement style="flex-direction: row; justify-content: space-around;">
+                <engine:TextField label="Package" readonly="false" name="PackageTextField" style="-unity-text-align: middle-center; width: 25%; margin-right: 2px;" />
+                <engine:TextField label="Category" value="Location" readonly="true" name="CategoryTextField" style="-unity-text-align: middle-center; width: 25%; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
+                <engine:TextField label="Author" name="AuthorTextField" style="-unity-text-align: middle-center; width: 25%; margin-left: 2px;" />
+                <editor:ObjectField label="ParentData" name="ParentDataField" enabled="true" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" style="width: 25%;" />
+            </engine:VisualElement>
+            <engine:Label text="Label" name="FullNameLabel" style="font-size: 24px; -unity-text-align: middle-center; padding-left: 2px;" />
+            <engine:TextField label="Name" name="NameTextField" style="-unity-text-align: upper-left;" />
+            <engine:TextField label="Description" name="DescriptionTextField" multiline="true" style="flex-direction: column;" />
+            <editor:ObjectField label="Background" name="BackgroundField" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
+        </engine:ScrollView>
+    </engine:VisualElement>
+    <engine:VisualElement name="BackgroundContainer" />
+</engine:UXML>

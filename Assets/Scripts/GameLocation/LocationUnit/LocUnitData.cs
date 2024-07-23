@@ -49,14 +49,14 @@ namespace THLL.LocationSystem
         {
             List<string> fullName = new();
             LocUnitData current = this;
-
             while (current != null)
             {
                 fullName.Insert(0, current.Name);
                 current = current.ParentData;
             }
-
             _fullName = fullName;
+            //标记数据为脏
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定名称时
         public override void Editor_SetName(string name)
@@ -64,6 +64,7 @@ namespace THLL.LocationSystem
             base.Editor_SetName(name);
             //重建全名
             Editor_GenerateFullName();
+            //标记数据为脏
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定父级数据
@@ -72,12 +73,14 @@ namespace THLL.LocationSystem
             _parentData = parentData;
             //父级数据设定更改时生成全名
             Editor_GenerateFullName();
+            //标记数据为脏
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定背景
         public void Editor_SetBackground(Sprite background)
         {
             _background = background;
+            //标记数据为脏
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //复制数据

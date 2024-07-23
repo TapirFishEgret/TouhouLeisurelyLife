@@ -11,9 +11,12 @@ namespace THLL.GameEditor
     public class LocUnitDataEditorWindow : EditorWindow
     {
         #region 基础构成
-        //UXML文件
+        //自身UXML文件
         [SerializeField]
         private VisualTreeAsset _visualTree;
+        //标签页面UXML文件
+        [SerializeField]
+        private VisualTreeAsset _tabVisualTree;
         //永久性存储文件
         [SerializeField]
         private TextAsset _persistentDataFile;
@@ -24,6 +27,8 @@ namespace THLL.GameEditor
         private TextField _authorTextField;
         //树形图
         private TreeView _locUnitDataTreeView;
+        //多标签控件
+        private TabView _locUnitDataTabView;
 
         //数据存储
         //根数据缓存
@@ -65,6 +70,15 @@ namespace THLL.GameEditor
             InitTreeViewData();
 
             //右侧面板
+            //获取多标签窗口
+            _locUnitDataTabView = rootVisualElement.Q<TabView>("MultiTabView");
+            //添加窗口切换时函数
+            _locUnitDataTabView.activeTabChanged += (tabA, tabB) =>
+            {
+                //保存资源
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            };
         }
         //窗口关闭时
         private void OnDestroy()
@@ -117,12 +131,12 @@ namespace THLL.GameEditor
             //实现展开状态保存
             _locUnitDataTreeView.itemExpandedChanged += SaveExpandedState;
 
-            //实现双击重命名
+            //实现双击打开编辑器标签
             _locUnitDataTreeView.RegisterCallback<MouseDownEvent>((evt) =>
             {
                 if (evt.clickCount == 2)
                 {
-                    RenameTreeViewItemData();
+                    OpenTab();
                 }
             });
 
@@ -195,6 +209,16 @@ namespace THLL.GameEditor
         {
             _locUnitDataTreeView.AddManipulator(new ContextualMenuManipulator(evt =>
             {
+                //打开方法
+                evt.menu.AppendAction("打开地点数据编辑器\tEnter\\双击", action => OpenTab(), actionStatus =>
+                {
+                    //判断是否有选择
+                    return _locUnitDataTreeView.selectedIndices.Any() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
+                });
+
+                //添加分割线
+                evt.menu.AppendSeparator();
+
                 //添加方法
                 evt.menu.AppendAction("添加地点数据\tInsert", action => CreateTreeViewItemData(), DropdownMenuAction.AlwaysEnabled);
                 //移除方法
@@ -280,6 +304,13 @@ namespace THLL.GameEditor
                     //阻断事件传播
                     e.StopImmediatePropagation();
                 }
+            }
+            else if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter)
+            {
+                //若按键为Enter，执行打开标签页方法
+                OpenTab();
+                //阻断事件传播
+                e.StopImmediatePropagation();
             }
             else if (e.keyCode == KeyCode.Insert)
             {
@@ -953,6 +984,25 @@ namespace THLL.GameEditor
                 _expandedStateCache.Add(id);
             }
             RestoreExpandedState();
+        }
+        #endregion
+
+        #region 多标签页相关方法
+        //打开标签页
+        private void OpenTab()
+        {
+            //获取当次选中项
+            LocUnitData selectedData = _locUnitDataTreeView.selectedIndices
+                .Select(index => _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(index))
+                .FirstOrDefault();
+            TreeViewItemData<LocUnitData> item = _itemDicCache[selectedData.GetAssetHashCode()];
+
+            //新建编辑标签页面
+            LocUnitDataEditorDataTab newDataTab = new(item, _tabVisualTree);
+            //添加到多标签页控件中
+            _locUnitDataTabView.Add(newDataTab);
+            //并将活动标签页更改为自身
+            _locUnitDataTabView.activeTab = newDataTab;
         }
         #endregion
 
