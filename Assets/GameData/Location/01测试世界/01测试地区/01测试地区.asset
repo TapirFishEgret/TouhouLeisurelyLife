@@ -17,6 +17,9 @@ MonoBehaviour:
   dataAuthor: TapirFishEgret
   dataPackage: Core
   dataCategory: Location
+  _fullName:
+  - "\u6D4B\u8BD5\u4E16\u754C"
+  - "\u6D4B\u8BD5\u5730\u533A"
   _parentData: {fileID: 11400000, guid: 522b78d37e62ef145ac55f2bfa7ba5e1, type: 2}
   _background: {fileID: 0}
   _connections: []

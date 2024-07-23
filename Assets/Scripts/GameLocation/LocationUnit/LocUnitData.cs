@@ -13,6 +13,7 @@ namespace THLL.LocationSystem
         //重写ID
         public override string ID => string.Join("_", new List<string>() { Package, Category, Author }.Concat(FullName));
         //全名
+        [SerializeField]
         private List<string> _fullName;
         public List<string> FullName => _fullName;
         //父级单元
@@ -38,6 +39,7 @@ namespace THLL.LocationSystem
         public LocUnitData()
         {
             //初始化
+            _fullName = new();
             _connections = new();
             _tags = new();
         }

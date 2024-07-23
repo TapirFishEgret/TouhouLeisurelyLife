@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using THLL.LocationSystem;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,13 +23,29 @@ namespace THLL.GameEditor
         private TextAsset _persistentDataFile;
 
         //UI元素
-        //包、作者输入框
-        private TextField _packageTextField;
-        private TextField _authorTextField;
+        //左侧面板
+        //面板切换按钮
+        private Button _switchPanelButton;
         //树形图
         private TreeView _locUnitDataTreeView;
-        //多标签控件
-        private TabView _dataEditorTabView;
+        //包、作者输入框
+        private TextField _defaultPackageField;
+        private TextField _defaultAuthorField;
+        //右侧面板
+        //数据编辑面板
+        private VisualElement _dataEditorPanel;
+        //基础四项
+        private TextField _packageField;
+        private TextField _authorFiled;
+        private ObjectField _parentDataField;
+        //全名
+        private Label _fullNameLabel;
+        //设置控件
+        private TextField _nameField;
+        private TextField _descriptionField;
+        private ObjectField _backgroundField;
+        //连接编辑面板
+        private VisualElement _connectionEditorPanel;
 
         //数据存储
         //根数据缓存
@@ -37,13 +54,15 @@ namespace THLL.GameEditor
         private readonly Dictionary<int, TreeViewItemData<LocUnitData>> _itemDicCache = new();
         //ID-子级查询字典缓存
         private readonly Dictionary<int, List<TreeViewItemData<LocUnitData>>> _childrenDicCache = new();
-        //标签打开状态缓存
-        private readonly Dictionary<int, Tab> _dataEditorTabOpenStateDicCache = new();
         //展开状态缓存
         private readonly HashSet<int> _expandedStateCache = new();
         //剪切板缓存
         private readonly List<TreeViewItemData<LocUnitData>> _clipboardItemCache = new();
         private bool _isCutOperation = false;
+        //当前活跃数据，单选
+        private LocUnitData _activeData;
+        //需要进行重命名的数据
+        private readonly HashSet<LocUnitData> _dataNeedToReGenerateFullName = new();
 
         //窗口菜单
         [MenuItem("GameEditor/LocationSystem/Location")]
@@ -62,25 +81,23 @@ namespace THLL.GameEditor
             //加载UXML文件
             _visualTree.CloneTree(rootVisualElement);
 
-            //属性面板
-            //获取与绑定
-            _packageTextField = rootVisualElement.Q<TextField>("PackageTextField");
-            _authorTextField = rootVisualElement.Q<TextField>("AuthorTextField");
+            //获取
+            _switchPanelButton = rootVisualElement.Q<Button>("SwitchPanelButton");
+            _defaultPackageField = rootVisualElement.Q<TextField>("DefaultPackageField");
+            _defaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
+
+            //绑定
+            _switchPanelButton.clicked += SwitchPanel;
 
             //左侧面板
             //初始化树形图面板
             InitTreeViewData();
 
             //右侧面板
-            //获取多标签窗口
-            _dataEditorTabView = rootVisualElement.Q<TabView>("MultiTabView");
-            //添加窗口切换时函数
-            _dataEditorTabView.activeTabChanged += (tabA, tabB) =>
-            {
-                //保存资源
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            };
+            //初始化数据编辑面板
+            InitDataEditorPanel();
+            //初始化连接编辑面板
+            InitConnectionEditorPanel();
 
             //读取持久化数据
             LoadPersistentData();
@@ -88,6 +105,14 @@ namespace THLL.GameEditor
         //窗口关闭时
         private void OnDestroy()
         {
+            //手动对标记为需要进行的数据的全名的重新生成
+            foreach (LocUnitData data in _dataNeedToReGenerateFullName)
+            {
+                if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(data)))
+                {
+                    data.Editor_GenerateFullName();
+                }
+            }
             //保存持久化数据到磁盘
             SavePersistentData();
             //提醒修改可寻址资源包标签
@@ -103,7 +128,7 @@ namespace THLL.GameEditor
             using ExecutionTimer timer = new("地点数据管理面板初始化");
 
             //获取树形图面板
-            _locUnitDataTreeView = rootVisualElement.Q<TreeView>("LocUnitTreeView");
+            _locUnitDataTreeView = rootVisualElement.Q<TreeView>("LocUnitDataTreeView");
             //设置数据源
             _locUnitDataTreeView.SetRootItems(_rootItemCache);
             //设置树形图面板
@@ -136,25 +161,24 @@ namespace THLL.GameEditor
             //实现展开状态保存
             _locUnitDataTreeView.itemExpandedChanged += SaveExpandedState;
 
-            //实现双击打开编辑器标签
+            //实现双击重命名
             _locUnitDataTreeView.RegisterCallback<MouseDownEvent>((evt) =>
             {
                 if (evt.clickCount == 2)
                 {
-                    OpenTab();
+                    RenameTreeViewItemData();
                 }
             });
 
-            //实现选中项更改时切换标签页页面
+            //实现有选中项时获取活跃数据与打开编辑窗口
             _locUnitDataTreeView.selectionChanged += (selections) =>
             {
-                //获取选中项
-                LocUnitData selectedData = selections.Cast<LocUnitData>().FirstOrDefault();
-                //尝试从缓存中读取数据
-                if (_dataEditorTabOpenStateDicCache.TryGetValue(selectedData.GetAssetHashCode(), out var tab))
+                //获取活跃数据
+                _activeData = selections.Cast<LocUnitData>().FirstOrDefault();
+                if (_activeData != null)
                 {
-                    //若成功读取，设置活动标签页
-                    _dataEditorTabView.activeTab = tab;
+                    //刷新数据编辑面板
+                    RefreshDataEditorPanel(_activeData);
                 }
             };
 
@@ -223,16 +247,6 @@ namespace THLL.GameEditor
         {
             _locUnitDataTreeView.AddManipulator(new ContextualMenuManipulator(evt =>
             {
-                //打开方法
-                evt.menu.AppendAction("打开地点数据编辑器\tEnter\\双击", action => OpenTab(), actionStatus =>
-                {
-                    //判断是否有选择
-                    return _locUnitDataTreeView.selectedIndices.Any() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
-                });
-
-                //添加分割线
-                evt.menu.AppendSeparator();
-
                 //添加方法
                 evt.menu.AppendAction("添加地点数据\tInsert", action => CreateTreeViewItemData(), DropdownMenuAction.AlwaysEnabled);
                 //移除方法
@@ -319,13 +333,6 @@ namespace THLL.GameEditor
                     e.StopImmediatePropagation();
                 }
             }
-            else if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter)
-            {
-                //若按键为Enter，执行打开标签页方法
-                OpenTab();
-                //阻断事件传播
-                e.StopImmediatePropagation();
-            }
             else if (e.keyCode == KeyCode.Insert)
             {
                 //若按键为Insert，执行添加方法
@@ -368,13 +375,8 @@ namespace THLL.GameEditor
                 //计时
                 using ExecutionTimer timer = new("新增地点数据");
 
-                //获取当次选中项
-                LocUnitData selectedData = _locUnitDataTreeView.selectedIndices
-                    .Select(index => _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(index))
-                    .FirstOrDefault();
-
-                //创建数据
-                CreateLocUnitData(selectedData, newName);
+                //以活跃选中项为可能的父级，创建数据
+                CreateLocUnitDataFile(_activeData, newName);
 
                 //刷新树形图
                 RefreshLocUnitDataTreeView();
@@ -408,7 +410,7 @@ namespace THLL.GameEditor
             //计时
             using ExecutionTimer timer = new("移除地点数据");
 
-            //获取当前选中项
+            //获取当前所有选中项
             List<TreeViewItemData<LocUnitData>> selectedItems = _locUnitDataTreeView.selectedItems
                 .Select(data => _itemDicCache[((LocUnitData)data).GetAssetHashCode()])
                 .ToList();
@@ -423,7 +425,7 @@ namespace THLL.GameEditor
                 foreach (TreeViewItemData<LocUnitData> removedItem in topLevelItems)
                 {
                     //删除
-                    DeleteLocUnitData(removedItem.data);
+                    DeleteLocUnitDataFile(removedItem.data);
                 }
 
                 //刷新树形图
@@ -433,13 +435,8 @@ namespace THLL.GameEditor
         //TreeView实现重命名
         private void RenameTreeViewItemData()
         {
-            //获取选中项
-            LocUnitData selectedData = _locUnitDataTreeView.selectedIndices
-                .Select(index => _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(index))
-                .FirstOrDefault();
-
-            //检测选中项
-            if (selectedData != null)
+            //检测活跃数据
+            if (_activeData != null)
             {
                 //显示输入窗口
                 TextInputWindow.ShowWindow(newName =>
@@ -448,14 +445,14 @@ namespace THLL.GameEditor
                     using ExecutionTimer timer = new("重命名地点数据");
 
                     //检测新名称
-                    if (newName.Equals(selectedData.name))
+                    if (newName.Equals(_activeData.name))
                     {
                         //若未发生更改，返回
                         return;
                     }
 
                     //更改文件名
-                    RenameLocUnitData(selectedData, newName);
+                    RenameLocUnitDataFile(_activeData, newName);
 
                     //刷新树形图
                     RefreshLocUnitDataTreeView();
@@ -463,7 +460,7 @@ namespace THLL.GameEditor
                 "重命名地点数据",
                 "请输入新的地点数据的名称",
                 "新名称",
-                selectedData.name,
+                _activeData.name,
                 this
                 );
             }
@@ -475,7 +472,7 @@ namespace THLL.GameEditor
             _clipboardItemCache.Clear();
             //设定剪切
             _isCutOperation = isCutOperation;
-            //获取选中数据
+            //获取所有选中数据
             List<TreeViewItemData<LocUnitData>> selectedItems = _locUnitDataTreeView.selectedItems
                 .Select(data => _itemDicCache[((LocUnitData)data).GetAssetHashCode()])
                 .ToList();
@@ -497,16 +494,11 @@ namespace THLL.GameEditor
             //计时
             using ExecutionTimer timer = new("粘贴地点数据");
 
-            //获取目标数据
-            LocUnitData targetData = _locUnitDataTreeView.selectedIndices
-                .Select(index => _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(index))
-                .FirstOrDefault();
-
             //获取剪切板数据
             List<LocUnitData> _clipboardData = _clipboardItemCache.Select(item => item.data).ToList();
 
             //检测目标数据是否在剪切板中
-            if (_clipboardData.Contains(targetData))
+            if (_clipboardData.Contains(_activeData))
             {
                 //爆出警告并返回
                 Debug.LogWarning("粘贴操作不允许将数据粘贴到自身上");
@@ -517,7 +509,7 @@ namespace THLL.GameEditor
             if (_isCutOperation)
             {
                 //若为剪切，则本次操作本质上为移动操作
-                MoveLocUnitData(targetData, _clipboardData);
+                MoveLocUnitDataFile(_activeData, _clipboardData);
                 //完成剪切后清除缓存数据
                 _clipboardItemCache.Clear();
             }
@@ -527,7 +519,7 @@ namespace THLL.GameEditor
                 foreach (TreeViewItemData<LocUnitData> item in _clipboardItemCache)
                 {
                     //以选中项为父级，原数据名称为新名称，原数据为源数据进行递归创建
-                    CreateLocUnitData(targetData, item.data.name, item.data);
+                    CreateLocUnitDataFile(_activeData, item.data.name, item.data);
                 }
             }
 
@@ -536,9 +528,223 @@ namespace THLL.GameEditor
         }
         #endregion
 
+        #region 树形图拖动功能的实现
+        //确认是否可以开始拖动操作
+        private bool OnCanStartDrag(CanStartDragArgs args)
+        {
+            //始终可以拖动
+            return true;
+        }
+        //设置拖动和放置的参数
+        private StartDragArgs OnSetupDragAndDrop(SetupDragAndDropArgs args)
+        {
+            //获取被拖动的元素
+            VisualElement draggerElement = args.draggedElement;
+            //检测被拖动的元素是否为空
+            if (draggerElement == null)
+            {
+                //若为空，返回默认
+                return args.startDragArgs;
+            }
+
+            //创建开始拖动的参数
+            StartDragArgs startDragArgs = new("拖动地点数据", DragVisualMode.Move);
+            //设置拖动源
+            startDragArgs.SetGenericData("地点数据源", _locUnitDataTreeView);
+            //获取被选择的物体的ID列表
+            //判断是否有选中项
+            bool hasSelection = false;
+            foreach (int id in args.selectedIds)
+            {
+                //若有选中项，则遍历可以成立，直接设置为真
+                hasSelection = true;
+                break;
+            }
+            //设置选中项ID
+            List<int> selectedIds = hasSelection ? args.selectedIds.ToList() : null;
+            //设置被拖动的数据ID列表
+            startDragArgs.SetGenericData("拖动数据ID列表", selectedIds);
+            //返回参数
+            return startDragArgs;
+        }
+        //拖动过程中更新拖动效果
+        private DragVisualMode OnDragAndDropUpdate(HandleDragAndDropArgs args)
+        {
+            //任何情景下均为普通拖动
+            return DragVisualMode.Move;
+        }
+        //拖动放置操作
+        private DragVisualMode OnHandleDrop(HandleDragAndDropArgs args)
+        {
+            //计时
+            using ExecutionTimer timer = new("拖拽操作");
+
+            //获取数据源
+            if (args.dragAndDropData.GetGenericData("地点数据源") is not TreeView sourceTreeView)
+            {
+                //若未正确获取数据，则什么都不发生
+                return DragVisualMode.None;
+            }
+            //获取拖动数据ID列表
+            if (args.dragAndDropData.GetGenericData("拖动数据ID列表") is not List<int> draggedIDs)
+            {
+                //若未正确获取数据，则什么都不发生
+                return DragVisualMode.None;
+            }
+
+            //获取目标数据
+            LocUnitData targetData = _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(args.insertAtIndex);
+
+            //提取选中物体中的顶层物体
+            List<TreeViewItemData<LocUnitData>> topLevelDraggedItems = GetTopLevelTreeViewItemData
+                (draggedIDs.Select(id => _itemDicCache[id]).ToList());
+
+            //获取顶层数据
+            List<LocUnitData> topLevelDatas = topLevelDraggedItems.Select(item => item.data).ToList();
+
+            //进行移动操作
+            MoveLocUnitDataFile(targetData, topLevelDatas);
+
+            //刷新树形图
+            RefreshLocUnitDataTreeView();
+
+            //正确放置，返回空
+            return DragVisualMode.None;
+        }
+        #endregion
+
+        #region 数据编辑面板的初始化以及数据更新
+        //初始化
+        private void InitDataEditorPanel()
+        {
+            //获取UI控件
+            //面板
+            _dataEditorPanel = rootVisualElement.Q<VisualElement>("DataEditorPanel");
+            //基础项
+            _packageField = _dataEditorPanel.Q<TextField>("PackageField");
+            _authorFiled = _dataEditorPanel.Q<TextField>("AuthorField");
+            _parentDataField = _dataEditorPanel.Q<ObjectField>("ParentDataField");
+            //全名
+            _fullNameLabel = _dataEditorPanel.Q<Label>("FullNameLabel");
+            //设置控件
+            _nameField = _dataEditorPanel.Q<TextField>("NameField");
+            _descriptionField = _dataEditorPanel.Q<TextField>("DescriptionField");
+            _backgroundField = _dataEditorPanel.Q<ObjectField>("BackgroundField");
+        }
+        //刷新面板
+        private void RefreshDataEditorPanel(LocUnitData locUnitData)
+        {
+            //刷新前进行资源的保存
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            //清除旧的绑定
+            UnbindDataEditorPanel();
+
+            //重新绑定
+            BindDataEditorPanel(locUnitData);
+
+            //设置数据
+            _fullNameLabel.text = string.Join("/", locUnitData.FullName);
+            if (_backgroundField.value is Sprite sprite)
+            {
+                _dataEditorPanel.style.backgroundImage = new StyleBackground(sprite);
+                _dataEditorPanel.style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+                _dataEditorPanel.style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+                _dataEditorPanel.style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
+                _dataEditorPanel.style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
+            }
+            else
+            {
+                _dataEditorPanel.style.backgroundImage = null;
+            }
+        }
+        //绑定
+        private void BindDataEditorPanel(LocUnitData locUnitData)
+        {
+            //不触发通知的情况下更改数据
+            _packageField.SetValueWithoutNotify(locUnitData.Package);
+            _authorFiled.SetValueWithoutNotify(locUnitData.Author);
+            _parentDataField.SetValueWithoutNotify(locUnitData.ParentData);
+            _nameField.SetValueWithoutNotify(locUnitData.Name);
+            _descriptionField.SetValueWithoutNotify(locUnitData.Description);
+            _backgroundField.SetValueWithoutNotify(locUnitData.Background);
+
+            //检测目标是否需要重新生成全名
+            if (_dataNeedToReGenerateFullName.Contains(locUnitData))
+            {
+                //若是，重新生成
+                locUnitData.Editor_GenerateFullName();
+            }
+
+            //将控件绑定至新数据上
+            _packageField.RegisterValueChangedCallback(DataEditor_OnPackageChanged);
+            _authorFiled.RegisterValueChangedCallback(DataEditor_OnAuthorChanged);
+            _nameField.RegisterValueChangedCallback(DataEditor_OnNameChanged);
+            _descriptionField.RegisterValueChangedCallback(DataEditor_OnDescriptionChanged);
+            _backgroundField.RegisterValueChangedCallback(DataEditor_OnBackgroundChanged);
+        }
+        //清除绑定
+        private void UnbindDataEditorPanel()
+        {
+            //将控件从旧数据清除绑定
+            _packageField.UnregisterValueChangedCallback(DataEditor_OnPackageChanged);
+            _authorFiled.UnregisterValueChangedCallback(DataEditor_OnAuthorChanged);
+            _nameField.UnregisterValueChangedCallback(DataEditor_OnNameChanged);
+            _descriptionField.UnregisterValueChangedCallback(DataEditor_OnDescriptionChanged);
+            _backgroundField.UnregisterValueChangedCallback(DataEditor_OnBackgroundChanged);
+        }
+        //数据处理方法
+        private void DataEditor_OnPackageChanged(ChangeEvent<string> evt)
+        {
+            _activeData.Editor_SetPackage(evt.newValue);
+        }
+        private void DataEditor_OnAuthorChanged(ChangeEvent<string> evt)
+        {
+            _activeData.Editor_SetAuthor(evt.newValue);
+        }
+
+        private void DataEditor_OnNameChanged(ChangeEvent<string> evt)
+        {
+            //更改数据
+            _activeData.Editor_SetName(evt.newValue);
+            //更改显示
+            _fullNameLabel.text = string.Join("/", _activeData.FullName);
+            //检查加上重命名全名标记
+            MarkAsNeedToReGenerateFullName(_activeData);
+        }
+
+        private void DataEditor_OnDescriptionChanged(ChangeEvent<string> evt)
+        {
+            _activeData.Editor_SetDescription(evt.newValue);
+        }
+
+        private void DataEditor_OnBackgroundChanged(ChangeEvent<Object> evt)
+        {
+            if (evt.newValue is Sprite sprite)
+            {
+                _activeData.Editor_SetBackground(sprite);
+                _dataEditorPanel.style.backgroundImage = new StyleBackground(sprite);
+            }
+            else
+            {
+                _activeData.Editor_SetBackground(null);
+            }
+        }
+        #endregion
+
+        #region 连接编辑面板的初始化
+        private void InitConnectionEditorPanel()
+        {
+            //获取UI控件
+            //面板
+            _connectionEditorPanel = rootVisualElement.Q<VisualElement>("ConnectionEditorPanel");
+        }
+        #endregion
+
         #region 编辑器面板下的地点数据增删改方法
         //编辑器面板下增加地点数据
-        private void CreateLocUnitData(LocUnitData parentData, string newDataName, LocUnitData originalData = null)
+        private void CreateLocUnitDataFile(LocUnitData parentData, string newDataName, LocUnitData originalData = null)
         {
             //检测重名状况
             //获取父级地点的地址
@@ -565,9 +771,9 @@ namespace THLL.GameEditor
             else
             {
                 //若为空，正常设置所需要的元素
-                newData.Editor_SetPackage(_packageTextField.text);
+                newData.Editor_SetPackage(_defaultPackageField.text);
                 newData.Editor_SetCategory("Location");
-                newData.Editor_SetAuthor(_authorTextField.text);
+                newData.Editor_SetAuthor(_defaultAuthorField.text);
             }
             //更改文件名
             newData.name = newDataName;
@@ -619,13 +825,13 @@ namespace THLL.GameEditor
                     foreach (TreeViewItemData<LocUnitData> childItem in _childrenDicCache[originalData.GetAssetHashCode()])
                     {
                         //此时的父数据为新创建的数据，新名称为原名称，源数据为自身
-                        CreateLocUnitData(newData, childItem.data.name, childItem.data);
+                        CreateLocUnitDataFile(newData, childItem.data.name, childItem.data);
                     }
                 }
             }
         }
         //编辑器面板中删除地点数据
-        private void DeleteLocUnitData(LocUnitData deletedData)
+        private void DeleteLocUnitDataFile(LocUnitData deletedData)
         {
             //判断传入是否为空
             if (deletedData == null)
@@ -650,6 +856,7 @@ namespace THLL.GameEditor
             _itemDicCache.Remove(item.id);
             _childrenDicCache.Remove(item.id);
             _expandedStateCache.Remove(item.id);
+            _dataNeedToReGenerateFullName.Remove(item.data);
 
             //将数据从文件夹中移除
             //获取其所在的文件夹
@@ -671,12 +878,12 @@ namespace THLL.GameEditor
                 //若有子级，对子级进行递归删除
                 foreach (TreeViewItemData<LocUnitData> childItem in item.children)
                 {
-                    DeleteLocUnitData(childItem.data);
+                    DeleteLocUnitDataFile(childItem.data);
                 }
             }
         }
         //编辑器面板中重命名物体数据
-        private void RenameLocUnitData(LocUnitData renamedData, string newDataName)
+        private void RenameLocUnitDataFile(LocUnitData renamedData, string newDataName)
         {
             //获取当前文件及文件夹路径
             string assetPath = AssetDatabase.GetAssetPath(renamedData);
@@ -716,7 +923,7 @@ namespace THLL.GameEditor
             RefreshLocUnitDataTreeView();
         }
         //编辑器面板中移动物体数据
-        private void MoveLocUnitData(LocUnitData targetData, List<LocUnitData> topLevelMovedDatas)
+        private void MoveLocUnitDataFile(LocUnitData targetData, List<LocUnitData> topLevelMovedDatas)
         {
             //移动前检测
             if (targetData != null)
@@ -814,7 +1021,7 @@ namespace THLL.GameEditor
                         //重设资源名称
                         string newName = "需要重命名_" + folderName;
                         //重命名文件
-                        RenameLocUnitData(movedData, newName);
+                        RenameLocUnitDataFile(movedData, newName);
                         //更改原地址
                         sourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(movedData));
                     }
@@ -822,6 +1029,9 @@ namespace THLL.GameEditor
                     //移动文件夹
                     AssetDatabase.MoveAsset(sourceFolderPath, finalFolderPath);
                 }
+
+                //移动结束后进行全名的重新生成的标记
+                MarkAsNeedToReGenerateFullName(movedData);
 
                 //标记资源为脏
                 EditorUtility.SetDirty(movedData);
@@ -834,91 +1044,6 @@ namespace THLL.GameEditor
 
             //刷新树形图
             RefreshLocUnitDataTreeView();
-        }
-        #endregion
-
-        #region 树形图拖动功能的实现
-        //确认是否可以开始拖动操作
-        private bool OnCanStartDrag(CanStartDragArgs args)
-        {
-            //始终可以拖动
-            return true;
-        }
-        //设置拖动和放置的参数
-        private StartDragArgs OnSetupDragAndDrop(SetupDragAndDropArgs args)
-        {
-            //获取被拖动的元素
-            VisualElement draggerElement = args.draggedElement;
-            //检测被拖动的元素是否为空
-            if (draggerElement == null)
-            {
-                //若为空，返回默认
-                return args.startDragArgs;
-            }
-
-            //创建开始拖动的参数
-            StartDragArgs startDragArgs = new("拖动地点数据", DragVisualMode.Move);
-            //设置拖动源
-            startDragArgs.SetGenericData("地点数据源", _locUnitDataTreeView);
-            //获取被选择的物体的ID列表
-            //判断是否有选中项
-            bool hasSelection = false;
-            foreach (int id in args.selectedIds)
-            {
-                //若有选中项，则遍历可以成立，直接设置为真
-                hasSelection = true;
-                break;
-            }
-            //设置选中项ID
-            List<int> selectedIds = hasSelection ? args.selectedIds.ToList() : null;
-            //设置被拖动的数据ID列表
-            startDragArgs.SetGenericData("拖动数据ID列表", selectedIds);
-            //返回参数
-            return startDragArgs;
-        }
-        //拖动过程中更新拖动效果
-        private DragVisualMode OnDragAndDropUpdate(HandleDragAndDropArgs args)
-        {
-            //任何情景下均为普通拖动
-            return DragVisualMode.Move;
-        }
-        //拖动放置操作
-        private DragVisualMode OnHandleDrop(HandleDragAndDropArgs args)
-        {
-            //计时
-            using ExecutionTimer timer = new("拖拽操作");
-
-            //获取数据源
-            if (args.dragAndDropData.GetGenericData("地点数据源") is not TreeView sourceTreeView)
-            {
-                //若未正确获取数据，则什么都不发生
-                return DragVisualMode.None;
-            }
-            //获取拖动数据ID列表
-            if (args.dragAndDropData.GetGenericData("拖动数据ID列表") is not List<int> draggedIDs)
-            {
-                //若未正确获取数据，则什么都不发生
-                return DragVisualMode.None;
-            }
-
-            //获取目标数据
-            LocUnitData targetData = _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(args.insertAtIndex);
-
-            //提取选中物体中的顶层物体
-            List<TreeViewItemData<LocUnitData>> topLevelDraggedItems = GetTopLevelTreeViewItemData
-                (draggedIDs.Select(id => _itemDicCache[id]).ToList());
-
-            //获取顶层数据
-            List<LocUnitData> topLevelDatas = topLevelDraggedItems.Select(item => item.data).ToList();
-
-            //进行移动操作
-            MoveLocUnitData(targetData, topLevelDatas);
-
-            //刷新树形图
-            RefreshLocUnitDataTreeView();
-
-            //正确放置，返回空
-            return DragVisualMode.None;
         }
         #endregion
 
@@ -964,10 +1089,9 @@ namespace THLL.GameEditor
             LocUnitDataEditorPersistentData persistentData = new()
             {
                 //设置其数值
-                Package = _packageTextField.text,
-                Author = _authorTextField.text,
+                DefaultPackage = _defaultPackageField.text,
+                DefaultAuthor = _defaultAuthorField.text,
                 ExpandedState = _expandedStateCache.ToList(),
-                TabOpenState = _dataEditorTabOpenStateDicCache.Keys.ToList()
             };
             //将永久性存储实例转化为文本
             string jsonString = JsonUtility.ToJson(persistentData, prettyPrint: true);
@@ -989,8 +1113,8 @@ namespace THLL.GameEditor
             LocUnitDataEditorPersistentData persistentData = JsonUtility.FromJson<LocUnitDataEditorPersistentData>(jsonString);
             //分配数据
             //属性
-            _packageTextField.SetValueWithoutNotify(persistentData.Package);
-            _authorTextField.SetValueWithoutNotify(persistentData.Author);
+            _defaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
+            _defaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
             //缓存
             //展开状态数据
             _expandedStateCache.Clear();
@@ -999,45 +1123,6 @@ namespace THLL.GameEditor
                 _expandedStateCache.Add(id);
             }
             RestoreExpandedState();
-            //打开标签页
-            foreach (int id in persistentData.TabOpenState)
-            {
-                //获取对应物体
-                TreeViewItemData<LocUnitData> item = _itemDicCache[id];
-                //打开标签页
-                OpenTab(item);
-            }
-        }
-        #endregion
-
-        #region 多标签页相关方法
-        //打开标签页
-        private void OpenTab()
-        {
-            //获取当次选中项
-            LocUnitData selectedData = _locUnitDataTreeView.selectedIndices
-                .Select(index => _locUnitDataTreeView.GetItemDataForIndex<LocUnitData>(index))
-                .FirstOrDefault();
-            TreeViewItemData<LocUnitData> item = _itemDicCache[selectedData.GetAssetHashCode()];
-
-            //执行重载方法
-            OpenTab(item);
-        }
-        private void OpenTab(TreeViewItemData<LocUnitData> item)
-        {
-            //检查是否已经开启
-            if (_dataEditorTabOpenStateDicCache.TryGetValue(item.data.GetAssetHashCode(), out var tab))
-            {
-                //若已开启，设置当前活动标签页，并返回
-                _dataEditorTabView.activeTab = tab;
-                return;
-            }
-            //新建编辑标签页面
-            LocUnitDataEditorDataTab newDataTab = new(item, _tabVisualTree, _dataEditorTabOpenStateDicCache);
-            //添加到多标签页控件中
-            _dataEditorTabView.Add(newDataTab);
-            //并将活动标签页更改为自身
-            _dataEditorTabView.activeTab = newDataTab;
         }
         #endregion
 
@@ -1176,6 +1261,46 @@ namespace THLL.GameEditor
             AssetDatabase.SaveAssets();
             //刷新资源视图
             AssetDatabase.Refresh();
+        }
+        //重新生成全名
+        private void MarkAsNeedToReGenerateFullName(LocUnitData locUnitData)
+        {
+            //检测数据是否为空
+            if (locUnitData == null)
+            {
+                //返回
+                return;
+            }
+
+            //数据自身生成添加
+            _dataNeedToReGenerateFullName.Add(locUnitData);
+
+            //检查是否拥有子级
+            if (_itemDicCache[locUnitData.GetAssetHashCode()].hasChildren)
+            {
+                //若有，则对子级进行同样操作
+                foreach (var child in _childrenDicCache[locUnitData.GetAssetHashCode()])
+                {
+                    MarkAsNeedToReGenerateFullName(child.data);
+                }
+            }
+        }
+        //切换面板
+        private void SwitchPanel()
+        {
+            //检测面板打开状态
+            if (_dataEditorPanel.style.display == DisplayStyle.Flex)
+            {
+                //若数据编辑面板为打开，则关闭，并打开连接编辑面板
+                _dataEditorPanel.style.display = DisplayStyle.None;
+                _connectionEditorPanel.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                //反之反之
+                _dataEditorPanel.style.display = DisplayStyle.Flex;
+                _connectionEditorPanel.style.display = DisplayStyle.None;
+            }
         }
         #endregion
     }

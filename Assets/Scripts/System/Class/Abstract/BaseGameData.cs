@@ -9,23 +9,23 @@ namespace THLL.BaseSystem
         public virtual string ID => string.Join("_", new string[] { Package, Category, Author, Name });
         //Name
         [SerializeField]
-        protected string dataName;
+        protected string dataName = string.Empty;
         public virtual string Name => dataName;
         //Description
         [SerializeField]
-        protected string dataDescription;
+        protected string dataDescription = string.Empty;
         public virtual string Description => dataDescription;
         //Author
         [SerializeField]
-        protected string dataAuthor;
+        protected string dataAuthor = string.Empty;
         public virtual string Author => dataAuthor;
         //Package
         [SerializeField]
-        protected string dataPackage;
+        protected string dataPackage = string.Empty;
         public virtual string Package => dataPackage;
         //Category
         [SerializeField]
-        protected string dataCategory;
+        protected string dataCategory = string.Empty;
         public virtual string Category => dataCategory;
         #endregion
 

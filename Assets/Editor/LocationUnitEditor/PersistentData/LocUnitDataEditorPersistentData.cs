@@ -7,10 +7,8 @@ namespace THLL.GameEditor
     public class LocUnitDataEditorPersistentData
     {
         //要保存的数据
-        public string Package;
-        public string Category;
-        public string Author;
+        public string DefaultPackage;
+        public string DefaultAuthor;
         public List<int> ExpandedState;
-        public List<int> TabOpenState;
     }
 }
