@@ -11,5 +11,6 @@ namespace THLL.GameEditor
         public string Category;
         public string Author;
         public List<int> ExpandedState;
+        public List<int> TabOpenState;
     }
 }

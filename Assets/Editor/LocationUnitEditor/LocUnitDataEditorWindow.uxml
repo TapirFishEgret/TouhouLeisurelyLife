@@ -10,7 +10,7 @@
                 <engine:TreeView name="LocUnitTreeView" fixed-item-height="20" virtualization-method="DynamicHeight" selection-type="Multiple" show-alternating-row-backgrounds="None" auto-expand="true" style="background-color: rgb(46, 46, 62); height: auto; flex-basis: auto;" />
             </engine:VisualElement>
             <engine:VisualElement name="RightPanel" style="flex-basis: 80%; flex-grow: 1; margin-top: 3px; margin-right: 6px; margin-bottom: 6px; margin-left: 3px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-left-color: rgb(62, 62, 78); border-right-color: rgb(62, 62, 78); border-top-color: rgb(62, 62, 78); border-bottom-color: rgb(62, 62, 78); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: rgb(46, 46, 62);">
-                <engine:TabView reorderable="true" name="MultiTabView" />
+                <engine:TabView reorderable="true" name="MultiTabView" style="flex-grow: 1;" />
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>

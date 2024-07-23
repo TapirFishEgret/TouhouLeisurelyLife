@@ -28,7 +28,7 @@ namespace THLL.GameEditor
         //树形图
         private TreeView _locUnitDataTreeView;
         //多标签控件
-        private TabView _locUnitDataTabView;
+        private TabView _dataEditorTabView;
 
         //数据存储
         //根数据缓存
@@ -37,6 +37,8 @@ namespace THLL.GameEditor
         private readonly Dictionary<int, TreeViewItemData<LocUnitData>> _itemDicCache = new();
         //ID-子级查询字典缓存
         private readonly Dictionary<int, List<TreeViewItemData<LocUnitData>>> _childrenDicCache = new();
+        //标签打开状态缓存
+        private readonly Dictionary<int, Tab> _dataEditorTabOpenStateDicCache = new();
         //展开状态缓存
         private readonly HashSet<int> _expandedStateCache = new();
         //剪切板缓存
@@ -71,14 +73,17 @@ namespace THLL.GameEditor
 
             //右侧面板
             //获取多标签窗口
-            _locUnitDataTabView = rootVisualElement.Q<TabView>("MultiTabView");
+            _dataEditorTabView = rootVisualElement.Q<TabView>("MultiTabView");
             //添加窗口切换时函数
-            _locUnitDataTabView.activeTabChanged += (tabA, tabB) =>
+            _dataEditorTabView.activeTabChanged += (tabA, tabB) =>
             {
                 //保存资源
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             };
+
+            //读取持久化数据
+            LoadPersistentData();
         }
         //窗口关闭时
         private void OnDestroy()
@@ -140,14 +145,23 @@ namespace THLL.GameEditor
                 }
             });
 
+            //实现选中项更改时切换标签页页面
+            _locUnitDataTreeView.selectionChanged += (selections) =>
+            {
+                //获取选中项
+                LocUnitData selectedData = selections.Cast<LocUnitData>().FirstOrDefault();
+                //尝试从缓存中读取数据
+                if (_dataEditorTabOpenStateDicCache.TryGetValue(selectedData.GetAssetHashCode(), out var tab))
+                {
+                    //若成功读取，设置活动标签页
+                    _dataEditorTabView.activeTab = tab;
+                }
+            };
+
             //注册快捷键
             _locUnitDataTreeView.RegisterCallback<KeyDownEvent>(RegisterShortcutKey);
-
             //注册右键菜单
             RegisterTreeViewContextMenu();
-
-            //读取持久化数据
-            LoadPersistentData();
         }
         //刷新树形图面板
         private void RefreshLocUnitDataTreeView()
@@ -952,7 +966,8 @@ namespace THLL.GameEditor
                 //设置其数值
                 Package = _packageTextField.text,
                 Author = _authorTextField.text,
-                ExpandedState = _expandedStateCache.ToList()
+                ExpandedState = _expandedStateCache.ToList(),
+                TabOpenState = _dataEditorTabOpenStateDicCache.Keys.ToList()
             };
             //将永久性存储实例转化为文本
             string jsonString = JsonUtility.ToJson(persistentData, prettyPrint: true);
@@ -984,6 +999,14 @@ namespace THLL.GameEditor
                 _expandedStateCache.Add(id);
             }
             RestoreExpandedState();
+            //打开标签页
+            foreach (int id in persistentData.TabOpenState)
+            {
+                //获取对应物体
+                TreeViewItemData<LocUnitData> item = _itemDicCache[id];
+                //打开标签页
+                OpenTab(item);
+            }
         }
         #endregion
 
@@ -997,12 +1020,24 @@ namespace THLL.GameEditor
                 .FirstOrDefault();
             TreeViewItemData<LocUnitData> item = _itemDicCache[selectedData.GetAssetHashCode()];
 
+            //执行重载方法
+            OpenTab(item);
+        }
+        private void OpenTab(TreeViewItemData<LocUnitData> item)
+        {
+            //检查是否已经开启
+            if (_dataEditorTabOpenStateDicCache.TryGetValue(item.data.GetAssetHashCode(), out var tab))
+            {
+                //若已开启，设置当前活动标签页，并返回
+                _dataEditorTabView.activeTab = tab;
+                return;
+            }
             //新建编辑标签页面
-            LocUnitDataEditorDataTab newDataTab = new(item, _tabVisualTree);
+            LocUnitDataEditorDataTab newDataTab = new(item, _tabVisualTree, _dataEditorTabOpenStateDicCache);
             //添加到多标签页控件中
-            _locUnitDataTabView.Add(newDataTab);
+            _dataEditorTabView.Add(newDataTab);
             //并将活动标签页更改为自身
-            _locUnitDataTabView.activeTab = newDataTab;
+            _dataEditorTabView.activeTab = newDataTab;
         }
         #endregion
 

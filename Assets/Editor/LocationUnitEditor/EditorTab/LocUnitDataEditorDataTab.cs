@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using THLL.LocationSystem;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -11,14 +12,15 @@ namespace THLL.GameEditor
     {
         //自身数据
         //UXML文档
-        private VisualTreeAsset _visualTree;
+        private readonly VisualTreeAsset _visualTree;
         //目标数据物体
         private readonly TreeViewItemData<LocUnitData> _targetItem;
         //目标数据
         private readonly LocUnitData _targetData;
+        //面板打开状态缓存
+        private readonly Dictionary<int, Tab> _dataEditorTabOpenStateDicCache;
 
         //UI控件
-        //获取控件
         private TextField _packageTextField;
         private TextField _categoryTextField;
         private TextField _authorTextField;
@@ -27,11 +29,12 @@ namespace THLL.GameEditor
         private TextField _nameTextField;
         private TextField _descriptionTextField;
         private ObjectField _parentDataField;
-        //背景图片
-        private Image _background;
+        private Button _closeButton;
+        private VisualElement _background;
+        private Image _backgroundImage;
 
         //构建函数
-        public LocUnitDataEditorDataTab(TreeViewItemData<LocUnitData> targetItem, VisualTreeAsset visualTree)
+        public LocUnitDataEditorDataTab(TreeViewItemData<LocUnitData> targetItem, VisualTreeAsset visualTree, Dictionary<int, Tab> dataEditorTabOpenStateDicCache)
         {
             //设置物体
             _targetItem = targetItem;
@@ -39,10 +42,18 @@ namespace THLL.GameEditor
             _targetData = _targetItem.data;
             //设置标签名称
             label = _targetData.name;
-            //设置标签为可关闭
+            //设置标签为可关闭，额外设置关闭按钮是为了防止标签页过多导致无法选中原生关闭按钮
             closeable = true;
             //设置文档
             _visualTree = visualTree;
+            //设置缓存
+            _dataEditorTabOpenStateDicCache = dataEditorTabOpenStateDicCache;
+            //添加到缓存中
+            _dataEditorTabOpenStateDicCache[_targetData.GetAssetHashCode()] = this;
+
+            //设置长宽
+            style.width = new Length(100, LengthUnit.Percent);
+            style.height = new Length(100, LengthUnit.Percent);
 
             //初始化UI
             InitUI();
@@ -52,8 +63,7 @@ namespace THLL.GameEditor
         private void InitUI()
         {
             //加载UI文档
-            VisualElement ui = _visualTree.CloneTree();
-            Add(ui);
+            _visualTree.CloneTree(this);
 
             //获取控件
             _packageTextField = this.Q<TextField>("PackageTextField");
@@ -64,20 +74,12 @@ namespace THLL.GameEditor
             _nameTextField = this.Q<TextField>("NameTextField");
             _descriptionTextField = this.Q<TextField>("DescriptionTextField");
             _parentDataField = this.Q<ObjectField>("ParentDataField");
-            //动态创建Image元素并添加到UI之中
-            //获取容器
-            VisualElement backgroundContainer = ui.Q<VisualElement>("BackgroundContainer");
-            //创建Image控件
-            _background = new()
-            {
-                name = "Background",
-                scaleMode = ScaleMode.ScaleToFit
-            };
-            //设置格式
-            _background.style.flexGrow = 1;
-            _background.style.display = DisplayStyle.None;
-            //添加
-            backgroundContainer.Add(_background);
+            _closeButton = this.Q<Button>("CloseButton");
+
+            //图片显示
+            _backgroundImage = new Image();
+            _background = this.Q<VisualElement>("Background");
+            _background.Add(_backgroundImage);
 
             //显示数据
             ShowData();
@@ -94,11 +96,17 @@ namespace THLL.GameEditor
                 ShowData();
             };
 
-            //设定当标签页被关闭时进行存储
+            //设定当标签页被关闭时进行存储并从缓存中移除
             closed += (tab) =>
             {
+                //关闭时存储数据
                 SaveData();
+                //并将自身从缓存中移除
+                _dataEditorTabOpenStateDicCache.Remove(_targetData.GetAssetHashCode());
             };
+
+            //绑定按钮
+            _closeButton.clicked += CloseTab;
 
             //监听控件变化信息并绑定
             _packageTextField.RegisterValueChangedCallback(evt =>
@@ -117,7 +125,7 @@ namespace THLL.GameEditor
                     //若为精灵图类型，则更改
                     _targetData.Editor_SetBackground(sprite);
                 }
-                //同时设置Image控件
+                //同时设置背景图
                 UpdateBackgroundState();
             });
             _nameTextField.RegisterValueChangedCallback(evt =>
@@ -164,15 +172,16 @@ namespace THLL.GameEditor
             //判断新数据类型
             if (_backgroundField.value is Sprite sprite)
             {
-                //若为精灵图类型，则更改
-                _targetData.Editor_SetBackground(sprite);
-                //同时设置Image控件
-                _background.sprite = sprite;
-                //将其更改为显示
-                _background.style.display = DisplayStyle.Flex;
+                //设置背景图
+                _backgroundImage.sprite = sprite;
+                _backgroundImage.style.display = DisplayStyle.Flex;
             }
-            //若不是，隐藏背景图片
-            _background.style.display = DisplayStyle.None;
+            else
+            {
+                //设置为空
+                _backgroundImage.sprite = null;
+                _backgroundImage.style.display = DisplayStyle.None;
+            }
         }
         //存储函数
         private void SaveData()
@@ -183,6 +192,16 @@ namespace THLL.GameEditor
             //存储
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+        //关闭函数，无法触发事件
+        private void CloseTab()
+        {
+            //关闭时存储数据
+            SaveData();
+            //并将自身从缓存中移除
+            _dataEditorTabOpenStateDicCache.Remove(_targetData.GetAssetHashCode());
+            //从面板移除
+            RemoveFromHierarchy();
         }
     }
 }

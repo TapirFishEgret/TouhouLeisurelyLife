@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
   m_Name: "07\u4E3B\u5367"
   m_EditorClassIdentifier: 
-  dataName: 07
+  dataName: "\u4E3B\u5367"
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core
   dataCategory: Location
   _parentData: {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
-  _background: {fileID: 0}
+  _background: {fileID: 21300000, guid: a104778972aa0074d9b7542e4d6e893c, type: 3}
   _connections: []
   _tags: []

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
   m_Name: "08\u6B21\u5367"
   m_EditorClassIdentifier: 
-  dataName: "08\u6B21\u5367"
+  dataName: "\u6B21\u5367"
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core

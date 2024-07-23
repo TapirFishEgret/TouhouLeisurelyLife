@@ -1,18 +1,23 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/UnityEditorStyles.uss?fileID=7433441132597879392&amp;guid=9b5e0ee7822030d4b80394fec071fef2&amp;type=3#UnityEditorStyles" />
-    <engine:VisualElement name="Root" style="width: 100%; height: 100%;">
-        <engine:ScrollView name="DataContainer">
-            <engine:VisualElement style="flex-direction: row; justify-content: space-around;">
-                <engine:TextField label="Package" readonly="false" name="PackageTextField" style="-unity-text-align: middle-center; width: 25%; margin-right: 2px;" />
-                <engine:TextField label="Category" value="Location" readonly="true" name="CategoryTextField" style="-unity-text-align: middle-center; width: 25%; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
-                <engine:TextField label="Author" name="AuthorTextField" style="-unity-text-align: middle-center; width: 25%; margin-left: 2px;" />
-                <editor:ObjectField label="ParentData" name="ParentDataField" enabled="true" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" style="width: 25%;" />
-            </engine:VisualElement>
-            <engine:Label text="Label" name="FullNameLabel" style="font-size: 24px; -unity-text-align: middle-center; padding-left: 2px;" />
-            <engine:TextField label="Name" name="NameTextField" style="-unity-text-align: upper-left;" />
-            <engine:TextField label="Description" name="DescriptionTextField" multiline="true" style="flex-direction: column;" />
+    <engine:VisualElement name="Root" style="width: 100%; height: 100%; -unity-background-image-tint-color: rgba(255, 255, 255, 0.5); background-image: none; -unity-background-scale-mode: scale-and-crop; flex-grow: 1; flex-shrink: 1; align-content: flex-start; flex-direction: column;">
+        <engine:VisualElement name="Background" style="width: 100%; height: 100%; position: absolute; flex-grow: 1; flex-basis: 100%;" />
+        <engine:VisualElement name="TopContainer" style="flex-direction: row; justify-content: space-around;">
+            <engine:TextField label="Package" readonly="false" name="PackageTextField" style="-unity-text-align: middle-center; width: 25%; margin-right: 2px;" />
+            <engine:TextField label="Category" value="Location" readonly="true" name="CategoryTextField" enabled="false" style="-unity-text-align: middle-center; width: 25%; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
+            <engine:TextField label="Author" name="AuthorTextField" style="-unity-text-align: middle-center; width: 25%; margin-left: 2px;" />
+            <editor:ObjectField label="ParentData" name="ParentDataField" enabled="false" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" style="width: 25%;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Space" style="height: 10px;" />
+        <engine:Label text="Label" name="FullNameLabel" style="font-size: 24px; -unity-text-align: middle-center; padding-left: 2px;" />
+        <engine:VisualElement name="Space" style="height: 10px;" />
+        <engine:VisualElement name="MainContainer">
+            <engine:TextField label="Name" name="NameTextField" hide-placeholder-on-focus="true" style="-unity-text-align: upper-left; flex-direction: row;" />
+            <engine:TextField label="Description" name="DescriptionTextField" multiline="true" hide-placeholder-on-focus="true" style="flex-direction: row; white-space: pre-wrap; flex-wrap: nowrap; align-items: stretch; justify-content: flex-start; align-self: auto; text-overflow: clip; flex-shrink: 0; flex-grow: 0; align-content: flex-start;" />
             <editor:ObjectField label="Background" name="BackgroundField" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
-        </engine:ScrollView>
+        </engine:VisualElement>
+        <engine:VisualElement name="ButtonCotainer" style="flex-direction: row-reverse;">
+            <engine:Button text="Close" name="CloseButton" />
+        </engine:VisualElement>
     </engine:VisualElement>
-    <engine:VisualElement name="BackgroundContainer" />
 </engine:UXML>
