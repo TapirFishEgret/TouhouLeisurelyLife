@@ -4,9 +4,9 @@ using THLL.LocationSystem;
 using UnityEngine.UIElements;
 using UnityEngine;
 
-namespace THLL.GameEditor
+namespace THLL.GameEditor.LocUnitDataEditor
 {
-    public class LocUnitDataNode : VisualElement
+    public class Node : VisualElement
     {
         //自身数据
         //此节点对应树状图物品
@@ -14,14 +14,14 @@ namespace THLL.GameEditor
         //对应数据
         private readonly LocUnitData _targetData;
         //缓存
-        private readonly Dictionary<int, LocUnitDataNode> _nodeDicCache;
+        private readonly Dictionary<int, Node> _nodeDicCache;
 
         //拖拽功能
         private Vector2 _dragStart;
         private bool _isDragging = false;
 
         //构造函数
-        public LocUnitDataNode(TreeViewItemData<LocUnitData> targetItem, Dictionary<int, LocUnitDataNode> nodeDicCache)
+        public Node(TreeViewItemData<LocUnitData> targetItem, Dictionary<int, Node> nodeDicCache)
         {
             //赋值
             _targetItem = targetItem;
@@ -42,6 +42,7 @@ namespace THLL.GameEditor
             style.width = 100;
             style.height = 100;
             style.alignContent = Align.Center;
+            style.justifyContent = Justify.Center;
             style.backgroundColor = new StyleColor(ChineseColor.Purple_丁香淡紫);
             style.position = Position.Absolute;
 

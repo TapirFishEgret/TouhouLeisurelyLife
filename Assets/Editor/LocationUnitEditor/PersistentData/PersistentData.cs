@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace THLL.GameEditor
+namespace THLL.GameEditor.LocUnitDataEditor
 {
     [Serializable]
-    public class LocUnitDataEditorPersistentData
+    public class PersistentData
     {
         //要保存的数据
         public string DefaultPackage;

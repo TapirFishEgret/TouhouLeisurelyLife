@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor
+namespace THLL.GameEditor.LocUnitDataEditor
 {
-    public class LocUnitDataNodeConnectionLine : VisualElement
+    public class NodeConnectionLine : VisualElement
     {
         //基础信息
         //起始
@@ -17,5 +18,11 @@ namespace THLL.GameEditor
         public Vector2 EndPoint { get { return _endPoint; } set { _endPoint = value; } }
         private Color _lineColor;
         public Color Color { get { return _lineColor; } set { _lineColor = value; } }
+
+        //构造函数
+        public NodeConnectionLine()
+        {
+
+        }
     }
 }
