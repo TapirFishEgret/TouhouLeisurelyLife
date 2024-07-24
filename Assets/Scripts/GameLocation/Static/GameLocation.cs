@@ -4,9 +4,11 @@ namespace THLL.LocationSystem
     {
         #region 数据
         //游戏内所有地点实例数据库
-        public static readonly LocUnitDb LocUnitDb = new();
+        private static readonly LocUnitDb _locUnitDb = new();
+        public static LocUnitDb LocUnitDb => _locUnitDb;
         //游戏内所有地点连接数据
-        public static readonly LocUnitConnDb LocUnitConnDb = new();
+        private static readonly LocUnitConnDb _locUnitConnDb = new();
+        public static LocUnitConnDb LocUnitConnDb => _locUnitConnDb;
         #endregion
 
         #region 方法
