@@ -27,26 +27,26 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //左侧面板
         //面板切换按钮
         private Button _switchPanelButton;
-        public Button SwitchPanelButton => _switchPanelButton;
+        public Button SwitchPanelButton { get => _switchPanelButton; private set => _switchPanelButton = value; }
         //树形图
         private DataTreeView _dataTreeView;
-        public DataTreeView DataTreeView => _dataTreeView;
+        public DataTreeView DataTreeView { get => _dataTreeView; private set => _dataTreeView = value; }
         //包输入框
         private TextField _defaultPackageField;
-        public TextField DefaultPackageField => _defaultPackageField;
+        public TextField DefaultPackageField { get => _defaultPackageField; private set => _defaultPackageField = value; }
         //作者输入框
         private TextField _defaultAuthorField;
-        public TextField DefaultAuthorField => _defaultAuthorField;
+        public TextField DefaultAuthorField { get => _defaultAuthorField; private set => _defaultAuthorField = value; }
         //计时器Debug面板显示开关
         private Toggle _timerDebugLogToggle;
-        public Toggle TimerDebugLogToggle => _timerDebugLogToggle;
+        public Toggle TimerDebugLogToggle { get => _timerDebugLogToggle; private set => _timerDebugLogToggle = value; }
         //右侧面板
         //数据编辑面板
         private DataEditorPanel _dataEditorPanel;
-        public DataEditorPanel DataEditorPanel => _dataEditorPanel;
+        public DataEditorPanel DataEditorPanel { get => _dataEditorPanel; private set => _dataEditorPanel = value; }
         //连接编辑面板
         private NodeEditorPanel _nodeEditorPanel;
-        public NodeEditorPanel NodeEditorPanel => _nodeEditorPanel;
+        public NodeEditorPanel NodeEditorPanel { get => _nodeEditorPanel; private set => _nodeEditorPanel = value; }
 
         //数据存储
         //需要进行重命名的数据
@@ -54,7 +54,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public HashSet<LocUnitData> DataNeedToReGenerateFullNameCache => _dataNeedToReGenerateFullNameCache;
         //面板的选择
         private bool _isDataEditorPanelOpen;
-        public bool IsDataEditorPanelOpen => _isDataEditorPanelOpen;
+        public bool IsDataEditorPanelOpen { get => _isDataEditorPanelOpen; private set => _isDataEditorPanelOpen = value; }
 
         //窗口菜单
         [MenuItem("GameEditor/LocationSystem/Location")]
@@ -75,28 +75,28 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //其他控件
             //获取
-            _switchPanelButton = rootVisualElement.Q<Button>("SwitchPanelButton");
-            _defaultPackageField = rootVisualElement.Q<TextField>("DefaultPackageField");
-            _defaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
-            _timerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
+            SwitchPanelButton = rootVisualElement.Q<Button>("SwitchPanelButton");
+            DefaultPackageField = rootVisualElement.Q<TextField>("DefaultPackageField");
+            DefaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
+            TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             //绑定
-            _switchPanelButton.clicked += SwitchPanel;
+            SwitchPanelButton.clicked += SwitchPanel;
 
             //读取持久化数据
             LoadPersistentData();
 
             //左侧面板
             //创建树形图面板并添加
-            _dataTreeView = new DataTreeView(this);
-            rootVisualElement.Q<VisualElement>("DataTreeViewContainer").Add(_dataTreeView);
+            DataTreeView = new DataTreeView(this);
+            rootVisualElement.Q<VisualElement>("DataTreeViewContainer").Add(DataTreeView);
 
             //右侧面板
             //创建数据编辑面板并添加
-            _dataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
-            rootVisualElement.Q<VisualElement>("EditorContainer").Add(_dataEditorPanel);
+            DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
+            rootVisualElement.Q<VisualElement>("EditorContainer").Add(DataEditorPanel);
             //创建连接面板并添加
-            _nodeEditorPanel = new NodeEditorPanel(this);
-            rootVisualElement.Q<VisualElement>("EditorContainer").Add(_nodeEditorPanel);
+            NodeEditorPanel = new NodeEditorPanel(this);
+            rootVisualElement.Q<VisualElement>("EditorContainer").Add(NodeEditorPanel);
 
             //调整面板的打开与关闭
             if (IsDataEditorPanelOpen)
@@ -159,9 +159,9 @@ namespace THLL.GameEditor.LocUnitDataEditor
             else
             {
                 //若为空，正常设置所需要的元素
-                newData.Editor_SetPackage(_defaultPackageField.text);
+                newData.Editor_SetPackage(DefaultPackageField.text);
                 newData.Editor_SetCategory("Location");
-                newData.Editor_SetAuthor(_defaultAuthorField.text);
+                newData.Editor_SetAuthor(DefaultAuthorField.text);
             }
             //更改文件名
             newData.name = newDataName;
@@ -443,18 +443,18 @@ namespace THLL.GameEditor.LocUnitDataEditor
             PersistentData persistentData = new()
             {
                 //设置其数值
-                DefaultPackage = _defaultPackageField.text,
-                DefaultAuthor = _defaultAuthorField.text,
-                TimerDebugLogState = _timerDebugLogToggle.value,
-                IsDataEditorPanelOpen = _isDataEditorPanelOpen,
+                DefaultPackage = DefaultPackageField.text,
+                DefaultAuthor = DefaultAuthorField.text,
+                TimerDebugLogState = TimerDebugLogToggle.value,
+                IsDataEditorPanelOpen = IsDataEditorPanelOpen,
                 ExpandedState = DataTreeView.ExpandedStateCache.ToList(),
             };
             //将永久性存储实例转化为文本
             string jsonString = JsonUtility.ToJson(persistentData, prettyPrint: true);
             //写入文件中
-            File.WriteAllText(AssetDatabase.GetAssetPath(_persistentDataFile), jsonString);
+            File.WriteAllText(AssetDatabase.GetAssetPath(PersistentDataFile), jsonString);
             //标记为脏
-            EditorUtility.SetDirty(_persistentDataFile);
+            EditorUtility.SetDirty(PersistentDataFile);
             //保存更改
             AssetDatabase.SaveAssets();
             //刷新数据
@@ -464,15 +464,15 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private void LoadPersistentData()
         {
             //读取文件中数据
-            string jsonString = File.ReadAllText(AssetDatabase.GetAssetPath(_persistentDataFile));
+            string jsonString = File.ReadAllText(AssetDatabase.GetAssetPath(PersistentDataFile));
             //生成永久性存储实例
             PersistentData persistentData = JsonUtility.FromJson<PersistentData>(jsonString);
             //分配数据
             //属性
-            _defaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
-            _defaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
-            _timerDebugLogToggle.SetValueWithoutNotify(persistentData.TimerDebugLogState);
-            _isDataEditorPanelOpen = persistentData.IsDataEditorPanelOpen;
+            DefaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
+            DefaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
+            TimerDebugLogToggle.SetValueWithoutNotify(persistentData.TimerDebugLogState);
+            IsDataEditorPanelOpen = persistentData.IsDataEditorPanelOpen;
         }
         #endregion
 
@@ -607,19 +607,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private void SwitchPanel()
         {
             //检测面板打开状态
-            if (_isDataEditorPanelOpen)
+            if (IsDataEditorPanelOpen)
             {
                 //若数据编辑面板为打开，则关闭，并打开连接编辑面板
                 DataEditorPanel.style.display = DisplayStyle.None;
                 NodeEditorPanel.style.display = DisplayStyle.Flex;
-                _isDataEditorPanelOpen = false;
+                IsDataEditorPanelOpen = false;
             }
             else
             {
                 //反之反之，并刷新面板
                 DataEditorPanel.style.display = DisplayStyle.Flex;
                 NodeEditorPanel.style.display = DisplayStyle.None;
-                _isDataEditorPanelOpen = true;
+                IsDataEditorPanelOpen = true;
                 DataEditorPanel.DRefresh(DataTreeView.ActiveData);
             }
         }
