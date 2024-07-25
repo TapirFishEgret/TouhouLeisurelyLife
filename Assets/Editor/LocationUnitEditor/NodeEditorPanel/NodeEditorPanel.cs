@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.LocUnitDataEditor
@@ -11,38 +13,30 @@ namespace THLL.GameEditor.LocUnitDataEditor
     {
         #region 基础构成
         //主面板
-        private readonly MainWindow _mainWindow;
-        public MainWindow MainWindow => _mainWindow;
+        public MainWindow MainWindow { get; private set; }
 
         //ID-地点数据节点缓存
-        private readonly Dictionary<int, Node> _nodeDicCache = new();
-        public Dictionary<int, Node> NodeDicCache => _nodeDicCache;
-
-        //连接编辑面板的节点拖拽功能
-        private Vector2 _dragStart;
-        public Vector2 DragStart { get => _dragStart; private set => _dragStart = value; }
-        private bool _isDragging = false;
-        public bool IsDragging { get => _isDragging; private set => _isDragging = value; }
+        public Dictionary<int, Node> NodeDicCache { get; private set; }
 
         //节点编辑功能
-        private Node _currentStartNode;
-        public Node CurrentStartNode { get => _currentStartNode; set => _currentStartNode = value; }
-        private NodeLine _currentLine;
-        public NodeLine CurrentLine { get => _currentLine; set => _currentLine = value; }
+        public Node CurrentStartNode { get; set; }
+        public NodeLine CurrentLine { get; set; }
         #endregion
 
         //构建函数
         public NodeEditorPanel(MainWindow mainWindow)
         {
-            //设置为可延展且100%填充
-            style.position = Position.Absolute;
+            //自身设置为可延展且100%填充
             style.flexShrink = 1;
             style.flexGrow = 1;
             style.width = new Length(100, LengthUnit.Percent);
             style.height = new Length(100, LengthUnit.Percent);
 
             //获取主面板
-            _mainWindow = mainWindow;
+            MainWindow = mainWindow;
+
+            //初始化缓存
+            NodeDicCache = new();
 
             //初始化
             Init();
@@ -54,129 +48,133 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //计时
             using ExecutionTimer timer = new("连接编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
-            //添加网格背景
-            //创建网格
-            IMGUIContainer gridContainer = new()
-            {
-                //设置格式
-                style =
-                {
-                    position = Position.Absolute,
-                    width = 2560,
-                    height = 1440,
-                },
-                //写入网格绘制方法
-                onGUIHandler = DrawGrid,
-            };
-            //添加到面板中去
-            Add(gridContainer);
+            //写入绘制事件
+            generateVisualContent += DrawGrid;
 
             //监听事件
-            RegisterCallback<WheelEvent>(OnMouseWheel);
-            RegisterCallback<MouseDownEvent>(OnMouseDown);
-            RegisterCallback<MouseMoveEvent>(OnMouseMove);
-            RegisterCallback<MouseUpEvent>(OnMouseUp);
-            RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
+            RegisterCallback<PointerDownEvent>(OnPointerDown);
+            RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
         //绘制网格纹理
-        private void DrawGrid()
+        private void DrawGrid(MeshGenerationContext mgc)
         {
             //网格间隔
             float gridSpacing = 20f;
-            //网格透明度
-            float gridOpacity = 0.2f;
             //网格颜色
             Color gridColor = ChineseColor.Grey_大理石灰;
-
+            gridColor.a = 0.2f;
+            
             //计算需要绘制的网格线条总数
-            int widthDivs = Mathf.CeilToInt(contentRect.width / gridSpacing);
-            int heightDivs = Mathf.CeilToInt(contentRect.height / gridSpacing);
+            int widthDivs = Mathf.CeilToInt(worldBound.xMax / gridSpacing);
+            int heightDivs = Mathf.CeilToInt(worldBound.yMax / gridSpacing);
 
-            //开始IMGUI绘制
-            Handles.BeginGUI();
-            //设置绘制颜色
-            Handles.color = new Color(gridColor.r, gridColor.g, gridColor.b, gridOpacity);
+            //获取画笔
+            Painter2D painter = mgc.painter2D;
+            painter.lineWidth = 2.0f;
+            painter.strokeColor = gridColor;
+            painter.BeginPath();
 
             //绘制垂直网格线
             for (int i = 0; i < widthDivs; i++)
             {
                 //绘制线条，从一段到另一端
-                Handles.DrawLine(new Vector3(gridSpacing * i, 0, 0), new Vector3(gridSpacing * i, contentRect.height, 0));
+                painter.MoveTo(new Vector2(gridSpacing * i, 0));
+                painter.LineTo(new Vector2(gridSpacing * i, worldBound.yMax));
             }
             //水平
             for (int j = 0; j < heightDivs; j++)
             {
-                Handles.DrawLine(new Vector3(0, gridSpacing * j, 0), new Vector3(contentRect.width, gridSpacing * j, 0));
+                painter.MoveTo(new Vector2(0, gridSpacing * j));
+                painter.LineTo(new Vector2(worldBound.xMax, gridSpacing * j));
             }
 
-            //重置绘制颜色
-            Handles.color = Color.white;
-            //结束IMGUI绘制
-            Handles.EndGUI();
-        }
-        //鼠标滚轮事件
-        private void OnMouseWheel(WheelEvent evt)
-        {
-            //处理缩放
-            //原缩放比例
-            Vector3 scale = transform.scale;
-            //缩放调整因子
-            float zoomFactor = 1.1f;
-            //检测滚轮移动
-            if (evt.delta.y > 0)
-            {
-                //若有移动，调整缩放因子
-                zoomFactor = 1 / zoomFactor;
-            }
-            //调整缩放
-            scale *= zoomFactor;
-            //应用缩放
-            transform.scale = scale;
+            //结束绘制
+            painter.Stroke();
         }
         //鼠标按下事件
-        private void OnMouseDown(MouseDownEvent evt)
+        private void OnPointerDown(PointerDownEvent evt)
         {
             //检测按键
-            if (evt.button == 0)
+            if (evt.button == 1)
             {
-                //当鼠标左键按下时
-                //记录拖动起始位置
-                DragStart = evt.localMousePosition;
-                //状态更改为拖放中
-                IsDragging = true;
+                //当鼠标右键按下时
+                //检测目标元素
+                if (evt.target is Node node)
+                {
+                    //若目标为节点元素Node，检测当前连接状态
+                    if (CurrentStartNode == null)
+                    {
+                        //若当前无连接在进行，则开始连接
+                        StartLine(node);
+                    }
+                    else
+                    {
+                        //若当前有连接在进行，则结束连接
+                        EndLine(node);
+                    }
+                }
+                //若不是，检查当下是否有连接
+                else if (CurrentLine != null)
+                {
+                    //若是，则清除当前连接
+                    Remove(CurrentLine);
+                    CurrentLine = null;
+                    CurrentStartNode = null;
+                }
             }
+            Debug.Log(evt.target);
         }
         //鼠标移动时
-        private void OnMouseMove(MouseMoveEvent evt)
+        private void OnPointerMove(PointerMoveEvent evt)
         {
-            //检测拖放状态
-            if (IsDragging)
-            {
-                //若正在拖放
-                //获取位置差值
-                Vector2 delta = evt.localMousePosition - DragStart;
-                //变更位置
-                transform.position += (Vector3)delta;
-            }
             //检测当前是否有在创建连接，若有，更新线条
             CurrentLine?.UpdateLine();
         }
-        //鼠标抬起时
-        private void OnMouseUp(MouseUpEvent evt)
+        //窗口变化事件
+        private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            //检测按键
-            if (evt.button == 0)
+            //获取X轴缩放比例
+            float scaleX = evt.newRect.width / evt.oldRect.width;
+            //获取Y轴缩放比例
+            float scaleY = evt.newRect.height / evt.oldRect.height;
+
+            //触发所有节点的更改位置方法
+            foreach (Node node in NodeDicCache.Values)
             {
-                //当左键抬起时
-                //取消拖拽状态
-                IsDragging = false;
+                node.ResetPosition(scaleX, scaleY);
             }
         }
-        //鼠标离开时
-        private void OnMouseLeave(MouseLeaveEvent evt)
+        //开始连接
+        private void StartLine(Node startNode)
         {
-            //停止拖拽
-            IsDragging = false;
+            //记录起始节点
+            CurrentStartNode = startNode;
+            //以传入节点为初始节点新建当前连接
+            CurrentLine = new(this)
+            {
+                StartNode = startNode,
+            };
+            //将线条添加入面板
+            Add(CurrentLine);
+        }
+        //结束连接
+        private void EndLine(Node endNode)
+        {
+            //设定当前连线节点终点
+            CurrentLine.EndNode = endNode;
+            //刷新
+            CurrentLine.UpdateLine();
+            //将线条加入双方记录
+            CurrentLine.StartNode.Lines.Add(CurrentLine);
+            CurrentLine.EndNode.Lines.Add(CurrentLine);
+            //节点前置
+            CurrentLine.StartNode.BringToFront();
+            CurrentLine.EndNode.BringToFront();
+            //清空起始节点
+            CurrentStartNode = null;
+            //清空当前连线
+            CurrentLine = null;
         }
         #endregion
     }

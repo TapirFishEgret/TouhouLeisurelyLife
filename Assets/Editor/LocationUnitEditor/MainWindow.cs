@@ -25,35 +25,26 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //UI元素
         //左侧面板
         //面板切换按钮
-        private Button _switchPanelButton;
-        public Button SwitchPanelButton { get => _switchPanelButton; private set => _switchPanelButton = value; }
+        public Button SwitchPanelButton { get; private set; }
         //树形图
-        private DataTreeView _dataTreeView;
-        public DataTreeView DataTreeView { get => _dataTreeView; private set => _dataTreeView = value; }
+        public DataTreeView DataTreeView { get; private set; }
         //包输入框
-        private TextField _defaultPackageField;
-        public TextField DefaultPackageField { get => _defaultPackageField; private set => _defaultPackageField = value; }
+        public TextField DefaultPackageField { get; private set; }
         //作者输入框
-        private TextField _defaultAuthorField;
-        public TextField DefaultAuthorField { get => _defaultAuthorField; private set => _defaultAuthorField = value; }
+        public TextField DefaultAuthorField { get; private set; }
         //计时器Debug面板显示开关
-        private Toggle _timerDebugLogToggle;
-        public Toggle TimerDebugLogToggle { get => _timerDebugLogToggle; private set => _timerDebugLogToggle = value; }
+        public Toggle TimerDebugLogToggle { get; private set; }
         //右侧面板
         //数据编辑面板
-        private DataEditorPanel _dataEditorPanel;
-        public DataEditorPanel DataEditorPanel { get => _dataEditorPanel; private set => _dataEditorPanel = value; }
+        public DataEditorPanel DataEditorPanel { get; private set; }
         //连接编辑面板
-        private NodeEditorPanel _nodeEditorPanel;
-        public NodeEditorPanel NodeEditorPanel { get => _nodeEditorPanel; private set => _nodeEditorPanel = value; }
+        public NodeEditorPanel NodeEditorPanel { get; private set; }
 
         //数据存储
         //需要进行重命名的数据
-        private readonly HashSet<LocUnitData> _dataNeedToReGenerateFullNameCache = new();
-        public HashSet<LocUnitData> DataNeedToReGenerateFullNameCache => _dataNeedToReGenerateFullNameCache;
+        public HashSet<LocUnitData> DataNeedToReGenerateFullNameCache { get; private set; }
         //面板的选择
-        private bool _isDataEditorPanelOpen;
-        public bool IsDataEditorPanelOpen { get => _isDataEditorPanelOpen; private set => _isDataEditorPanelOpen = value; }
+        public bool IsDataEditorPanelOpen { get; private set; }
 
         //窗口菜单
         [MenuItem("GameEditor/LocationSystem/Location")]
@@ -71,6 +62,9 @@ namespace THLL.GameEditor.LocUnitDataEditor
         {
             //加载UXML文件
             _windowVisualTree.CloneTree(rootVisualElement);
+
+            //初始化数据
+            DataNeedToReGenerateFullNameCache = new();
 
             //其他控件
             //获取

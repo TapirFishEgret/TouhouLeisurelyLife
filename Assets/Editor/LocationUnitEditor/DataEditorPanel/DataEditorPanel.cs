@@ -13,8 +13,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private VisualTreeAsset _visualTree;
 
         //主面板
-        private readonly MainWindow _mainWindow;
-        public MainWindow MainWindow => _mainWindow;
+        public MainWindow MainWindow { get; private set; }
 
         //基础四项
         private TextField _packageField;
@@ -38,7 +37,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             style.flexShrink = 1;
 
             //指定主窗口
-            _mainWindow = mainWindow;
+            MainWindow = mainWindow;
 
             //初始化
             Init();

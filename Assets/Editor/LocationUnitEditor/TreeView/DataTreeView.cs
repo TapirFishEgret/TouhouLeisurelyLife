@@ -12,38 +12,37 @@ namespace THLL.GameEditor.LocUnitDataEditor
     {
         #region 数据内容
         //主窗口
-        private readonly MainWindow _mainWindow;
-        public MainWindow MainWindow => _mainWindow;
+        public MainWindow MainWindow { get; private set; }
 
         //根数据缓存
-        private readonly List<TreeViewItemData<LocUnitData>> _rootItemCache = new();
-        public List<TreeViewItemData<LocUnitData>> RootItemCache => _rootItemCache;
+        public List<TreeViewItemData<LocUnitData>> RootItemCache { get; private set; }
         //ID-地点查询字典缓存
-        private readonly Dictionary<int, TreeViewItemData<LocUnitData>> _itemDicCache = new();
-        public Dictionary<int, TreeViewItemData<LocUnitData>> ItemDicCache => _itemDicCache;
+        public Dictionary<int, TreeViewItemData<LocUnitData>> ItemDicCache { get; private set; }
         //ID-子级查询字典缓存
-        private readonly Dictionary<int, List<TreeViewItemData<LocUnitData>>> _childrenDicCache = new();
-        public Dictionary<int, List<TreeViewItemData<LocUnitData>>> ChildrenDicCache => _childrenDicCache;
+        public Dictionary<int, List<TreeViewItemData<LocUnitData>>> ChildrenDicCache { get; private set; }
         //展开状态缓存
-        private readonly HashSet<int> _expandedStateCache = new();
-        public HashSet<int> ExpandedStateCache => _expandedStateCache;
+        public HashSet<int> ExpandedStateCache { get; private set; }
         //剪切板缓存
-        private readonly List<TreeViewItemData<LocUnitData>> _clipboardItemCache = new();
-        public List<TreeViewItemData<LocUnitData>> ClipboardItemCache => _clipboardItemCache;
+        public List<TreeViewItemData<LocUnitData>> ClipboardItemCache { get; private set; }
         //是否为剪切操作
-        private bool _isCutOperation = false;
-        public bool IsCutOperation => _isCutOperation;
+        public bool IsCutOperation { get; private set; }
 
         //当前活跃数据
-        private LocUnitData _activeData;
-        public LocUnitData ActiveData => _activeData;
+        public LocUnitData ActiveData { get; private set; }
         #endregion
 
         //构建函数
         public DataTreeView(MainWindow mainWindow)
         {
             //获取主面板
-            _mainWindow = mainWindow;
+            MainWindow = mainWindow;
+
+            //初始化缓存
+            RootItemCache = new();
+            ItemDicCache = new();
+            ChildrenDicCache = new();
+            ExpandedStateCache = new();
+            ClipboardItemCache = new();
 
             //更改自身属性
             style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0));
@@ -95,7 +94,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             itemExpandedChanged += SaveExpandedState;
 
             //实现双击重命名
-            RegisterCallback<MouseDownEvent>((evt) =>
+            RegisterCallback<PointerDownEvent>((evt) =>
             {
                 if (evt.clickCount == 2)
                 {
@@ -107,17 +106,17 @@ namespace THLL.GameEditor.LocUnitDataEditor
             selectionChanged += (selections) =>
             {
                 //获取活跃数据
-                _activeData = selections.Cast<LocUnitData>().FirstOrDefault();
+                ActiveData = selections.Cast<LocUnitData>().FirstOrDefault();
                 //检测活跃数据与打开面板状况
                 if (ActiveData != null && MainWindow.IsDataEditorPanelOpen)
                 {
                     //刷新数据编辑面板
-                    MainWindow.DataEditorPanel.DRefresh(_activeData);
+                    MainWindow.DataEditorPanel.DRefresh(ActiveData);
                 }
                 else if (ActiveData != null && !MainWindow.IsDataEditorPanelOpen)
                 {
                     //向节点面板新增节点
-                    MainWindow.NodeEditorPanel.Add(new Node(ItemDicCache[_activeData.GetAssetHashCode()], MainWindow.NodeEditorPanel));
+                    MainWindow.NodeEditorPanel.Add(new Node(ItemDicCache[ActiveData.GetAssetHashCode()], MainWindow.NodeEditorPanel));
                 }
             };
 
@@ -310,7 +309,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 using ExecutionTimer timer = new("新增地点数据", MainWindow.TimerDebugLogToggle.value);
 
                 //以活跃选中项为可能的父级，创建数据
-                MainWindow.CreateLocUnitDataFile(_activeData, newName);
+                MainWindow.CreateLocUnitDataFile(ActiveData, newName);
 
                 //刷新树形图
                 TRefresh();
@@ -405,7 +404,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //清除剪切板缓存
             ClipboardItemCache.Clear();
             //设定剪切
-            _isCutOperation = isCutOperation;
+            IsCutOperation = isCutOperation;
             //获取所有选中数据
             List<TreeViewItemData<LocUnitData>> selections = selectedItems
                 .Select(data => ItemDicCache[((LocUnitData)data).GetAssetHashCode()])
@@ -440,7 +439,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             }
 
             //检测是否为剪切
-            if (_isCutOperation)
+            if (IsCutOperation)
             {
                 //若为剪切，则本次操作本质上为移动操作
                 MainWindow.MoveLocUnitDataFile(ActiveData, _clipboardData);

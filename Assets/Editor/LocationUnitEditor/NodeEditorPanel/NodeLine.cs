@@ -7,27 +7,26 @@ namespace THLL.GameEditor.LocUnitDataEditor
     public class NodeLine : VisualElement
     {
         #region 自身构成
+        //节点面板
+        private readonly NodeEditorPanel _nodeEditorPanel;
+        public NodeEditorPanel NodeEditorPanel => _nodeEditorPanel;
+
         //起始与结束，点
-        private Node _startNode;
-        public Node StartNode { get => _startNode; private set => _startNode = value; }
-        private Node _endNode;
-        public Node EndNode { get => _endNode; private set => _endNode = value; }
+        public Node StartNode { get; set; }
+        public Node EndNode { get; set; }
 
         //线条颜色
-        private Color _lineColor;
-        public Color LineColor { get => _lineColor; private set => _lineColor = value; }
+        public Color LineColor { get; private set; }
 
         //数字输入框
-        private IntegerField _integerField;
-        public IntegerField IntegerField { get => _integerField; private set => _integerField = value; }
+        public IntegerField IntegerField { get; private set; }
         #endregion
 
         //构造函数
-        public NodeLine(Node startNode, Node endNode)
+        public NodeLine(NodeEditorPanel nodeEditorPanel)
         {
-            //设置起始与结束点
-            StartNode = startNode;
-            EndNode = endNode;
+            //设置节点面板
+            _nodeEditorPanel = nodeEditorPanel;
 
             //设置线条颜色为随机颜色
             LineColor = new(Random.value, Random.value, Random.value, 1.0f);
@@ -42,7 +41,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //添加到线条上
             Add(IntegerField);
 
-            //注册几何形状更改回调
+            //注册生成面板事件以绘制曲线
             generateVisualContent += DrawBezierCurve;
         }
 
@@ -50,38 +49,27 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //当输入框数值发生更改时
         private void OnIntegerFieldValueChanged(ChangeEvent<int> evt)
         {
-            //先输出一条信息吧
-            Debug.Log("我连接啦！");
+            //检测输入值
+            if (evt.newValue < 0)
+            {
+                //若小于0，取消该链接
+                StartNode.Lines.Remove(this);
+                EndNode.Lines.Remove(this);
+                NodeEditorPanel.Remove(this);
+                //输出信息
+                Debug.Log("爷免费啦！");
+            }
+            else
+            {
+                //先输出一条信息吧
+                Debug.Log($"{StartNode.TargetData.Name}和{EndNode.TargetData.Name}喜成连理，共入洞房，耗时{evt.newValue}秒");
+            }
         }
         //更新线条
         public void UpdateLine()
         {
-            //更新数字输入框位置
-            UpdateIntegerFieldPositon();
-
             //标记面板为脏以进行重绘
             MarkDirtyRepaint();
-        }
-        //更新数字输入框位置
-        public void UpdateIntegerFieldPositon()
-        {
-            //起始、终结、点
-            //起始，直接获取起始节点的中点
-            Vector3 startPos = StartNode.localBound.center;
-            //终结，如果有终点那么获取终点，如果没有那么获取鼠标位置
-            Vector3 endPos = (EndNode != null) ? EndNode.localBound.center : (Vector3)GetMousePosition();
-
-            //更新IntegerField的位置
-            IntegerField.style.left = (startPos.x + endPos.x) / 2 - IntegerField.resolvedStyle.width / 2;
-            IntegerField.style.top = (startPos.y + endPos.y) / 2 - IntegerField.resolvedStyle.height / 2;
-        }
-        //获取鼠标位置
-        private Vector2 GetMousePosition()
-        {
-            //获取鼠标位置
-            Vector2 mousePos = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
-            //返回相对位置
-            return parent.WorldToLocal(mousePos);
         }
         //重绘线条
         private void DrawBezierCurve(MeshGenerationContext mgc)
@@ -90,7 +78,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //起始，直接获取起始节点的中点
             Vector3 startPos = StartNode.localBound.center;
             //终结，如果有终点那么获取终点，如果没有那么获取鼠标位置
-            Vector3 endPos = (EndNode != null) ? EndNode.localBound.center : (Vector3)GetMousePosition();
+            Vector3 endPos = (EndNode != null) ? EndNode.localBound.center : (Vector3)parent.WorldToLocal(Event.current.mousePosition);
+
+            //更新IntegerField的位置
+            IntegerField.style.left = (startPos.x + endPos.x) / 2 - IntegerField.resolvedStyle.width / 2;
+            IntegerField.style.top = (startPos.y + endPos.y) / 2 - IntegerField.resolvedStyle.height / 2;
 
             //曲线、起始、终结、点
             Vector2 bezierStartPoint = new(startPos.x, startPos.y);
