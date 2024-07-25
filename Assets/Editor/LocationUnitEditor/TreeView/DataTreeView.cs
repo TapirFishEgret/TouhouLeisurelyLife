@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using THLL.LocationSystem;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.IO;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -40,7 +40,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         #endregion
 
         //构建函数
-        public DataTreeView(MainWindow mainWindow) 
+        public DataTreeView(MainWindow mainWindow)
         {
             //获取主面板
             _mainWindow = mainWindow;
@@ -117,7 +117,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 else if (ActiveData != null && !MainWindow.IsDataEditorPanelOpen)
                 {
                     //向节点面板新增节点
-                    MainWindow.NodeEditorPanel.Add(new Node(ItemDicCache[_activeData.GetAssetHashCode()], MainWindow.NodeEditorPanel.NodeDicCache));
+                    MainWindow.NodeEditorPanel.Add(new Node(ItemDicCache[_activeData.GetAssetHashCode()], MainWindow.NodeEditorPanel));
                 }
             };
 

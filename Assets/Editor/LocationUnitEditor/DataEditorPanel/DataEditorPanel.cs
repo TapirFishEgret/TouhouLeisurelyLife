@@ -1,8 +1,8 @@
-﻿using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using THLL.LocationSystem;
+﻿using THLL.LocationSystem;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -17,7 +17,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public MainWindow MainWindow => _mainWindow;
 
         //基础四项
-        private VisualElement _container;
         private TextField _packageField;
         private TextField _authorFiled;
         private ObjectField _parentDataField;

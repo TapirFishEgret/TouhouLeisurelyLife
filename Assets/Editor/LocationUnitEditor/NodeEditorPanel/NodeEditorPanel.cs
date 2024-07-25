@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.UIElements;
-using UnityEngine;
+using System.IO;
 using UnityEditor;
-using UnityEditor.Rendering.LookDev;
+using UnityEditor.MemoryProfiler;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -23,15 +24,15 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private bool _isDragging = false;
         public bool IsDragging { get => _isDragging; private set => _isDragging = value; }
 
-        //节点连接
-        private NodeConnectionLine _currnetNodeLine;
-        public NodeConnectionLine CurrentNodeLine { get => _currnetNodeLine; private set => _currnetNodeLine = value; }
-        private VisualElement _currentStartElement;
-        public VisualElement CurrentStartElement { get => _currentStartElement; private set => _currentStartElement = value; }
+        //节点编辑功能
+        private Node _currentStartNode;
+        public Node CurrentStartNode { get => _currentStartNode; set => _currentStartNode = value; }
+        private NodeLine _currentLine;
+        public NodeLine CurrentLine { get => _currentLine; set => _currentLine = value; }
         #endregion
 
         //构建函数
-        public NodeEditorPanel(MainWindow mainWindow) 
+        public NodeEditorPanel(MainWindow mainWindow)
         {
             //设置为可延展且100%填充
             style.position = Position.Absolute;
@@ -54,15 +55,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
             using ExecutionTimer timer = new("连接编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
             //添加网格背景
-            //新建网格背景
-            IMGUIContainer gridContainer = new();
-            //将其位置修改为绝对
-            gridContainer.style.position = Position.Absolute;
-            //设置宽高
-            gridContainer.style.width = 2560;
-            gridContainer.style.height = 1440;
-            //绘制网格
-            gridContainer.onGUIHandler = DrawGrid;
+            //创建网格
+            IMGUIContainer gridContainer = new()
+            {
+                //设置格式
+                style =
+                {
+                    position = Position.Absolute,
+                    width = 2560,
+                    height = 1440,
+                },
+                //写入网格绘制方法
+                onGUIHandler = DrawGrid,
+            };
             //添加到面板中去
             Add(gridContainer);
 
@@ -72,10 +77,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             RegisterCallback<MouseMoveEvent>(OnMouseMove);
             RegisterCallback<MouseUpEvent>(OnMouseUp);
             RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
-            RegisterCallback<MouseDownEvent>(OnCreateConnection);
-            //_connectionEditorPanel.RegisterCallback<KeyDownEvent>(ConnectionEditor_OnKeyDown);
         }
-        //绘制面板网格
+        //绘制网格纹理
         private void DrawGrid()
         {
             //网格间隔
@@ -83,7 +86,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //网格透明度
             float gridOpacity = 0.2f;
             //网格颜色
-            Color gridColor = Color.gray;
+            Color gridColor = ChineseColor.Grey_大理石灰;
 
             //计算需要绘制的网格线条总数
             int widthDivs = Mathf.CeilToInt(contentRect.width / gridSpacing);
@@ -130,7 +133,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //应用缩放
             transform.scale = scale;
         }
-        //鼠标拖放事件
+        //鼠标按下事件
         private void OnMouseDown(MouseDownEvent evt)
         {
             //检测按键
@@ -143,6 +146,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 IsDragging = true;
             }
         }
+        //鼠标移动时
         private void OnMouseMove(MouseMoveEvent evt)
         {
             //检测拖放状态
@@ -154,13 +158,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //变更位置
                 transform.position += (Vector3)delta;
             }
-            //检测是否在连线
-            else if (CurrentNodeLine != null)
-            {
-                //若是，实时更新线条
-                CurrentNodeLine.UpdateEndPosition(evt.localMousePosition);
-            }
+            //检测当前是否有在创建连接，若有，更新线条
+            CurrentLine?.UpdateLine();
         }
+        //鼠标抬起时
         private void OnMouseUp(MouseUpEvent evt)
         {
             //检测按键
@@ -171,91 +172,12 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 IsDragging = false;
             }
         }
+        //鼠标离开时
         private void OnMouseLeave(MouseLeaveEvent evt)
         {
             //停止拖拽
             IsDragging = false;
         }
-        //连线
-        //响应连线事件
-        private void OnCreateConnection(MouseDownEvent evt)
-        {
-            //检测按键
-            if (evt.button == 1)
-            {
-                //当为右键时，检测当前是否已在生成线条
-                if (CurrentNodeLine != null)
-                {
-                    //若是，检测目标对象是否为另一个节点元素
-                    if (evt.target is VisualElement targetElement && targetElement != this && targetElement != CurrentNodeLine)
-                    {
-                        //若是，确认线条终点
-                        CurrentNodeLine.EndElement = targetElement;
-                        //生成线条
-                        CurrentNodeLine.UpdateEndPosition(targetElement.worldBound.center);
-                        //触发连接完成事件
-                        OnConnectionComplete(CurrentStartElement, targetElement);
-                        //清空当前数据
-                        CurrentNodeLine = null;
-                    }
-                    else
-                    {
-                        //若不是，添加中断点
-                        CurrentNodeLine.UpdateEndPosition(evt.localMousePosition);
-                        //清空当前数据
-                        CurrentStartElement = null;
-                    }
-                }
-                else
-                {
-                    //若尚未开始生成线条
-                    if (evt.target is VisualElement startElement && startElement != this)
-                    {
-                        //获取起始位置
-                        CurrentStartElement = startElement;
-                        //生成线条
-                        CurrentNodeLine = new NodeConnectionLine
-                        {
-                            StartElement = startElement,
-                            StartPoint = startElement.worldBound.center,
-                            EndPoint = evt.localMousePosition
-                        };
-                        //添加到面板中
-                        Add(CurrentNodeLine);
-                    }
-                }
-                //阻止事件传递
-                evt.StopPropagation();
-            }
-            else if (evt.button == 0 && CurrentNodeLine != null)
-            {
-                // 左键单击空白部分取消本次创建
-                Remove(CurrentNodeLine);
-                CurrentNodeLine = null;
-                evt.StopPropagation();
-            }
-        }
-        //当链接完成时
-        private void OnConnectionComplete(VisualElement startElement, VisualElement endElement)
-        {
-            //通知一声
-            Debug.Log($"'{startElement.name}'和'{endElement.name}'连接完成");
-        }
-        //快捷键事件，聚焦功能
-        //private void ConnectionEditor_OnKeyDown(KeyDownEvent evt)
-        //{
-        //    //检测按键
-        //    if (evt.keyCode == KeyCode.Home)
-        //    {
-        //        //当Home键被按下时
-        //        //获取当基础面板中心位置
-        //        Vector3 centerPosition = new(_rightPanel.contentRect.width / 2, _rightPanel.contentRect.height / 2, 0);
-        //        //设置中心位置
-        //        _connectionEditorPanel.transform.position = centerPosition - new Vector3(_connectionEditorPanel.contentRect.width / 2, _connectionEditorPanel.contentRect.height / 2, 0);
-        //        //更改缩放
-        //        _connectionEditorPanel.transform.scale = Vector3.one;
-        //    }
-        //}
         #endregion
     }
 }

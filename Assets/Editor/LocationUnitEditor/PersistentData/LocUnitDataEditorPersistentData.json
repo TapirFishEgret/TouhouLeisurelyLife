@@ -1,7 +1,7 @@
 {
     "DefaultPackage": "Core",
     "DefaultAuthor": "TapirFishEgret",
-    "TimerDebugLogState": false,
+    "TimerDebugLogState": true,
     "IsDataEditorPanelOpen": false,
     "ExpandedState": [
         1163744832,
