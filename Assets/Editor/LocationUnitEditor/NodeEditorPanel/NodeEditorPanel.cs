@@ -14,8 +14,13 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //主面板
         public MainWindow MainWindow { get; private set; }
 
-        //当前面板缩放
-        public (float, float) CurrentScale { get; private set; }
+        //滚轴容器与节点容器
+        public ScrollView ScrollView { get; private set; }
+        public VisualElement NodeView { get; private set; }
+
+        //滚轴面板拖放
+        public Vector2 ScrollViewDragStart { get; private set; }
+        public Vector2 ScrollViewStartPos { get; private set; }
 
         //ID-地点数据节点缓存
         public Dictionary<int, Node> NodeDicCache { get; private set; }
@@ -37,8 +42,27 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //构建函数
         public NodeEditorPanel(MainWindow mainWindow)
         {
+            //创建并添加容器
+            ScrollView = new()
+            {
+                style =
+                {
+                    flexGrow = 1,
+                }
+            };
+            Add(ScrollView);
+            NodeView = new()
+            {
+                style =
+                {
+                    position = Position.Absolute,
+                    width = 5000,
+                    height = 5000
+                }
+            };
+            ScrollView.Add(NodeView);
+
             //初始化缓存
-            CurrentScale = (1f, 1f);
             NodeDicCache = new();
             NodePosDicCache = new();
             NodeLineCache = new();
@@ -70,8 +94,108 @@ namespace THLL.GameEditor.LocUnitDataEditor
             LoadPersistentData();
 
             //写入绘制事件
-            generateVisualContent += DrawGrid;
+            NodeView.generateVisualContent += DrawGrid;
 
+            //生成节点与连线
+            GenerateNodesAndLines();
+
+            //监听事件
+            RegisterCallback<PointerDownEvent>(OnPointerDown);
+            RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            ScrollView.RegisterCallback<PointerDownEvent>(SVOnPointerDown);
+            ScrollView.RegisterCallback<PointerMoveEvent>(SVOnPointerMove);
+            ScrollView.RegisterCallback<PointerUpEvent>(SVOnPointerUp);
+        }
+        //绘制网格纹理
+        private void DrawGrid(MeshGenerationContext mgc)
+        {
+            //网格间隔
+            float gridSpacing = 20f;
+            //网格颜色
+            Color gridColor = ChineseColor.Grey_大理石灰;
+            gridColor.a = 0.2f;
+
+            //计算需要绘制的网格线条总数
+            int widthDivs = Mathf.CeilToInt(NodeView.worldBound.xMax / gridSpacing);
+            int heightDivs = Mathf.CeilToInt(NodeView.worldBound.yMax / gridSpacing);
+
+            //获取画笔
+            Painter2D painter = mgc.painter2D;
+            painter.lineWidth = 2.0f;
+            painter.strokeColor = gridColor;
+            painter.BeginPath();
+
+            //绘制垂直网格线
+            for (int i = 0; i < widthDivs; i++)
+            {
+                //绘制线条，从一段到另一端
+                painter.MoveTo(new Vector2(gridSpacing * i, 0));
+                painter.LineTo(new Vector2(gridSpacing * i, NodeView.worldBound.yMax));
+            }
+            //水平
+            for (int j = 0; j < heightDivs; j++)
+            {
+                painter.MoveTo(new Vector2(0, gridSpacing * j));
+                painter.LineTo(new Vector2(NodeView.worldBound.xMax, gridSpacing * j));
+            }
+
+            //结束绘制
+            painter.Stroke();
+        }
+        //刷新逻辑
+        public void NRefresh(LocUnitData locUnitData)
+        {
+            //检测传入是否为空
+            if (locUnitData == null)
+            {
+                //若是，返回
+                return;
+            }
+
+            //检测是否需要重生成
+            if (!NeedToRefresh)
+            {
+                //检测所选节点是否在缓存中
+                if (NodeDicCache.ContainsKey(locUnitData.GetAssetHashCode()))
+                {
+                    //检测所选节点是否在面板上
+                    if (ShowedNodes.Contains(NodeDicCache[locUnitData.GetAssetHashCode()]))
+                    {
+                        //满足三重条件，返回
+                        return;
+                    }
+                }
+            }
+
+            //若不是，开始计时
+            using ExecutionTimer timer = new("节点编辑面板刷新", MainWindow.TimerDebugLogToggle.value);
+
+            //刷新前进行资源的保存
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            //刷新
+            ShowFullNodes(locUnitData);
+        }
+        //窗口大小变化事件
+        private void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            //判断活跃窗口
+            if (MainWindow.MultiTabView.activeTab == this)
+            {
+                //若为自身
+                //更改窗口大小
+                ScrollView.style.width = evt.newRect.width;
+                ScrollView.style.height = evt.newRect.height;
+            }
+        }
+        //重新生成节点与连线
+        public void GenerateNodesAndLines()
+        {
+            //清除数据
+            NodeDicCache.Clear();
+            NodeLineCache.Clear();
             //生成所有节点
             foreach (TreeViewItemData<LocUnitData> item in MainWindow.DataTreeView.ItemDicCache.Values)
             {
@@ -114,133 +238,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     otherNode.NodeLines.Add(line);
                 }
             }
-
-            //监听事件
-            RegisterCallback<PointerDownEvent>(OnPointerDown);
-            RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-        }
-        //绘制网格纹理
-        private void DrawGrid(MeshGenerationContext mgc)
-        {
-            //网格间隔
-            float gridSpacing = 20f;
-            //网格颜色
-            Color gridColor = ChineseColor.Grey_大理石灰;
-            gridColor.a = 0.2f;
-
-            //计算需要绘制的网格线条总数
-            int widthDivs = Mathf.CeilToInt(worldBound.xMax / gridSpacing);
-            int heightDivs = Mathf.CeilToInt(worldBound.yMax / gridSpacing);
-
-            //获取画笔
-            Painter2D painter = mgc.painter2D;
-            painter.lineWidth = 2.0f;
-            painter.strokeColor = gridColor;
-            painter.BeginPath();
-
-            //绘制垂直网格线
-            for (int i = 0; i < widthDivs; i++)
-            {
-                //绘制线条，从一段到另一端
-                painter.MoveTo(new Vector2(gridSpacing * i, 0));
-                painter.LineTo(new Vector2(gridSpacing * i, worldBound.yMax));
-            }
-            //水平
-            for (int j = 0; j < heightDivs; j++)
-            {
-                painter.MoveTo(new Vector2(0, gridSpacing * j));
-                painter.LineTo(new Vector2(worldBound.xMax, gridSpacing * j));
-            }
-
-            //结束绘制
-            painter.Stroke();
-        }
-        //刷新逻辑
-        public void NRefresh(LocUnitData locUnitData)
-        {
-            //检测传入是否为空
-            if (locUnitData == null)
-            {
-                //若是，返回
-                return;
-            }
-
-            //检测是否需要重生成
-            if (!NeedToRefresh)
-            {
-                //检测所选节点是否在缓存中
-                if (NodeDicCache.ContainsKey(locUnitData.GetAssetHashCode()))
-                {
-                    //检测所选节点是否在面板上
-                    if (ShowedNodes.Contains(NodeDicCache[locUnitData.GetAssetHashCode()]))
-                    {
-                        //满足三重条件，返回
-                        return;
-                    }
-                }
-            }
-
-            //若不是，开始计时
-            using ExecutionTimer timer = new("节点编辑面板刷新", MainWindow.TimerDebugLogToggle.value);
-
-            //刷新前进行资源的保存
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            //并对当前面板进行判断
-            bool hasGateway = false;
-            bool hasSingelNode = false;
-            foreach (Node node in ShowedNodes)
-            {
-                if (node.IsGateway)
-                {
-                    hasGateway = true;
-                }
-                if (node.NodeLines.Count == 0)
-                {
-                    hasSingelNode = true;
-                }
-            }
-            if (!hasGateway)
-            {
-                Debug.LogWarning("上一个地区缺少出入口！");
-            }
-            if (hasSingelNode && ShowedNodes.Count > 1)
-            {
-                Debug.LogWarning("上一个地区有无法正常通行地点！");
-            }
-
-            //刷新
-            ShowFullNodes(locUnitData);
-        }
-        //窗口大小变化事件
-        private void OnGeometryChanged(GeometryChangedEvent evt)
-        {
-            //判断活跃窗口
-            if (MainWindow.MultiTabView.activeTab == this)
-            {
-                //若为自身
-                //获取X轴缩放比例
-                float scaleX = evt.newRect.width / evt.oldRect.width;
-                //获取Y轴缩放比例
-                float scaleY = evt.newRect.height / evt.oldRect.height;
-
-                //检查数字是否正常
-                if (scaleX <= 0 || scaleX > 5000 || float.IsNaN(scaleX) || float.IsInfinity(scaleX))
-                {
-                    //若不正常，直接返回
-                    return;
-                }
-
-                //若正常，记录
-                CurrentScale = (scaleX, scaleY);
-                //并触发所有节点的更改位置方法
-                foreach (Node node in NodeDicCache.Values)
-                {
-                    node.ScalePosition(scaleX, scaleY);
-                }
-            }
         }
         //读取永久性存储文件到缓存
         private void LoadPersistentData()
@@ -254,7 +251,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         }
         #endregion
 
-        #region 节点的移动与连接与设定
+        #region 节点与面板的移动与节点连接与设定
         //鼠标按下事件
         private void OnPointerDown(PointerDownEvent evt)
         {
@@ -319,7 +316,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 StartNode = startNode,
             };
             //将线条添加入面板
-            Add(CurrentNodeLine);
+            NodeView.Add(CurrentNodeLine);
         }
         //结束连接
         private void EndLine(Node endNode)
@@ -340,6 +337,40 @@ namespace THLL.GameEditor.LocUnitDataEditor
         }
         #endregion
 
+        #region 滚轴面板事件
+        //鼠标按下时
+        private void SVOnPointerDown(PointerDownEvent evt)
+        {
+            //检测是否选到了节点
+            if (evt.target is Node)
+            {
+                //若是，返回
+                return;
+            }
+            //记录开始拖动的位置
+            ScrollViewDragStart = evt.localPosition;
+            ScrollViewStartPos = new Vector2(ScrollView.scrollOffset.x, ScrollView.scrollOffset.y);
+            //并捕获鼠标
+            ScrollView.CaptureMouse();
+        }
+        //鼠标移动时
+        private void SVOnPointerMove(PointerMoveEvent evt)
+        {
+            //检测鼠标是否有被捕获
+            if (ScrollView.HasMouseCapture())
+            {
+                //若有，则计算偏移并拖动
+                Vector2 dragOffset = (Vector2)evt.localPosition - ScrollViewDragStart;
+                ScrollView.scrollOffset = ScrollViewStartPos - dragOffset;
+            }
+        }
+        //鼠标抬起时
+        private void SVOnPointerUp(PointerUpEvent evt)
+        {
+            ScrollView.ReleaseMouse();
+        }
+        #endregion
+
         #region 节点的显示
         //展示完整节点
         private void ShowFullNodes(LocUnitData locUnitData)
@@ -348,11 +379,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
             foreach (Node node in ShowedNodes)
             {
                 NodePosDicCache[node.TargetData.GetAssetHashCode()] = (node.style.left.value.value, node.style.top.value.value);
-                Remove(node);
+                NodeView.Remove(node);
             }
             foreach (NodeLine nodeLine in ShowedNodeLines.Values)
             {
-                Remove(nodeLine);
+                NodeView.Remove(nodeLine);
             }
             ShowedNodes.Clear();
             ShowedNodeLines.Clear();
@@ -414,7 +445,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     if (!ShowedNodeLines.ContainsKey(nodeLine.ID))
                     {
                         //若没有
-                        Add(nodeLine);
+                        NodeView.Add(nodeLine);
                         //并加入肯德基豪华午餐
                         ShowedNodeLines[nodeLine.ID] = nodeLine;
                     }
@@ -430,7 +461,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //考虑到既然已经重设，顺便给个名字
             node.Label.text = locUnitData.name;
             //将节点添加至面板
-            Add(node);
+            NodeView.Add(node);
             //尝试更改节点位置
             if (NodePosDicCache.ContainsKey(id))
             {

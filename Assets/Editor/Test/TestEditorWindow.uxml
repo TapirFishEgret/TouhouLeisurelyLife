@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:TabView>
+        <engine:Tab label="Tab">
+            <engine:ScrollView name="SCV" style="flex-grow: 1; height: auto;">
+                <engine:VisualElement name="VisualElement" style="position: absolute; width: 5000px; height: 5000px; background-color: rgba(55, 55, 55, 0); background-image: url(&quot;project://database/Assets/Art/2D/Sprites/Backgrounds/TestBackground.jpg?fileID=21300000&amp;guid=a104778972aa0074d9b7542e4d6e893c&amp;type=3#TestBackground&quot;); -unity-background-scale-mode: scale-and-crop;" />
+            </engine:ScrollView>
+        </engine:Tab>
+    </engine:TabView>
+</engine:UXML>

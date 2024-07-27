@@ -142,6 +142,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             else
             {
                 //若为空，正常设置所需要的元素
+                newData.Editor_SetName(newDataName);
                 newData.Editor_SetPackage(DefaultPackageField.text);
                 newData.Editor_SetCategory("Location");
                 newData.Editor_SetAuthor(DefaultAuthorField.text);
@@ -150,6 +151,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             newData.name = newDataName;
             //更改父级
             newData.Editor_SetParent(parentData);
+            //生成全名
+            newData.Editor_GenerateFullName();
             //获取资源文件夹地址
             string newDataPath = Path.Combine(GetDataFolderPath(newData), $"{newDataName}.asset").Replace("\\", "/");
             //新建资源
@@ -201,9 +204,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 }
             }
 
+            //重新生成节点与连线缓存
+            NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建并重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(DataTreeView.ActiveData);
+            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
         }
         //编辑器面板中删除地点数据
         public void DeleteLocUnitDataFile(LocUnitData deletedData)
@@ -227,11 +232,33 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 DataTreeView.ChildrenDicCache[item.data.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
             }
             //其他缓存
+            //树状图数据的根物体缓存，考虑到Remove能自己解决没有物体的问题，所以直接移除
             DataTreeView.RootItemCache.Remove(item);
+            //树状图数据的全物体缓存
             DataTreeView.ItemDicCache.Remove(item.id);
+            //树状图数据的子物体缓存
             DataTreeView.ChildrenDicCache.Remove(item.id);
+            //树状图数据的扩展状态缓存
             DataTreeView.ExpandedStateCache.Remove(item.id);
+            //节点面板的当前显示节点缓存，考虑到需要移除视觉元素，还有丫有关的连线，所以稍微麻烦点
+            Node node = NodeEditorPanel.NodeDicCache[item.id];
+            if (NodeEditorPanel.ShowedNodes.Contains(node))
+            {
+                NodeEditorPanel.NodeView.Remove(node);
+                NodeEditorPanel.ShowedNodes.Remove(node);
+            }
+            //节点面板的全节点缓存
+            NodeEditorPanel.NodeDicCache.Remove(item.id);
+            //节点面板的节点位置缓存
+            NodeEditorPanel.NodePosDicCache.Remove(item.id);
+            //需要重命名的数据的缓存
             DataNeedToReGenerateFullNameCache.Remove(item.data);
+
+            //将其对应的连接中删除
+            foreach (LocUnitData otherData in deletedData.ConnectionKeys)
+            {
+                otherData.Editor_RemoveConnection(deletedData);
+            }
 
             //将数据从文件夹中移除
             //获取其所在的文件夹
@@ -257,9 +284,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 }
             }
 
+            //重新生成节点与连线缓存
+            NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(DataTreeView.ActiveData);
+            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
         }
         //编辑器面板中重命名物体数据
         public void RenameLocUnitDataFile(LocUnitData renamedData, string newDataName)
@@ -275,9 +304,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 Debug.LogWarning("重命名警告：重命名文件与同级目录下其他文件重名！");
                 newDataName = "需要重命名_" + newDataName;
             }
-            //重命名文件及文件夹
+            //重命名文件及文件夹与数据
             AssetDatabase.RenameAsset(assetPath, newDataName);
             AssetDatabase.RenameAsset(assetFolderPath, newDataName);
+            renamedData.Editor_SetName(newDataName);
+            MarkAsNeedToReGenerateFullName(renamedData);
 
             //标记为脏
             EditorUtility.SetDirty(renamedData);
@@ -300,6 +331,12 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //重构树形图
             DataTreeView.TRefresh();
+
+            //重新生成节点与连线缓存
+            NodeEditorPanel.GenerateNodesAndLines();
+            //结束后注明节点面板需要重建
+            NodeEditorPanel.NeedToRefresh = true;
+            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
         }
         //编辑器面板中移动物体数据
         public void MoveLocUnitDataFile(LocUnitData targetData, List<LocUnitData> topLevelMovedDatas)
@@ -331,6 +368,14 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //更新父级与缓存与本地存储
             foreach (LocUnitData movedData in topLevelMovedDatas)
             {
+                //移动前，首先清除自身相关链接
+                foreach (LocUnitData otherData in movedData.ConnectionKeys)
+                {
+                    otherData.Editor_RemoveConnection(movedData);
+                }
+                movedData.ConnectionKeys.Clear();
+                movedData.ConnectionValues.Clear();
+
                 //源文件夹
                 string sourceFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(movedData));
                 //目标父级文件夹
@@ -424,9 +469,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //刷新树形图
             DataTreeView.TRefresh();
 
+            //并重新生成节点
+            NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(DataTreeView.ActiveData);
+            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
         }
         #endregion
 
@@ -447,11 +494,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //生成节点位置数据
             foreach (Node node in NodeEditorPanel.NodeDicCache.Values)
             {
-                //获取调整缩放后数值
-                float x = node.style.left.value.value / NodeEditorPanel.CurrentScale.Item1;
-                float y = node.style.top.value.value / NodeEditorPanel.CurrentScale.Item2;
                 //存入
-                persistentData.NodePositions[node.TargetData.GetAssetHashCode()] = (x, y);
+                persistentData.NodePositions[node.TargetData.GetAssetHashCode()] = (node.style.left.value.value, node.style.top.value.value);
             }
             //将永久性存储实例转化为文本
             string jsonString = JsonConvert.SerializeObject(persistentData, Formatting.Indented);

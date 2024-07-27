@@ -89,19 +89,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
             RegisterCallback<PointerMoveEvent>(OnPointerMove);
             RegisterCallback<PointerUpEvent>(OnPointerUp);
         }
-        //重设自身位置
-        public void ScalePosition(float scaleX, float scaleY)
-        {
-            //设置X轴位置
-            style.left = resolvedStyle.left * scaleX;
-            //设置Y轴位置
-            style.top = resolvedStyle.top * scaleY;
-            //刷新线条
-            foreach (NodeLine line in NodeLines)
-            {
-                line.UpdateLine();
-            }
-        }
         #endregion
 
         #region 鼠标响应

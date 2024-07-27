@@ -124,7 +124,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //若小于0，取消该链接
                 StartNode.NodeLines.Remove(this);
                 EndNode.NodeLines.Remove(this);
-                NodeEditorPanel.Remove(this);
+                NodeEditorPanel.NodeView.Remove(this);
                 NodeEditorPanel.ShowedNodeLines.Remove(ID);
                 NodeEditorPanel.NodeLineCache.Remove(ID);
                 //并删除双方连接字典中的对方

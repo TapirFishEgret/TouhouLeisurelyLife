@@ -28,5 +28,6 @@ MonoBehaviour:
   _connectionKeys:
   - {fileID: 11400000, guid: da22965ff7cd7bd458c430eb1bdee9ec, type: 2}
   - {fileID: 11400000, guid: 5a87e721f6b9cb54680917c50640446c, type: 2}
-  _connectionValues: 0f0000000f000000
+  - {fileID: 11400000, guid: 8b4e6e721e07ab54b90716438ca21a92, type: 2}
+  _connectionValues: 0f0000000f0000000f000000
   _isGateway: 0

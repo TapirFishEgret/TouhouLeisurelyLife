@@ -26,6 +26,7 @@ MonoBehaviour:
   _parentData: {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
   _background: {fileID: 0}
   _connectionKeys:
+  - {fileID: 11400000, guid: a5d43a105a3ec9f419f4e90a2d2a8ab8, type: 2}
   - {fileID: 11400000, guid: 5a87e721f6b9cb54680917c50640446c, type: 2}
-  _connectionValues: 0f000000
+  _connectionValues: 0f0000000f000000
   _isGateway: 0

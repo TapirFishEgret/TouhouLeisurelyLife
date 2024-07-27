@@ -26,10 +26,9 @@ MonoBehaviour:
   _parentData: {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
   _background: {fileID: 0}
   _connectionKeys:
-  - {fileID: 11400000, guid: a5d43a105a3ec9f419f4e90a2d2a8ab8, type: 2}
-  - {fileID: 11400000, guid: 8b4e6e721e07ab54b90716438ca21a92, type: 2}
   - {fileID: 11400000, guid: 1bc33b0dde5c89b4abd6e844e323717e, type: 2}
   - {fileID: 11400000, guid: 600a8363c0c6aa4409b67cafc0d0e96b, type: 2}
-  - {fileID: 11400000, guid: 6afdf1632e84f0142b201c3539ef30d3, type: 2}
-  _connectionValues: 0f0000000f0000000f0000000f0000000f000000
+  - {fileID: 11400000, guid: a5d43a105a3ec9f419f4e90a2d2a8ab8, type: 2}
+  - {fileID: 11400000, guid: 8b4e6e721e07ab54b90716438ca21a92, type: 2}
+  _connectionValues: 0f0000000f0000000f0000000f000000
   _isGateway: 0
