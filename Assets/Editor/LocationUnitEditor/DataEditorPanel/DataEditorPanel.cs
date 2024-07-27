@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
-    public class DataEditorPanel : VisualElement
+    public class DataEditorPanel : Tab
     {
         //UI文档资源
         [SerializeField]
@@ -15,6 +15,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //主面板
         public MainWindow MainWindow { get; private set; }
 
+        //基层面板
+        private VisualElement _dataEditorPanel;
         //基础四项
         private TextField _packageField;
         private TextField _authorFiled;
@@ -30,11 +32,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
         {
             //获取面板
-            visualTree.CloneTree(this);
-
-            //设置为可延展
-            style.flexGrow = 1;
-            style.flexShrink = 1;
+            VisualElement panel = visualTree.CloneTree();
+            Add(panel);
 
             //指定主窗口
             MainWindow = mainWindow;
@@ -50,7 +49,16 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //计时
             using ExecutionTimer timer = new("数据编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
+            //设置标签页容器可延展
+            style.flexGrow = 1;
+            contentContainer.style.flexGrow = 1;
+            
+            //设定名称
+            label = "数据编辑窗口";
+
             //获取UI控件
+            //基层面板
+            _dataEditorPanel = this.Q<VisualElement>("DataEditorPanel");
             //基础项
             _packageField = this.Q<TextField>("PackageField");
             _authorFiled = this.Q<TextField>("AuthorField");
@@ -61,6 +69,9 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField = this.Q<TextField>("NameField");
             _descriptionField = this.Q<TextField>("DescriptionField");
             _backgroundField = this.Q<ObjectField>("BackgroundField");
+
+            //注册事件
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
         //刷新面板
         public void DRefresh(LocUnitData locUnitData)
@@ -135,6 +146,17 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField.UnregisterValueChangedCallback(OnNameChanged);
             _descriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
             _backgroundField.UnregisterValueChangedCallback(OnBackgroundChanged);
+        }
+        //几何图形改变时手动调整窗口大小
+        private void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            //检测当前多标签页面板选中标签是否为自身
+            if (MainWindow.MultiTabView.activeTab == this)
+            {
+                //若是，则触发更改
+                _dataEditorPanel.style.width = evt.newRect.width;
+                _dataEditorPanel.style.height = evt.newRect.height;
+            }
         }
         //数据处理方法
         private void OnPackageChanged(ChangeEvent<string> evt)

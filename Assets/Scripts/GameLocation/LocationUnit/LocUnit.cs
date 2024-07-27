@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using THLL.BaseSystem;
-using THLL.LocationSystem.Tags;
 using UnityEngine;
 
 namespace THLL.LocationSystem
@@ -21,9 +20,8 @@ namespace THLL.LocationSystem
         //地点连接情况
         private readonly Dictionary<LocUnit, int> _connections;
         public Dictionary<LocUnit, int> Connections => _connections;
-        //标签存储
-        private readonly LocUnitTagDb _tags;
-        public LocUnitTagDb Tags => _tags;
+        //是否为出入口
+        public bool IsGateway => baseData.IsGateway;
         #endregion
 
         #region 方法
@@ -32,10 +30,9 @@ namespace THLL.LocationSystem
         {
             _children = new();
             _connections = new();
-            _tags = new();
         }
         //初始化方法
-        public void Init(LocUnitDb globalData, LocUnitConnDb globalConnData)
+        public void Init(LocUnitDb globalData, Dictionary<LocUnit, Dictionary<LocUnit, int>> globalConnData)
         {
             //设定父级
             if (baseData.ParentData != null)
@@ -49,35 +46,21 @@ namespace THLL.LocationSystem
                 Children.AddValue(locUnit.baseData, locUnit);
             }
 
-            //应用标签
-            foreach (LocUnitTag locUnitTag in baseData.Tags)
+            //将加载连接数据并放入全局
+            foreach (LocUnitData locUnitData in baseData.ConnectionKeys)
             {
-                locUnitTag.ApplyTag(this, globalData, globalConnData);
-            }
-
-            //创建连接
-            InitConnections(globalData, globalConnData);
-        }
-        //初始化地点连接
-        private void InitConnections(LocUnitDb globalData, LocUnitConnDb globalConnData)
-        {
-            //检测连接数据是否为空
-            if (Connections.Count == 0)
-            {
-                return;
-            }
-
-            //遍历数据中的连接数据
-            foreach (LocUnitDataConn conn in baseData.LocUnitDataConns)
-            {
-                //目标地点
-                LocUnit targetLocUnit = globalData[conn.otherLocUnit];
-                //添加双向连接
-                Connections[targetLocUnit] = conn.duration;
-                targetLocUnit.Connections[this] = conn.duration;
-                //添加全局双向连接
-                globalConnData.AddConnection(this, targetLocUnit, conn.duration);
-                globalConnData.AddConnection(targetLocUnit, this, conn.duration);
+                //序号
+                int index = baseData.ConnectionKeys.IndexOf(locUnitData);
+                //耗时
+                int duration = baseData.ConnectionValues[index];
+                //实例
+                LocUnit locUnit = globalData[locUnitData];
+                //存放
+                if (!globalConnData.ContainsKey(this))
+                {
+                    globalConnData[this] = new Dictionary<LocUnit, int>();
+                }
+                globalConnData[this][locUnit] = duration;
             }
         }
         #endregion

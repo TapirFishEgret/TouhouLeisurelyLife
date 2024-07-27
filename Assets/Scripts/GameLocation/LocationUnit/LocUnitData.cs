@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using THLL.BaseSystem;
-using THLL.LocationSystem.Tags;
 using UnityEngine;
 
 
@@ -14,7 +14,7 @@ namespace THLL.LocationSystem
         public override string ID => string.Join("_", new List<string>() { Package, Category, Author }.Concat(FullName));
         //全名
         [SerializeField]
-        private List<string> _fullName;
+        private List<string> _fullName = new();
         public List<string> FullName => _fullName;
         //父级单元
         [SerializeField]
@@ -26,23 +26,15 @@ namespace THLL.LocationSystem
         public Sprite Background => _background;
         //地点相连情况
         [SerializeField]
-        private List<LocUnitDataConn> _connections;
-        public List<LocUnitDataConn> LocUnitDataConns => _connections;
-        //标签列表
+        private List<LocUnitData> _connectionKeys = new();
+        public List<LocUnitData> ConnectionKeys => _connectionKeys;
         [SerializeField]
-        private List<LocUnitTag> _tags;
-        public List<LocUnitTag> Tags => _tags;
-        #endregion
-
-        #region 函数
-        //构建函数
-        public LocUnitData()
-        {
-            //初始化
-            _fullName = new();
-            _connections = new();
-            _tags = new();
-        }
+        private List<int> _connectionValues = new();
+        public List<int> ConnectionValues => _connectionValues;
+        //是否为出入口
+        [SerializeField]
+        private bool _isGateway = false;
+        public bool IsGateway => _isGateway;
         #endregion
 
 #if UNITY_EDITOR
@@ -83,6 +75,12 @@ namespace THLL.LocationSystem
         {
             _background = background;
             //标记数据为脏
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        //设定是否为出入口
+        public void Editor_SetIsGateway(bool isGateway)
+        {
+            _isGateway = isGateway;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //复制数据

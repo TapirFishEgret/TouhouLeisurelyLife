@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using THLL.LocationSystem;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -108,15 +109,15 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //获取活跃数据
                 ActiveData = selections.Cast<LocUnitData>().FirstOrDefault();
                 //检测活跃数据与打开面板状况
-                if (ActiveData != null && MainWindow.IsDataEditorPanelOpen)
+                if (ActiveData != null && MainWindow.MultiTabView.activeTab == MainWindow.DataEditorPanel)
                 {
                     //刷新数据编辑面板
                     MainWindow.DataEditorPanel.DRefresh(ActiveData);
                 }
-                else if (ActiveData != null && !MainWindow.IsDataEditorPanelOpen)
+                else if (ActiveData != null && MainWindow.MultiTabView.activeTab == MainWindow.NodeEditorPanel)
                 {
-                    //向节点面板新增节点
-                    MainWindow.NodeEditorPanel.Add(new Node(ItemDicCache[ActiveData.GetAssetHashCode()], MainWindow.NodeEditorPanel));
+                    //刷新节点面板
+                    MainWindow.NodeEditorPanel.NRefresh(ActiveData);
                 }
             };
 
@@ -590,7 +591,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //读取文件中数据
             string jsonString = File.ReadAllText(AssetDatabase.GetAssetPath(MainWindow.PersistentDataFile));
             //生成永久性存储实例
-            PersistentData persistentData = JsonUtility.FromJson<PersistentData>(jsonString);
+            PersistentData persistentData = JsonConvert.DeserializeObject<PersistentData>(jsonString);
             //分配数据
             //展开状态数据
             ExpandedStateCache.Clear();

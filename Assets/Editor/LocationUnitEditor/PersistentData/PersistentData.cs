@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -10,7 +11,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public string DefaultPackage;
         public string DefaultAuthor;
         public bool TimerDebugLogState;
-        public bool IsDataEditorPanelOpen;
         public List<int> ExpandedState;
+        public Dictionary<int, (float, float)> NodePositions;
     }
 }

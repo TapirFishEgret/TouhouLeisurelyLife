@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
-  m_Name: "02\u535A\u4E3D\u795E\u793E"
+  m_Name: "10\u5EAD\u9662"
   m_EditorClassIdentifier: 
-  dataName: "\u535A\u4E3D\u795E\u793E"
+  dataName: "\u5EAD\u9662"
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core
@@ -21,7 +21,9 @@ MonoBehaviour:
   - "\u6D4B\u8BD5\u4E16\u754C"
   - "\u6D4B\u8BD5\u5730\u533A"
   - "\u535A\u4E3D\u795E\u793E"
-  _parentData: {fileID: 11400000, guid: c87ecec6906c6bc43985127cc432eaf6, type: 2}
+  - "\u4E3B\u5C4B"
+  - "\u5EAD\u9662"
+  _parentData: {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
   _background: {fileID: 0}
-  _serializedConnections: '{}'
-  _isGateway: 0
+  _connections: []
+  _tags: []

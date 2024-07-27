@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using THLL.BaseSystem;
-using THLL.LocationSystem.Tags;
 using UnityEngine;
 
 namespace THLL.LocationSystem
@@ -26,11 +25,6 @@ namespace THLL.LocationSystem
                 LocUnit realTestTarget = GameLocation.LocUnitDb[testTarget];
                 //输出对象ID
                 Debug.Log(realTestTarget.ID);
-                //输出对象包含的标签的名称
-                foreach (LocUnitTag locUnitTag in realTestTarget.Tags)
-                {
-                    Debug.Log(locUnitTag.Name);
-                }
                 //输出对象所有链接数据
                 foreach (KeyValuePair<LocUnit, int> keyValuePair in realTestTarget.Connections)
                 {

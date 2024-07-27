@@ -10,8 +10,7 @@ namespace THLL.BaseSystem
         B_Author,
         B_Name,
         L_ParentName,
-        LT_TagCategory,
-        LT_IsInherited,
+        L_IsGateway,
     }
 
     //委托，用于表示过滤函数，可传入多种类型

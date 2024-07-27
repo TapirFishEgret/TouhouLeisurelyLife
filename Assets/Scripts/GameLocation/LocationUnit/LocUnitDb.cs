@@ -74,6 +74,16 @@ namespace THLL.LocationSystem
                 }
                 return datas;
             };
+            //新增是否为出入口查询
+            filters[QueryKeywordEnum.L_IsGateway] = (datas, queryValue) =>
+            {
+                //检查类型
+                if (queryValue is bool isGateway)
+                {
+                    return datas.Where(d => d.IsGateway == isGateway);
+                }
+                return datas;
+            };
         }
         #endregion
     }
