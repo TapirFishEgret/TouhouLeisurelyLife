@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using THLL.BaseSystem;
 using UnityEngine;
@@ -81,6 +80,37 @@ namespace THLL.LocationSystem
         public void Editor_SetIsGateway(bool isGateway)
         {
             _isGateway = isGateway;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        //添加链接
+        public void Editor_AddConnection(LocUnitData locUnitData, int duration)
+        {
+            ConnectionKeys.Add(locUnitData);
+            ConnectionValues.Add(duration);
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        //移除链接
+        public bool Editor_RemoveConnection(LocUnitData locUnitData)
+        {
+            if (ConnectionKeys.Contains(locUnitData))
+            {
+                int index = ConnectionKeys.IndexOf(locUnitData);
+                ConnectionKeys.RemoveAt(index);
+                ConnectionValues.RemoveAt(index);
+                UnityEditor.EditorUtility.SetDirty(this);
+                return true;
+            }
+            UnityEditor.EditorUtility.SetDirty(this);
+            return false;
+        }
+        //设定通行时间
+        public void Editor_SetConnDuration(LocUnitData locUnitData, int duration)
+        {
+            if (ConnectionKeys.Contains(locUnitData))
+            {
+                int index = ConnectionKeys.IndexOf(locUnitData);
+                ConnectionValues[index] = duration;
+            }
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //复制数据

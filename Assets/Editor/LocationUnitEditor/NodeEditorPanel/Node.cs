@@ -17,7 +17,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public bool IsGateway { get; private set; }
 
         //文本框
-        public Label Label { get; private set; }    
+        public Label Label { get; private set; }
 
         //拖拽功能
         public Vector2 DragStart { get; private set; }
@@ -50,7 +50,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             Init();
         }
 
-        #region 方法
+        #region 初始化及调整方法
         //初始化
         public void Init()
         {
@@ -89,6 +89,22 @@ namespace THLL.GameEditor.LocUnitDataEditor
             RegisterCallback<PointerMoveEvent>(OnPointerMove);
             RegisterCallback<PointerUpEvent>(OnPointerUp);
         }
+        //重设自身位置
+        public void ScalePosition(float scaleX, float scaleY)
+        {
+            //设置X轴位置
+            style.left = resolvedStyle.left * scaleX;
+            //设置Y轴位置
+            style.top = resolvedStyle.top * scaleY;
+            //刷新线条
+            foreach (NodeLine line in NodeLines)
+            {
+                line.UpdateLine();
+            }
+        }
+        #endregion
+
+        #region 鼠标响应
         //鼠标按下时
         private void OnPointerDown(PointerDownEvent evt)
         {
@@ -136,17 +152,38 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 this.ReleasePointer(evt.pointerId);
             }
         }
-        //重设自身位置
-        public void ScalePosition(float scaleX, float scaleY)
+        #endregion
+
+        #region 出入口的设定
+        public void AsGateway(bool yes)
         {
-            //设置X轴位置
-            style.left = resolvedStyle.left * scaleX;
-            //设置Y轴位置
-            style.top = resolvedStyle.top * scaleY;
-            //刷新线条
-            foreach (NodeLine line in NodeLines)
+            //首先检测目前数据是否有父级
+            if (TargetData.ParentData == null)
             {
-                line.UpdateLine();
+                //若无父级，返回
+                Debug.LogWarning("当前节点无父级，无法设置为出入口！");
+                return;
+            }
+            //随后检测传入
+            if (yes)
+            {
+                //若设定为出入口，则设定，并向其本身与其父级添加耗时为0的连接
+                TargetData.Editor_SetIsGateway(true);
+                TargetData.Editor_AddConnection(TargetData.ParentData, 0);
+                TargetData.ParentData.Editor_AddConnection(TargetData, 0);
+                //并将节点数据同步更改
+                IsGateway = true;
+                style.backgroundColor = DefaultGatewayColor;
+            }
+            else
+            {
+                //若取消设定为出入口，则设定，并删除相关链接
+                TargetData.Editor_SetIsGateway(false);
+                TargetData.Editor_RemoveConnection(TargetData.ParentData);
+                TargetData.ParentData.Editor_RemoveConnection(TargetData);
+                //并将节点数据同步更改
+                IsGateway = false;
+                style.backgroundColor = DefaultNodeColor;
             }
         }
         #endregion

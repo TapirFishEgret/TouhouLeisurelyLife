@@ -22,5 +22,8 @@ MonoBehaviour:
   - "\u6D4B\u8BD5\u5730\u533A"
   _parentData: {fileID: 11400000, guid: 522b78d37e62ef145ac55f2bfa7ba5e1, type: 2}
   _background: {fileID: 0}
-  _connections: []
-  _tags: []
+  _connectionKeys:
+  - {fileID: 11400000, guid: 570c528465aa4b744a99aad2e581601f, type: 2}
+  - {fileID: 11400000, guid: 522b78d37e62ef145ac55f2bfa7ba5e1, type: 2}
+  _connectionValues: 0000000000000000
+  _isGateway: 1

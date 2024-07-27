@@ -36,11 +36,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
             style.position = Position.Absolute;
 
             //创建整形面板
-            IntegerField = new IntegerField() 
-            { 
+            IntegerField = new IntegerField()
+            {
                 //设置名称与延迟响应
-                label = "通行时间", 
-                isDelayed = true 
+                label = "通行时间",
+                isDelayed = true
             };
             //设置标签大小为可变
             IntegerField.Q<Label>().style.minWidth = new StyleLength(StyleKeyword.Auto);
@@ -51,65 +51,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             generateVisualContent += DrawBezierCurve;
         }
 
-        #region 方法
-        //当连线成功时
-        public void OnLineConnected()
-        {
-            Debug.Log(StartNode.TargetData);
-            Debug.Log(EndNode.TargetData);
-            //检测是否已有连接
-            if (NodeEditorPanel.NodeLineCache.ContainsKey(ID))
-            {
-                //若有，直接返回
-                Debug.LogWarning("不要添加重复连接");
-                return;
-            }
-            //若无，添加
-            NodeEditorPanel.NodeLineCache[ID] = this;
-            //生成为双方生成连接
-            StartNode.TargetData.ConnectionKeys.Add(EndNode.TargetData);
-            StartNode.TargetData.ConnectionValues.Add(0);
-            EndNode.TargetData.ConnectionKeys.Add(StartNode.TargetData);
-            EndNode.TargetData.ConnectionValues.Add(0);
-            //并放置整形输入框
-            Add(IntegerField);
-            //将连接加入双方记录
-            StartNode.NodeLines.Add(this);
-            EndNode.NodeLines.Add(this);
-            //并放入节点编辑界面的当前线条下
-            NodeEditorPanel.ShowedNodeLines[ID] = this;
-        }
-        //当输入框数值发生更改时
-        private void OnIntegerFieldValueChanged(ChangeEvent<int> evt)
-        {
-            //获取双方在对方连接信息中的索引
-            int indexB = StartNode.TargetData.ConnectionKeys.IndexOf(EndNode.TargetData);
-            int indexA = EndNode.TargetData.ConnectionKeys.IndexOf(StartNode.TargetData);
-            //检测输入值
-            if (evt.newValue < 0)
-            {
-                //若小于0，取消该链接
-                StartNode.NodeLines.Remove(this);
-                EndNode.NodeLines.Remove(this);
-                NodeEditorPanel.Remove(this);
-                NodeEditorPanel.ShowedNodeLines.Remove(ID);
-                //并删除双方连接字典中的对方
-                StartNode.TargetData.ConnectionKeys.RemoveAt(indexB);
-                StartNode.TargetData.ConnectionValues.RemoveAt(indexB);
-                EndNode.TargetData.ConnectionKeys.RemoveAt(indexA);
-                EndNode.TargetData.ConnectionValues.RemoveAt(indexA);
-                //将移除双方记录
-                StartNode.NodeLines.Remove(this);
-                EndNode.NodeLines.Remove(this);
-            }
-            else
-            {
-                //变更通行时间
-                StartNode.TargetData.ConnectionValues[indexB] = evt.newValue;
-                EndNode.TargetData.ConnectionValues[indexA] = evt.newValue;
-                Debug.Log($"{StartNode.TargetData.Name}和{EndNode.TargetData.Name}喜成连理，共入洞房，耗时{evt.newValue}秒");
-            }
-        }
+        #region 线条重绘
         //更新线条
         public void UpdateLine()
         {
@@ -146,6 +88,59 @@ namespace THLL.GameEditor.LocUnitDataEditor
             painter.MoveTo(bezierStartPoint);
             painter.BezierCurveTo(bezierStartTangent, bezierEndTangent, bezierEndPoint);
             painter.Stroke();
+        }
+        #endregion
+
+        #region 连线状态相关
+        //当连线成功时
+        public void OnLineConnected()
+        {
+            //检测是否已有连接
+            if (NodeEditorPanel.NodeLineCache.ContainsKey(ID))
+            {
+                //若有，直接返回
+                Debug.LogWarning("不要添加重复连接");
+                return;
+            }
+            //若无，添加
+            NodeEditorPanel.NodeLineCache[ID] = this;
+            //生成为双方生成连接
+            StartNode.TargetData.Editor_AddConnection(EndNode.TargetData, 0);
+            EndNode.TargetData.Editor_AddConnection(StartNode.TargetData, 0);
+            //并放置整形输入框
+            Add(IntegerField);
+            //将连接加入双方记录
+            StartNode.NodeLines.Add(this);
+            EndNode.NodeLines.Add(this);
+            //并放入节点编辑界面的当前线条下
+            NodeEditorPanel.ShowedNodeLines[ID] = this;
+        }
+        //当输入框数值发生更改时
+        private void OnIntegerFieldValueChanged(ChangeEvent<int> evt)
+        {
+            //检测输入值
+            if (evt.newValue < 0)
+            {
+                //若小于0，取消该链接
+                StartNode.NodeLines.Remove(this);
+                EndNode.NodeLines.Remove(this);
+                NodeEditorPanel.Remove(this);
+                NodeEditorPanel.ShowedNodeLines.Remove(ID);
+                NodeEditorPanel.NodeLineCache.Remove(ID);
+                //并删除双方连接字典中的对方
+                StartNode.TargetData.Editor_RemoveConnection(EndNode.TargetData);
+                EndNode.TargetData.Editor_RemoveConnection(StartNode.TargetData);
+                //将移除双方记录
+                StartNode.NodeLines.Remove(this);
+                EndNode.NodeLines.Remove(this);
+            }
+            else
+            {
+                //变更通行时间
+                StartNode.TargetData.Editor_SetConnDuration(EndNode.TargetData, evt.newValue);
+                EndNode.TargetData.Editor_SetConnDuration(StartNode.TargetData, evt.newValue);
+                Debug.Log($"{StartNode.TargetData.Name}和{EndNode.TargetData.Name}喜成连理，共入洞房，耗时{evt.newValue}秒");
+            }
         }
         #endregion
     }

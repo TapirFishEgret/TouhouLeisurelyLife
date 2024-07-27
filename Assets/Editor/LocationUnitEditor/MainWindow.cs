@@ -2,12 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using THLL.LocationSystem;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Unity.Plastic.Newtonsoft.Json;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
-using Unity.VisualScripting;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -24,7 +22,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         [SerializeField]
         private TextAsset _persistentDataFile;
         public TextAsset PersistentDataFile => _persistentDataFile;
-        
+
         //UI元素
         //左侧面板
         //树形图
@@ -81,7 +79,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //读取持久化数据
             LoadPersistentData();
-            
+
             //左侧面板
             //创建树形图面板并添加
             DataTreeView = new DataTreeView(this);

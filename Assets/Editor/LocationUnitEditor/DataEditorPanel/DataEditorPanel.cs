@@ -1,4 +1,5 @@
-﻿using THLL.LocationSystem;
+﻿using System.Linq;
+using THLL.LocationSystem;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
 {
     public class DataEditorPanel : Tab
     {
+        #region 自身构成
         //UI文档资源
         [SerializeField]
         private VisualTreeAsset _visualTree;
@@ -27,6 +29,9 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private TextField _nameField;
         private TextField _descriptionField;
         private ObjectField _backgroundField;
+        //连接展示框
+        private MultiColumnListView _connectionsShowView;
+        #endregion
 
         //构建函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
@@ -52,7 +57,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //设置标签页容器可延展
             style.flexGrow = 1;
             contentContainer.style.flexGrow = 1;
-            
+
             //设定名称
             label = "数据编辑窗口";
 
@@ -69,6 +74,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField = this.Q<TextField>("NameField");
             _descriptionField = this.Q<TextField>("DescriptionField");
             _backgroundField = this.Q<ObjectField>("BackgroundField");
+            //连接展示框
+            _connectionsShowView = this.Q<MultiColumnListView>("ConnectionsShowView");
 
             //注册事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -108,6 +115,40 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 {
                     style.backgroundImage = null;
                 }
+
+                //设置双列列表视图
+                //清除现有视图
+                _connectionsShowView.columns.Clear();
+                _connectionsShowView.itemsSource = null;
+                //绑定新内容
+                _connectionsShowView.itemsSource = locUnitData.ConnectionKeys;
+                //添加全名列
+                _connectionsShowView.columns.Add(new Column
+                {
+                    name = "FullName",
+                    title = "FullName",
+                    makeCell = () => new Label(),
+                    bindCell = (element, i) => (element as Label).text = string.Join("/", locUnitData.ConnectionKeys[i].FullName),
+                    width = new Length(60, LengthUnit.Percent)
+                });
+                //添加索引列
+                _connectionsShowView.columns.Add(new Column
+                {
+                    name = "DataObject",
+                    title = "DataObject",
+                    makeCell = () => new ObjectField(),
+                    bindCell = (element, i) => (element as ObjectField).value = locUnitData.ConnectionKeys[i],
+                    width = new Length(20, LengthUnit.Percent)
+                });
+                //添加耗时列
+                _connectionsShowView.columns.Add(new Column
+                {
+                    name = "Duration",
+                    title = "Duration",
+                    makeCell = () => new Label(),
+                    bindCell = (element, i) => (element as Label).text = locUnitData.ConnectionValues[i].ToString(),
+                    width = new Length(20, LengthUnit.Percent)
+                });
             }
         }
         //绑定

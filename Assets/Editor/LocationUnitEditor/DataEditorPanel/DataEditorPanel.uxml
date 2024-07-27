@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Editor/UnityEditorStyles.uss?fileID=7433441132597879392&amp;guid=9b5e0ee7822030d4b80394fec071fef2&amp;type=3#UnityEditorStyles" />
     <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; min-height: auto;">
-        <engine:VisualElement name="Filter" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.5);" />
+        <engine:VisualElement name="Filter" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.7);" />
         <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-around;">
             <engine:TextField label="Package" hide-placeholder-on-focus="true" name="PackageField" is-delayed="true" style="width: 21%;" />
             <engine:TextField label="Author" hide-placeholder-on-focus="true" name="AuthorField" is-delayed="true" style="width: 21%;" />
@@ -14,5 +14,8 @@
         <engine:TextField label="Name" hide-placeholder-on-focus="true" name="NameField" is-delayed="true" />
         <engine:TextField label="Description" hide-placeholder-on-focus="true" multiline="true" name="DescriptionField" is-delayed="true" />
         <editor:ObjectField label="Background" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="BackgroundField" />
+        <engine:MultiColumnListView show-foldout-header="true" allow-add="false" allow-remove="false" header-title="Connections" name="ConnectionsShowView" enabled="false" fixed-item-height="30">
+            <engine:Columns />
+        </engine:MultiColumnListView>
     </engine:VisualElement>
 </engine:UXML>

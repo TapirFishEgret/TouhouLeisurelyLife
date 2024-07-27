@@ -10,18 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
-  m_Name: "01\u6D4B\u8BD5\u4E16\u754C"
+  m_Name: "03\u4E3B\u5C4B"
   m_EditorClassIdentifier: 
-  dataName: "\u6D4B\u8BD5\u4E16\u754C"
+  dataName: "\u4E3B\u5C4B"
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core
   dataCategory: Location
   _fullName:
   - "\u6D4B\u8BD5\u4E16\u754C"
-  _parentData: {fileID: 0}
+  - "\u6D4B\u8BD5\u5730\u533A"
+  - "\u535A\u4E3D\u795E\u793E"
+  - "\u4E3B\u5C4B"
+  _parentData: {fileID: 11400000, guid: 5bdc42ff621bff84eb3ab60fef7c90f1, type: 2}
   _background: {fileID: 0}
   _connectionKeys:
-  - {fileID: 11400000, guid: c87ecec6906c6bc43985127cc432eaf6, type: 2}
-  _connectionValues: 00000000
+  - {fileID: 11400000, guid: fb587cb83ae40054e85a8218605f2d78, type: 2}
+  - {fileID: 11400000, guid: 76b6256183d28574981bcc04e37a7bcd, type: 2}
+  _connectionValues: 2c01000000000000
   _isGateway: 0
