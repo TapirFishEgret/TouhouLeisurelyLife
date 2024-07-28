@@ -55,7 +55,9 @@ namespace THLL.LocationSystem
                 int duration = baseData.ConnectionValues[index];
                 //实例
                 LocUnit locUnit = globalData[locUnitData];
-                //存放
+                //存放在自身
+                Connections[locUnit] = duration;
+                //存放入全局
                 if (!globalConnData.ContainsKey(this))
                 {
                     globalConnData[this] = new Dictionary<LocUnit, int>();
