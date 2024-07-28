@@ -50,7 +50,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public HashSet<LocUnitData> DataNeedToReGenerateFullNameCache { get; private set; }
 
         //窗口菜单
-        [MenuItem("GameEditor/LocationSystem/Location")]
+        [MenuItem("GameEditor/LocationDataEditor")]
         public static void ShowWindow()
         {
             //窗口设置

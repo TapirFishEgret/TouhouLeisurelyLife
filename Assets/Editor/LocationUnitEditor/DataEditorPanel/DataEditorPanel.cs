@@ -9,10 +9,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
     public class DataEditorPanel : Tab
     {
         #region 自身构成
-        //UI文档资源
-        [SerializeField]
-        private VisualTreeAsset _visualTree;
-
         //主面板
         public MainWindow MainWindow { get; private set; }
 
