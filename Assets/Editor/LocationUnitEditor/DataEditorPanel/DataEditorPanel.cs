@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using THLL.LocationSystem;
+﻿using THLL.LocationSystem;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -100,21 +99,21 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 Bind(locUnitData);
 
                 //设置数据
+                //设置全名显示
                 _fullNameLabel.text = string.Join("/", locUnitData.FullName);
-                if (_backgroundField.value is Sprite sprite)
+                //检测背景图状态
+                if (_backgroundField.value == null)
                 {
-                    //设置背景图
-                    style.backgroundImage = new StyleBackground(sprite);
-                    //设置背景图延展模式为切削
-                    style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
-                    style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
-                    style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
-                    style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
+                    //若无背景图，则设置为默认
+                    _backgroundField.value = MainWindow.DefaultLocationBackground;
                 }
-                else
-                {
-                    style.backgroundImage = null;
-                }
+                //随后设置面板背景图
+                style.backgroundImage = new StyleBackground(_backgroundField.value as Sprite);
+                //设置背景图延展模式为切削
+                style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+                style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+                style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
+                style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
 
                 //设置双列列表视图
                 //清除现有视图

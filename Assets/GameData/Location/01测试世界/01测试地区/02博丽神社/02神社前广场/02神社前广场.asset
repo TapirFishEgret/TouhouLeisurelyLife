@@ -23,7 +23,7 @@ MonoBehaviour:
   - "\u535A\u4E3D\u795E\u793E"
   - "\u795E\u793E\u524D\u5E7F\u573A"
   _parentData: {fileID: 11400000, guid: 5bdc42ff621bff84eb3ab60fef7c90f1, type: 2}
-  _background: {fileID: 0}
+  _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
   _connectionKeys:
   - {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
   - {fileID: 11400000, guid: 9d32f6af7dd8a3f4c994036a5d28f037, type: 2}

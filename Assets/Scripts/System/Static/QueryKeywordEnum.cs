@@ -11,6 +11,8 @@ namespace THLL.BaseSystem
         B_Name,
         L_ParentName,
         L_IsGateway,
+        C_OriginatingSeries,
+        C_Affiliation,
     }
 
     //委托，用于表示过滤函数，可传入多种类型

@@ -4,26 +4,26 @@
     {
         #region 基础实例数据成员
         //数据本身
-        protected T baseData;
+        public T BaseData { get; private set; }
         //ID
-        public string ID => baseData.ID;
+        public string ID => BaseData.ID;
         //Name
-        public string Name => baseData.Name;
+        public string Name => BaseData.Name;
         //Des
-        public string Description => baseData.Description;
+        public string Description => BaseData.Description;
         //Author
-        public string Author => baseData.Author;
+        public string Author => BaseData.Author;
         //Package
-        public string Package => baseData.Package;
+        public string Package => BaseData.Package;
         //Category
-        public string Category => baseData.Category;
+        public string Category => BaseData.Category;
         #endregion
 
         #region 自身函数
         //构造函数
         public BaseGameEntity(T baseData)
         {
-            this.baseData = baseData;
+            BaseData = baseData;
         }
         #endregion
     }

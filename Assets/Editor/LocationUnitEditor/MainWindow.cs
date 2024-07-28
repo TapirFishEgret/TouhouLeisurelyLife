@@ -22,6 +22,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
         [SerializeField]
         private TextAsset _persistentDataFile;
         public TextAsset PersistentDataFile => _persistentDataFile;
+        //默认地点背景图
+        [SerializeField]
+        private Sprite _defaultLocationBackground;
+        public Sprite DefaultLocationBackground => _defaultLocationBackground;
 
         //UI元素
         //左侧面板
@@ -146,6 +150,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 newData.Editor_SetPackage(DefaultPackageField.text);
                 newData.Editor_SetCategory("Location");
                 newData.Editor_SetAuthor(DefaultAuthorField.text);
+                newData.Editor_SetBackground(DefaultLocationBackground);
             }
             //更改文件名
             newData.name = newDataName;

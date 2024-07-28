@@ -16,7 +16,7 @@ namespace THLL.LocationSystem
         public static void Init()
         {
             //完成每个实例的初始化方法
-            foreach (LocUnit locUnit in LocUnitDb)
+            foreach (LocUnit locUnit in LocUnitDb.Datas)
             {
                 locUnit.Init(LocUnitDb, LocUnitConnDic);
             }

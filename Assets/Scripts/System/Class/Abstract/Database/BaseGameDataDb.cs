@@ -6,9 +6,14 @@ namespace THLL.BaseSystem
     {
         #region 操作方法
         //增添
-        public void AddValue(T data)
+        public virtual void Add(T data)
         {
-            base.AddValue(data.ID, data);
+            base.Add(data.ID, data);
+        }
+        //移除
+        public virtual void Remove(T data)
+        {
+            base.Remove(data.ID);
         }
         #endregion
 
@@ -19,7 +24,7 @@ namespace THLL.BaseSystem
         protected override void InitFilters()
         {
             //基础过滤器
-            filters[QueryKeywordEnum.B_Package] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.B_Package] = (datas, queryValue) =>
             {
                 //类型检查
                 if (queryValue is string package)
@@ -28,7 +33,7 @@ namespace THLL.BaseSystem
                 }
                 return datas;
             };
-            filters[QueryKeywordEnum.B_Category] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.B_Category] = (datas, queryValue) =>
             {
                 //类型检查
                 if (queryValue is string category)
@@ -37,7 +42,7 @@ namespace THLL.BaseSystem
                 }
                 return datas;
             };
-            filters[QueryKeywordEnum.B_Author] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.B_Author] = (datas, queryValue) =>
             {
                 //类型检查
                 if (queryValue is string author)
@@ -46,7 +51,7 @@ namespace THLL.BaseSystem
                 }
                 return datas;
             };
-            filters[QueryKeywordEnum.B_Name] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.B_Name] = (datas, queryValue) =>
             {
                 //类型检查
                 if (queryValue is string name)

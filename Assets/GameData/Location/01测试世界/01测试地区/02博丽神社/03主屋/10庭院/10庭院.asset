@@ -24,7 +24,7 @@ MonoBehaviour:
   - "\u4E3B\u5C4B"
   - "\u5EAD\u9662"
   _parentData: {fileID: 11400000, guid: e06283ca9d941f0489b8345f6ab54748, type: 2}
-  _background: {fileID: 0}
+  _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
   _connectionKeys:
   - {fileID: 11400000, guid: 1bc33b0dde5c89b4abd6e844e323717e, type: 2}
   - {fileID: 11400000, guid: 600a8363c0c6aa4409b67cafc0d0e96b, type: 2}

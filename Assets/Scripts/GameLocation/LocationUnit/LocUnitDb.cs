@@ -7,65 +7,70 @@ namespace THLL.LocationSystem
     public class LocUnitDb : BaseGameEntityDb<LocUnitData, LocUnit>
     {
         #region 新增存储
-        //ID索引存储
-        private readonly Dictionary<string, LocUnit> _idStore;
         //父级名称索引存储
-        private readonly Dictionary<string, List<LocUnit>> _parentIndex;
+        private Dictionary<string, List<LocUnit>> ParentDic { get; } = new();
         #endregion
 
         #region 操作方法
         //增添
-        public override void AddValue(LocUnitData key, LocUnit value)
+        public override void Add(LocUnitData key, LocUnit value)
         {
-            base.AddValue(key, value);
-
-            //向ID存储中添加同样的数据
-            _idStore[value.ID] = value;
+            base.Add(key, value);
 
             //创建父级名称索引存储
             if (key.ParentData != null)
             {
-                if (!_parentIndex.ContainsKey(key.ParentData.ID))
+                if (!ParentDic.ContainsKey(key.ParentData.ID))
                 {
-                    _parentIndex[key.ParentData.ID] = new List<LocUnit>();
+                    ParentDic[key.ParentData.ID] = new List<LocUnit>();
                 }
-                _parentIndex[key.ParentData.ID].Add(value);
+                ParentDic[key.ParentData.ID].Add(value);
             }
         }
-        //获取
-        public LocUnit GetValue(string id)
+        public override void Add(LocUnit value)
         {
-            _idStore.TryGetValue(id, out var value);
-            return value;
+            Add(value.BaseData, value);
+        }
+        //移除
+        public override bool Remove(LocUnitData key)
+        {
+            //从他的父级中移除他自己
+            ParentDic[key.ParentData.ID].Remove(Store[key]);
+            //移除他自己
+            ParentDic.Remove(key.ID);
+            //使用父级方法移除ID存储与根存储
+            return base.Remove(key);
+        }
+        public override bool Remove(LocUnit value)
+        {
+            return Remove(value.BaseData);
+        }
+        public override bool Remove(string id)
+        {
+            return Remove(IDDic[id]);
         }
         //获取子级地点
+        public IEnumerable<LocUnit> GetChildren(LocUnitData locUnitData)
+        {
+            return GetChildren(locUnitData.ID);
+        }
+        public IEnumerable<LocUnit> GetChildren(LocUnit locUnit)
+        {
+            return GetChildren(locUnit.ID);
+        }
         public IEnumerable<LocUnit> GetChildren(string parentID)
         {
-            return _parentIndex.ContainsKey(parentID) ? _parentIndex[parentID] : Enumerable.Empty<LocUnit>();
-        }
-        //索引器
-        public LocUnit this[string id]
-        {
-            get
-            {
-                return GetValue(id);
-            }
+            return ParentDic.ContainsKey(parentID) ? ParentDic[parentID] : Enumerable.Empty<LocUnit>();
         }
         #endregion
 
         #region 其他方法
-        //构造函数
-        public LocUnitDb() : base()
-        {
-            _idStore = new Dictionary<string, LocUnit>();
-            _parentIndex = new Dictionary<string, List<LocUnit>>();
-        }
         //更新查询方式
         protected override void InitFilters()
         {
             base.InitFilters();
             //新增父级名称查询
-            filters[QueryKeywordEnum.L_ParentName] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.L_ParentName] = (datas, queryValue) =>
             {
                 //检查类型
                 if (queryValue is string parentName)
@@ -75,7 +80,7 @@ namespace THLL.LocationSystem
                 return datas;
             };
             //新增是否为出入口查询
-            filters[QueryKeywordEnum.L_IsGateway] = (datas, queryValue) =>
+            Filters[QueryKeywordEnum.L_IsGateway] = (datas, queryValue) =>
             {
                 //检查类型
                 if (queryValue is bool isGateway)

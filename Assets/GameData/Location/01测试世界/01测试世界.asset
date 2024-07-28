@@ -20,7 +20,7 @@ MonoBehaviour:
   _fullName:
   - "\u6D4B\u8BD5\u4E16\u754C"
   _parentData: {fileID: 0}
-  _background: {fileID: 0}
+  _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
   _connectionKeys:
   - {fileID: 11400000, guid: c87ecec6906c6bc43985127cc432eaf6, type: 2}
   _connectionValues: 00000000
