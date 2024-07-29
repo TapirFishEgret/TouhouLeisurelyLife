@@ -108,21 +108,21 @@ namespace THLL.GameEditor.LocUnitDataEditor
             {
                 //获取活跃数据
                 ActiveData = selections.Cast<LocUnitData>().FirstOrDefault();
-                //检测活跃数据与打开面板状况
-                if (ActiveData != null && MainWindow.MultiTabView.activeTab == MainWindow.DataEditorPanel)
-                {
-                    //刷新数据编辑面板
-                    MainWindow.DataEditorPanel.DRefresh(ActiveData);
-                }
-                else if (ActiveData != null && MainWindow.MultiTabView.activeTab == MainWindow.NodeEditorPanel)
+                //检测活跃数据
+                if (ActiveData != null)
                 {
                     //刷新节点面板
                     MainWindow.NodeEditorPanel.NRefresh(ActiveData);
+                    //刷新数据编辑面板
+                    MainWindow.DataEditorPanel.DRefresh(ActiveData);
                 }
             };
 
             //注册快捷键
             RegisterCallback<KeyDownEvent>(RegisterShortcutKey);
+
+            //注册点击事件
+            RegisterCallback<PointerDownEvent>(OnPointerDown);
 
             //注册右键菜单
             RegisterContextMenu();
@@ -173,10 +173,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
             }
 
             //结束后按文件名称进行重新排序
-            RootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
+            RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             foreach (List<TreeViewItemData<LocUnitData>> items in ChildrenDicCache.Values)
             {
-                items.Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                items.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
 
             //刷新面板
@@ -295,6 +295,26 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 }
                 //阻断事件传播
                 e.StopImmediatePropagation();
+            }
+        }
+        //取消选中方法
+        private void OnPointerDown(PointerDownEvent evt)
+        {
+            if (evt.ctrlKey)
+            {
+                if (evt.button == 0)
+                {
+                    //当按下Ctrl+左键时
+                    //获取新的选中项数据
+                    LocUnitData newSelection = selectedItems.Cast<LocUnitData>().FirstOrDefault();
+                    //比较
+                    if (newSelection == ActiveData)
+                    {
+                        //若与旧选中项相同，则清空选择
+                        SetSelection(new int[0]);
+                        ActiveData = null;
+                    }
+                }
             }
         }
         #endregion

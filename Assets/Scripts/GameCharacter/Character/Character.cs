@@ -11,6 +11,8 @@ namespace THLL.CharacterSystem
         public string OriginatingSeries => BaseData.OriginatingSeries;
         //角色所属组织
         public string Affiliation => BaseData.Affiliation;
+        //角色版本
+        public string Version => BaseData.Version;
         //角色头像
         public Sprite Avatar => BaseData.Avatar;
         //角色立绘

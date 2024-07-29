@@ -27,6 +27,10 @@ namespace THLL.BaseSystem
         [SerializeField]
         protected string dataCategory = string.Empty;
         public virtual string Category => dataCategory;
+        //SortingOrder
+        [SerializeField]
+        protected int sortingOrder = 0;
+        public virtual int SortingOrder => sortingOrder;
         #endregion
 
 #if UNITY_EDITOR
@@ -53,6 +57,11 @@ namespace THLL.BaseSystem
         public virtual void Editor_SetCategory(string category)
         {
             dataCategory = category;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        public virtual void Editor_SetSortingOrder(int sortingOrder)
+        {
+            this.sortingOrder = sortingOrder;
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif

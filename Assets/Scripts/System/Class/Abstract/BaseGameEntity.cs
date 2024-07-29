@@ -17,6 +17,8 @@
         public string Package => BaseData.Package;
         //Category
         public string Category => BaseData.Category;
+        //SortingOrder
+        public int SortingOrder => BaseData.SortingOrder;
         #endregion
 
         #region 自身函数

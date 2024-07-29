@@ -20,6 +20,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private ObjectField _parentDataField;
         //全名
         private Label _fullNameLabel;
+        //排序位置
+        private IntegerField _sortingOrderField;
         //设置控件
         private TextField _nameField;
         private TextField _descriptionField;
@@ -65,6 +67,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _parentDataField = this.Q<ObjectField>("ParentDataField");
             //全名
             _fullNameLabel = this.Q<Label>("FullNameLabel");
+            //排序位置
+            _sortingOrderField = this.Q<IntegerField>("SortingOrderField");
             //设置控件
             _nameField = this.Q<TextField>("NameField");
             _descriptionField = this.Q<TextField>("DescriptionField");
@@ -156,6 +160,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField.SetValueWithoutNotify(locUnitData.Name);
             _descriptionField.SetValueWithoutNotify(locUnitData.Description);
             _backgroundField.SetValueWithoutNotify(locUnitData.Background);
+            _sortingOrderField.SetValueWithoutNotify(locUnitData.SortingOrder);
 
             //检测目标是否需要重新生成全名
             if (MainWindow.DataNeedToReGenerateFullNameCache.Contains(locUnitData))
@@ -172,6 +177,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField.RegisterValueChangedCallback(OnNameChanged);
             _descriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
             _backgroundField.RegisterValueChangedCallback(OnBackgroundChanged);
+            _sortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
         }
         //清除绑定
         private void Unbind()
@@ -182,6 +188,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _nameField.UnregisterValueChangedCallback(OnNameChanged);
             _descriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
             _backgroundField.UnregisterValueChangedCallback(OnBackgroundChanged);
+            _sortingOrderField.UnregisterValueChangedCallback(OnSortingOrderChanged);
         }
         //几何图形改变时手动调整窗口大小
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -230,6 +237,24 @@ namespace THLL.GameEditor.LocUnitDataEditor
             {
                 MainWindow.DataTreeView.ActiveData.Editor_SetBackground(null);
             }
+        }
+
+        private void OnSortingOrderChanged(ChangeEvent<int> evt)
+        {
+            //设置排序
+            MainWindow.DataTreeView.ActiveData.Editor_SetSortingOrder(evt.newValue);
+            //重排
+            if (MainWindow.DataTreeView.ActiveData.ParentData == null)
+            {
+                MainWindow.DataTreeView.RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
+            }
+            else
+            {
+                MainWindow.DataTreeView.ChildrenDicCache[MainWindow.DataTreeView.ActiveData.ParentData.GetAssetHashCode()]
+                    .Sort((x,y) => x.data.SortingOrder.CompareTo((y.data.SortingOrder)));
+            }
+            //刷新
+            MainWindow.DataTreeView.TRefresh();
         }
         #endregion
     }

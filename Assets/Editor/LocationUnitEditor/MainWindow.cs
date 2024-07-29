@@ -141,7 +141,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             if (originalData != null)
             {
                 //若不为空，则继承其数据
-                originalData.Editor_CopyTo(newData);
+                originalData.Editor_PartlyCopyTo(newData);
             }
             else
             {
@@ -150,6 +150,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 newData.Editor_SetPackage(DefaultPackageField.text);
                 newData.Editor_SetCategory("Location");
                 newData.Editor_SetAuthor(DefaultAuthorField.text);
+                newData.Editor_SetSortingOrder(999);
                 newData.Editor_SetBackground(DefaultLocationBackground);
             }
             //更改文件名
@@ -176,16 +177,20 @@ namespace THLL.GameEditor.LocUnitDataEditor
             {
                 //当选中项不为空时，新数据作为被选中的数据的子级被添加
                 DataTreeView.ChildrenDicCache[parentData.GetAssetHashCode()].Add(newItem);
+                //并赋予序号
+                newItem.data.Editor_SetSortingOrder(DataTreeView.ChildrenDicCache[parentData.GetAssetHashCode()].Count);
                 //重排
-                DataTreeView.ChildrenDicCache[parentData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                DataTreeView.ChildrenDicCache[parentData.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             else
             {
                 //若为空，则认定为顶级数据
                 //添加到顶级数据中
                 DataTreeView.RootItemCache.Add(newItem);
+                //并赋予序号
+                newItem.data.Editor_SetSortingOrder(DataTreeView.RootItemCache.Count);
                 //重排
-                DataTreeView.RootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                DataTreeView.RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             //添加到其他缓存中
             DataTreeView.ItemDicCache[newData.GetAssetHashCode()] = newItem;
@@ -213,7 +218,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
             NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建并重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            if (NodeEditorPanel.ShowedNodes[0] != null)
+            {
+                NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            }
         }
         //编辑器面板中删除地点数据
         public void DeleteLocUnitDataFile(LocUnitData deletedData)
@@ -234,7 +242,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //若其父级不为空，则删除父级的子级数据
                 DataTreeView.ChildrenDicCache[item.data.ParentData.GetAssetHashCode()].Remove(item);
                 //重排
-                DataTreeView.ChildrenDicCache[item.data.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                DataTreeView.ChildrenDicCache[item.data.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             //其他缓存
             //树状图数据的根物体缓存，考虑到Remove能自己解决没有物体的问题，所以直接移除
@@ -293,7 +301,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
             NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            if (NodeEditorPanel.ShowedNodes[0] != null)
+            {
+                NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            }
         }
         //编辑器面板中重命名物体数据
         public void RenameLocUnitDataFile(LocUnitData renamedData, string newDataName)
@@ -322,18 +333,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            //更名结束后对缓存中的数据进行重排
-            if (renamedData.ParentData != null)
-            {
-                //若有父级，重排其父级的子级
-                DataTreeView.ChildrenDicCache[renamedData.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
-            }
-            else
-            {
-                //若无父级，重排根数据子级
-                DataTreeView.RootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
-            }
-
             //重构树形图
             DataTreeView.TRefresh();
 
@@ -341,7 +340,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
             NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            if (NodeEditorPanel.ShowedNodes[0] != null)
+            {
+                NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            }
         }
         //编辑器面板中移动物体数据
         public void MoveLocUnitDataFile(LocUnitData targetData, List<LocUnitData> topLevelMovedDatas)
@@ -395,14 +397,14 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     //若有，则将数据从旧父级的子级列表中移除
                     DataTreeView.ChildrenDicCache[movedData.ParentData.GetAssetHashCode()].Remove(movedItem);
                     //重排
-                    DataTreeView.ChildrenDicCache[movedData.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                    DataTreeView.ChildrenDicCache[movedData.ParentData.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
                 }
                 else
                 {
                     //若无，说明为顶层，从根数据缓存中移除
                     DataTreeView.RootItemCache.Remove(movedItem);
                     //重排
-                    DataTreeView.RootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                    DataTreeView.RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
                 }
                 //设置新的父级
                 movedData.Editor_SetParent(targetData);
@@ -412,7 +414,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     //如果有目标对象，则将数据作为目标的子级
                     DataTreeView.ChildrenDicCache[targetData.GetAssetHashCode()].Add(movedItem);
                     //重排
-                    DataTreeView.ChildrenDicCache[targetData.GetAssetHashCode()].Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                    DataTreeView.ChildrenDicCache[targetData.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
                     //并设置父级文件夹
                     targetFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(targetData));
                 }
@@ -421,7 +423,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     //如果没有目标对象，则添加到根数据缓存中
                     DataTreeView.RootItemCache.Add(movedItem);
                     //重排
-                    DataTreeView.RootItemCache.Sort((x, y) => x.data.name.CompareTo(y.data.name));
+                    DataTreeView.RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
                     //并生成父级文件夹
                     targetFolderPath = GetDataFolderPath(targetData);
                 }
@@ -478,7 +480,10 @@ namespace THLL.GameEditor.LocUnitDataEditor
             NodeEditorPanel.GenerateNodesAndLines();
             //结束后注明节点面板需要重建
             NodeEditorPanel.NeedToRefresh = true;
-            NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            if (NodeEditorPanel.ShowedNodes[0] != null)
+            {
+                NodeEditorPanel.NRefresh(NodeEditorPanel.ShowedNodes[0].TargetData);
+            }
         }
         #endregion
 
@@ -530,7 +535,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
         #region 辅助方法
         //获取数据理论存储地址，同时承担理论地址为空时进行创建
-        public static string GetDataFolderPath(LocUnitData locUnitData)
+        public string GetDataFolderPath(LocUnitData locUnitData)
         {
             //生成地址，默认为根目录的GameData文件夹下
             string assetFolderPath = "Assets\\GameData";
@@ -601,7 +606,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             return assetFolderPath;
         }
         //通过递归完全删除文件夹
-        public static void DeleteFolder(string folderPath)
+        public void DeleteFolder(string folderPath)
         {
             //获取文件夹中的所有文件和子文件夹GUID
             string[] asseGUIDs = AssetDatabase.FindAssets("", new[] { folderPath });

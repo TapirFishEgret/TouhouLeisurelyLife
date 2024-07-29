@@ -113,8 +113,8 @@ namespace THLL.LocationSystem
             }
             UnityEditor.EditorUtility.SetDirty(this);
         }
-        //复制数据
-        public void Editor_CopyTo(LocUnitData otherData)
+        //部分复制数据
+        public void Editor_PartlyCopyTo(LocUnitData otherData)
         {
             otherData.Editor_SetPackage(Package);
             otherData.Editor_SetCategory(Category);
@@ -123,6 +123,7 @@ namespace THLL.LocationSystem
             otherData.Editor_SetName(Name);
             otherData.Editor_SetParent(ParentData);
             otherData.Editor_SetBackground(Background);
+            otherData.Editor_SetSortingOrder(SortingOrder);
         }
 #endif
     }

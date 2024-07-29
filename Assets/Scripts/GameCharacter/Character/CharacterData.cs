@@ -9,7 +9,7 @@ namespace THLL.CharacterSystem
     {
         #region 角色数据类成员
         //重写ID
-        public override string ID => string.Join("_", new List<string>() { Package, Category, Author, OriginatingSeries, Affiliation, Name });
+        public override string ID => string.Join("_", new List<string>() { Package, Category, Author, OriginatingSeries, Affiliation, Name, Version });
         //角色所属系列
         [SerializeField]
         private string _originatingSeries = string.Empty;
@@ -18,6 +18,10 @@ namespace THLL.CharacterSystem
         [SerializeField]
         private string _affiliation = string.Empty;
         public string Affiliation => _affiliation;
+        //角色版本
+        [SerializeField]
+        private string _version = string.Empty;
+        public string Version => _version;
         //角色头像
         [SerializeField]
         private Sprite _avatar = null;

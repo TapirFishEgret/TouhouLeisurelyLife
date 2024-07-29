@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+using THLL.CharacterSystem;
+using System.IO;
 
 namespace THLL.GameEditor.CharacterEditor
 {
@@ -53,6 +55,7 @@ namespace THLL.GameEditor.CharacterEditor
         #endregion
 
         #region UI周期函数
+        //窗口生成时
         public void CreateGUI()
         {
             //加载UXML文件
@@ -63,6 +66,7 @@ namespace THLL.GameEditor.CharacterEditor
             DefaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
+            MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");
 
             //生成UI控件
             //左侧面板
@@ -73,6 +77,12 @@ namespace THLL.GameEditor.CharacterEditor
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
             MultiTabView.Add(DataEditorPanel);
+        }
+        //窗口关闭时
+        private void OnDestroy()
+        {
+            //提醒修改可寻址资源包标签
+            Debug.LogWarning("窗口已被关闭，请注意修改新增数据的可寻址资源包的Key");
         }
         #endregion
     }
