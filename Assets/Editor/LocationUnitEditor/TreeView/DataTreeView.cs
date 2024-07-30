@@ -68,7 +68,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             makeItem = () =>
             {
                 Label label = new();
-                label.AddToClassList("treeview-item");
+                label.AddToClassList("treeview-item-location");
                 return label;
             };
             bindItem = (element, i) =>
@@ -591,6 +591,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //恢复树形图展开状态
         private void RestoreExpandedState()
         {
+            //新增被移除的ID列表
+            List<int> removedIDs = new();
             //根据缓存数据进行展开
             foreach (int id in ExpandedStateCache)
             {
@@ -600,7 +602,14 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     //若存在，展开
                     ExpandItem(id);
                 }
+                else
+                {
+                    //若不存在，说明该ID对应的物体已经消失，添加到被移除的列表中
+                    removedIDs.Add(id);
+                }
             }
+            //结束后取差集
+            ExpandedStateCache = ExpandedStateCache.Except(removedIDs).ToHashSet();
         }
         #endregion
 

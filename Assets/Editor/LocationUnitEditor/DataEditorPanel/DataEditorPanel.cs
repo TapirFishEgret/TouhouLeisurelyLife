@@ -251,7 +251,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             else
             {
                 MainWindow.DataTreeView.ChildrenDicCache[MainWindow.DataTreeView.ActiveData.ParentData.GetAssetHashCode()]
-                    .Sort((x,y) => x.data.SortingOrder.CompareTo((y.data.SortingOrder)));
+                    .Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             //刷新
             MainWindow.DataTreeView.TRefresh();

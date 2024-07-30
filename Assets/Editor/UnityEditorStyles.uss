@@ -6,7 +6,7 @@
     color: rgb(255, 255, 255);
 }
 
-.treeview-item {
+.treeview-item-location {
     background-color: rgb(58, 58, 74);
     border-left-color: rgb(74, 74, 90);
     border-right-color: rgb(74, 74, 90);
@@ -21,4 +21,9 @@
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     color: rgb(160, 160, 255);
+}
+
+.treeview-item-character {
+    color: rgb(145, 255, 255);
+    -unity-background-image-tint-color: rgb(76, 175, 80);
 }

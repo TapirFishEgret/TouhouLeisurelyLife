@@ -38,9 +38,21 @@ namespace THLL.CharacterSystem
 
 #if UNITY_EDITOR
         //更改角色所属作品
-        public void Editor_SetSourceWork(string sourceWork)
+        public void Editor_SetOriginatingSeries(string sourceWork)
         {
             _originatingSeries = sourceWork;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        //更改角色所属组织
+        public void Editor_SetAffiliation(string affiliation)
+        {
+            _affiliation = affiliation;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        //更改角色版本
+        public void Editor_SetVersion(string version)
+        {
+            _version = version;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //更改角色头像

@@ -10,7 +10,7 @@ namespace THLL.GameEditor.CharacterEditor
         #endregion
 
         #region 构造及刷新方法
-        public DataEditorPanel(VisualTreeAsset visualTree, MainWindow window) 
+        public DataEditorPanel(VisualTreeAsset visualTree, MainWindow window)
         {
             //获取面板
             VisualElement panel = visualTree.CloneTree();

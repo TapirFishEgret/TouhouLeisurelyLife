@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEngine.UIElements;
-using THLL.CharacterSystem;
+﻿using System.Linq;
+using Unity.Plastic.Newtonsoft.Json;
 using System.IO;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.CharacterEditor
 {
@@ -19,8 +20,8 @@ namespace THLL.GameEditor.CharacterEditor
         public VisualTreeAsset DataEditorVisualTree => _dataEditorVisualTree;
         //永久性存储数据
         [SerializeField]
-        private TextAsset _persistentData;
-        public TextAsset PersistentData => _persistentData;
+        private TextAsset _persistentDataFile;
+        public TextAsset PersistentDataFile => _persistentDataFile;
         //默认角色头像
         [SerializeField]
         private Sprite _defaultCharacterAvatar;
@@ -68,6 +69,9 @@ namespace THLL.GameEditor.CharacterEditor
             VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");
 
+            //读取永久性存储文件
+            LoadPersistentData();
+
             //生成UI控件
             //左侧面板
             //创建树形图面板并添加
@@ -75,14 +79,55 @@ namespace THLL.GameEditor.CharacterEditor
             dataTreeViewContainer.Add(DataTreeView);
             //右侧面板
             //创建数据编辑面板并添加
-            DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
-            MultiTabView.Add(DataEditorPanel);
+            //DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
+            //MultiTabView.Add(DataEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()
         {
+            //保存
+            SavePersistentData();
             //提醒修改可寻址资源包标签
             Debug.LogWarning("窗口已被关闭，请注意修改新增数据的可寻址资源包的Key");
+        }
+        #endregion
+
+        #region 数据的保存
+        //保存缓存到永久性存储文件
+        private void SavePersistentData()
+        {
+            //生成永久性实例
+            PersistentData persistentData = new()
+            {
+                //设置其数值
+                DefaultPackage = DefaultPackageField.text,
+                DefaultAuthor = DefaultAuthorField.text,
+                TimerDebugLogState = TimerDebugLogToggle.value,
+                ExpandedState = DataTreeView.ExpandedStatePersistentData.ToList(),
+            };
+            //将永久性存储实例转化为文本
+            string jsonString = JsonConvert.SerializeObject(persistentData, Formatting.Indented);
+            //写入文件中
+            File.WriteAllText(AssetDatabase.GetAssetPath(PersistentDataFile), jsonString);
+            //标记为脏
+            EditorUtility.SetDirty(PersistentDataFile);
+
+            //保存更改
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        //读取永久性存储文件到缓存
+        private void LoadPersistentData()
+        {
+            //读取文件中数据
+            string jsonString = File.ReadAllText(AssetDatabase.GetAssetPath(PersistentDataFile));
+            //生成永久性存储实例
+            PersistentData persistentData = JsonConvert.DeserializeObject<PersistentData>(jsonString);
+            //分配数据
+            //属性
+            DefaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
+            DefaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
+            TimerDebugLogToggle.SetValueWithoutNotify(persistentData.TimerDebugLogState);
         }
         #endregion
     }
