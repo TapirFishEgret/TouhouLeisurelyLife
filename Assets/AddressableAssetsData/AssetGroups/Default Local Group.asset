@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Location
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb1da45a95ef076479bb6447f3116cd3
+    m_Address: Assets/GameData/Character
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 28e3aecf5f024e14ea4abb5cd35fa69c, type: 2}
   m_SchemaSet:

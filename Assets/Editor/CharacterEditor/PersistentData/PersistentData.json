@@ -1,6 +1,6 @@
 {
-  "DefaultPackage": "",
-  "DefaultAuthor": "",
+  "DefaultPackage": "Core",
+  "DefaultAuthor": "TapirFishEgret",
   "TimerDebugLogState": true,
   "ExpandedState": [
     -447248486,

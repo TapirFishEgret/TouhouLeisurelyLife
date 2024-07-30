@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataName: "\u535A\u4E3D\u7075\u68A6"
   dataDescription: 
-  dataAuthor: 
-  dataPackage: 
+  dataAuthor: TapirFishEgret
+  dataPackage: Core
   dataCategory: Character
   sortingOrder: 1
   _originatingSeries: "\u4E1C\u65B9Project"
@@ -23,4 +23,4 @@ MonoBehaviour:
   _version: "\u8C98\u9C7C\u9E6D\u539F\u7248"
   _avatar: {fileID: 21300000, guid: fa9fafa3351ab714dbd768a113f4849e, type: 3}
   _portrait: {fileID: 21300000, guid: 62fc3281c480f8b419d12a33db2331ef, type: 3}
-  _livingArea: {fileID: 0}
+  _livingArea: {fileID: 11400000, guid: 6b7e4c3f0cef9f948b0e7eca1211a8f2, type: 2}

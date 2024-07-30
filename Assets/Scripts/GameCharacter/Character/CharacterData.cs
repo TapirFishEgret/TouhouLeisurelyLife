@@ -67,6 +67,12 @@ namespace THLL.CharacterSystem
             _portrait = portrait;
             UnityEditor.EditorUtility.SetDirty(this);
         }
+        //更改角色居住地
+        public void Editor_SetLivingArea(LocUnitData locUnitData)
+        {
+            _livingArea = locUnitData;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
 #endif
     }
 }

@@ -333,6 +333,7 @@ namespace THLL.GameEditor.CharacterEditor
                 if (newSelection != null)
                 {
                     ActiveSelection = newSelection;
+                    MainWindow.DataEditorPanel.DRefresh();
                 }
             };
 

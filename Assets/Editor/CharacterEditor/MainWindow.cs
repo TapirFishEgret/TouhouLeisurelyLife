@@ -44,7 +44,7 @@ namespace THLL.GameEditor.CharacterEditor
         //多标签页窗口
         public TabView MultiTabView { get; private set; }
         //数据编辑窗口
-        public VisualElement DataEditorPanel { get; private set; }
+        public DataEditorPanel DataEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("GameEditor/CharacterDataEditor")]
@@ -69,6 +69,10 @@ namespace THLL.GameEditor.CharacterEditor
             VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");
 
+            //设置标签页面容器为可延展
+            MultiTabView.contentContainer.style.flexGrow = 1;
+            MultiTabView.contentContainer.style.flexShrink = 1;
+
             //读取永久性存储文件
             LoadPersistentData();
 
@@ -79,8 +83,8 @@ namespace THLL.GameEditor.CharacterEditor
             dataTreeViewContainer.Add(DataTreeView);
             //右侧面板
             //创建数据编辑面板并添加
-            //DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
-            //MultiTabView.Add(DataEditorPanel);
+            DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
+            MultiTabView.Add(DataEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()
