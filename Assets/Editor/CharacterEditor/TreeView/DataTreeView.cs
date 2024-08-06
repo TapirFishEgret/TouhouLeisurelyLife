@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using THLL.CharacterSystem;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine.UIElements;
 
 namespace THLL.GameEditor.CharacterEditor
