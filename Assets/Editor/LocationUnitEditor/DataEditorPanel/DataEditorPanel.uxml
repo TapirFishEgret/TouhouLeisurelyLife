@@ -11,7 +11,6 @@
         <engine:VisualElement name="Space" style="height: 10px;" />
         <engine:Label text="FullName" name="FullNameLabel" style="font-size: 32px; -unity-text-align: middle-center; align-items: stretch; justify-content: flex-start;" />
         <engine:VisualElement name="Space" style="height: 10px;" />
-        <engine:TextField label="Name" hide-placeholder-on-focus="true" name="NameField" is-delayed="true" />
         <engine:TextField label="Description" hide-placeholder-on-focus="true" multiline="true" name="DescriptionField" is-delayed="true" />
         <engine:IntegerField label="Sorting Order" value="0" name="SortingOrderField" max-length="10000" is-delayed="true" />
         <editor:ObjectField label="Background" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="BackgroundField" />

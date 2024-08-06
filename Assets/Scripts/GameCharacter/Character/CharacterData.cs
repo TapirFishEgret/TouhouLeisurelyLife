@@ -9,7 +9,9 @@ namespace THLL.CharacterSystem
     {
         #region 角色数据类成员
         //重写ID
-        public override string ID => string.Join("_", new List<string>() { Package, Category, Author, OriginatingSeries, Affiliation, Name, Version });
+        [SerializeField]
+        private string id = string.Empty;
+        public override string ID => id;
         //角色所属系列
         [SerializeField]
         private string _originatingSeries = string.Empty;
@@ -37,6 +39,13 @@ namespace THLL.CharacterSystem
         #endregion
 
 #if UNITY_EDITOR
+        //生成ID
+        public override void Editor_GenerateID()
+        {
+            base.Editor_GenerateID();
+            id = string.Join("_", new List<string>() { Package, Category, Author, OriginatingSeries, Affiliation, Name, Version }).Replace(" ", "-");
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
         //更改角色所属作品
         public void Editor_SetOriginatingSeries(string sourceWork)
         {

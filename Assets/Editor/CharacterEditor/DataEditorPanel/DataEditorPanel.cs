@@ -125,7 +125,7 @@ namespace THLL.GameEditor.CharacterEditor
             CharacterPortrait.style.backgroundImage = new StyleBackground(ShowedCharacter.Portrait);
 
             //显示全部信息
-            FullInfoLabel.text = $"{ShowedCharacter.OriginatingSeries}_{ShowedCharacter.Affiliation}_{ShowedCharacter.Name}_{ShowedCharacter.Version}";
+            FullInfoLabel.text = $"{ShowedCharacter.OriginatingSeries}_{ShowedCharacter.Affiliation}_{ShowedCharacter.Name}_{ShowedCharacter.Version}".Replace(" ", "-");
 
             //绑定
             PackageField.RegisterValueChangedCallback(OnPackageChanged);

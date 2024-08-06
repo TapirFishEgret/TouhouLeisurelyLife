@@ -307,8 +307,8 @@ namespace THLL.GameEditor.CharacterEditor
                 //设置展示形态显示内容
                 if (itemDataContainer.Type == ItemDataContainer.ItemType.CharacterData)
                 {
-                    //若为角色数据，则设置显示名称为角色名+版本名
-                    label.text = $"{itemDataContainer.CharacterData.Name}_{itemDataContainer.CharacterData.Version}";
+                    //若为角色数据，则设置显示名称为版本名
+                    label.text = $"{itemDataContainer.CharacterData.Version}";
                 }
                 else
                 {
@@ -579,7 +579,6 @@ namespace THLL.GameEditor.CharacterEditor
                 else if (ActiveSelection.Type == ItemDataContainer.ItemType.CharacterName)
                 {
                     //若选中了角色名称，创建新版本，也就是正经的角色数据实例
-                    //选中组织的情况下，创建角色
                     CreateNewVersionCharacterData(ActiveSelection);
                 }
                 else if (ActiveSelection.Type == ItemDataContainer.ItemType.CharacterData)
@@ -808,8 +807,9 @@ namespace THLL.GameEditor.CharacterEditor
                     newCharacterData.Editor_SetSortingOrder(ItemDicCache[characterNameItemDataContainer.StringData.GetHashCode()].children.Count() + 1);
                     newCharacterData.Editor_SetAvatar(MainWindow.DefaultCharacterAvatar);
                     newCharacterData.Editor_SetPortarit(MainWindow.DefaultCharacterPortrait);
+                    newCharacterData.Editor_GenerateID();
                     //更改文件名
-                    newCharacterData.name = characterNameItemDataContainer.StringData + "_" + newVersionName;
+                    newCharacterData.name = newVersionName;
                     //获取文件地址
                     string newFilePath = Path.Combine(newFolderPath, $"{newCharacterData.name}.asset").Replace("\\", "/");
                     //创建资源

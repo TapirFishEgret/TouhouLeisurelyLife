@@ -10,7 +10,9 @@ namespace THLL.LocationSystem
     {
         #region 地点类型数据成员
         //重写ID
-        public override string ID => string.Join("_", new List<string>() { Package, Category, Author }.Concat(FullName));
+        [SerializeField]
+        private string id = string.Empty;
+        public override string ID => id;
         //全名
         [SerializeField]
         private List<string> _fullName = new();
@@ -37,9 +39,17 @@ namespace THLL.LocationSystem
         #endregion
 
 #if UNITY_EDITOR
+        //生成ID
+        public override void Editor_GenerateID()
+        {
+            base.Editor_GenerateID();
+            id = string.Join("_", new List<string>() { Package, Category, Author }.Concat(FullName)).Replace(" ", "-");
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
         //生成全名
         public void Editor_GenerateFullName()
         {
+            //遍历父级生成全名
             List<string> fullName = new();
             LocUnitData current = this;
             while (current != null)
@@ -55,18 +65,12 @@ namespace THLL.LocationSystem
         public override void Editor_SetName(string name)
         {
             base.Editor_SetName(name);
-            //重建全名
-            Editor_GenerateFullName();
-            //标记数据为脏
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定父级数据
         public void Editor_SetParent(LocUnitData parentData)
         {
             _parentData = parentData;
-            //父级数据设定更改时生成全名
-            Editor_GenerateFullName();
-            //标记数据为脏
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //设定背景
@@ -112,18 +116,6 @@ namespace THLL.LocationSystem
                 ConnectionValues[index] = duration;
             }
             UnityEditor.EditorUtility.SetDirty(this);
-        }
-        //部分复制数据
-        public void Editor_PartlyCopyTo(LocUnitData otherData)
-        {
-            otherData.Editor_SetPackage(Package);
-            otherData.Editor_SetCategory(Category);
-            otherData.Editor_SetAuthor(Author);
-            otherData.Editor_SetDescription(Description);
-            otherData.Editor_SetName(Name);
-            otherData.Editor_SetParent(ParentData);
-            otherData.Editor_SetBackground(Background);
-            otherData.Editor_SetSortingOrder(SortingOrder);
         }
 #endif
     }

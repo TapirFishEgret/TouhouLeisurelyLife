@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626d14ef90e8ea843b75bf91bcce820e, type: 3}
+  m_Name: TFE Original
+  m_EditorClassIdentifier: 
+  dataID: Core_Character_TapirFishEgret_Hakurei-Reimu
+  dataName: Hakurei Reimu
+  dataDescription: 
+  dataAuthor: TapirFishEgret
+  dataPackage: Core
+  dataCategory: Character
+  sortingOrder: 1
+  id: Core_Character_TapirFishEgret_Touhou-Project_Main-Character_Hakurei-Reimu_TFE-Original
+  _originatingSeries: Touhou Project
+  _affiliation: Main Character
+  _version: TFE Original
+  _avatar: {fileID: 21300000, guid: fa9fafa3351ab714dbd768a113f4849e, type: 3}
+  _portrait: {fileID: 21300000, guid: 62fc3281c480f8b419d12a33db2331ef, type: 3}
+  _livingArea: {fileID: 0}

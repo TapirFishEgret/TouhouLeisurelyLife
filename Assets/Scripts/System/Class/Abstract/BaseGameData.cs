@@ -6,7 +6,9 @@ namespace THLL.BaseSystem
     {
         #region 基础数据成员
         //ID
-        public virtual string ID => string.Join("_", new string[] { Package, Category, Author, Name });
+        [SerializeField]
+        protected string dataID = string.Empty;
+        public virtual string ID => dataID;
         //Name
         [SerializeField]
         protected string dataName = string.Empty;
@@ -34,6 +36,10 @@ namespace THLL.BaseSystem
         #endregion
 
 #if UNITY_EDITOR
+        public virtual void Editor_GenerateID()
+        {
+            dataID = string.Join("_", new string[] { Package, Category, Author, Name }).Replace(" ", "-");
+        }
         public virtual void Editor_SetName(string name)
         {
             dataName = name;

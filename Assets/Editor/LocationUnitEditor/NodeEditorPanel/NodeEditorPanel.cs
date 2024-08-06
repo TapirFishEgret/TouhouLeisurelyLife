@@ -144,28 +144,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
             painter.Stroke();
         }
         //刷新逻辑
-        public void NRefresh(LocUnitData locUnitData)
+        public void NRefresh()
         {
             //检测传入是否为空
-            if (locUnitData == null)
+            if (MainWindow.DataTreeView.ActiveSelection == null)
             {
                 //若是，返回
                 return;
             }
-
-            //检测是否需要重生成
-            if (!NeedToRefresh)
+            //再检测选中节点是否已经在显示中
+            if (ShowedNodes.Contains(NodeDicCache[MainWindow.DataTreeView.ActiveSelection.GetAssetHashCode()]))
             {
-                //检测所选节点是否在缓存中
-                if (NodeDicCache.ContainsKey(locUnitData.GetAssetHashCode()))
-                {
-                    //检测所选节点是否在面板上
-                    if (ShowedNodes.Contains(NodeDicCache[locUnitData.GetAssetHashCode()]))
-                    {
-                        //满足三重条件，返回
-                        return;
-                    }
-                }
+                //若是，返回
+                return;
             }
 
             //若不是，开始计时
@@ -176,7 +167,72 @@ namespace THLL.GameEditor.LocUnitDataEditor
             AssetDatabase.Refresh();
 
             //刷新
-            ShowFullNodes(locUnitData);
+            //首先记录并清除当前显示节点与连接
+            foreach (Node node in ShowedNodes)
+            {
+                NodePosDicCache[node.TargetData.GetAssetHashCode()] = (node.style.left.value.value, node.style.top.value.value);
+                NodeView.Remove(node);
+            }
+            foreach (NodeLine nodeLine in ShowedNodeLines.Values)
+            {
+                NodeView.Remove(nodeLine);
+            }
+            ShowedNodes.Clear();
+            ShowedNodeLines.Clear();
+
+            //做好显示新系节点的准备
+            List<TreeViewItemData<LocUnitData>> peers;
+            LocUnitData parentData = MainWindow.DataTreeView.ActiveSelection.ParentData;
+            //随后对传入数据进行分析，检测其有无父级
+            if (parentData != null)
+            {
+                //若有父级，则子级直接从父级获取
+                peers = MainWindow.DataTreeView.ChildrenDicCache[MainWindow.DataTreeView.ActiveSelection.ParentData.GetAssetHashCode()];
+            }
+            else
+            {
+                //若无父级，则子级为顶级
+                peers = MainWindow.DataTreeView.RootItemCache;
+            }
+
+            //对新系列节点进行生成或显示
+            foreach (TreeViewItemData<LocUnitData> item in peers)
+            {
+                //获取其资源哈希值
+                int id = item.data.GetAssetHashCode();
+                //读取节点
+                Node node = NodeDicCache[id];
+                //并显示其连线
+                foreach (NodeLine nodeLine in node.NodeLines)
+                {
+                    //判断是否已有
+                    if (!ShowedNodeLines.ContainsKey(nodeLine.ID))
+                    {
+                        //若没有
+                        NodeView.Add(nodeLine);
+                        //并加入肯德基豪华午餐
+                        ShowedNodeLines[nodeLine.ID] = nodeLine;
+                    }
+                }
+                //顺便给个名字
+                node.Label.text = item.data.name;
+                //将节点添加至面板
+                NodeView.Add(node);
+                //尝试更改节点位置
+                if (NodePosDicCache.ContainsKey(id))
+                {
+                    node.style.left = NodePosDicCache[id].Item1;
+                    node.style.top = NodePosDicCache[id].Item2;
+                }
+                //添加到当前节点列表中
+                ShowedNodes.Add(node);
+            }
+
+            //对新系列线条进行位置更改
+            foreach (NodeLine nodeLine1 in ShowedNodeLines.Values)
+            {
+                nodeLine1.UpdateLine();
+            }
         }
         //窗口大小变化事件
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -196,6 +252,18 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //清除数据
             NodeDicCache.Clear();
             NodeLineCache.Clear();
+            //记录并清除当前显示节点与连接
+            foreach (Node node in ShowedNodes)
+            {
+                NodeView.Remove(node);
+            }
+            foreach (NodeLine nodeLine in ShowedNodeLines.Values)
+            {
+                NodeView.Remove(nodeLine);
+            }
+            ShowedNodes.Clear();
+            ShowedNodeLines.Clear();
+
             //生成所有节点
             foreach (TreeViewItemData<LocUnitData> item in MainWindow.DataTreeView.ItemDicCache.Values)
             {
@@ -237,6 +305,20 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     node.NodeLines.Add(line);
                     otherNode.NodeLines.Add(line);
                 }
+            }
+
+            //数据自净，指的是删除缓存中已经被移除的数据
+            List<int> missingNodes = new();
+            foreach (int id in NodePosDicCache.Keys)
+            {
+                if (!NodeDicCache.ContainsKey(id))
+                {
+                    missingNodes.Add(id);
+                }
+            }
+            foreach (int id in missingNodes)
+            {
+                NodePosDicCache.Remove(id);
             }
         }
         //读取永久性存储文件到缓存
@@ -291,7 +373,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 else if (CurrentNodeLine != null)
                 {
                     //若是，则清除当前连接
-                    Remove(CurrentNodeLine);
+                    NodeView.Remove(CurrentNodeLine);
                     CurrentNodeLine = null;
                     CurrentStartNode = null;
                 }
@@ -368,108 +450,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private void SVOnPointerUp(PointerUpEvent evt)
         {
             ScrollView.ReleaseMouse();
-        }
-        #endregion
-
-        #region 节点的显示
-        //展示完整节点
-        private void ShowFullNodes(LocUnitData locUnitData)
-        {
-            //首先记录并清除当前显示节点与连接
-            foreach (Node node in ShowedNodes)
-            {
-                NodePosDicCache[node.TargetData.GetAssetHashCode()] = (node.style.left.value.value, node.style.top.value.value);
-                NodeView.Remove(node);
-            }
-            foreach (NodeLine nodeLine in ShowedNodeLines.Values)
-            {
-                NodeView.Remove(nodeLine);
-            }
-            ShowedNodes.Clear();
-            ShowedNodeLines.Clear();
-
-            //做好显示新系节点的准备
-            List<TreeViewItemData<LocUnitData>> peers;
-            LocUnitData parentData = locUnitData.ParentData;
-            //随后对传入数据进行分析，检测其有无父级
-            if (parentData != null)
-            {
-                //若有父级，则子级直接从父级获取
-                peers = MainWindow.DataTreeView.ChildrenDicCache[locUnitData.ParentData.GetAssetHashCode()];
-            }
-            else
-            {
-                //若无父级，则子级为顶级
-                peers = MainWindow.DataTreeView.RootItemCache;
-            }
-
-            //对新系列节点进行生成或显示
-            foreach (TreeViewItemData<LocUnitData> item in peers)
-            {
-                CreateAndShowNode(item.data);
-            }
-
-            //对新系列线条进行位置更改
-            foreach (NodeLine nodeLine1 in ShowedNodeLines.Values)
-            {
-                nodeLine1.UpdateLine();
-            }
-
-            //最后将重建需求设定为否
-            NeedToRefresh = false;
-        }
-        //显示或生成单个节点
-        private void CreateAndShowNode(LocUnitData locUnitData)
-        {
-            //检测是否存在
-            if (locUnitData == null)
-            {
-                //若传入为空，则直接返回
-                return;
-            }
-
-            //获取其资源哈希值
-            int id = locUnitData.GetAssetHashCode();
-            //声明节点
-            Node node;
-
-            //判断是否有对应节点存在
-            if (NodeDicCache.ContainsKey(id))
-            {
-                //若存在
-                node = NodeDicCache[id];
-                //并显示其连线
-                foreach (NodeLine nodeLine in node.NodeLines)
-                {
-                    //判断是否已有
-                    if (!ShowedNodeLines.ContainsKey(nodeLine.ID))
-                    {
-                        //若没有
-                        NodeView.Add(nodeLine);
-                        //并加入肯德基豪华午餐
-                        ShowedNodeLines[nodeLine.ID] = nodeLine;
-                    }
-                }
-            }
-            else
-            {
-                //若不存在，则生成
-                node = new Node(locUnitData, this);
-                //并添加到节点缓存中
-                NodeDicCache[locUnitData.GetAssetHashCode()] = node;
-            }
-            //考虑到既然已经重设，顺便给个名字
-            node.Label.text = locUnitData.name;
-            //将节点添加至面板
-            NodeView.Add(node);
-            //尝试更改节点位置
-            if (NodePosDicCache.ContainsKey(id))
-            {
-                node.style.left = NodePosDicCache[id].Item1;
-                node.style.top = NodePosDicCache[id].Item2;
-            }
-            //添加到当前节点列表中
-            ShowedNodes.Add(node);
         }
         #endregion
     }

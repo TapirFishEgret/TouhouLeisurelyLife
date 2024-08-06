@@ -23,7 +23,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //排序位置
         private IntegerField _sortingOrderField;
         //设置控件
-        private TextField _nameField;
         private TextField _descriptionField;
         private ObjectField _backgroundField;
         //连接展示框
@@ -70,17 +69,42 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //排序位置
             _sortingOrderField = this.Q<IntegerField>("SortingOrderField");
             //设置控件
-            _nameField = this.Q<TextField>("NameField");
             _descriptionField = this.Q<TextField>("DescriptionField");
             _backgroundField = this.Q<ObjectField>("BackgroundField");
             //连接展示框
             _connectionsShowView = this.Q<MultiColumnListView>("ConnectionsShowView");
 
+            //添加连接显示框的内容
+            //添加全名列
+            _connectionsShowView.columns.Add(new Column
+            {
+                name = "FullName",
+                title = "FullName",
+                makeCell = () => new Label(),
+                width = new Length(60, LengthUnit.Percent)
+            });
+            //添加索引列
+            _connectionsShowView.columns.Add(new Column
+            {
+                name = "DataObject",
+                title = "DataObject",
+                makeCell = () => new ObjectField(),
+                width = new Length(20, LengthUnit.Percent)
+            });
+            //添加耗时列
+            _connectionsShowView.columns.Add(new Column
+            {
+                name = "Distance",
+                title = "Distance",
+                makeCell = () => new Label(),
+                width = new Length(20, LengthUnit.Percent)
+            });
+
             //注册事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
         //刷新面板
-        public void DRefresh(LocUnitData locUnitData)
+        public void DRefresh()
         {
             //计时
             using ExecutionTimer timer = new("数据编辑面板刷新", MainWindow.TimerDebugLogToggle.value);
@@ -92,15 +116,15 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //清除旧的绑定
             Unbind();
             //检测是否有数据被选择
-            if (locUnitData != null)
+            if (MainWindow.DataTreeView.ActiveSelection != null)
             {
                 //若有
                 //重新绑定
-                Bind(locUnitData);
+                Bind(MainWindow.DataTreeView.ActiveSelection);
 
                 //设置数据
                 //设置全名显示
-                _fullNameLabel.text = string.Join("/", locUnitData.FullName);
+                _fullNameLabel.text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.FullName);
                 //检测背景图状态
                 if (_backgroundField.value == null)
                 {
@@ -116,38 +140,14 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
 
                 //设置双列列表视图
-                //清除现有视图
-                _connectionsShowView.columns.Clear();
-                _connectionsShowView.itemsSource = null;
-                //绑定新内容
-                _connectionsShowView.itemsSource = locUnitData.ConnectionKeys;
-                //添加全名列
-                _connectionsShowView.columns.Add(new Column
-                {
-                    name = "FullName",
-                    title = "FullName",
-                    makeCell = () => new Label(),
-                    bindCell = (element, i) => (element as Label).text = string.Join("/", locUnitData.ConnectionKeys[i].FullName),
-                    width = new Length(60, LengthUnit.Percent)
-                });
-                //添加索引列
-                _connectionsShowView.columns.Add(new Column
-                {
-                    name = "DataObject",
-                    title = "DataObject",
-                    makeCell = () => new ObjectField(),
-                    bindCell = (element, i) => (element as ObjectField).value = locUnitData.ConnectionKeys[i],
-                    width = new Length(20, LengthUnit.Percent)
-                });
-                //添加耗时列
-                _connectionsShowView.columns.Add(new Column
-                {
-                    name = "Duration",
-                    title = "Duration",
-                    makeCell = () => new Label(),
-                    bindCell = (element, i) => (element as Label).text = locUnitData.ConnectionValues[i].ToString(),
-                    width = new Length(20, LengthUnit.Percent)
-                });
+                //数据源的设置
+                _connectionsShowView.itemsSource = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys;
+                //数据的重新绑定
+                _connectionsShowView.columns[0].bindCell = (element, i) => (element as Label).text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i].FullName);
+                _connectionsShowView.columns[1].bindCell = (element, i) => (element as ObjectField).value = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i];
+                _connectionsShowView.columns[2].bindCell = (element, i) => (element as Label).text = MainWindow.DataTreeView.ActiveSelection.ConnectionValues[i].ToString();
+                //刷新
+                _connectionsShowView.RefreshItems();
             }
         }
         //绑定
@@ -157,24 +157,13 @@ namespace THLL.GameEditor.LocUnitDataEditor
             _packageField.SetValueWithoutNotify(locUnitData.Package);
             _authorFiled.SetValueWithoutNotify(locUnitData.Author);
             _parentDataField.SetValueWithoutNotify(locUnitData.ParentData);
-            _nameField.SetValueWithoutNotify(locUnitData.Name);
             _descriptionField.SetValueWithoutNotify(locUnitData.Description);
             _backgroundField.SetValueWithoutNotify(locUnitData.Background);
             _sortingOrderField.SetValueWithoutNotify(locUnitData.SortingOrder);
 
-            //检测目标是否需要重新生成全名
-            if (MainWindow.DataNeedToReGenerateFullNameCache.Contains(locUnitData))
-            {
-                //若是，重新生成
-                locUnitData.Editor_GenerateFullName();
-                //生成结束后移除
-                MainWindow.DataNeedToReGenerateFullNameCache.Remove(locUnitData);
-            }
-
             //将控件绑定至新数据上
             _packageField.RegisterValueChangedCallback(OnPackageChanged);
             _authorFiled.RegisterValueChangedCallback(OnAuthorChanged);
-            _nameField.RegisterValueChangedCallback(OnNameChanged);
             _descriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
             _backgroundField.RegisterValueChangedCallback(OnBackgroundChanged);
             _sortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
@@ -185,7 +174,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //将控件从旧数据清除绑定
             _packageField.UnregisterValueChangedCallback(OnPackageChanged);
             _authorFiled.UnregisterValueChangedCallback(OnAuthorChanged);
-            _nameField.UnregisterValueChangedCallback(OnNameChanged);
             _descriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
             _backgroundField.UnregisterValueChangedCallback(OnBackgroundChanged);
             _sortingOrderField.UnregisterValueChangedCallback(OnSortingOrderChanged);
@@ -204,53 +192,43 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //数据处理方法
         private void OnPackageChanged(ChangeEvent<string> evt)
         {
-            MainWindow.DataTreeView.ActiveData.Editor_SetPackage(evt.newValue);
+            MainWindow.DataTreeView.ActiveSelection.Editor_SetPackage(evt.newValue);
         }
         private void OnAuthorChanged(ChangeEvent<string> evt)
         {
-            MainWindow.DataTreeView.ActiveData.Editor_SetAuthor(evt.newValue);
-        }
-
-        private void OnNameChanged(ChangeEvent<string> evt)
-        {
-            //更改数据
-            MainWindow.DataTreeView.ActiveData.Editor_SetName(evt.newValue);
-            //更改显示
-            _fullNameLabel.text = string.Join("/", MainWindow.DataTreeView.ActiveData.FullName);
-            //检查加上重命名全名标记
-            MainWindow.MarkAsNeedToReGenerateFullName(MainWindow.DataTreeView.ActiveData);
+            MainWindow.DataTreeView.ActiveSelection.Editor_SetAuthor(evt.newValue);
         }
 
         private void OnDescriptionChanged(ChangeEvent<string> evt)
         {
-            MainWindow.DataTreeView.ActiveData.Editor_SetDescription(evt.newValue);
+            MainWindow.DataTreeView.ActiveSelection.Editor_SetDescription(evt.newValue);
         }
 
         private void OnBackgroundChanged(ChangeEvent<Object> evt)
         {
             if (evt.newValue is Sprite sprite)
             {
-                MainWindow.DataTreeView.ActiveData.Editor_SetBackground(sprite);
+                MainWindow.DataTreeView.ActiveSelection.Editor_SetBackground(sprite);
                 style.backgroundImage = new StyleBackground(sprite);
             }
             else
             {
-                MainWindow.DataTreeView.ActiveData.Editor_SetBackground(null);
+                MainWindow.DataTreeView.ActiveSelection.Editor_SetBackground(null);
             }
         }
 
         private void OnSortingOrderChanged(ChangeEvent<int> evt)
         {
             //设置排序
-            MainWindow.DataTreeView.ActiveData.Editor_SetSortingOrder(evt.newValue);
+            MainWindow.DataTreeView.ActiveSelection.Editor_SetSortingOrder(evt.newValue);
             //重排
-            if (MainWindow.DataTreeView.ActiveData.ParentData == null)
+            if (MainWindow.DataTreeView.ActiveSelection.ParentData == null)
             {
                 MainWindow.DataTreeView.RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             else
             {
-                MainWindow.DataTreeView.ChildrenDicCache[MainWindow.DataTreeView.ActiveData.ParentData.GetAssetHashCode()]
+                MainWindow.DataTreeView.ChildrenDicCache[MainWindow.DataTreeView.ActiveSelection.ParentData.GetAssetHashCode()]
                     .Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
             //刷新

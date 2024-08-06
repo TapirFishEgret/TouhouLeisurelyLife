@@ -38,6 +38,7 @@ namespace THLL.GameEditor.CharacterEditor
             Type = ItemType.CharacterData;
             SortingOrder = characterData.SortingOrder;
             CharacterData = characterData;
+            StringData = characterData.Version;
             Parent = parent;
         }
     }

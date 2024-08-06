@@ -39,7 +39,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             IntegerField = new IntegerField()
             {
                 //设置名称与延迟响应
-                label = "通行时间",
+                label = "Distance",
                 isDelayed = true
             };
             //设置标签大小为可变
