@@ -12,7 +12,7 @@
                 <engine:TextField label="Category" name="CategoryField" enabled="false" value="Character" is-delayed="true" style="width: 30%;" />
             </engine:VisualElement>
             <engine:VisualElement name="Space" style="width: 10px;" />
-            <engine:Label text="Full Info" name="FullInfoLabel" style="-unity-text-align: middle-center; font-size: 32px;" />
+            <engine:Label text="Full Info" name="FullInfoLabel" style="-unity-text-align: middle-center; font-size: 32px; white-space: nowrap;" />
             <engine:VisualElement name="Space" style="width: 10px;" />
             <engine:TextField label="Description" name="DescriptionField" is-delayed="true" multiline="true" style="flex-direction: row;" />
             <engine:IntegerField label="Sorting Order" value="0" name="SortingOrderField" max-length="10000" is-delayed="true" />

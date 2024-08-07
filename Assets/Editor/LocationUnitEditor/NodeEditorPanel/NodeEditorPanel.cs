@@ -365,8 +365,12 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     }
                     else
                     {
-                        //若当前有连接在进行，则结束连接
-                        EndLine(node);
+                        //若当前有连接在进行，检测目标
+                        if (node != CurrentStartNode)
+                        {
+                            //若目标与当前起始节点不同，创建
+                            EndLine(node);
+                        }
                     }
                 }
                 //若不是，检查当下是否有连接
