@@ -3,8 +3,8 @@
     <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; min-height: auto;">
         <engine:VisualElement name="Filter" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.7);" />
         <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-around;">
-            <engine:TextField label="Package" hide-placeholder-on-focus="true" name="PackageField" is-delayed="true" style="width: 21%;" />
-            <engine:TextField label="Author" hide-placeholder-on-focus="true" name="AuthorField" is-delayed="true" style="width: 21%;" />
+            <engine:TextField label="Package" hide-placeholder-on-focus="true" name="PackageField" is-delayed="true" enabled="false" style="width: 21%;" />
+            <engine:TextField label="Author" hide-placeholder-on-focus="true" name="AuthorField" is-delayed="true" enabled="false" style="width: 21%;" />
             <engine:TextField label="Category" placeholder-text="filler text" value="Location" hide-placeholder-on-focus="true" readonly="true" enabled="false" name="CategoryField" style="width: 21%;" />
             <editor:ObjectField label="Parent" enabled="false" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" name="ParentDataField" style="width: 21%;" />
         </engine:VisualElement>

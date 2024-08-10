@@ -1,6 +1,10 @@
 ﻿using System;
 using System.IO;
+using UnityEngine;
 using UnityEditor;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 
 namespace THLL.GameEditor
 {
@@ -102,6 +106,70 @@ namespace THLL.GameEditor
             AssetDatabase.SaveAssets();
             //刷新资源视图
             AssetDatabase.Refresh();
+        }
+        //确保目标资源包存在
+        public static AddressableAssetGroup GetAddressableGroup(string groupName, string buildPath, string loadPath)
+        {
+            //创建返回结果
+            AddressableAssetGroup group;
+
+            //获取可寻址资源设置
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+
+            //尝试获取包
+            group = settings.FindGroup(groupName);
+
+            //检测获取情况
+            if (group == null)
+            {
+                //若无获取，则进行创建
+                //设定构建及读取变量在设置中对应的变量名
+                string buildPathVariable = groupName + "BuildPath";
+                string loadPathVariable = groupName + "LoadPath";
+                //设置
+                SetProfileVariable(settings, buildPathVariable, buildPath);
+                SetProfileVariable(settings, loadPathVariable, loadPath);
+                //随后创建新资源组
+                group = settings.CreateGroup(groupName, false, false, true, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+                //配置组的参数
+                //打包参数
+                BundledAssetGroupSchema bundledSchema = group.GetSchema<BundledAssetGroupSchema>();
+                if (bundledSchema != null)
+                {
+                    //设置自定义构建路径与加载路径
+                    bundledSchema.BuildPath.SetVariableByName(settings, buildPathVariable);
+                    bundledSchema.LoadPath.SetVariableByName(settings, loadPathVariable);
+                    //设置打包模式为分开打包
+                    bundledSchema.BundleMode = BundledAssetGroupSchema.BundlePackingMode.PackSeparately;
+                    //设置自定义命名策略
+                    bundledSchema.BundleNaming = BundledAssetGroupSchema.BundleNamingStyle.AppendHash;
+                }
+                //内容参数
+                ContentUpdateGroupSchema contentSchema = group.GetSchema<ContentUpdateGroupSchema>();
+                if (contentSchema != null)
+                {
+                    //设置为非静态资源
+                    contentSchema.StaticContent = false;
+                }
+            }
+
+            //返回结果
+            return group;
+        }
+        //设定文档变量
+        private static void SetProfileVariable(AddressableAssetSettings settings, string variableName, string value)
+        {
+            //获取当前Profile的值
+            AddressableAssetProfileSettings profileSettings = settings.profileSettings;
+            string currentProfileID = settings.activeProfileId;
+            //确认变量是否存在
+            if (!profileSettings.GetVariableNames().Contains(variableName))
+            {
+                //若不存在，创建
+                profileSettings.CreateValue(variableName, value);
+            }
+            //设置路径变量值
+            profileSettings.SetValue(currentProfileID, variableName, value);
         }
     }
 }

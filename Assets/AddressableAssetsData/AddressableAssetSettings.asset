@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 881bd03c94b1d8f47bc370bee4e9a530
   m_currentHash:
     serializedVersion: 2
-    Hash: 46fb3ac40737dd1ebaa97e188fb2f1a8
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -53,13 +53,19 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 8d861abda215c004382d1e5760e99dc3, type: 2}
+  - {fileID: 11400000, guid: 6b471b323035b2847be46317236d7bdb, type: 2}
+  - {fileID: 11400000, guid: 7ffc194ea073fa540a898e3cb5367466, type: 2}
+  - {fileID: 11400000, guid: 33b7aae067460184a84685ced3af1839, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -77,8 +83,12 @@ MonoBehaviour:
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
         m_Value: 'ServerData/[BuildTarget]'
+      - m_Id: c51dfd7abdae74a44bd03376d1837922
+        m_Value: C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets\AddressableAssets\Location\Core\TapirFishEgret
       - m_Id: e7972a14c8056fb439bce04c53bbaab6
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: fe0443679c719444584d70ef44b6123e
+        m_Value: C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets\AddressableAssets\Location\Core\TapirFishEgret
     m_ProfileEntryNames:
     - m_Id: 2719dfef13105e347b9e91532829d20a
       m_Name: Remote.LoadPath
@@ -92,8 +102,14 @@ MonoBehaviour:
     - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
+    - m_Id: c51dfd7abdae74a44bd03376d1837922
+      m_Name: Location_Core_TapirFishEgretLoadPath
+      m_InlineUsage: 0
     - m_Id: e7972a14c8056fb439bce04c53bbaab6
       m_Name: BuildTarget
+      m_InlineUsage: 0
+    - m_Id: fe0443679c719444584d70ef44b6123e
+      m_Name: Location_Core_TapirFishEgretBuildPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:

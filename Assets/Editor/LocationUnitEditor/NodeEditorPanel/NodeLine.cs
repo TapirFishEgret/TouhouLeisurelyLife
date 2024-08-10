@@ -100,6 +100,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             {
                 //若有，直接返回
                 Debug.LogWarning("不要添加重复连接");
+                //並从面板显示上移除自身
+                NodeEditorPanel.NodeView.Remove(this);
                 return;
             }
             //若无，添加

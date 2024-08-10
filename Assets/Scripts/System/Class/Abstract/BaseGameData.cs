@@ -38,7 +38,7 @@ namespace THLL.BaseSystem
 #if UNITY_EDITOR
         public virtual void Editor_GenerateID()
         {
-            dataID = string.Join("_", new string[] { Package, Category, Author, Name }).Replace(" ", "-");
+            dataID = string.Join("_", new string[] { Category, Package, Author, Name }).Replace(" ", "-");
         }
         public virtual void Editor_SetName(string name)
         {
