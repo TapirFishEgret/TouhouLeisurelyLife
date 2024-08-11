@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
-  m_Name: Test Area A
+  m_Name: Hakurei Shrine
   m_EditorClassIdentifier: 
-  dataID: Core_Location_TapirFishEgret_Test-Area-A
-  dataName: Test Area A
+  dataID: Location_Core_TapirFishEgret_Hakurei-Shrine
+  dataName: Hakurei Shrine
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core
   dataCategory: Location
   sortingOrder: 1
-  id: Core_Location_TapirFishEgret_Test-World_Test-Area-A
+  id: Core_Location_TapirFishEgret_Test-World_Test-Area_Hakurei-Shrine
   _fullName:
   - Test World
-  - Test Area A
-  _parentData: {fileID: 11400000, guid: 742afd9b72655c44db2672ca7965af50, type: 2}
+  - Test Area
+  - Hakurei Shrine
+  _parentData: {fileID: 11400000, guid: 4355de48a307b55488c15a993a631f22, type: 2}
   _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
   _connectionKeys: []
   _connectionValues: 

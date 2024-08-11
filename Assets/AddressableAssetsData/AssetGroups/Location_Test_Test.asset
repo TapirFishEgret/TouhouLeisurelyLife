@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: Location_Test_Test
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
-  m_GUID: 881bd03c94b1d8f47bc370bee4e9a530
-  m_SerializeEntries: []
+  m_GroupName: Location_Test_Test
+  m_GUID: e7a07543a4aaf0140a64fef16591da3d
+  m_SerializeEntries:
+  - m_GUID: ee07d8514627e744885bf5be546f006e
+    m_Address: Test-World_Test-Area_Hakurei-Shrine_Test
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 28e3aecf5f024e14ea4abb5cd35fa69c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 6e8257695624f7948b126bb3c9f36aed, type: 2}
-    - {fileID: 11400000, guid: e0a6e1359d1427b44b14901aad7f43b1, type: 2}
+    - {fileID: 11400000, guid: 84735c371a3c1284e8a7fe959d40b4e0, type: 2}
+    - {fileID: 11400000, guid: abda98f12868c254ab7e45e0bf9c51f2, type: 2}

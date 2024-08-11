@@ -4,6 +4,8 @@ using System.Linq;
 using THLL.LocationSystem;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -249,67 +251,82 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     Debug.LogWarning("该地点已经存在，请重新创建！");
                     return;
                 }
+                //检查包存在状态
+                if (MainWindow.CurrentAddressableAssetGroup == null)
+                {
+                    //若包为空，提示并返回
+                    Debug.LogWarning("请先选定资源组");
+                    return;
+                }
+
+                //若路径不存在，而包存在，则开始生成物体
+                //创建新资源
+                LocUnitData newLocData = ScriptableObject.CreateInstance<LocUnitData>();
+                //设置相关数据
+                newLocData.Editor_SetPackage(MainWindow.PackageField.text);
+                newLocData.Editor_SetCategory("Location");
+                newLocData.Editor_SetAuthor(MainWindow.AuthorField.text);
+                newLocData.Editor_SetName(newName);
+                newLocData.Editor_SetSortingOrder(999);
+                newLocData.Editor_SetBackground(MainWindow.DefaultLocationBackground);
+                //更改文件名
+                newLocData.name = newName;
+                //更改父级
+                newLocData.Editor_SetParent(ActiveSelection);
+                //生成全名
+                newLocData.Editor_GenerateFullName();
+                //生成ID
+                newLocData.Editor_GenerateID();
+                //获取资源文件夹地址
+                string newLocDataPath = Path.Combine(newFolderPath, $"{newName}.asset").Replace("\\", "/");
+                //新建资源
+                AssetDatabase.CreateAsset(newLocData, newLocDataPath);
+                //保存文件更改
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                //处理缓存数据
+                //创建新实例对应的树形图数据
+                List<TreeViewItemData<LocUnitData>> newChildren = new();
+                TreeViewItemData<LocUnitData> newItem = new(newLocData.GetAssetHashCode(), newLocData, newChildren);
+                //判断选中项是否为空
+                if (ActiveSelection != null)
+                {
+                    //当选中项不为空时，新数据作为被选中的数据的子级被添加
+                    ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Add(newItem);
+                    //并赋予序号
+                    newItem.data.Editor_SetSortingOrder(ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Count);
+                    //重排
+                    ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
+                }
                 else
                 {
-                    //若不存在，开始生成物体
-                    //创建新资源
-                    LocUnitData newData = ScriptableObject.CreateInstance<LocUnitData>();
-                    //设置相关数据
-                    newData.Editor_SetPackage(MainWindow.DefaultPackageField.text);
-                    newData.Editor_SetCategory("Location");
-                    newData.Editor_SetAuthor(MainWindow.DefaultAuthorField.text);
-                    newData.Editor_SetName(newName);
-                    newData.Editor_SetSortingOrder(999);
-                    newData.Editor_SetBackground(MainWindow.DefaultLocationBackground);
-                    //更改文件名
-                    newData.name = newName;
-                    //更改父级
-                    newData.Editor_SetParent(ActiveSelection);
-                    //生成全名
-                    newData.Editor_GenerateFullName();
-                    //生成ID
-                    newData.Editor_GenerateID();
-                    //获取资源文件夹地址
-                    string newDataPath = Path.Combine(newFolderPath, $"{newName}.asset").Replace("\\", "/");
-                    //新建资源
-                    AssetDatabase.CreateAsset(newData, newDataPath);
-                    //保存文件更改
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-
-                    //处理缓存数据
-                    //创建新实例对应的树形图数据
-                    List<TreeViewItemData<LocUnitData>> newChildren = new();
-                    TreeViewItemData<LocUnitData> newItem = new(newData.GetAssetHashCode(), newData, newChildren);
-                    //判断选中项是否为空
-                    if (ActiveSelection != null)
-                    {
-                        //当选中项不为空时，新数据作为被选中的数据的子级被添加
-                        ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Add(newItem);
-                        //并赋予序号
-                        newItem.data.Editor_SetSortingOrder(ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Count);
-                        //重排
-                        ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-                    }
-                    else
-                    {
-                        //若为空，则认定为顶级数据
-                        //添加到顶级数据中
-                        RootItemCache.Add(newItem);
-                        //并赋予序号
-                        newItem.data.Editor_SetSortingOrder(RootItemCache.Count);
-                        //重排
-                        RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-                    }
-                    //添加到其他缓存中
-                    ItemDicCache[newData.GetAssetHashCode()] = newItem;
-                    ChildrenDicCache[newData.GetAssetHashCode()] = newChildren;
-                    //重构树形图
-                    TRefresh();
-
-                    //重新生成节点与连线缓存
-                    MainWindow.NodeEditorPanel.GenerateNodesAndLines();
+                    //若为空，则认定为顶级数据
+                    //添加到顶级数据中
+                    RootItemCache.Add(newItem);
+                    //并赋予序号
+                    newItem.data.Editor_SetSortingOrder(RootItemCache.Count);
+                    //重排
+                    RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
                 }
+                //添加到其他缓存中
+                ItemDicCache[newLocData.GetAssetHashCode()] = newItem;
+                ChildrenDicCache[newLocData.GetAssetHashCode()] = newChildren;
+                //重新生成节点与连线缓存
+                MainWindow.NodeEditorPanel.GenerateNodesAndLines();
+                //重构树形图
+                TRefresh();
+
+                //处理资源包
+                //创建新的资源索引
+                AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
+                .GetSettings(true)
+                .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newLocData)), MainWindow.CurrentAddressableAssetGroup);
+                //设定索引名称
+                entry.SetAddress(string.Join("_", newLocData.FullName).Replace(" ", "-"));
+                //保存设置
+                MainWindow.CurrentAddressableAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+                AssetDatabase.SaveAssets();
             },
             "创建新地点数据",
             "请输入新地点数据的文件名",

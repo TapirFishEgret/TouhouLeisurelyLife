@@ -63,8 +63,8 @@ namespace THLL.GameEditor.CharacterEditor
             _windowVisualTree.CloneTree(rootVisualElement);
 
             //获取UI控件
-            DefaultPackageField = rootVisualElement.Q<TextField>("DefaultPackageField");
-            DefaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
+            DefaultPackageField = rootVisualElement.Q<TextField>("PackageField");
+            DefaultAuthorField = rootVisualElement.Q<TextField>("AuthorField");
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");

@@ -4,10 +4,13 @@ using System.Linq;
 using THLL.LocationSystem;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor.AddressableAssets.Build.DataBuilders;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
@@ -30,26 +33,31 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public Sprite DefaultLocationBackground => _defaultLocationBackground;
 
         //UI元素
-        //左侧面板
+        //树形图面板
+        //树形图容纳容器
+        public VisualElement DataTreeViewContainer { get; private set; }
         //树形图
         public DataTreeView DataTreeView { get; private set; }
-        //包输入框
-        public TextField DefaultPackageField { get; private set; }
-        //作者输入框
-        public TextField DefaultAuthorField { get; private set; }
-        //获取资源包按钮
-        public Button AddressableGroupButton { get; private set; }
-        //获取的资源包
-        public ObjectField AddressableGroupField { get; private set; }
         //计时器Debug面板显示开关
         public Toggle TimerDebugLogToggle { get; private set; }
-        //右侧面板
+        //编辑器面板
         //多标签页面板
         public TabView MultiTabView { get; private set; }
         //数据编辑面板
         public DataEditorPanel DataEditorPanel { get; private set; }
         //连接编辑面板
         public NodeEditorPanel NodeEditorPanel { get; private set; }
+        //可寻址资源包面板
+        //包输入框
+        public TextField PackageField { get; private set; }
+        //作者输入框
+        public TextField AuthorField { get; private set; }
+        //获取资源包按钮
+        public Button GetAddressableAssetGroupButton { get; private set; }
+        //获取的资源包
+        public ObjectField AddressableAssetGroupField { get; private set; }
+        //构建资源包
+        public Button BuildAddressableAssetGroupButton { get; private set; }
 
         //数据
         //可寻址资源组
@@ -74,13 +82,17 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //其他控件
             //获取
-            DefaultPackageField = rootVisualElement.Q<TextField>("DefaultPackageField");
-            DefaultAuthorField = rootVisualElement.Q<TextField>("DefaultAuthorField");
+            PackageField = rootVisualElement.Q<TextField>("PackageField");
+            AuthorField = rootVisualElement.Q<TextField>("AuthorField");
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
-            VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
+            DataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("EditorContainer");
-            AddressableGroupButton = rootVisualElement.Q<Button>("AddressableGroupButton");
-            AddressableGroupField = rootVisualElement.Q<ObjectField>("AddressableGroupField");
+            GetAddressableAssetGroupButton = rootVisualElement.Q<Button>("GetAddressableAssetGroupButton");
+            AddressableAssetGroupField = rootVisualElement.Q<ObjectField>("AddressableAssetGroupField");
+            BuildAddressableAssetGroupButton = rootVisualElement.Q<Button>("BuildAddressableAssetGroupButton");
+            //绑定
+            GetAddressableAssetGroupButton.clicked += SetAddressableAssetGroup;
+            BuildAddressableAssetGroupButton.clicked += BuildAddressableAssetGroup;
 
             //设置标签页面容器为可延展
             MultiTabView.contentContainer.style.flexGrow = 1;
@@ -92,9 +104,9 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //左侧面板
             //创建树形图面板并添加
             DataTreeView = new DataTreeView(this);
-            dataTreeViewContainer.Add(DataTreeView);
+            DataTreeViewContainer.Add(DataTreeView);
             //设置可寻址资源组
-            SetAddressableGroup();
+            SetAddressableAssetGroup();
 
             //右侧面板
             //创建数据编辑面板并添加
@@ -109,8 +121,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
         {
             //保存持久化数据到磁盘
             SavePersistentData();
-            //提醒修改可寻址资源包标签
-            Debug.LogWarning("窗口已被关闭，请注意修改新增数据的可寻址资源包的Key。");
         }
         #endregion
 
@@ -122,8 +132,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             PersistentData persistentData = new()
             {
                 //设置其数值
-                DefaultPackage = DefaultPackageField.text,
-                DefaultAuthor = DefaultAuthorField.text,
+                DefaultPackage = PackageField.text,
+                DefaultAuthor = AuthorField.text,
                 TimerDebugLogState = TimerDebugLogToggle.value,
                 ExpandedState = DataTreeView.ExpandedStateCache.ToList(),
                 NodePositions = new()
@@ -154,33 +164,46 @@ namespace THLL.GameEditor.LocUnitDataEditor
             PersistentData persistentData = JsonConvert.DeserializeObject<PersistentData>(jsonString);
             //分配数据
             //属性
-            DefaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
-            DefaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
+            PackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
+            AuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
             TimerDebugLogToggle.SetValueWithoutNotify(persistentData.TimerDebugLogState);
         }
         #endregion
 
         #region
         //可寻址资源包相关
-        private void SetAddressableGroup()
+        private void SetAddressableAssetGroup()
         {
             //确认输入框中存在内容
-            if (string.IsNullOrEmpty(DefaultAuthorField.text) || string.IsNullOrEmpty(DefaultPackageField.text))
+            if (string.IsNullOrEmpty(AuthorField.text) || string.IsNullOrEmpty(PackageField.text))
             {
                 //若输入框中有空输入，则返回
                 Debug.LogWarning("请输入完整信息后获取资源包");
                 return;
             }
             //确认包名
-            string bundleName = $"Location_{DefaultPackageField.text}_{DefaultAuthorField.text}";
-            //确认构建路径
-            string buildPath = Path.Combine(Application.streamingAssetsPath, "AddressableAssets", "Location", DefaultPackageField.text, DefaultAuthorField.text);
+            string bundleName = $"Location_{PackageField.text}_{AuthorField.text}";
+            //确认构建路径，此处采用可寻址资源包内置路径变量
+            string buildPath = "[UnityEngine.AddressableAssets.Addressables.BuildPath]/" 
+                + "Location/" + PackageField.text + "/" + AuthorField.text;
             //确认读取路径
-            string loadPath = Path.Combine(Application.streamingAssetsPath, "AddressableAssets", "Location", DefaultPackageField.text, DefaultAuthorField.text);
+            string loadPath = "{UnityEngine.AddressableAssets.Addressables.RuntimePath}/" 
+                + "Location/" + PackageField.text + "/" + AuthorField.text;
             //获取组
             CurrentAddressableAssetGroup = EditorExtensions.GetAddressableGroup(bundleName, buildPath, loadPath);
             //赋值
-            AddressableGroupField.SetValueWithoutNotify(CurrentAddressableAssetGroup);
+            AddressableAssetGroupField.SetValueWithoutNotify(CurrentAddressableAssetGroup);
+        }
+        //构建可寻址资源包
+        private void BuildAddressableAssetGroup()
+        {
+            //确认有资源包的存在
+            if (CurrentAddressableAssetGroup == null)
+            {
+                //若无，返回
+                Debug.LogWarning("当前没有资源包被选中！");
+                return;
+            }
         }
         #endregion
     }

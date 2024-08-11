@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
   m_Name: Test World
   m_EditorClassIdentifier: 
-  dataID: Core_Location_TapirFishEgret_Test-World
+  dataID: Location_Core_TapirFishEgret_Test-World
   dataName: Test World
   dataDescription: 
   dataAuthor: TapirFishEgret

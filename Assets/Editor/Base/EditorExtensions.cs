@@ -124,8 +124,8 @@ namespace THLL.GameEditor
             {
                 //若无获取，则进行创建
                 //设定构建及读取变量在设置中对应的变量名
-                string buildPathVariable = groupName + "BuildPath";
-                string loadPathVariable = groupName + "LoadPath";
+                string buildPathVariable = groupName + "_" + "BuildPath";
+                string loadPathVariable = groupName + "_" + "LoadPath";
                 //设置
                 SetProfileVariable(settings, buildPathVariable, buildPath);
                 SetProfileVariable(settings, loadPathVariable, loadPath);
@@ -151,6 +151,10 @@ namespace THLL.GameEditor
                     //设置为非静态资源
                     contentSchema.StaticContent = false;
                 }
+
+                //创建结束后保存并刷新
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
 
             //返回结果

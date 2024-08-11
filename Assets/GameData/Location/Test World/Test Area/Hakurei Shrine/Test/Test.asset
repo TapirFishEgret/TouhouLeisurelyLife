@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
-  m_Name: Test Location B
+  m_Name: Test
   m_EditorClassIdentifier: 
-  dataID: Core_Location_TapirFishEgret_Test-Location-B
-  dataName: Test Location B
+  dataID: Location_Test_Test_Test
+  dataName: Test
   dataDescription: 
-  dataAuthor: TapirFishEgret
-  dataPackage: Core
+  dataAuthor: Test
+  dataPackage: Test
   dataCategory: Location
-  sortingOrder: 2
-  id: Core_Location_TapirFishEgret_Test-World_Test-Area-A_Test-Location-B
+  sortingOrder: 1
+  id: Test_Location_Test_Test-World_Test-Area_Hakurei-Shrine_Test
   _fullName:
   - Test World
-  - Test Area A
-  - Test Location B
-  _parentData: {fileID: 11400000, guid: ca7b27ca1be19a040b394edcc7b283ee, type: 2}
+  - Test Area
+  - Hakurei Shrine
+  - Test
+  _parentData: {fileID: 11400000, guid: 2161eb408766f4f48ab5af5394ac8c83, type: 2}
   _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
-  _connectionKeys:
-  - {fileID: 11400000, guid: a9b4f7e3959a04b41a5ed73236934d4b, type: 2}
-  _connectionValues: 00000000
+  _connectionKeys: []
+  _connectionValues: 
   _isGateway: 0
