@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: Location_Test_Test_BundledAssetGroupSchema
+  m_Name: Character_Core_TapirFishEgret_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: ee6c049db8bdb474f952ff95016b8389, type: 2}
+  m_Group: {fileID: 11400000, guid: a0f559f5a35da9b439bfea37f8e7bc71, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1
@@ -34,9 +34,9 @@ MonoBehaviour:
   m_RedirectLimit: -1
   m_RetryCount: 0
   m_BuildPath:
-    m_Id: 706fd1d8b70f63d4499259045b0e0ffa
+    m_Id: 69cb4c9efc0970d43b29c2791ad13129
   m_LoadPath:
-    m_Id: 1300c7c24830de44882f210f389639f9
+    m_Id: f6d0e6fa72714b449b2bd1f8aca6a992
   m_BundleMode: 1
   m_AssetBundleProviderType:
     m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

@@ -1,5 +1,7 @@
 ﻿using THLL.LocationSystem;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,20 +15,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public MainWindow MainWindow { get; private set; }
 
         //基层面板
-        private VisualElement _dataEditorPanel;
-        //基础四项
-        private TextField _packageField;
-        private TextField _authorFiled;
-        private ObjectField _parentDataField;
+        private VisualElement BasePanel { get; set; }
+        //组及父级信息
+        private ObjectField AddressableAssetGroupField { get; set; }
+        private ObjectField ParentDataField { get; set; }
         //全名
-        private Label _fullNameLabel;
+        private Label FullNameLabel { get; set; }
         //排序位置
-        private IntegerField _sortingOrderField;
+        private IntegerField SortingOrderField { get; set; }    
         //设置控件
-        private TextField _descriptionField;
-        private ObjectField _backgroundField;
+        private TextField DescriptionField { get; set; }
+        private ObjectField BackgroundField { get; set; }
         //连接展示框
-        private MultiColumnListView _connectionsShowView;
+        private MultiColumnListView ConnectionsShowView { get; set; }
         #endregion
 
         //构建函数
@@ -59,24 +60,23 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //获取UI控件
             //基层面板
-            _dataEditorPanel = this.Q<VisualElement>("DataEditorPanel");
+            BasePanel = this.Q<VisualElement>("DataEditorPanel");
             //基础项
-            _packageField = this.Q<TextField>("PackageField");
-            _authorFiled = this.Q<TextField>("AuthorField");
-            _parentDataField = this.Q<ObjectField>("ParentDataField");
+            AddressableAssetGroupField = this.Q<ObjectField>("AddressableAssetGroupField");
+            ParentDataField = this.Q<ObjectField>("ParentDataField");
             //全名
-            _fullNameLabel = this.Q<Label>("FullNameLabel");
+            FullNameLabel = this.Q<Label>("FullNameLabel");
             //排序位置
-            _sortingOrderField = this.Q<IntegerField>("SortingOrderField");
+            SortingOrderField = this.Q<IntegerField>("SortingOrderField");
             //设置控件
-            _descriptionField = this.Q<TextField>("DescriptionField");
-            _backgroundField = this.Q<ObjectField>("BackgroundField");
+            DescriptionField = this.Q<TextField>("DescriptionField");
+            BackgroundField = this.Q<ObjectField>("BackgroundField");
             //连接展示框
-            _connectionsShowView = this.Q<MultiColumnListView>("ConnectionsShowView");
+            ConnectionsShowView = this.Q<MultiColumnListView>("ConnectionsShowView");
 
             //添加连接显示框的内容
             //添加全名列
-            _connectionsShowView.columns.Add(new Column
+            ConnectionsShowView.columns.Add(new Column
             {
                 name = "FullName",
                 title = "FullName",
@@ -84,7 +84,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 width = new Length(60, LengthUnit.Percent)
             });
             //添加索引列
-            _connectionsShowView.columns.Add(new Column
+            ConnectionsShowView.columns.Add(new Column
             {
                 name = "DataObject",
                 title = "DataObject",
@@ -92,7 +92,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 width = new Length(20, LengthUnit.Percent)
             });
             //添加耗时列
-            _connectionsShowView.columns.Add(new Column
+            ConnectionsShowView.columns.Add(new Column
             {
                 name = "Distance",
                 title = "Distance",
@@ -113,70 +113,66 @@ namespace THLL.GameEditor.LocUnitDataEditor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            //清除旧的绑定
-            Unbind();
             //检测是否有数据被选择
             if (MainWindow.DataTreeView.ActiveSelection != null)
             {
                 //若有
+                //清除旧的绑定
+                Unbind();
                 //重新绑定
                 Bind(MainWindow.DataTreeView.ActiveSelection);
 
                 //设置数据
                 //设置全名显示
-                _fullNameLabel.text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.FullName);
+                FullNameLabel.text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.FullName);
                 //检测背景图状态
-                if (_backgroundField.value == null)
+                if (BackgroundField.value == null)
                 {
                     //若无背景图，则设置为默认
-                    _backgroundField.value = MainWindow.DefaultLocationBackground;
+                    BackgroundField.value = MainWindow.DefaultLocationBackground;
                 }
                 //随后设置面板背景图
-                style.backgroundImage = new StyleBackground(_backgroundField.value as Sprite);
+                style.backgroundImage = new StyleBackground(BackgroundField.value as Sprite);
                 //设置背景图延展模式为切削
                 style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
                 style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
                 style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
                 style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
+                //设置当前那选中数据资源组
+                SetAddressableAssetGroup();
 
                 //设置双列列表视图
                 //数据源的设置
-                _connectionsShowView.itemsSource = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys;
+                ConnectionsShowView.itemsSource = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys;
                 //数据的重新绑定
-                _connectionsShowView.columns[0].bindCell = (element, i) => (element as Label).text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i].FullName);
-                _connectionsShowView.columns[1].bindCell = (element, i) => (element as ObjectField).value = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i];
-                _connectionsShowView.columns[2].bindCell = (element, i) => (element as Label).text = MainWindow.DataTreeView.ActiveSelection.ConnectionValues[i].ToString();
+                ConnectionsShowView.columns[0].bindCell = (element, i) => (element as Label).text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i].FullName);
+                ConnectionsShowView.columns[1].bindCell = (element, i) => (element as ObjectField).value = MainWindow.DataTreeView.ActiveSelection.ConnectionKeys[i];
+                ConnectionsShowView.columns[2].bindCell = (element, i) => (element as Label).text = MainWindow.DataTreeView.ActiveSelection.ConnectionValues[i].ToString();
                 //刷新
-                _connectionsShowView.RefreshItems();
+                ConnectionsShowView.RefreshItems();
             }
         }
         //绑定
         private void Bind(LocUnitData locUnitData)
         {
             //不触发通知的情况下更改数据
-            _packageField.SetValueWithoutNotify(locUnitData.Package);
-            _authorFiled.SetValueWithoutNotify(locUnitData.Author);
-            _parentDataField.SetValueWithoutNotify(locUnitData.ParentData);
-            _descriptionField.SetValueWithoutNotify(locUnitData.Description);
-            _backgroundField.SetValueWithoutNotify(locUnitData.Background);
-            _sortingOrderField.SetValueWithoutNotify(locUnitData.SortingOrder);
+            ParentDataField.SetValueWithoutNotify(locUnitData.ParentData);
+            DescriptionField.SetValueWithoutNotify(locUnitData.Description);
+            BackgroundField.SetValueWithoutNotify(locUnitData.Background);
+            SortingOrderField.SetValueWithoutNotify(locUnitData.SortingOrder);
 
             //将控件绑定至新数据上
-            _packageField.RegisterValueChangedCallback(OnPackageChanged);
-            _authorFiled.RegisterValueChangedCallback(OnAuthorChanged);
-            _descriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
-            _backgroundField.RegisterValueChangedCallback(OnBackgroundChanged);
-            _sortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
+            DescriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
+            BackgroundField.RegisterValueChangedCallback(OnBackgroundChanged);
+            SortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
         }
         //清除绑定
         private void Unbind()
         {
             //将控件从旧数据清除绑定
-            _packageField.UnregisterValueChangedCallback(OnPackageChanged);
-            _authorFiled.UnregisterValueChangedCallback(OnAuthorChanged);
-            _descriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
-            _backgroundField.UnregisterValueChangedCallback(OnBackgroundChanged);
-            _sortingOrderField.UnregisterValueChangedCallback(OnSortingOrderChanged);
+            DescriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
+            BackgroundField.UnregisterValueChangedCallback(OnBackgroundChanged);
+            SortingOrderField.UnregisterValueChangedCallback(OnSortingOrderChanged);
         }
         //几何图形改变时手动调整窗口大小
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -185,25 +181,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
             if (MainWindow.MultiTabView.activeTab == this)
             {
                 //若是，则触发更改
-                _dataEditorPanel.style.width = evt.newRect.width;
-                _dataEditorPanel.style.height = evt.newRect.height;
+                BasePanel.style.width = evt.newRect.width;
+                BasePanel.style.height = evt.newRect.height;
             }
         }
-        //数据处理方法
-        private void OnPackageChanged(ChangeEvent<string> evt)
-        {
-            MainWindow.DataTreeView.ActiveSelection.Editor_SetPackage(evt.newValue);
-        }
-        private void OnAuthorChanged(ChangeEvent<string> evt)
-        {
-            MainWindow.DataTreeView.ActiveSelection.Editor_SetAuthor(evt.newValue);
-        }
+        #endregion
 
+        #region 数据处理方法
+        //描述改变时
         private void OnDescriptionChanged(ChangeEvent<string> evt)
         {
             MainWindow.DataTreeView.ActiveSelection.Editor_SetDescription(evt.newValue);
         }
-
+        //背景改变时
         private void OnBackgroundChanged(ChangeEvent<Object> evt)
         {
             if (evt.newValue is Sprite sprite)
@@ -216,7 +206,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 MainWindow.DataTreeView.ActiveSelection.Editor_SetBackground(null);
             }
         }
-
+        //排序改变时
         private void OnSortingOrderChanged(ChangeEvent<int> evt)
         {
             //设置排序
@@ -233,6 +223,32 @@ namespace THLL.GameEditor.LocUnitDataEditor
             }
             //刷新
             MainWindow.DataTreeView.TRefresh();
+        }
+        //设置所属资源组
+        private void SetAddressableAssetGroup()
+        {
+            //获取设置
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+            //获取当前选中项的GUID
+            string assetGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(MainWindow.DataTreeView.ActiveSelection));
+            //遍历所有组，找到资源所在组
+            foreach (AddressableAssetGroup group in settings.groups)
+            {
+                //检测是否为空
+                if (group == null) continue;
+
+                //若不为空，查找条目
+                AddressableAssetEntry entry = group.GetAssetEntry(assetGUID);
+                //检测是否为空
+                if (entry != null)
+                {
+                    //若不为空，设置组，并结束方法
+                    AddressableAssetGroupField.SetValueWithoutNotify(group);
+                    return;
+                }
+            }
+            //若没能获取结果，提出警告
+            Debug.LogWarning("该资源没有对应的可寻址资源组，请检测并排查问题！");
         }
         #endregion
     }

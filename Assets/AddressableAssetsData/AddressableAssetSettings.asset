@@ -18,6 +18,7 @@ MonoBehaviour:
     Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
+  m_BundleLocalCatalog: 0
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
   m_InternalIdNamingMode: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
     m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
   m_IgnoreUnsupportedFilesInBuild: 0
   m_UniqueBundleIds: 0
-  m_EnableJsonCatalog: 0
+  m_EnableJsonCatalog: 1
   m_NonRecursiveBuilding: 1
   m_CCDEnabled: 0
   m_maxConcurrentWebRequests: 3
@@ -59,9 +60,9 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: 8d861abda215c004382d1e5760e99dc3, type: 2}
   - {fileID: 11400000, guid: 33b7aae067460184a84685ced3af1839, type: 2}
-  - {fileID: 11400000, guid: ee6c049db8bdb474f952ff95016b8389, type: 2}
+  - {fileID: 11400000, guid: 8d861abda215c004382d1e5760e99dc3, type: 2}
+  - {fileID: 11400000, guid: a0f559f5a35da9b439bfea37f8e7bc71, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -71,27 +72,27 @@ MonoBehaviour:
       m_Id: 9a69fc804e616984f9496f77c2b47839
       m_ProfileName: Default
       m_Values:
-      - m_Id: 1300c7c24830de44882f210f389639f9
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Location/Test/Test'
+      - m_Id: 1159117954434f843b4fa6a897971a2c
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Location_Core_TapirFishEgret'
       - m_Id: 2719dfef13105e347b9e91532829d20a
         m_Value: <undefined>
       - m_Id: 2853c50778084f244bf7808cd74c55c6
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 44d179cae6be0314a9b03b09da178a7c
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Location/Core/TapirFishEgret'
       - m_Id: 5272f0bb818d8f2479d4140d8e5e0581
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 706fd1d8b70f63d4499259045b0e0ffa
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Location/Test/Test'
+      - m_Id: 69cb4c9efc0970d43b29c2791ad13129
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Character_Core_TapirFishEgret'
       - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
         m_Value: 'ServerData/[BuildTarget]'
-      - m_Id: e3708c95bf8c46d4c867c37d164fc441
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Location/Core/TapirFishEgret'
       - m_Id: e7972a14c8056fb439bce04c53bbaab6
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: ed8e8b7a41d0f044bbd8a5349d832981
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Location_Core_TapirFishEgret'
+      - m_Id: f6d0e6fa72714b449b2bd1f8aca6a992
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Character_Core_TapirFishEgret'
     m_ProfileEntryNames:
-    - m_Id: 1300c7c24830de44882f210f389639f9
-      m_Name: Location_Test_Test_LoadPath
+    - m_Id: 1159117954434f843b4fa6a897971a2c
+      m_Name: Location_Core_TapirFishEgret_BuildPath
       m_InlineUsage: 0
     - m_Id: 2719dfef13105e347b9e91532829d20a
       m_Name: Remote.LoadPath
@@ -99,28 +100,30 @@ MonoBehaviour:
     - m_Id: 2853c50778084f244bf7808cd74c55c6
       m_Name: Local.BuildPath
       m_InlineUsage: 0
-    - m_Id: 44d179cae6be0314a9b03b09da178a7c
-      m_Name: Location_Core_TapirFishEgret_LoadPath
-      m_InlineUsage: 0
     - m_Id: 5272f0bb818d8f2479d4140d8e5e0581
       m_Name: Local.LoadPath
       m_InlineUsage: 0
-    - m_Id: 706fd1d8b70f63d4499259045b0e0ffa
-      m_Name: Location_Test_Test_BuildPath
+    - m_Id: 69cb4c9efc0970d43b29c2791ad13129
+      m_Name: Character_Core_TapirFishEgret_BuildPath
       m_InlineUsage: 0
     - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
-    - m_Id: e3708c95bf8c46d4c867c37d164fc441
-      m_Name: Location_Core_TapirFishEgret_BuildPath
-      m_InlineUsage: 0
     - m_Id: e7972a14c8056fb439bce04c53bbaab6
       m_Name: BuildTarget
+      m_InlineUsage: 0
+    - m_Id: ed8e8b7a41d0f044bbd8a5349d832981
+      m_Name: Location_Core_TapirFishEgret_LoadPath
+      m_InlineUsage: 0
+    - m_Id: f6d0e6fa72714b449b2bd1f8aca6a992
+      m_Name: Character_Core_TapirFishEgret_LoadPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
     - default
+    - Location
+    - Character
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 25635fdde16e4884b9320d1afd52d3e0, type: 2}

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using THLL.LocationSystem;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
@@ -322,8 +322,13 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
                 .GetSettings(true)
                 .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newLocData)), MainWindow.CurrentAddressableAssetGroup);
-                //设定索引名称
+                //设定索引名称为全名
                 entry.SetAddress(string.Join("_", newLocData.FullName).Replace(" ", "-"));
+                //并尝试设定标签
+                if (!entry.labels.Contains("Location"))
+                {
+                    entry.SetLabel("Location", true, true);
+                }
                 //保存设置
                 MainWindow.CurrentAddressableAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
                 AssetDatabase.SaveAssets();

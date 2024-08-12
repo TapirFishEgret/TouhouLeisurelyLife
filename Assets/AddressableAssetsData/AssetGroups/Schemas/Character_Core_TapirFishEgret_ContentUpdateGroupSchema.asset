@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
-  m_Name: Location_Test_Test_ContentUpdateGroupSchema
+  m_Name: Character_Core_TapirFishEgret_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: ee6c049db8bdb474f952ff95016b8389, type: 2}
+  m_Group: {fileID: 11400000, guid: a0f559f5a35da9b439bfea37f8e7bc71, type: 2}
   m_StaticContent: 0

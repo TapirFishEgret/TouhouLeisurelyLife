@@ -1,6 +1,8 @@
 ﻿using THLL.CharacterSystem;
 using THLL.LocationSystem;
 using UnityEditor;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,9 +23,8 @@ namespace THLL.GameEditor.CharacterEditor
         //角色头像与立绘
         private VisualElement CharacterAvatar { get; set; }
         private VisualElement CharacterPortrait { get; set; }
-        //基础三项
-        private TextField PackageField { get; set; }
-        private TextField AuthorField { get; set; }
+        //可寻址包
+        private ObjectField AddressableAssetGroupField { get; set; }
         //信息显示
         private Label FullInfoLabel { get; set; }
         //数据编辑
@@ -65,8 +66,7 @@ namespace THLL.GameEditor.CharacterEditor
             EditorRootPanel = this.Q<VisualElement>("DataEditorPanel");
             CharacterAvatar = this.Q<VisualElement>("CharacterAvatar");
             CharacterPortrait = this.Q<VisualElement>("CharacterPortrait");
-            PackageField = this.Q<TextField>("PackageField");
-            AuthorField = this.Q<TextField>("AuthorField");
+            AddressableAssetGroupField = this.Q<ObjectField>("AddressableAssetGroupField");
             FullInfoLabel = this.Q<Label>("FullInfoLabel");
             DescriptionField = this.Q<TextField>("DescriptionField");
             SortingOrderField = this.Q<IntegerField>("SortingOrderField");
@@ -112,8 +112,6 @@ namespace THLL.GameEditor.CharacterEditor
         private void Bind()
         {
             //绑定前以不通知的形式设置显示数据
-            PackageField.SetValueWithoutNotify(ShowedCharacter.Package);
-            AuthorField.SetValueWithoutNotify(ShowedCharacter.Author);
             DescriptionField.SetValueWithoutNotify(ShowedCharacter.Description);
             SortingOrderField.SetValueWithoutNotify(ShowedCharacter.SortingOrder);
             AvatarField.SetValueWithoutNotify(ShowedCharacter.Avatar);
@@ -125,11 +123,15 @@ namespace THLL.GameEditor.CharacterEditor
             CharacterPortrait.style.backgroundImage = new StyleBackground(ShowedCharacter.Portrait);
 
             //显示全部信息
-            FullInfoLabel.text = $"{ShowedCharacter.OriginatingSeries}_{ShowedCharacter.Affiliation}_{ShowedCharacter.Name}_{ShowedCharacter.Version}".Replace(" ", "-");
+            FullInfoLabel.text = $"{ShowedCharacter.OriginatingSeries}" +
+                $"_{ShowedCharacter.Affiliation}" +
+                $"_{ShowedCharacter.Name}" +
+                $"_{ShowedCharacter.Version}"
+                .Replace(" ", "-");
+            //显示资源组
+            SetAddressableAssetGroup();
 
             //绑定
-            PackageField.RegisterValueChangedCallback(OnPackageChanged);
-            AuthorField.RegisterValueChangedCallback(OnAuthorChanged);
             DescriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
             SortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
             AvatarField.RegisterValueChangedCallback(OnAvatarChanged);
@@ -140,8 +142,6 @@ namespace THLL.GameEditor.CharacterEditor
         private void Unbind()
         {
             //解绑
-            PackageField.UnregisterValueChangedCallback(OnPackageChanged);
-            AuthorField.UnregisterValueChangedCallback(OnAuthorChanged);
             DescriptionField.UnregisterValueChangedCallback(OnDescriptionChanged);
             SortingOrderField.UnregisterValueChangedCallback(OnSortingOrderChanged);
             AvatarField.UnregisterValueChangedCallback(OnAvatarChanged);
@@ -151,16 +151,6 @@ namespace THLL.GameEditor.CharacterEditor
         #endregion
 
         #region 数据更改事件与事件
-        //包更改
-        private void OnPackageChanged(ChangeEvent<string> evt)
-        {
-            ShowedCharacter.Editor_SetPackage(evt.newValue);
-        }
-        //作者更改
-        private void OnAuthorChanged(ChangeEvent<string> evt)
-        {
-            ShowedCharacter.Editor_SetAuthor(evt.newValue);
-        }
         //描述更改
         private void OnDescriptionChanged(ChangeEvent<string> evt)
         {
@@ -231,6 +221,32 @@ namespace THLL.GameEditor.CharacterEditor
                 ShowedCharacter.Editor_SetLivingArea(null);
                 //EditorRootPanel.style.backgroundImage = null;
             }
+        }
+        //设置所属资源组
+        private void SetAddressableAssetGroup()
+        {
+            //获取设置
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+            //获取当前选中项的GUID
+            string assetGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(MainWindow.DataTreeView.ActiveSelection.CharacterData));
+            //遍历所有组，找到资源所在组
+            foreach (AddressableAssetGroup group in settings.groups)
+            {
+                //检测是否为空
+                if (group == null) continue;
+
+                //若不为空，查找条目
+                AddressableAssetEntry entry = group.GetAssetEntry(assetGUID);
+                //检测是否为空
+                if (entry != null)
+                {
+                    //若不为空，设置组，并结束方法
+                    AddressableAssetGroupField.SetValueWithoutNotify(group);
+                    return;
+                }
+            }
+            //若没能获取结果，提出警告
+            Debug.LogWarning("该资源没有对应的可寻址资源组，请检测并排查问题！");
         }
         #endregion
     }

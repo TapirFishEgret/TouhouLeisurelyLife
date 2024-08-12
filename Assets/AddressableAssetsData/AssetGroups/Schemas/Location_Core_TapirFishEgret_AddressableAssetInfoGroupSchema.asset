@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381750ee0018e1e45af13c242d15019a, type: 3}
+  m_Name: Location_Core_TapirFishEgret_AddressableAssetInfoGroupSchema
+  m_EditorClassIdentifier: 
+  m_Group: {fileID: 11400000, guid: 33b7aae067460184a84685ced3af1839, type: 2}
+  _description: "\u6E38\u620F\u7684\u4E3B\u8981\u5730\u70B9\u5305\uFF0C\u5305\u62EC\u4E86\u7EDD\u5927\u90E8\u5206\u7684\u4E1C\u65B9Project\u5730\u70B9\uFF0C\u4EE5\u53CA\u90E8\u5206\u4E3A\u4E86\u4FDD\u8BC1\u903B\u8F91\u4EE5\u53CA\u73A9\u6CD5\u4E0A\u7684\u5B8C\u6574\u800C\u521B\u7ACB\u7684\u5730\u70B9\u3002"

@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEditor;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,20 +33,31 @@ namespace THLL.GameEditor.CharacterEditor
         private Sprite _defaultCharacterPortrait;
         public Sprite DefaultCharacterPortrait => _defaultCharacterPortrait;
 
-        //左侧面板
+        //树形图面板
         //树形图窗口
         public DataTreeView DataTreeView { get; private set; }
-        //包输入框
-        public TextField DefaultPackageField { get; private set; }
-        //作者输入框
-        public TextField DefaultAuthorField { get; private set; }
         //计时器Debug面板显示开关
         public Toggle TimerDebugLogToggle { get; private set; }
-        //右侧面板
+        //编辑器面板
         //多标签页窗口
         public TabView MultiTabView { get; private set; }
         //数据编辑窗口
         public DataEditorPanel DataEditorPanel { get; private set; }
+        //可寻址资源包面板
+        //包名输入框
+        public TextField PackageField { get; private set; }
+        //作者输入框
+        public TextField AuthorField { get; private set; }
+        //描述输入框
+        public TextField GroupDescriptionField { get; private set; }
+        //获取资源组按钮
+        public Button GetAddressableAssetGroupButton { get; private set; }
+        //获取的资源组
+        public ObjectField AddressableAssetGroupField { get; private set; }
+
+        //数据
+        //当前可寻址资源组
+        public AddressableAssetGroup CurrentAddressableAssetGroup { get; private set; }
 
         //窗口菜单
         [MenuItem("GameEditor/CharacterDataEditor")]
@@ -63,12 +76,17 @@ namespace THLL.GameEditor.CharacterEditor
             _windowVisualTree.CloneTree(rootVisualElement);
 
             //获取UI控件
-            DefaultPackageField = rootVisualElement.Q<TextField>("PackageField");
-            DefaultAuthorField = rootVisualElement.Q<TextField>("AuthorField");
+            PackageField = rootVisualElement.Q<TextField>("PackageField");
+            AuthorField = rootVisualElement.Q<TextField>("AuthorField");
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             VisualElement dataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");
-
+            GetAddressableAssetGroupButton = rootVisualElement.Q<Button>("GetAddressableAssetGroupButton");
+            AddressableAssetGroupField = rootVisualElement.Q<ObjectField>("AddressableAssetGroupField");
+            GroupDescriptionField = rootVisualElement.Q<TextField>("GroupDescriptionField");
+            //绑定
+            GetAddressableAssetGroupButton.clicked += SetAddressableAssetGroup;
+            
             //设置标签页面容器为可延展
             MultiTabView.contentContainer.style.flexGrow = 1;
             MultiTabView.contentContainer.style.flexShrink = 1;
@@ -77,22 +95,22 @@ namespace THLL.GameEditor.CharacterEditor
             LoadPersistentData();
 
             //生成UI控件
-            //左侧面板
+            //树形图面板
             //创建树形图面板并添加
             DataTreeView = new DataTreeView(this);
             dataTreeViewContainer.Add(DataTreeView);
-            //右侧面板
+            //编辑面板
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
             MultiTabView.Add(DataEditorPanel);
+            //组面板
+            SetAddressableAssetGroup();
         }
         //窗口关闭时
         private void OnDestroy()
         {
             //保存
             SavePersistentData();
-            //提醒修改可寻址资源包标签
-            Debug.LogWarning("窗口已被关闭，请注意修改新增数据的可寻址资源包的Key");
         }
         #endregion
 
@@ -104,8 +122,8 @@ namespace THLL.GameEditor.CharacterEditor
             PersistentData persistentData = new()
             {
                 //设置其数值
-                DefaultPackage = DefaultPackageField.text,
-                DefaultAuthor = DefaultAuthorField.text,
+                DefaultPackage = PackageField.text,
+                DefaultAuthor = AuthorField.text,
                 TimerDebugLogState = TimerDebugLogToggle.value,
                 ExpandedState = DataTreeView.ExpandedStatePersistentData.ToList(),
             };
@@ -129,9 +147,49 @@ namespace THLL.GameEditor.CharacterEditor
             PersistentData persistentData = JsonConvert.DeserializeObject<PersistentData>(jsonString);
             //分配数据
             //属性
-            DefaultPackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
-            DefaultAuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
+            PackageField.SetValueWithoutNotify(persistentData.DefaultPackage);
+            AuthorField.SetValueWithoutNotify(persistentData.DefaultAuthor);
             TimerDebugLogToggle.SetValueWithoutNotify(persistentData.TimerDebugLogState);
+        }
+        #endregion
+
+        #region 可寻址资源包相关
+        //设置当前可寻址资源组
+        private void SetAddressableAssetGroup()
+        {
+            //确认输入框中存在内容
+            if (string.IsNullOrEmpty(AuthorField.text) || string.IsNullOrEmpty(PackageField.text))
+            {
+                //若输入框中有空输入，则返回
+                Debug.LogWarning("请输入完整信息后获取资源组");
+                return;
+            }
+            //确认开始取得新组之后，首先解绑当前面板数值修改事件
+            GroupDescriptionField.UnregisterValueChangedCallback(SetGroupDescription);
+
+            //确认组名
+            string groupName = $"Character_{PackageField.text}_{AuthorField.text}";
+            //确认构建路径，此处采用可寻址资源包内置路径变量
+            string buildPath = "[UnityEngine.AddressableAssets.Addressables.BuildPath]/" + groupName;
+            //确认读取路径
+            string loadPath = "{UnityEngine.AddressableAssets.Addressables.RuntimePath}/" + groupName;
+            //获取组
+            CurrentAddressableAssetGroup = EditorExtensions.GetAddressableGroup(groupName, buildPath, loadPath);
+            //赋值
+            AddressableAssetGroupField.SetValueWithoutNotify(CurrentAddressableAssetGroup);
+
+            //结束后再次绑定数值修改事件
+            GroupDescriptionField.RegisterValueChangedCallback(SetGroupDescription);
+            //并设置值
+            GroupDescriptionField.SetValueWithoutNotify(CurrentAddressableAssetGroup.GetSchema<AddressableAssetInfoGroupSchema>().Description);
+        }
+        //更改组描述
+        private void SetGroupDescription(ChangeEvent<string> evt)
+        {
+            if (CurrentAddressableAssetGroup != null)
+            {
+                CurrentAddressableAssetGroup.GetSchema<AddressableAssetInfoGroupSchema>().SetDescription(evt.newValue);
+            }
         }
         #endregion
     }

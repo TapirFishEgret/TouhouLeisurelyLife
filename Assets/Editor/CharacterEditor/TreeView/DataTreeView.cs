@@ -2,10 +2,12 @@
 using System.IO;
 using System.Linq;
 using THLL.CharacterSystem;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets;
 
 namespace THLL.GameEditor.CharacterEditor
 {
@@ -797,9 +799,9 @@ namespace THLL.GameEditor.CharacterEditor
                     //创建新资源
                     CharacterData newCharacterData = ScriptableObject.CreateInstance<CharacterData>();
                     //设置相关数据
-                    newCharacterData.Editor_SetPackage(MainWindow.DefaultPackageField.value);
+                    newCharacterData.Editor_SetPackage(MainWindow.PackageField.value);
                     newCharacterData.Editor_SetCategory("Character");
-                    newCharacterData.Editor_SetAuthor(MainWindow.DefaultAuthorField.value);
+                    newCharacterData.Editor_SetAuthor(MainWindow.AuthorField.value);
                     newCharacterData.Editor_SetName(characterNameItemDataContainer.StringData);
                     newCharacterData.Editor_SetOriginatingSeries(characterNameItemDataContainer.Parent.Parent.StringData);
                     newCharacterData.Editor_SetAffiliation(characterNameItemDataContainer.Parent.StringData);
@@ -836,9 +838,24 @@ namespace THLL.GameEditor.CharacterEditor
                     ItemDicCache[newCharacterData.GetAssetHashCode()] = newItem;
                     //添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
                     CharacterVersionDicCache[characterNameItemDataContainer.StringData.GetHashCode()].Add(newItem);
-
                     //刷新
                     TRefresh();
+
+                    //随后处理资源组问题
+                    //创建新的资源索引
+                    AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
+                    .GetSettings(true)
+                    .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newCharacterData)), MainWindow.CurrentAddressableAssetGroup);
+                    //设定索引名称为全名
+                    entry.SetAddress($"{newCharacterData.OriginatingSeries}_{newCharacterData.Affiliation}_{newCharacterData.Name}_{newCharacterData.Version}".Replace(" ", "-"));
+                    //并尝试设定标签
+                    if (!entry.labels.Contains("Character"))
+                    {
+                        entry.SetLabel("Character", true, true);
+                    }
+                    //保存设置
+                    MainWindow.CurrentAddressableAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+                    AssetDatabase.SaveAssets();
                 }
             },
             "创建新角色版本名称",

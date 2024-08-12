@@ -151,6 +151,8 @@ namespace THLL.GameEditor
                     //设置为非静态资源
                     contentSchema.StaticContent = false;
                 }
+                //生成资源信息参数
+                group.AddSchema<AddressableAssetInfoGroupSchema>();
 
                 //创建结束后保存并刷新
                 AssetDatabase.SaveAssets();

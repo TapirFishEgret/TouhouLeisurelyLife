@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381750ee0018e1e45af13c242d15019a, type: 3}
+  m_Name: Character_Core_TapirFishEgret_AddressableAssetInfoGroupSchema
+  m_EditorClassIdentifier: 
+  m_Group: {fileID: 11400000, guid: a0f559f5a35da9b439bfea37f8e7bc71, type: 2}
+  _description: "\u6E38\u620F\u7684\u6838\u5FC3\u89D2\u8272\u5305\uFF0C\u5305\u62EC\u4E86\u4E3B\u8981\u4E0E\u6B21\u8981\u4E1C\u65B9Project\u89D2\u8272\u3002"

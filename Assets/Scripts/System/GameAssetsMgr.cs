@@ -1,4 +1,5 @@
-﻿using THLL.CharacterSystem;
+﻿using System;
+using THLL.CharacterSystem;
 using THLL.LocationSystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -16,18 +17,18 @@ namespace THLL.BaseSystem
             //加载资源
             using (ExecutionTimer timer = new("地点资源加载"))
             {
-                LoadLocUnitResource("Location");
+                LoadLocUnitResource();
             }
             using (ExecutionTimer timer1 = new("角色资源加载"))
             {
-                LoadCharacterResource("Character");
+                LoadCharacterResource();
             }
         }
         #endregion
 
         #region 资源加载方法
         //加载地点单元
-        public void LoadLocUnitResource(string key)
+        public void LoadLocUnitResource()
         {
             //计数
             int number = 0;
@@ -35,7 +36,7 @@ namespace THLL.BaseSystem
             //获取操作句柄
             AsyncOperationHandle handle = Addressables.LoadAssetsAsync<LocUnitData>
                 (
-                key,
+                "Location",
                 (resource) =>
                 {
                     //加载
@@ -63,7 +64,7 @@ namespace THLL.BaseSystem
             };
         }
         //加载角色资源方法
-        public void LoadCharacterResource(string key)
+        public void LoadCharacterResource()
         {
             //计数
             int number = 0;
@@ -71,7 +72,7 @@ namespace THLL.BaseSystem
             //获取操作句柄
             AsyncOperationHandle handle = Addressables.LoadAssetsAsync<CharacterData>
                 (
-                key,
+                "Character",
                 (resource) =>
                 {
                     //加载

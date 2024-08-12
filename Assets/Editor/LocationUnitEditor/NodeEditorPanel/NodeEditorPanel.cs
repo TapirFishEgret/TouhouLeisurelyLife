@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using THLL.LocationSystem;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
