@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
@@ -86,7 +86,7 @@ namespace THLL.GameEditor.CharacterEditor
             GroupDescriptionField = rootVisualElement.Q<TextField>("GroupDescriptionField");
             //绑定
             GetAddressableAssetGroupButton.clicked += SetAddressableAssetGroup;
-            
+
             //设置标签页面容器为可延展
             MultiTabView.contentContainer.style.flexGrow = 1;
             MultiTabView.contentContainer.style.flexShrink = 1;

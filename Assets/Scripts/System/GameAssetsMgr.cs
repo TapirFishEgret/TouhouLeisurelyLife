@@ -1,5 +1,4 @@
-﻿using System;
-using THLL.CharacterSystem;
+﻿using THLL.CharacterSystem;
 using THLL.LocationSystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;

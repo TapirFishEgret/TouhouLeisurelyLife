@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using UnityEngine;
 using UnityEditor;
-using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 
 namespace THLL.GameEditor

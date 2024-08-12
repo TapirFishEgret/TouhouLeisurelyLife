@@ -22,7 +22,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //全名
         private Label FullNameLabel { get; set; }
         //排序位置
-        private IntegerField SortingOrderField { get; set; }    
+        private IntegerField SortingOrderField { get; set; }
         //设置控件
         private TextField DescriptionField { get; set; }
         private ObjectField BackgroundField { get; set; }

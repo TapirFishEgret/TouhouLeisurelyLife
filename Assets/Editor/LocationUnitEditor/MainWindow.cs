@@ -1,16 +1,11 @@
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
-using THLL.LocationSystem;
-using Newtonsoft.Json;
 using UnityEditor;
-using UnityEditor.AddressableAssets;
-using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.AddressableAssets.Build.DataBuilders;
 
 namespace THLL.GameEditor.LocUnitDataEditor
 {
