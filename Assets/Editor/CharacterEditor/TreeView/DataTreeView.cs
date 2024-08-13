@@ -845,16 +845,13 @@ namespace THLL.GameEditor.CharacterEditor
                     //创建新的资源索引
                     AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
                     .GetSettings(true)
-                    .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newCharacterData)), MainWindow.CurrentAddressableAssetGroup);
+                    .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newCharacterData)), MainWindow.CurrentAssetGroup);
                     //设定索引名称为全名
                     entry.SetAddress($"{newCharacterData.OriginatingSeries}_{newCharacterData.Affiliation}_{newCharacterData.Name}_{newCharacterData.Version}".Replace(" ", "-"));
-                    //并尝试设定标签
-                    if (!entry.labels.Contains("Character"))
-                    {
-                        entry.SetLabel("Character", true, true);
-                    }
+                    //并设定标签
+                    entry.SetLabel("Character", true, true);
                     //保存设置
-                    MainWindow.CurrentAddressableAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+                    MainWindow.CurrentAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
                     AssetDatabase.SaveAssets();
                 }
             },

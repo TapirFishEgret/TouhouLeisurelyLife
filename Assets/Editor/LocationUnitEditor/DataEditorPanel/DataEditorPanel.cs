@@ -17,7 +17,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //基层面板
         private VisualElement BasePanel { get; set; }
         //组及父级信息
-        private ObjectField AddressableAssetGroupField { get; set; }
+        private ObjectField AssetGroupField { get; set; }
         private ObjectField ParentDataField { get; set; }
         //全名
         private Label FullNameLabel { get; set; }
@@ -30,6 +30,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
         private MultiColumnListView ConnectionsShowView { get; set; }
         #endregion
 
+        #region 数据编辑面板的初始化以及数据更新
         //构建函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
         {
@@ -43,8 +44,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //初始化
             Init();
         }
-
-        #region 数据编辑面板的初始化以及数据更新
         //初始化
         private void Init()
         {
@@ -62,7 +61,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //基层面板
             BasePanel = this.Q<VisualElement>("DataEditorPanel");
             //基础项
-            AddressableAssetGroupField = this.Q<ObjectField>("AddressableAssetGroupField");
+            AssetGroupField = this.Q<ObjectField>("AssetGroupField");
             ParentDataField = this.Q<ObjectField>("ParentDataField");
             //全名
             FullNameLabel = this.Q<Label>("FullNameLabel");
@@ -243,7 +242,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 if (entry != null)
                 {
                     //若不为空，设置组，并结束方法
-                    AddressableAssetGroupField.SetValueWithoutNotify(group);
+                    AssetGroupField.SetValueWithoutNotify(group);
                     return;
                 }
             }

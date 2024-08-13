@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Location_Core_TapirFishEgret
   m_EditorClassIdentifier: 
   m_GroupName: Location_Core_TapirFishEgret
-  m_GUID: 33855206a2701b544b9fe3fd0db5f0c2
+  m_GUID: 5bafa955e406cbb49915fd863ab9a7d5
   m_SerializeEntries:
   - m_GUID: 2161eb408766f4f48ab5af5394ac8c83
     m_Address: Test-World_Test-Area_Hakurei-Shrine
@@ -37,6 +37,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 28e3aecf5f024e14ea4abb5cd35fa69c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 73a2167c405490e499c011516ca26c4e, type: 2}
     - {fileID: 11400000, guid: e75cf1d67ae8a3e4491dcce3c1ab3ce4, type: 2}
     - {fileID: 11400000, guid: 7582e0a3e99ba1041bd44cb37b081f18, type: 2}

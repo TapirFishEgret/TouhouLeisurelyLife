@@ -3,7 +3,7 @@
     <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; min-height: auto;">
         <engine:VisualElement name="Filter" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.7);" />
         <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-around;">
-            <editor:ObjectField label="Group" name="AddressableAssetGroupField" style="width: 48%; flex-direction: row;" />
+            <editor:ObjectField label="Group" name="AssetGroupField" type="UnityEditor.AddressableAssets.Settings.AddressableAssetGroup, Unity.Addressables.Editor" style="width: 48%; flex-direction: row;" />
             <editor:ObjectField label="Parent" enabled="false" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" name="ParentDataField" style="width: 48%; flex-direction: row;" />
         </engine:VisualElement>
         <engine:VisualElement name="Space" style="height: 10px;" />

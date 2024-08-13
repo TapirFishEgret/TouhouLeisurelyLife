@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using THLL.BaseSystem;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
@@ -48,15 +49,19 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //作者输入框
         public TextField AuthorField { get; private set; }
         //描述输入框
-        public TextField GroupDescriptionField { get; private set; }
+        public TextField AssetGroupInfoDescriptionField { get; private set; }
         //获取资源组按钮
-        public Button GetAddressableAssetGroupButton { get; private set; }
+        public Button GetAssetGroupButton { get; private set; }
         //获取的资源组
-        public ObjectField AddressableAssetGroupField { get; private set; }
+        public ObjectField AssetGroupField { get; private set; }
+        //资源组对应的信息
+        public ObjectField AssetGroupInfoField { get; private set; }
 
         //数据
         //可寻址资源组
-        public AddressableAssetGroup CurrentAddressableAssetGroup { get; private set; }
+        public AddressableAssetGroup CurrentAssetGroup { get; private set; }
+        //当前可寻址资源组信息
+        public AssetGroupInfo CurrentAssetGroupInfo { get; private set; }
 
         //窗口菜单
         [MenuItem("GameEditor/LocationDataEditor")]
@@ -82,11 +87,12 @@ namespace THLL.GameEditor.LocUnitDataEditor
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             DataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
             MultiTabView = rootVisualElement.Q<TabView>("EditorContainer");
-            GetAddressableAssetGroupButton = rootVisualElement.Q<Button>("GetAddressableAssetGroupButton");
-            AddressableAssetGroupField = rootVisualElement.Q<ObjectField>("AddressableAssetGroupField");
-            GroupDescriptionField = rootVisualElement.Q<TextField>("GroupDescriptionField");
+            GetAssetGroupButton = rootVisualElement.Q<Button>("GetAssetGroupButton");
+            AssetGroupField = rootVisualElement.Q<ObjectField>("AssetGroupField");
+            AssetGroupInfoDescriptionField = rootVisualElement.Q<TextField>("AssetGroupInfoDescriptionField");
+            AssetGroupInfoField = rootVisualElement.Q<ObjectField>("AssetGroupInfoField");
             //绑定
-            GetAddressableAssetGroupButton.clicked += SetAddressableAssetGroup;
+            GetAssetGroupButton.clicked += SetAssetGroup;
 
             //设置标签页面容器为可延展
             MultiTabView.contentContainer.style.flexGrow = 1;
@@ -110,13 +116,15 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
             //组面板
             //设置可寻址资源组
-            SetAddressableAssetGroup();
+            SetAssetGroup();
         }
         //窗口关闭时
         private void OnDestroy()
         {
             //保存持久化数据到磁盘
             SavePersistentData();
+            //保存组信息
+            SaveCurrentAssetGroupInfo();
         }
         #endregion
 
@@ -168,7 +176,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
         #region 可寻址资源包相关
         //设置当前可寻址资源组
-        private void SetAddressableAssetGroup()
+        private void SetAssetGroup()
         {
             //确认输入框中存在内容
             if (string.IsNullOrEmpty(AuthorField.text) || string.IsNullOrEmpty(PackageField.text))
@@ -177,8 +185,6 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 Debug.LogWarning("请输入完整信息后获取资源组");
                 return;
             }
-            //确认开始取得新组之后，首先解绑当前面板数值修改事件
-            GroupDescriptionField.UnregisterValueChangedCallback(SetGroupDescription);
 
             //确认组名
             string groupName = $"Location_{PackageField.text}_{AuthorField.text}";
@@ -187,22 +193,60 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //确认读取路径
             string loadPath = "{UnityEngine.AddressableAssets.Addressables.RuntimePath}/" + groupName;
             //获取组
-            CurrentAddressableAssetGroup = EditorExtensions.GetAddressableGroup(groupName, buildPath, loadPath);
+            CurrentAssetGroup = EditorExtensions.GetAssetGroup(groupName, buildPath, loadPath);
             //赋值
-            AddressableAssetGroupField.SetValueWithoutNotify(CurrentAddressableAssetGroup);
+            AssetGroupField.SetValueWithoutNotify(CurrentAssetGroup);
 
-            //结束后再次绑定数值修改事件
-            GroupDescriptionField.RegisterValueChangedCallback(SetGroupDescription);
-            //并设置值
-            GroupDescriptionField.SetValueWithoutNotify(CurrentAddressableAssetGroup.GetSchema<AddressableAssetInfoGroupSchema>().Description);
+            //设置可寻址资源组信息
+            SetAssetGroupInfo();
+        }
+        //设置当前可寻址资源组信息
+        private void SetAssetGroupInfo()
+        {
+            //检测当前是否有组
+            if (CurrentAssetGroup == null)
+            {
+                //若无组，返回
+                return;
+            }
+
+            //检测当前是否有信息
+            if (CurrentAssetGroupInfo != null)
+            {
+                //若有，保存
+                SaveCurrentAssetGroupInfo();
+            }
+
+            //解绑当前
+            AssetGroupInfoDescriptionField.UnregisterValueChangedCallback(OnAssetGroupInfoDescriptionChanged);
+            //获取并赋值资源组信息
+            CurrentAssetGroupInfo = EditorExtensions.GetAssetGroupInfo(CurrentAssetGroup, GameAssetTypeEnum.Location);
+            //设置UI元素
+            AssetGroupInfoField.SetValueWithoutNotify(CurrentAssetGroupInfo);
+            //绑定事件
+            AssetGroupInfoDescriptionField.RegisterValueChangedCallback(OnAssetGroupInfoDescriptionChanged);
+            //设定初始值
+            AssetGroupInfoDescriptionField.SetValueWithoutNotify(CurrentAssetGroupInfo.Description);
         }
         //更改组描述
-        private void SetGroupDescription(ChangeEvent<string> evt)
+        private void OnAssetGroupInfoDescriptionChanged(ChangeEvent<string> evt)
         {
-            if (CurrentAddressableAssetGroup != null)
+            if (CurrentAssetGroupInfo != null)
             {
-                CurrentAddressableAssetGroup.GetSchema<AddressableAssetInfoGroupSchema>().SetDescription(evt.newValue);
+                CurrentAssetGroupInfo.Description = evt.newValue;
             }
+        }
+        //保存当前组信息
+        private void SaveCurrentAssetGroupInfo()
+        {
+            //首先清空信息
+            CurrentAssetGroupInfo.AssetAddresses.Clear();
+            //然后遍历当前组所有资源并添加
+            foreach (var entry in CurrentAssetGroup.entries)
+            {
+                CurrentAssetGroupInfo.AssetAddresses.Add(entry.address);
+            }
+            //顺带一提，这么做是为了防止删除资源时信息内地址未同步删除
         }
         #endregion
     }

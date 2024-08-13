@@ -24,7 +24,7 @@ namespace THLL.GameEditor.CharacterEditor
         private VisualElement CharacterAvatar { get; set; }
         private VisualElement CharacterPortrait { get; set; }
         //可寻址包
-        private ObjectField AddressableAssetGroupField { get; set; }
+        private ObjectField AssetGroupField { get; set; }
         //信息显示
         private Label FullInfoLabel { get; set; }
         //数据编辑
@@ -66,7 +66,7 @@ namespace THLL.GameEditor.CharacterEditor
             EditorRootPanel = this.Q<VisualElement>("DataEditorPanel");
             CharacterAvatar = this.Q<VisualElement>("CharacterAvatar");
             CharacterPortrait = this.Q<VisualElement>("CharacterPortrait");
-            AddressableAssetGroupField = this.Q<ObjectField>("AddressableAssetGroupField");
+            AssetGroupField = this.Q<ObjectField>("AssetGroupField");
             FullInfoLabel = this.Q<Label>("FullInfoLabel");
             DescriptionField = this.Q<TextField>("DescriptionField");
             SortingOrderField = this.Q<IntegerField>("SortingOrderField");
@@ -177,13 +177,13 @@ namespace THLL.GameEditor.CharacterEditor
                 //设置头像
                 ShowedCharacter.Editor_SetAvatar(avatar);
                 //设置显示
-                AvatarField.style.backgroundImage = new StyleBackground(avatar);
+                CharacterAvatar.style.backgroundImage = new StyleBackground(avatar);
             }
             else
             {
                 //若不是，均设置为空
                 ShowedCharacter.Editor_SetAvatar(null);
-                AvatarField.style.backgroundImage = null;
+                CharacterAvatar.style.backgroundImage = null;
             }
         }
         //立绘更改
@@ -195,13 +195,13 @@ namespace THLL.GameEditor.CharacterEditor
                 //设置头像
                 ShowedCharacter.Editor_SetPortarit(portrait);
                 //设置显示
-                PortraitField.style.backgroundImage = new StyleBackground(portrait);
+                CharacterPortrait.style.backgroundImage = new StyleBackground(portrait);
             }
             else
             {
                 //若不是，均设置为空
                 ShowedCharacter.Editor_SetPortarit(null);
-                PortraitField.style.backgroundImage = null;
+                CharacterPortrait.style.backgroundImage = null;
             }
         }
         //居住地区更改
@@ -241,7 +241,7 @@ namespace THLL.GameEditor.CharacterEditor
                 if (entry != null)
                 {
                     //若不为空，设置组，并结束方法
-                    AddressableAssetGroupField.SetValueWithoutNotify(group);
+                    AssetGroupField.SetValueWithoutNotify(group);
                     return;
                 }
             }

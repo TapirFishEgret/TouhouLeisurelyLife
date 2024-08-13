@@ -1,14 +1,22 @@
 ﻿using System;
 using System.IO;
+using THLL.BaseSystem;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEngine;
 
 namespace THLL.GameEditor
 {
     public static class EditorExtensions
     {
+        #region 数据
+        //存放了资源组信息的资源组
+        public static AddressableAssetGroup AssetGroupInfoGroup { get; private set; }
+        #endregion
+
+        #region 文件相关
         //获取文件资源的GUID的哈希值
         public static int GetAssetHashCode(this UnityEngine.Object asset)
         {
@@ -106,8 +114,11 @@ namespace THLL.GameEditor
             //刷新资源视图
             AssetDatabase.Refresh();
         }
+        #endregion
+
+        #region 可寻址资源包相关
         //确保目标资源包存在
-        public static AddressableAssetGroup GetAddressableGroup(string groupName, string buildPath, string loadPath)
+        public static AddressableAssetGroup GetAssetGroup(string groupName, string buildPath, string loadPath)
         {
             //创建返回结果
             AddressableAssetGroup group;
@@ -150,8 +161,6 @@ namespace THLL.GameEditor
                     //设置为非静态资源
                     contentSchema.StaticContent = false;
                 }
-                //生成资源信息参数
-                group.AddSchema<AddressableAssetInfoGroupSchema>();
 
                 //创建结束后保存并刷新
                 AssetDatabase.SaveAssets();
@@ -176,5 +185,78 @@ namespace THLL.GameEditor
             //设置路径变量值
             profileSettings.SetValue(currentProfileID, variableName, value);
         }
+        //获取资源组对应的信息文件
+        public static AssetGroupInfo GetAssetGroupInfo(AddressableAssetGroup group, GameAssetTypeEnum assetType)
+        {
+            //创建返回结果
+            AssetGroupInfo assetGroupInfo = null;
+
+            //确保当前资源组信息组存在
+            if (AssetGroupInfoGroup == null)
+            {
+                //组名
+                string groupName = "AssetGroupInfo";
+                //确认构建路径，此处采用可寻址资源包内置路径变量
+                string buildPath = "[UnityEngine.AddressableAssets.Addressables.BuildPath]/AssetGroupInfo";
+                //确认读取路径
+                string loadPath = "{UnityEngine.AddressableAssets.Addressables.RuntimePath}/AssetGroupInfo";
+                //获取
+                AssetGroupInfoGroup = GetAssetGroup(groupName, buildPath, loadPath);
+            }
+
+            //确保当前资源组信息组存在后，尝试获取信息资源
+            //根据当前组名寻找对应的信息文件
+            string[] guids = AssetDatabase.FindAssets($"t:AssetGroupInfo {group.Name}_Info", new[] { "Assets/GameData" });
+            //检测获取到的数量
+            if (guids.Length == 0)
+            {
+                //若为0，说明没有对应资源，进行创建
+                AssetGroupInfo newAssetGroupInfo = ScriptableObject.CreateInstance<AssetGroupInfo>();
+                //并设定类型
+                newAssetGroupInfo.AssetType = assetType;
+                //更改文件名
+                newAssetGroupInfo.name = group.Name + "_Info";
+                //获取文件夹地址
+                string newFolderPath = "Assets\\GameData\\AssetGroupInfos";
+                //确保文件夹地址存在
+                MakeSureFolderPathExist(newFolderPath);
+                //获取文件地址
+                string newFilePath = (newFolderPath + $"\\{group.Name}_Info.asset").Replace("\\", "/");
+                //创建资源
+                AssetDatabase.CreateAsset(newAssetGroupInfo, newFilePath);
+                //保存
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                //由于是新建的资源，所以将其添加入信息组中
+                AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
+                    .GetSettings(true)
+                    .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(newFilePath), AssetGroupInfoGroup);
+                //并设定索引名称
+                entry.SetAddress(group.Name + "_Info");
+                //并设定标签
+                entry.SetLabel("AssetGroupInfo", true, true);
+                //保存
+                AssetGroupInfoGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+                AssetDatabase.SaveAssets();
+
+                //指定结果
+                assetGroupInfo = newAssetGroupInfo;
+            }
+            else if (guids.Length == 1)
+            {
+                //若等于1，说明没问题，加载
+                assetGroupInfo = AssetDatabase.LoadAssetAtPath<AssetGroupInfo>(AssetDatabase.GUIDToAssetPath(guids[0]));
+            }
+            else
+            {
+                //其他情况说明出毛病了，检查一下吧
+                Debug.LogWarning("当前资源组对应多个信息文件，请检查。");
+            }
+
+            //返回结果
+            return assetGroupInfo;
+        }
+        #endregion
     }
 }

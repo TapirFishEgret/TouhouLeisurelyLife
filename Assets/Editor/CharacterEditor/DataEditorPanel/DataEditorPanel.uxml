@@ -7,7 +7,7 @@
         </engine:VisualElement>
         <engine:VisualElement name="EditorPanel" style="flex-basis: 80%; flex-grow: 1;">
             <engine:VisualElement name="BaseData" style="flex-direction: row; justify-content: space-around;">
-                <editor:ObjectField label="Object Field" name="AddressableAssetGroupField" style="width: 98%; justify-content: center;" />
+                <editor:ObjectField label="Object Field" name="AssetGroupField" type="UnityEditor.AddressableAssets.Settings.AddressableAssetGroup, Unity.Addressables.Editor" style="width: 98%; justify-content: center;" />
             </engine:VisualElement>
             <engine:VisualElement name="Space" style="width: 10px;" />
             <engine:Label text="Full Info" name="FullInfoLabel" style="-unity-text-align: middle-center; font-size: 32px; white-space: nowrap;" />

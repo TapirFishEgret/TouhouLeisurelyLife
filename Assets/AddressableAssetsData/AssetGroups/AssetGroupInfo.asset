@@ -10,20 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Character_Core_TapirFishEgret
+  m_Name: AssetGroupInfo
   m_EditorClassIdentifier: 
-  m_GroupName: Character_Core_TapirFishEgret
-  m_GUID: f30b0d2051431ec40a8d15c1a5877b5c
+  m_GroupName: AssetGroupInfo
+  m_GUID: 536d83ffca4a459479b51e5759d0e531
   m_SerializeEntries:
-  - m_GUID: f392eec0f1daaa64e810774cc750634e
-    m_Address: Touhou-Project_Main-Characters_Hakurei-Reimu_TFE-Original
+  - m_GUID: 69e1072312e79d045be612ffedcbe837
+    m_Address: Character_Core_TapirFishEgret_Info
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Character
+    - AssetGroupInfo
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bae6d11d2c2eda47b8680f4617d27c1
+    m_Address: Location_Core_TapirFishEgret_Info
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AssetGroupInfo
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 28e3aecf5f024e14ea4abb5cd35fa69c, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: a2b962c4316563942b3a81b7bd8c4b3d, type: 2}
-    - {fileID: 11400000, guid: be2f39e76719c0a4cb8ccc060219c11f, type: 2}
+    - {fileID: 11400000, guid: 4af1a4eccbea1cb44949fe73bf3bb25e, type: 2}
+    - {fileID: 11400000, guid: 9a53e453dcb2318429f08e0a73eb1fb3, type: 2}

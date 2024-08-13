@@ -252,7 +252,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     return;
                 }
                 //检查包存在状态
-                if (MainWindow.CurrentAddressableAssetGroup == null)
+                if (MainWindow.CurrentAssetGroup == null)
                 {
                     //若包为空，提示并返回
                     Debug.LogWarning("请先选定资源组");
@@ -321,16 +321,13 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //创建新的资源索引
                 AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
                 .GetSettings(true)
-                .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newLocData)), MainWindow.CurrentAddressableAssetGroup);
+                .CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newLocData)), MainWindow.CurrentAssetGroup);
                 //设定索引名称为全名
                 entry.SetAddress(string.Join("_", newLocData.FullName).Replace(" ", "-"));
-                //并尝试设定标签
-                if (!entry.labels.Contains("Location"))
-                {
-                    entry.SetLabel("Location", true, true);
-                }
+                //并设定标签
+                entry.SetLabel("Location", true, true);
                 //保存设置
-                MainWindow.CurrentAddressableAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+                MainWindow.CurrentAssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
                 AssetDatabase.SaveAssets();
             },
             "创建新地点数据",
