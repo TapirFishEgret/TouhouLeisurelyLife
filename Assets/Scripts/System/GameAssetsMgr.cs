@@ -24,7 +24,7 @@ namespace THLL.BaseSystem
             DontDestroyOnLoad(this);
 
             //依次加载资源
-            LoadResourcesSequentially();
+            StartCoroutine(LoadResourcesSequentially());
         }
         #endregion
         
@@ -32,11 +32,6 @@ namespace THLL.BaseSystem
         //依次加载资源
         private IEnumerator LoadResourcesSequentially()
         {
-            //加载所有Catalog
-#if !UNITY_EDITOR
-            //仅在非编辑器环境下执行
-            yield return LoadAllCatalog();
-#endif
             //加载所有资源组信息
             yield return LoadAllAssetGroupInfo();
 
@@ -45,43 +40,6 @@ namespace THLL.BaseSystem
 
             //加载所需加载的角色
             yield return LoadCharacterResource();
-        }
-        //加载所有Catalog
-        private IEnumerator LoadAllCatalog()
-        {
-            //协程返回值
-            bool isComplete = false;
-
-            //获取目录
-            string path = Application.streamingAssetsPath;
-            //获取所有Catalog文件，设置中选择了以JSON为结尾，此处同理
-            string[] catalogFiles = Directory.GetFiles(path, "catalog.json");
-            //遍历所有文件
-            foreach (string catalogFile in catalogFiles)
-            {
-                //获取具体路径
-                string catalogPath = Path.Combine(path, catalogFile).Replace("\\", "/");
-                catalogPath = Path.GetFullPath(catalogPath).Replace("\\", "/");
-                //使用方法加载catalog
-                AsyncOperationHandle handle = Addressables.LoadContentCatalogAsync(catalogPath);
-
-                //当加载完成时
-                handle.Completed += (operation) =>
-                {
-                    //判断加载状态
-                    if (handle.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        //TODO:若加载成功
-                    }
-                    else
-                    {
-                        //TODO:若失败
-                    }
-                };
-
-                //返回
-                yield return new WaitUntil(() => isComplete);
-            }
         }
         //加载所有资源组信息
         private IEnumerator LoadAllAssetGroupInfo()

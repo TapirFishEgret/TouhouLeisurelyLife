@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Character_Core_TapirFishEgret
   m_GUID: f30b0d2051431ec40a8d15c1a5877b5c
   m_SerializeEntries:
+  - m_GUID: 1d849577b4f063b459dab4ce92aa4d3a
+    m_Address: Touhou-Project_Main-Characters_Kirisame-Marisa_TFE-Original
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f392eec0f1daaa64e810774cc750634e
     m_Address: Touhou-Project_Main-Characters_Hakurei-Reimu_TFE-Original
     m_ReadOnly: 0

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626d14ef90e8ea843b75bf91bcce820e, type: 3}
   m_Name: TFE Original
   m_EditorClassIdentifier: 
-  dataID: Character_Core_TapirFishEgret_Hakurei-Reimu
-  dataName: Hakurei Reimu
+  dataID: Character_Core_TapirFishEgret_Kirisame-Marisa
+  dataName: Kirisame Marisa
   dataDescription: 
   dataAuthor: TapirFishEgret
   dataPackage: Core
   dataCategory: Character
   sortingOrder: 1
-  id: Core_Character_TapirFishEgret_Touhou-Project_Main-Characters_Hakurei-Reimu_TFE-Original
+  id: Core_Character_TapirFishEgret_Touhou-Project_Main-Characters_Kirisame-Marisa_TFE-Original
   _originatingSeries: Touhou Project
   _affiliation: Main Characters
   _version: TFE Original
-  _avatar: {fileID: 21300000, guid: aa2f4b6b43ff0514587aeafdbae056b7, type: 3}
-  _portrait: {fileID: 21300000, guid: 18b212c77a94f084ea7b3ed6e5e91976, type: 3}
+  _avatar: {fileID: 21300000, guid: 4dc3327c0d98767468cde42257400582, type: 3}
+  _portrait: {fileID: 21300000, guid: 15ec340e885edcf448c976fdab839126, type: 3}
   _livingArea: {fileID: 0}
