@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using THLL.CharacterSystem;
@@ -22,39 +23,37 @@ namespace THLL.BaseSystem
             //加载时不销毁
             DontDestroyOnLoad(this);
 
-            //加载资源
-            using (ExecutionTimer catalogTimer = new("Catalog加载"))
-            {
-                LoadAllCatalog();
-            }
-            using (ExecutionTimer assetGroupInfoTimer = new("资源组信息加载"))
-            {
-                LoadAllAssetGroupInfo();
-            }
-            using (ExecutionTimer LocationTimer = new("地点资源加载"))
-            {
-                LoadLocUnitResource();
-            }
-            using (ExecutionTimer characterTimer = new("角色资源加载"))
-            {
-                LoadCharacterResource();
-            }
+            //依次加载资源
+            LoadResourcesSequentially();
         }
         #endregion
-
+        
         #region 资源加载方法
-        //加载所有Catalog
-        public void LoadAllCatalog()
+        //依次加载资源
+        private IEnumerator LoadResourcesSequentially()
         {
-            //创建目录变量
-            string path = string.Empty;
+            //加载所有Catalog
+#if !UNITY_EDITOR
+            //仅在非编辑器环境下执行
+            yield return LoadAllCatalog();
+#endif
+            //加载所有资源组信息
+            yield return LoadAllAssetGroupInfo();
+
+            //加载所需加载的地点
+            yield return LoadLocUnitResource();
+
+            //加载所需加载的角色
+            yield return LoadCharacterResource();
+        }
+        //加载所有Catalog
+        private IEnumerator LoadAllCatalog()
+        {
+            //协程返回值
+            bool isComplete = false;
 
             //获取目录
-            path = Application.streamingAssetsPath;
-            //若为编辑器模式，则获取可寻址资源包的构建路径
-#if UNITY_EDITOR
-            path = Addressables.BuildPath;
-#endif
+            string path = Application.streamingAssetsPath;
             //获取所有Catalog文件，设置中选择了以JSON为结尾，此处同理
             string[] catalogFiles = Directory.GetFiles(path, "catalog.json");
             //遍历所有文件
@@ -79,11 +78,16 @@ namespace THLL.BaseSystem
                         //TODO:若失败
                     }
                 };
+
+                //返回
+                yield return new WaitUntil(() => isComplete);
             }
         }
         //加载所有资源组信息
-        public void LoadAllAssetGroupInfo()
+        private IEnumerator LoadAllAssetGroupInfo()
         {
+            //协程返回值
+            bool isComplete = false;
             //计数
             int number = 0;
 
@@ -108,6 +112,8 @@ namespace THLL.BaseSystem
             //设置资源加载完成时操作
             handle.Completed += (operation) =>
             {
+                //完成协程
+                isComplete = true;
                 //检测资源加载是否成功
                 if (operation.Status == AsyncOperationStatus.Succeeded)
                 {
@@ -118,10 +124,15 @@ namespace THLL.BaseSystem
                     //TODO:若不成功
                 }
             };
+
+            //返回
+            yield return new WaitUntil(() => isComplete);
         }
         //加载地点单元
-        public void LoadLocUnitResource()
+        private IEnumerator LoadLocUnitResource()
         {
+            //协程返回值
+            bool isComplete = false;
             //计数
             int number = 0;
             //需要加载的资源的地址
@@ -162,10 +173,15 @@ namespace THLL.BaseSystem
                     //TODO:若不成功
                 }
             };
+
+            //返回
+            yield return new WaitUntil(() => isComplete);
         }
         //加载角色资源方法
-        public void LoadCharacterResource()
+        private IEnumerator LoadCharacterResource()
         {
+            //协程返回值
+            bool isComplete = false;
             //计数
             int number = 0;
             //需要加载的资源的地址
@@ -205,7 +221,10 @@ namespace THLL.BaseSystem
                     //TODO:若不成功
                 }
             };
+
+            //返回
+            yield return new WaitUntil(() => isComplete);
         }
-        #endregion
+#endregion
     }
 }
