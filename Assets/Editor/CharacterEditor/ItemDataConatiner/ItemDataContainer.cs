@@ -1,6 +1,6 @@
 ﻿using THLL.CharacterSystem;
 
-namespace THLL.GameEditor.CharacterEditor
+namespace THLL.GameEditor.CharacterDataEditor
 {
     //主要为解决Unity的TreeView中不允许不同类型的ItemData的问题
     public class ItemDataContainer

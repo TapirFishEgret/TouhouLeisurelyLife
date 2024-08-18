@@ -16,6 +16,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
 
         //基层面板
         private VisualElement BasePanel { get; set; }
+        //背景显示
+        private VisualElement BackgroundView { get; set; }
         //组及父级信息
         private ObjectField AssetGroupField { get; set; }
         private ObjectField ParentDataField { get; set; }
@@ -60,6 +62,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
             //获取UI控件
             //基层面板
             BasePanel = this.Q<VisualElement>("DataEditorPanel");
+            //背景显示
+            BackgroundView = this.Q<VisualElement>("BackgroundView");
             //基础项
             AssetGroupField = this.Q<ObjectField>("AssetGroupField");
             ParentDataField = this.Q<ObjectField>("ParentDataField");
@@ -72,6 +76,12 @@ namespace THLL.GameEditor.LocUnitDataEditor
             BackgroundField = this.Q<ObjectField>("BackgroundField");
             //连接展示框
             ConnectionsShowView = this.Q<MultiColumnListView>("ConnectionsShowView");
+
+            //设置背景图延展模式为切削
+            BackgroundView.style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+            BackgroundView.style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
+            BackgroundView.style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
+            BackgroundView.style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
 
             //添加连接显示框的内容
             //添加全名列
@@ -124,6 +134,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //设置数据
                 //设置全名显示
                 FullNameLabel.text = string.Join("/", MainWindow.DataTreeView.ActiveSelection.FullName);
+                //并调整全名大小
+                EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullNameLabel);
                 //检测背景图状态
                 if (BackgroundField.value == null)
                 {
@@ -131,12 +143,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                     BackgroundField.value = MainWindow.DefaultLocationBackground;
                 }
                 //随后设置面板背景图
-                style.backgroundImage = new StyleBackground(BackgroundField.value as Sprite);
-                //设置背景图延展模式为切削
-                style.backgroundPositionX = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
-                style.backgroundPositionY = BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(ScaleMode.ScaleAndCrop);
-                style.backgroundRepeat = BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(ScaleMode.ScaleAndCrop);
-                style.backgroundSize = BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(ScaleMode.ScaleAndCrop);
+                BackgroundView.style.backgroundImage = new StyleBackground(BackgroundField.value as Sprite);
                 //设置当前那选中数据资源组
                 SetAddressableAssetGroup();
 
@@ -176,13 +183,11 @@ namespace THLL.GameEditor.LocUnitDataEditor
         //几何图形改变时手动调整窗口大小
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            //检测当前多标签页面板选中标签是否为自身
-            if (MainWindow.MultiTabView.activeTab == this)
-            {
-                //若是，则触发更改
-                BasePanel.style.width = evt.newRect.width;
-                BasePanel.style.height = evt.newRect.height;
-            }
+            //触发更改
+            BasePanel.style.width = evt.newRect.width;
+            BasePanel.style.height = evt.newRect.height;
+            //并调整全名大小
+            EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullNameLabel);
         }
         #endregion
 
@@ -198,7 +203,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
             if (evt.newValue is Sprite sprite)
             {
                 MainWindow.DataTreeView.ActiveSelection.Editor_SetBackground(sprite);
-                style.backgroundImage = new StyleBackground(sprite);
+                BackgroundView.style.backgroundImage = new StyleBackground(sprite);
             }
             else
             {

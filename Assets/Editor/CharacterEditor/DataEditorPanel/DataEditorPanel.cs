@@ -7,7 +7,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.CharacterEditor
+namespace THLL.GameEditor.CharacterDataEditor
 {
     public class DataEditorPanel : Tab
     {
@@ -34,7 +34,7 @@ namespace THLL.GameEditor.CharacterEditor
         private ObjectField PortraitField { get; set; }
         private ObjectField LivingAreaField { get; set; }
         #endregion
-
+        
         #region 构造及初始化
         //构造函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow window)
@@ -45,7 +45,7 @@ namespace THLL.GameEditor.CharacterEditor
 
             //指定主窗口
             MainWindow = window;
-
+            
             //初始化
             Init();
         }
@@ -83,6 +83,8 @@ namespace THLL.GameEditor.CharacterEditor
             //面板大小更改时，数据编辑面板大小同步更改
             EditorRootPanel.style.width = evt.newRect.width;
             EditorRootPanel.style.height = evt.newRect.height;
+            //同时更改Label字体大小
+            EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
         }
         #endregion
 
@@ -128,6 +130,8 @@ namespace THLL.GameEditor.CharacterEditor
                 $"_{ShowedCharacter.Name}" +
                 $"_{ShowedCharacter.Version}"
                 .Replace(" ", "-");
+            //同时更改Label字体大小
+            EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
             //显示资源组
             SetAddressableAssetGroup();
 
@@ -213,7 +217,7 @@ namespace THLL.GameEditor.CharacterEditor
                 //设置头像
                 ShowedCharacter.Editor_SetLivingArea(livingArea);
                 //设置显示
-                //EditorRootPanel.style.backgroundImage = new StyleBackground(livingArea.Background);
+                //EditorRootPanel.style.backgroundImage = new StyleBackground(livingArea.BackgroundView);
             }
             else
             {

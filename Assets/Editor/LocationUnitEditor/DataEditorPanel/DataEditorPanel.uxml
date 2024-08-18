@@ -1,19 +1,22 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/UnityEditorStyles.uss?fileID=7433441132597879392&amp;guid=9b5e0ee7822030d4b80394fec071fef2&amp;type=3#UnityEditorStyles" />
-    <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; min-height: auto;">
-        <engine:VisualElement name="Filter" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.7);" />
-        <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-around;">
-            <editor:ObjectField label="Group" name="AssetGroupField" type="UnityEditor.AddressableAssets.Settings.AddressableAssetGroup, Unity.Addressables.Editor" style="width: 48%; flex-direction: row;" />
-            <editor:ObjectField label="Parent" enabled="false" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" name="ParentDataField" style="width: 48%; flex-direction: row;" />
+    <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: auto; height: auto; -unity-background-scale-mode: scale-and-crop; min-height: auto; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px;">
+        <engine:VisualElement name="BackgroundView" style="flex-grow: 1;">
+            <engine:VisualElement name="Filter" style="width: auto; height: auto; position: relative; background-color: rgba(0, 0, 0, 0.7); flex-grow: 1;">
+                <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-between;">
+                    <editor:ObjectField label="Group" name="AssetGroupField" type="UnityEditor.AddressableAssets.Settings.AddressableAssetGroup, Unity.Addressables.Editor" style="width: 48%; flex-direction: row;" />
+                    <editor:ObjectField label="Parent" enabled="false" type="THLL.LocationSystem.LocUnitData, Assembly-CSharp" name="ParentDataField" style="width: 48%; flex-direction: row;" />
+                </engine:VisualElement>
+                <engine:VisualElement name="Space" style="height: 10px;" />
+                <engine:Label text="FullName" name="FullNameLabel" style="font-size: 32px; -unity-text-align: middle-center; align-items: stretch; justify-content: flex-start; height: 54px;" />
+                <engine:VisualElement name="Space" style="height: 10px;" />
+                <engine:TextField label="Description" hide-placeholder-on-focus="true" multiline="true" name="DescriptionField" is-delayed="true" />
+                <engine:IntegerField label="Sorting Order" value="0" name="SortingOrderField" max-length="10000" is-delayed="true" />
+                <editor:ObjectField label="Background" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="BackgroundField" />
+                <engine:MultiColumnListView show-foldout-header="true" allow-add="false" allow-remove="false" header-title="Connections" name="ConnectionsShowView" enabled="false" fixed-item-height="30">
+                    <engine:Columns />
+                </engine:MultiColumnListView>
+            </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="Space" style="height: 10px;" />
-        <engine:Label text="FullName" name="FullNameLabel" style="font-size: 32px; -unity-text-align: middle-center; align-items: stretch; justify-content: flex-start;" />
-        <engine:VisualElement name="Space" style="height: 10px;" />
-        <engine:TextField label="Description" hide-placeholder-on-focus="true" multiline="true" name="DescriptionField" is-delayed="true" />
-        <engine:IntegerField label="Sorting Order" value="0" name="SortingOrderField" max-length="10000" is-delayed="true" />
-        <editor:ObjectField label="Background" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="BackgroundField" />
-        <engine:MultiColumnListView show-foldout-header="true" allow-add="false" allow-remove="false" header-title="Connections" name="ConnectionsShowView" enabled="false" fixed-item-height="30">
-            <engine:Columns />
-        </engine:MultiColumnListView>
     </engine:VisualElement>
 </engine:UXML>

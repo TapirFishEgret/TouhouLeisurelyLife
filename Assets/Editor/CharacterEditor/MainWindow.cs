@@ -8,7 +8,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.CharacterEditor
+namespace THLL.GameEditor.CharacterDataEditor
 {
     public class MainWindow : EditorWindow
     {

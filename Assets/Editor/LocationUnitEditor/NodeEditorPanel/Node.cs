@@ -55,8 +55,8 @@ namespace THLL.GameEditor.LocUnitDataEditor
         public void Init()
         {
             //设置节点样式
-            style.width = 120;
-            style.height = 60;
+            style.width = 200;
+            style.height = 40;
             style.alignContent = Align.Center;
             style.justifyContent = Justify.Center;
             style.position = Position.Absolute;
@@ -82,6 +82,7 @@ namespace THLL.GameEditor.LocUnitDataEditor
                 //不响应鼠标事件
                 pickingMode = PickingMode.Ignore,
             };
+            //添加到面板中
             Add(Label);
 
             //监听鼠标事件

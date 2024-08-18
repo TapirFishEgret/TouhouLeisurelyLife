@@ -6,6 +6,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.GameEditor
 {
@@ -256,6 +257,80 @@ namespace THLL.GameEditor
 
             //返回结果
             return assetGroupInfo;
+        }
+        #endregion
+
+        #region 视觉元素功能扩展
+        //Label视觉元素实现字体自动缩放
+        public static void SingleLineLabelAdjustFontSizeToFit(Label label)
+        {
+            //首先检测传入
+            if (label == null 
+                || label.text == null 
+                || label.style.display == DisplayStyle.None 
+                || float.IsNaN(label.resolvedStyle.width) 
+                || float.IsNaN(label.resolvedStyle.height))
+            {
+                //若无传入或者传入Label中无文本或Label压根儿就没显示或高和宽为NaN，则返回
+                return;
+            }
+
+            //记录循环次数
+            int count = 0;
+            //然后计算文本长度
+            Vector2 textSize = label.MeasureTextSize(
+                label.text, 
+                float.MaxValue, 
+                VisualElement.MeasureMode.Undefined, 
+                float.MaxValue, 
+                VisualElement.MeasureMode.Undefined);
+            //获取Label宽度
+            float labelWidth = label.resolvedStyle.width;
+            float labelHeight = label.resolvedStyle.height;
+            //循环缩放以调整字体大小
+            while (true)
+            {
+                //当前字体大小
+                float currentFontSize = label.resolvedStyle.fontSize;
+                //调整后字体大小
+                float adjustedFontSize = currentFontSize;
+                //检测文本宽度与Label宽度关系
+                if (textSize.x > labelWidth)
+                {
+                    //若大于，则缩小
+                    adjustedFontSize = currentFontSize - 0.1f;
+                }
+                else if (textSize.x < labelWidth && textSize.y < labelHeight)
+                {
+                    //若文本宽度小于当前宽度，且文本高度同样小于，则放大
+                    adjustedFontSize = currentFontSize + 0.1f;
+                }
+                //设置字体大小
+                label.style.fontSize = adjustedFontSize;
+                //重新测量长度
+                textSize = label.MeasureTextSize(
+                    label.text,
+                    float.MaxValue,
+                    VisualElement.MeasureMode.Undefined,
+                    float.MaxValue,
+                    VisualElement.MeasureMode.Undefined);
+                //检测是否满足跳出循环条件
+                //两种情形，宽度近似而高度小，宽度小而高度近似
+                if ((Mathf.Abs(textSize.x - labelWidth) < 4f && textSize.y < labelHeight) 
+                    || (Mathf.Abs(textSize.y - labelHeight) < 4f && textSize.x < labelWidth))
+                {
+                    //若满足跳出循环条件，则跳出
+                    break;
+                }
+                //循环次数增加
+                count++;
+                //检测
+                if (count > 100)
+                {
+                    //若循环次数过多，结束调整
+                    break;
+                }
+            }
         }
         #endregion
     }
