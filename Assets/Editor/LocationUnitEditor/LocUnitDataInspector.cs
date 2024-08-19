@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using THLL.LocationSystem;
+﻿using THLL.LocationSystem;
 using UnityEditor;
 using UnityEngine;
 

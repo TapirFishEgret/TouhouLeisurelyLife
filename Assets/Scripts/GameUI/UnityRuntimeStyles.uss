@@ -1,0 +1,7 @@
+* {
+    font-size: 16px;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/NotoSansSC/NotoSansSC-Medium.ttf?fileID=12800000&guid=7db7180b3c63c7942b39c781189f628b&type=3#NotoSansSC-Medium");
+    -unity-text-outline-width: 0;
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
+}

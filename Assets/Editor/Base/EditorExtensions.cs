@@ -265,10 +265,10 @@ namespace THLL.GameEditor
         public static void SingleLineLabelAdjustFontSizeToFit(Label label)
         {
             //首先检测传入
-            if (label == null 
-                || label.text == null 
-                || label.style.display == DisplayStyle.None 
-                || float.IsNaN(label.resolvedStyle.width) 
+            if (label == null
+                || label.text == null
+                || label.style.display == DisplayStyle.None
+                || float.IsNaN(label.resolvedStyle.width)
                 || float.IsNaN(label.resolvedStyle.height))
             {
                 //若无传入或者传入Label中无文本或Label压根儿就没显示或高和宽为NaN，则返回
@@ -279,10 +279,10 @@ namespace THLL.GameEditor
             int count = 0;
             //然后计算文本长度
             Vector2 textSize = label.MeasureTextSize(
-                label.text, 
-                float.MaxValue, 
-                VisualElement.MeasureMode.Undefined, 
-                float.MaxValue, 
+                label.text,
+                float.MaxValue,
+                VisualElement.MeasureMode.Undefined,
+                float.MaxValue,
                 VisualElement.MeasureMode.Undefined);
             //获取Label宽度
             float labelWidth = label.resolvedStyle.width;
@@ -316,7 +316,7 @@ namespace THLL.GameEditor
                     VisualElement.MeasureMode.Undefined);
                 //检测是否满足跳出循环条件
                 //两种情形，宽度近似而高度小，宽度小而高度近似
-                if ((Mathf.Abs(textSize.x - labelWidth) < 4f && textSize.y < labelHeight) 
+                if ((Mathf.Abs(textSize.x - labelWidth) < 4f && textSize.y < labelHeight)
                     || (Mathf.Abs(textSize.y - labelHeight) < 4f && textSize.x < labelWidth))
                 {
                     //若满足跳出循环条件，则跳出

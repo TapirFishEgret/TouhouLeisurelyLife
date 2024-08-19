@@ -34,7 +34,7 @@ namespace THLL.GameEditor.CharacterDataEditor
         private ObjectField PortraitField { get; set; }
         private ObjectField LivingAreaField { get; set; }
         #endregion
-        
+
         #region 构造及初始化
         //构造函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow window)
@@ -45,7 +45,7 @@ namespace THLL.GameEditor.CharacterDataEditor
 
             //指定主窗口
             MainWindow = window;
-            
+
             //初始化
             Init();
         }

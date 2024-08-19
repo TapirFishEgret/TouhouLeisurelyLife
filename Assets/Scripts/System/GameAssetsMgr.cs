@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using THLL.CharacterSystem;
 using THLL.LocationSystem;
@@ -24,10 +23,10 @@ namespace THLL.BaseSystem
             DontDestroyOnLoad(this);
 
             //依次加载资源
-            StartCoroutine(LoadResourcesSequentially());
+            //StartCoroutine(LoadResourcesSequentially());
         }
         #endregion
-        
+
         #region 资源加载方法
         //依次加载资源
         private IEnumerator LoadResourcesSequentially()
@@ -183,6 +182,6 @@ namespace THLL.BaseSystem
             //返回
             yield return new WaitUntil(() => isComplete);
         }
-#endregion
+        #endregion
     }
 }

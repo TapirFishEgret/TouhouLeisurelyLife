@@ -1,0 +1,32 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
+    <engine:VisualElement name="Background" style="flex-grow: 1; -unity-background-scale-mode: scale-and-crop; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+        <engine:VisualElement name="TopPanel" style="flex-grow: 1; flex-basis: 23%; background-color: rgb(0, 0, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+            <engine:VisualElement name="TopButtonsPanel" style="flex-grow: 1; flex-basis: 36%; flex-direction: row-reverse;">
+                <engine:ToggleButtonGroup name="BottomPanelChangeButtonGroup">
+                    <engine:Button text="Game Play" name="GamePlayButton" style="font-size: 36px; max-width: none; width: 250px;" />
+                    <engine:Button text="Asset Group" name="AssetGroupButton" style="font-size: 36px; width: 250px;" />
+                </engine:ToggleButtonGroup>
+            </engine:VisualElement>
+            <engine:VisualElement name="TitlePanel" style="flex-grow: 1; flex-basis: 64%;">
+                <engine:Label text="Touhou Leisure Life" name="Title" style="flex-shrink: 1; flex-grow: 1; -unity-text-align: middle-center; font-size: 96px;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="MiddlePanel" style="flex-grow: 1; flex-basis: 54%; -unity-background-scale-mode: scale-and-crop; background-image: none;" />
+        <engine:VisualElement name="BottomPanel" style="flex-grow: 1; flex-basis: 23%; background-color: rgb(0, 0, 0); flex-direction: column; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+            <engine:VisualElement name="VersionPanel" style="flex-grow: 1; flex-basis: 64%;">
+                <engine:Label text="0.1.0_2024.08.19" name="Version" style="-unity-text-align: upper-center; font-size: 27px;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="GamePlayButtonsPanel" style="flex-grow: 1; flex-basis: 36%; flex-direction: row-reverse; justify-content: flex-start; display: flex;">
+                <engine:Button text="New Game" name="NewGameButton" style="font-size: 36px; width: 250px;" />
+                <engine:Button text="Load Game" name="LoadGameButton" style="font-size: 36px; width: 250px;" />
+                <engine:Button text="Settings" name="SettingsButton" style="font-size: 36px; width: 250px;" />
+                <engine:Button text="Quit" name="QuitGameButton" style="font-size: 36px; width: 250px;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="AssetGroupButtonsPanel" style="flex-grow: 1; flex-basis: 36%; display: none; flex-direction: row-reverse;">
+                <engine:Button text="Location" name="LocationAssetGroupButton" style="font-size: 36px; width: 250px;" />
+                <engine:Button text="Character" name="CharacterAssetGroupButton" style="font-size: 36px; width: 250px;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
