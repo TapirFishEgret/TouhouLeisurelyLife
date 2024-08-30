@@ -9,10 +9,6 @@ namespace THLL.LocationSystem
     public class LocUnitData : BaseGameData
     {
         #region 地点类型数据成员
-        //重写ID
-        [SerializeField]
-        private string id = string.Empty;
-        public override string ID => id;
         //全名
         [SerializeField]
         private List<string> _fullName = new();
@@ -20,11 +16,15 @@ namespace THLL.LocationSystem
         //父级单元
         [SerializeField]
         private LocUnitData _parentData;
-        public LocUnitData ParentData => _parentData;
+        public LocUnitData ParentData { get { return _parentData; } set { _parentData = value; } }
         //地点背景图
         [SerializeField]
         private Sprite _background;
-        public Sprite Background => _background;
+        public Sprite Background { get { return _background; } set { _background = value; } }
+        //是否为出入口
+        [SerializeField]
+        private bool _isGateway = false;
+        public bool IsGateway { get { return _isGateway; } set { _isGateway = value; } }
         //地点相连情况
         [SerializeField]
         private List<LocUnitData> _connectionKeys = new();
@@ -32,10 +32,6 @@ namespace THLL.LocationSystem
         [SerializeField]
         private List<int> _connectionValues = new();
         public List<int> ConnectionValues => _connectionValues;
-        //是否为出入口
-        [SerializeField]
-        private bool _isGateway = false;
-        public bool IsGateway => _isGateway;
         #endregion
 
 #if UNITY_EDITOR
@@ -43,7 +39,7 @@ namespace THLL.LocationSystem
         public override void Editor_GenerateID()
         {
             base.Editor_GenerateID();
-            id = string.Join("_", new List<string>() { Package, Category, Author }.Concat(FullName)).Replace(" ", "-");
+            id = string.Join("_", new List<string>() { GameDataType.ToString() }.Concat(FullName)).Replace(" ", "-");
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //生成全名
@@ -59,31 +55,6 @@ namespace THLL.LocationSystem
             }
             _fullName = fullName;
             //标记数据为脏
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        //设定名称时
-        public override void Editor_SetName(string name)
-        {
-            base.Editor_SetName(name);
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        //设定父级数据
-        public void Editor_SetParent(LocUnitData parentData)
-        {
-            _parentData = parentData;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        //设定背景
-        public void Editor_SetBackground(Sprite background)
-        {
-            _background = background;
-            //标记数据为脏
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        //设定是否为出入口
-        public void Editor_SetIsGateway(bool isGateway)
-        {
-            _isGateway = isGateway;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //添加链接
@@ -107,13 +78,13 @@ namespace THLL.LocationSystem
             UnityEditor.EditorUtility.SetDirty(this);
             return false;
         }
-        //设定通行时间
-        public void Editor_SetConnDuration(LocUnitData locUnitData, int duration)
+        //设定通行距离
+        public void Editor_SetConnDistance(LocUnitData locUnitData, int distance)
         {
             if (ConnectionKeys.Contains(locUnitData))
             {
                 int index = ConnectionKeys.IndexOf(locUnitData);
-                ConnectionValues[index] = duration;
+                ConnectionValues[index] = distance;
             }
             UnityEditor.EditorUtility.SetDirty(this);
         }

@@ -59,30 +59,12 @@ namespace THLL.BaseSystem
         protected override void InitFilters()
         {
             //基础过滤器
-            Filters[QueryKeywordEnum.B_Package] = (datas, queryValue) =>
-            {
-                //类型检查
-                if (queryValue is string package)
-                {
-                    return datas.Where(x => x.Package == package);
-                }
-                return datas;
-            };
             Filters[QueryKeywordEnum.B_Category] = (datas, queryValue) =>
             {
                 //类型检查
-                if (queryValue is string category)
+                if (queryValue is GameDataTypeEnum gameDataType)
                 {
-                    return datas.Where(d => d.Category == category);
-                }
-                return datas;
-            };
-            Filters[QueryKeywordEnum.B_Author] = (datas, queryValue) =>
-            {
-                //类型检查
-                if (queryValue is string author)
-                {
-                    return datas.Where(d => d.Author == author);
+                    return datas.Where(d => d.Category == gameDataType);
                 }
                 return datas;
             };

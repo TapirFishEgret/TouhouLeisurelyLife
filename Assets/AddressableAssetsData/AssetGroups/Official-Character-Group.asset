@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Official-Character-Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Official-Character-Group
+  m_GUID: d58d4b4bdb909cc4da635d31db8d980b
+  m_SerializeEntries:
+  - m_GUID: 8a3819e42500e364fb10c1a03c54bafa
+    m_Address: Touhou-Project_Main-Characters_Hakurei-Reimu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: be86ecd0df245c5458db9dd2b62dbc48, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d51cbd10b9bfae848a6f3fc0505cdc03, type: 2}
+    - {fileID: 11400000, guid: e86e247ecff1cea428250357b52502e0, type: 2}

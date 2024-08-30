@@ -11,11 +11,6 @@ namespace THLL.BaseSystem
 {
     public class GameAssetsMgr : Singleton<GameAssetsMgr>
     {
-        #region 数据
-        //资源类型-需要加载的资源字典
-        private Dictionary<GameAssetTypeEnum, List<AssetGroupInfo>> AssetGroupsNeedToLoad { get; set; } = new();
-        #endregion
-
         #region 周期函数
         protected override void Awake()
         {
@@ -23,7 +18,7 @@ namespace THLL.BaseSystem
             DontDestroyOnLoad(this);
 
             //依次加载资源
-            //StartCoroutine(LoadResourcesSequentially());
+            StartCoroutine(LoadResourcesSequentially());
         }
         #endregion
 
@@ -31,59 +26,11 @@ namespace THLL.BaseSystem
         //依次加载资源
         private IEnumerator LoadResourcesSequentially()
         {
-            //加载所有资源组信息
-            yield return LoadAllAssetGroupInfo();
-
             //加载所需加载的地点
             yield return LoadLocUnitResource();
 
             //加载所需加载的角色
             yield return LoadCharacterResource();
-        }
-        //加载所有资源组信息
-        private IEnumerator LoadAllAssetGroupInfo()
-        {
-            //协程返回值
-            bool isComplete = false;
-            //计数
-            int number = 0;
-
-            //获取操作句柄
-            AsyncOperationHandle handle = Addressables.LoadAssetsAsync<AssetGroupInfo>
-                (
-                "AssetGroupInfo",
-                (resource) =>
-                {
-                    //加载
-                    //存放入库
-                    if (!AssetGroupsNeedToLoad.ContainsKey(resource.AssetType))
-                    {
-                        AssetGroupsNeedToLoad[resource.AssetType] = new();
-                    }
-                    AssetGroupsNeedToLoad[resource.AssetType].Add(resource);
-                    //计数
-                    number++;
-                }
-                );
-
-            //设置资源加载完成时操作
-            handle.Completed += (operation) =>
-            {
-                //完成协程
-                isComplete = true;
-                //检测资源加载是否成功
-                if (operation.Status == AsyncOperationStatus.Succeeded)
-                {
-                    //TODO:若成功
-                }
-                else
-                {
-                    //TODO:若不成功
-                }
-            };
-
-            //返回
-            yield return new WaitUntil(() => isComplete);
         }
         //加载地点单元
         private IEnumerator LoadLocUnitResource()
@@ -92,19 +39,11 @@ namespace THLL.BaseSystem
             bool isComplete = false;
             //计数
             int number = 0;
-            //需要加载的资源的地址
-            List<string> loadedAssets = new();
-
-            //遍历所需加载的包
-            foreach (AssetGroupInfo assetGroupInfo in AssetGroupsNeedToLoad[GameAssetTypeEnum.Location])
-            {
-                loadedAssets.Concat(assetGroupInfo.AssetAddresses);
-            }
 
             //获取操作句柄
             AsyncOperationHandle handle = Addressables.LoadAssetsAsync<LocUnitData>
                 (
-                loadedAssets,
+                "Location",
                 (resource) =>
                 {
                     //加载
@@ -141,19 +80,11 @@ namespace THLL.BaseSystem
             bool isComplete = false;
             //计数
             int number = 0;
-            //需要加载的资源的地址
-            List<string> loadedAssets = new();
-
-            //遍历所需加载的包
-            foreach (AssetGroupInfo assetGroupInfo in AssetGroupsNeedToLoad[GameAssetTypeEnum.Character])
-            {
-                loadedAssets.Concat(assetGroupInfo.AssetAddresses);
-            }
 
             //获取操作句柄
             AsyncOperationHandle handle = Addressables.LoadAssetsAsync<CharacterData>
                 (
-                loadedAssets,
+                "Character",
                 (resource) =>
                 {
                     //加载

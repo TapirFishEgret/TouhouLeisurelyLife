@@ -18,7 +18,7 @@ namespace THLL.GameUI
         //GamePlayButton
         public Button GamePlayButton { get; private set; }
         //AssetGroupPanel
-        public Button AssetGroupButton { get; private set; }
+        public Button GamePatchesButton { get; private set; }
         //GamePlayButtonsPanel
         public VisualElement GamePlayButtonsPanel { get; private set; }
         //NewGameButton
@@ -29,12 +29,12 @@ namespace THLL.GameUI
         public Button SettingsButton { get; private set; }
         //QuitGameButton
         public Button QuitGameButton { get; private set; }
-        //AssetGroupButtonsPanel
-        public VisualElement AssetGroupButtonsPanel { get; private set; }
-        //LocationAssetGroupButton
-        public VisualElement LocationAssetGroupButton { get; private set; }
-        //CharacterAssetGroupButton
-        public VisualElement CharacterAssetGroupButton { get; private set; }
+        //GamePatchesButtonsPanel
+        public VisualElement GamePatchesButtonsPanel { get; private set; }
+        //LocationPatchesButton
+        public VisualElement LocationPatchesButton { get; private set; }
+        //CharacterPatchesButton
+        public VisualElement CharacterPatchesButton { get; private set; }
         #endregion
 
         #region Unity周期函数
@@ -67,15 +67,15 @@ namespace THLL.GameUI
             TopButtonsPanel = MainUI.rootVisualElement.Q<VisualElement>("TopButtonsPanel");
             BottomPanelChangeButtonGroup = MainUI.rootVisualElement.Q<ToggleButtonGroup>("BottomPanelChangeButtonGroup");
             GamePlayButton = BottomPanelChangeButtonGroup.Q<Button>("GamePlayButton");
-            AssetGroupButton = BottomPanelChangeButtonGroup.Q<Button>("AssetGroupButton");
+            GamePatchesButton = BottomPanelChangeButtonGroup.Q<Button>("GamePatchesButton");
             GamePlayButtonsPanel = MainUI.rootVisualElement.Q<VisualElement>("GamePlayButtonsPanel");
             NewGameButton = GamePlayButtonsPanel.Q<Button>("NewGameButton");
             LoadGameButton = GamePlayButtonsPanel.Q<Button>("LoadGameButton");
             SettingsButton = GamePlayButtonsPanel.Q<Button>("SettingsButton");
             QuitGameButton = GamePlayButtonsPanel.Q<Button>("QuitGameButton");
-            AssetGroupButtonsPanel = MainUI.rootVisualElement.Q<VisualElement>("AssetGroupButtonsPanel");
-            LocationAssetGroupButton = AssetGroupButtonsPanel.Q<Button>("LocationAssetGroupButton");
-            CharacterAssetGroupButton = AssetGroupButtonsPanel.Q<Button>("CharacterAssetGroupButton");
+            GamePatchesButtonsPanel = MainUI.rootVisualElement.Q<VisualElement>("GamePatchesButtonsPanel");
+            LocationPatchesButton = GamePatchesButtonsPanel.Q<Button>("LocationPatchesButton");
+            CharacterPatchesButton = GamePatchesButtonsPanel.Q<Button>("CharacterPatchesButton");
         }
         //绑定控件方法
         private void RegisterMethods()
@@ -93,13 +93,13 @@ namespace THLL.GameUI
             {
                 //若0号位为激活，按照面板设置，GamePlay相关按钮激活
                 GamePlayButtonsPanel.style.display = DisplayStyle.Flex;
-                AssetGroupButtonsPanel.style.display = DisplayStyle.None;
+                GamePatchesButtonsPanel.style.display = DisplayStyle.None;
             }
             else if (evt.newValue[1])
             {
                 //若1号位为激活，按照面板设置，AssetGroup相关按钮激活
                 GamePlayButtonsPanel.style.display = DisplayStyle.None;
-                AssetGroupButtonsPanel.style.display = DisplayStyle.Flex;
+                GamePatchesButtonsPanel.style.display = DisplayStyle.Flex;
             }
         }
         #endregion

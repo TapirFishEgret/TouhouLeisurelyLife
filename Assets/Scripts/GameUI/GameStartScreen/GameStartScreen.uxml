@@ -5,7 +5,7 @@
             <engine:VisualElement name="TopButtonsPanel" style="flex-grow: 1; flex-basis: 36%; flex-direction: row-reverse;">
                 <engine:ToggleButtonGroup name="BottomPanelChangeButtonGroup">
                     <engine:Button text="Game Play" name="GamePlayButton" style="font-size: 36px; max-width: none; width: 250px;" />
-                    <engine:Button text="Asset Group" name="AssetGroupButton" style="font-size: 36px; width: 250px;" />
+                    <engine:Button text="Game Patches" name="GamePatchesButton" style="font-size: 36px; width: 250px;" />
                 </engine:ToggleButtonGroup>
             </engine:VisualElement>
             <engine:VisualElement name="TitlePanel" style="flex-grow: 1; flex-basis: 64%;">
@@ -23,9 +23,9 @@
                 <engine:Button text="Settings" name="SettingsButton" style="font-size: 36px; width: 250px;" />
                 <engine:Button text="Quit" name="QuitGameButton" style="font-size: 36px; width: 250px;" />
             </engine:VisualElement>
-            <engine:VisualElement name="AssetGroupButtonsPanel" style="flex-grow: 1; flex-basis: 36%; display: none; flex-direction: row-reverse;">
-                <engine:Button text="Location" name="LocationAssetGroupButton" style="font-size: 36px; width: 250px;" />
-                <engine:Button text="Character" name="CharacterAssetGroupButton" style="font-size: 36px; width: 250px;" />
+            <engine:VisualElement name="GamePatchesButtonsPanel" style="flex-grow: 1; flex-basis: 36%; display: none; flex-direction: row-reverse;">
+                <engine:Button text="Location" name="LocationPatchesButton" style="font-size: 36px; width: 250px;" />
+                <engine:Button text="Character" name="CharacterPatchesButton" style="font-size: 36px; width: 250px;" />
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>

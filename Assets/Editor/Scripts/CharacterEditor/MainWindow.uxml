@@ -1,0 +1,14 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/UnityEditorStyles.uss?fileID=7433441132597879392&amp;guid=9b5e0ee7822030d4b80394fec071fef2&amp;type=3#UnityEditorStyles" />
+    <engine:VisualElement name="Root" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: column; background-color: rgb(46, 125, 50);">
+        <engine:VisualElement name="Panel" style="flex-direction: row; width: auto; height: auto; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; flex-grow: 1;">
+            <engine:VisualElement name="TreeViewPanel" style="width: auto; background-color: rgb(27, 94, 32); margin-top: 6px; margin-right: 3px; margin-bottom: 6px; margin-left: 6px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; flex-grow: 1; flex-basis: 25%;">
+                <engine:VisualElement name="DataTreeViewContainer" style="flex-grow: 1;" />
+                <engine:Toggle label="Timer Debug Log" name="TimerDebugLogToggle" value="true" />
+            </engine:VisualElement>
+            <engine:VisualElement name="EditorPanel" style="width: auto; background-color: rgb(56, 142, 60); margin-top: 6px; margin-right: 3px; margin-bottom: 6px; margin-left: 3px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; flex-grow: 1; flex-basis: 75%;">
+                <engine:TabView name="MultiTabView" style="width: 100%; height: 100%; flex-grow: 1;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

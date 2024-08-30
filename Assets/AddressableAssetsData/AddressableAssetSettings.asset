@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: 881bd03c94b1d8f47bc370bee4e9a530
+  m_DefaultGroup: 41473ceb6b7e98143b307181bdec9521
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: f457045ae4027d0a8a03b4e726569d69
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
   m_IgnoreUnsupportedFilesInBuild: 0
   m_UniqueBundleIds: 0
-  m_EnableJsonCatalog: 1
+  m_EnableJsonCatalog: 0
   m_NonRecursiveBuilding: 1
   m_CCDEnabled: 0
   m_maxConcurrentWebRequests: 3
@@ -51,83 +51,52 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 52f76eaa66a82564d9f9571e8b03fffd
   m_RemoteCatalogLoadPath:
-    m_Id: 
+    m_Id: b82119c751940014ebe5d135ecce7a87
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: b7455235bb1180846b3282abcf6facab, type: 2}
-  - {fileID: 11400000, guid: 33b7aae067460184a84685ced3af1839, type: 2}
-  - {fileID: 11400000, guid: 8d861abda215c004382d1e5760e99dc3, type: 2}
-  - {fileID: 11400000, guid: a0f559f5a35da9b439bfea37f8e7bc71, type: 2}
+  - {fileID: 11400000, guid: d2c6906f6272f7f4f892279fc14e43f9, type: 2}
+  - {fileID: 11400000, guid: 456ed482c5ceb024b84fe284c4c6a022, type: 2}
+  - {fileID: 11400000, guid: 9f9ad6d8b35b5ba4da62f8f6f3b940d5, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-      m_Id: 9a69fc804e616984f9496f77c2b47839
+      m_Id: c7455f45535d85c46a70320f738f62b5
       m_ProfileName: Default
       m_Values:
-      - m_Id: 13ebaf817a598c9409b55397c4a8cafc
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/AssetGroupInfo'
-      - m_Id: 2719dfef13105e347b9e91532829d20a
-        m_Value: <undefined>
-      - m_Id: 2853c50778084f244bf7808cd74c55c6
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 3cd439a427a9a0b448a1f384d44884fa
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Location_Core_TapirFishEgret'
-      - m_Id: 402dec402b8d37e4f81b913c78d509a4
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/Character_Core_TapirFishEgret'
-      - m_Id: 5272f0bb818d8f2479d4140d8e5e0581
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 6a9ac3001140f3142a416aeb0a48bd2c
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Character_Core_TapirFishEgret'
-      - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
+      - m_Id: 52f76eaa66a82564d9f9571e8b03fffd
         m_Value: 'ServerData/[BuildTarget]'
-      - m_Id: d16b1d470d1108d46af953ee58b4c3aa
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/Location_Core_TapirFishEgret'
-      - m_Id: e7972a14c8056fb439bce04c53bbaab6
+      - m_Id: 6d8bc1cd4e74c1942b97c56fbf89393b
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: f3104fcf83279b1449e9477b13759842
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/AssetGroupInfo'
+      - m_Id: 86e7aee1ac145ea4387cdb51dbe97709
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: b82119c751940014ebe5d135ecce7a87
+        m_Value: <undefined>
+      - m_Id: d2c0cd6d1d24b5b428f7d7bd7575628d
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
     m_ProfileEntryNames:
-    - m_Id: 13ebaf817a598c9409b55397c4a8cafc
-      m_Name: AssetGroupInfo_LoadPath
-      m_InlineUsage: 0
-    - m_Id: 2719dfef13105e347b9e91532829d20a
-      m_Name: Remote.LoadPath
-      m_InlineUsage: 0
-    - m_Id: 2853c50778084f244bf7808cd74c55c6
-      m_Name: Local.BuildPath
-      m_InlineUsage: 0
-    - m_Id: 3cd439a427a9a0b448a1f384d44884fa
-      m_Name: Location_Core_TapirFishEgret_LoadPath
-      m_InlineUsage: 0
-    - m_Id: 402dec402b8d37e4f81b913c78d509a4
-      m_Name: Character_Core_TapirFishEgret_LoadPath
-      m_InlineUsage: 0
-    - m_Id: 5272f0bb818d8f2479d4140d8e5e0581
-      m_Name: Local.LoadPath
-      m_InlineUsage: 0
-    - m_Id: 6a9ac3001140f3142a416aeb0a48bd2c
-      m_Name: Character_Core_TapirFishEgret_BuildPath
-      m_InlineUsage: 0
-    - m_Id: a38f9ddfbad43974ba2b9ca00ece6d7e
+    - m_Id: 52f76eaa66a82564d9f9571e8b03fffd
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
-    - m_Id: d16b1d470d1108d46af953ee58b4c3aa
-      m_Name: Location_Core_TapirFishEgret_BuildPath
-      m_InlineUsage: 0
-    - m_Id: e7972a14c8056fb439bce04c53bbaab6
+    - m_Id: 6d8bc1cd4e74c1942b97c56fbf89393b
       m_Name: BuildTarget
       m_InlineUsage: 0
-    - m_Id: f3104fcf83279b1449e9477b13759842
-      m_Name: AssetGroupInfo_BuildPath
+    - m_Id: 86e7aee1ac145ea4387cdb51dbe97709
+      m_Name: Local.LoadPath
+      m_InlineUsage: 0
+    - m_Id: b82119c751940014ebe5d135ecce7a87
+      m_Name: Remote.LoadPath
+      m_InlineUsage: 0
+    - m_Id: d2c0cd6d1d24b5b428f7d7bd7575628d
+      m_Name: Local.BuildPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
@@ -135,17 +104,16 @@ MonoBehaviour:
     - default
     - Location
     - Character
-    - AssetGroupInfo
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
-  - {fileID: 11400000, guid: 25635fdde16e4884b9320d1afd52d3e0, type: 2}
+  - {fileID: 11400000, guid: 92a270e495d0d8d41b82921f1e52fe64, type: 2}
   m_InitializationObjects: []
   m_CertificateHandlerType:
     m_AssemblyName: 
     m_ClassName: 
   m_ActivePlayerDataBuilderIndex: 2
   m_DataBuilders:
-  - {fileID: 11400000, guid: bcf38016d82582944a3d251b5be3eb0b, type: 2}
-  - {fileID: 11400000, guid: dc933661f00bcd542a750a69fa909e4e, type: 2}
-  - {fileID: 11400000, guid: ce62c22f81610fa4390bef3ff53f1e69, type: 2}
-  m_ActiveProfileId: 9a69fc804e616984f9496f77c2b47839
+  - {fileID: 11400000, guid: d5c44a7dbebe1034ca6431a0847e2a39, type: 2}
+  - {fileID: 11400000, guid: d27567817b2192047a3a03d126a632d6, type: 2}
+  - {fileID: 11400000, guid: 43dfe930d9139e148ae0e7c1187d4a0b, type: 2}
+  m_ActiveProfileId: c7455f45535d85c46a70320f738f62b5

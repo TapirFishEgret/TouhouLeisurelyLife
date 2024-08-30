@@ -11,12 +11,8 @@
         public string Name => BaseData.Name;
         //Des
         public string Description => BaseData.Description;
-        //Author
-        public string Author => BaseData.Author;
-        //Package
-        public string Package => BaseData.Package;
-        //Category
-        public string Category => BaseData.Category;
+        //GameDataType
+        public GameDataTypeEnum Category => BaseData.GameDataType;
         //SortingOrder
         public int SortingOrder => BaseData.SortingOrder;
         #endregion

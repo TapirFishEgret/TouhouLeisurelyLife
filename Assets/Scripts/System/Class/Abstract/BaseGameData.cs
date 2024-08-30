@@ -7,67 +7,31 @@ namespace THLL.BaseSystem
         #region 基础数据成员
         //ID
         [SerializeField]
-        protected string dataID = string.Empty;
-        public virtual string ID => dataID;
+        protected string id = string.Empty;
+        public virtual string ID { get { return id; } set { id = value; } }
         //Name
         [SerializeField]
         protected string dataName = string.Empty;
-        public virtual string Name => dataName;
+        public virtual string Name { get { return dataName; } set { dataName = value; } }
         //Description
         [SerializeField]
-        protected string dataDescription = string.Empty;
-        public virtual string Description => dataDescription;
-        //Author
+        protected string description = string.Empty;
+        public virtual string Description { get { return description; } set { description = value; } }
+        //GameDataType
         [SerializeField]
-        protected string dataAuthor = string.Empty;
-        public virtual string Author => dataAuthor;
-        //Package
-        [SerializeField]
-        protected string dataPackage = string.Empty;
-        public virtual string Package => dataPackage;
-        //Category
-        [SerializeField]
-        protected string dataCategory = string.Empty;
-        public virtual string Category => dataCategory;
+        protected GameDataTypeEnum gameDataType = 0;
+        public virtual GameDataTypeEnum GameDataType { get { return gameDataType; } set { gameDataType = value; } }
         //SortingOrder
         [SerializeField]
         protected int sortingOrder = 0;
-        public virtual int SortingOrder => sortingOrder;
+        public virtual int SortingOrder { get { return sortingOrder; } set { sortingOrder = value; } }
         #endregion
 
 #if UNITY_EDITOR
+        //生成ID
         public virtual void Editor_GenerateID()
         {
-            dataID = string.Join("_", new string[] { Category, Package, Author, Name }).Replace(" ", "-");
-        }
-        public virtual void Editor_SetName(string name)
-        {
-            dataName = name;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        public virtual void Editor_SetDescription(string description)
-        {
-            dataDescription = description;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        public virtual void Editor_SetAuthor(string author)
-        {
-            dataAuthor = author;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        public virtual void Editor_SetPackage(string package)
-        {
-            dataPackage = package;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        public virtual void Editor_SetCategory(string category)
-        {
-            dataCategory = category;
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        public virtual void Editor_SetSortingOrder(int sortingOrder)
-        {
-            this.sortingOrder = sortingOrder;
+            id = string.Join("_", new string[] { GameDataType.ToString(), Name });
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif

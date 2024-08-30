@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 85a9f9b83a498364d8cd732d73263ab2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - _windowVisualTree: {fileID: 9197481963319205126, guid: 5a8691e12aa742a499c1b6f059c4285d, type: 3}
+  - _dataEditorVisualTree: {fileID: 9197481963319205126, guid: 48a12e1bad77a7f43971adc588535038, type: 3}
+  - _persistentDataFile: {fileID: 4900000, guid: 30fc32d8955a2714792b0f2fe8b73121, type: 3}
+  - _assetGroup: {fileID: 11400000, guid: 9f9ad6d8b35b5ba4da62f8f6f3b940d5, type: 2}
+  - _defaultCharacterAvatar: {fileID: 21300000, guid: fa9fafa3351ab714dbd768a113f4849e, type: 3}
+  - _defaultCharacterPortrait: {fileID: 21300000, guid: 62fc3281c480f8b419d12a33db2331ef, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
