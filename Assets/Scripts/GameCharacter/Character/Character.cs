@@ -1,5 +1,5 @@
 ﻿using THLL.BaseSystem;
-using THLL.LocationSystem;
+using THLL.GeographySystem;
 using UnityEngine;
 
 namespace THLL.CharacterSystem
@@ -19,14 +19,14 @@ namespace THLL.CharacterSystem
 
         #region 角色自身数据成员
         //当前所处地点
-        public LocUnit Location { get; private set; }
+        public Location Location { get; private set; }
         #endregion
 
         #region 方法
         //构造函数
         public Character(CharacterData data) : base(data) { }
         //移动
-        public void MoveTo(LocUnit end)
+        public void MoveTo(Location end)
         {
             //TODO:理论上移动需要有过程，但暂时不做，仅进行位置及数据更改
             //从原地点移除

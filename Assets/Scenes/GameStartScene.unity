@@ -455,6 +455,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5f497d06433a3b479bf8cba82da0c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameStartInterfaceVisualTree: {fileID: 9197481963319205126, guid: 43d97e4a984d4ef4a9deef836adb21e6, type: 3}
+  gameSavesInterfaceVisualTree: {fileID: 9197481963319205126, guid: 79d1f7cfb288ffd4192727f643c6967f, type: 3}
+  gameSettingsInterface: {fileID: 9197481963319205126, guid: 397074624ab447547be961d33bf8c8ca, type: 3}
+  gameSystemSettingsInterface: {fileID: 9197481963319205126, guid: 2fc5f78661ee11645bc2eae81db2bdd2, type: 3}
+  gamePlaySettingsInterface: {fileID: 9197481963319205126, guid: 3806a05521b8fa840b6aca7334a898d9, type: 3}
+  gamePatchesSettingsInterface: {fileID: 9197481963319205126, guid: 8cee4e8de91fa71479a1808d7b930e47, type: 3}
 --- !u!114 &880109150
 MonoBehaviour:
   m_ObjectHideFlags: 0

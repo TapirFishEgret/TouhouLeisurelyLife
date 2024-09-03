@@ -1,9 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using THLL.CharacterSystem;
-using THLL.LocationSystem;
-using UnityEngine;
+using THLL.GeographySystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -11,45 +9,62 @@ namespace THLL.BaseSystem
 {
     public class GameAssetsMgr : Singleton<GameAssetsMgr>
     {
+        #region 数据
+        //资源加载事件
+        public event Action OnAllResourcesLoaded;
+        //资源加载队列
+        public Queue<Action> ResourcesLoadQueue { get; private set; } = new();
+        #endregion
+
         #region 周期函数
         protected override void Awake()
         {
             //加载时不销毁
             DontDestroyOnLoad(this);
 
-            //依次加载资源
-            StartCoroutine(LoadResourcesSequentially());
+            //依次添加加载资源方法
+            ResourcesLoadQueue.Enqueue(LoadLocationResource);
+            ResourcesLoadQueue.Enqueue(LoadCharacterResource);
+
+            //开始加载资源
+            LoadNextResource();
         }
         #endregion
 
         #region 资源加载方法
-        //依次加载资源
-        private IEnumerator LoadResourcesSequentially()
+        //加载下一个资源
+        private void LoadNextResource()
         {
-            //加载所需加载的地点
-            yield return LoadLocUnitResource();
-
-            //加载所需加载的角色
-            yield return LoadCharacterResource();
+            //检测队列长度
+            if (ResourcesLoadQueue.Count > 0)
+            {
+                //若仍有方法未执行，获取方法
+                Action method = ResourcesLoadQueue.Dequeue();
+                //执行
+                method.Invoke();
+            }
+            else
+            {
+                //若方法执行完成，通知其他脚本
+                OnAllResourcesLoaded.Invoke();
+            }
         }
         //加载地点单元
-        private IEnumerator LoadLocUnitResource()
+        private void LoadLocationResource()
         {
-            //协程返回值
-            bool isComplete = false;
             //计数
             int number = 0;
 
             //获取操作句柄
-            AsyncOperationHandle handle = Addressables.LoadAssetsAsync<LocUnitData>
+            AsyncOperationHandle handle = Addressables.LoadAssetsAsync<LocationData>
                 (
                 "Location",
                 (resource) =>
                 {
                     //加载
                     //生成实例并移交至数据库中
-                    LocUnit locUnit = new(resource);
-                    GameLocation.LocUnitDb.Add(resource, locUnit);
+                    Location locUnit = new(resource);
+                    GameLocation.LocationDb.Add(resource, locUnit);
                     //计数
                     number++;
                 }
@@ -63,21 +78,18 @@ namespace THLL.BaseSystem
                 {
                     //若成功，对地点数据进行初始化
                     GameLocation.Init();
+                    //初始化结束后，加载下一个资源
+                    LoadNextResource();
                 }
                 else
                 {
                     //TODO:若不成功
                 }
             };
-
-            //返回
-            yield return new WaitUntil(() => isComplete);
         }
         //加载角色资源方法
-        private IEnumerator LoadCharacterResource()
+        private void LoadCharacterResource()
         {
-            //协程返回值
-            bool isComplete = false;
             //计数
             int number = 0;
 
@@ -102,16 +114,14 @@ namespace THLL.BaseSystem
                 //检测资源加载是否成功
                 if (operation.Status == AsyncOperationStatus.Succeeded)
                 {
-                    //若成功
+                    //若成功，加载下一个资源
+                    LoadNextResource();
                 }
                 else
                 {
                     //TODO:若不成功
                 }
             };
-
-            //返回
-            yield return new WaitUntil(() => isComplete);
         }
         #endregion
     }

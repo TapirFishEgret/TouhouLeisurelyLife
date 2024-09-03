@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af992d529636a88438325978807d6eed, type: 3}
+  m_Script: {fileID: 11500000, guid: d6c3f82d00ab55743b0935e2bf5848d3, type: 3}
   m_Name: Hakurei Shrine
   m_EditorClassIdentifier: 
   id: Location_Gensokyo_Hakurei-Shrine
@@ -21,7 +21,7 @@ MonoBehaviour:
   - Gensokyo
   - Hakurei Shrine
   _parentData: {fileID: 11400000, guid: 1265b95e104286a438a4bbd660091ddd, type: 2}
-  _background: {fileID: 21300000, guid: 02e271584a527f24b9eff673a28319bf, type: 3}
+  _background: {fileID: 21300000, guid: 59c27a42b7d74214f9ebdb405e8665d4, type: 3}
   _isGateway: 0
   _connectionKeys: []
   _connectionValues: 

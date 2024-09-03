@@ -1,5 +1,5 @@
 ﻿using THLL.CharacterSystem;
-using THLL.LocationSystem;
+using THLL.GeographySystem;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -190,7 +190,7 @@ namespace THLL.GameEditor.CharacterDataEditor
         private void OnLivingAreaChanged(ChangeEvent<Object> evt)
         {
             //检测传入数据
-            if (evt.newValue is LocUnitData livingArea)
+            if (evt.newValue is LocationData livingArea)
             {
                 //设置头像
                 ShowedCharacter.LivingArea = livingArea;

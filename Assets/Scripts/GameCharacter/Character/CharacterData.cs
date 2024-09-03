@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using THLL.BaseSystem;
-using THLL.LocationSystem;
+using THLL.GeographySystem;
 using UnityEngine;
 
 namespace THLL.CharacterSystem
@@ -26,8 +26,8 @@ namespace THLL.CharacterSystem
         public Sprite Portrait { get { return _portrait; } set { _portrait = value; } }
         //居住地区
         [SerializeField]
-        private LocUnitData _livingArea = null;
-        public LocUnitData LivingArea { get { return _livingArea; } set { _livingArea = value; } }
+        private LocationData _livingArea = null;
+        public LocationData LivingArea { get { return _livingArea; } set { _livingArea = value; } }
         #endregion
 
 #if UNITY_EDITOR
