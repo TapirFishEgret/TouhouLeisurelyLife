@@ -253,11 +253,11 @@ namespace THLL.TimeSystem
             Millisecond = 0;
             Second = 0;
             Minute = 0;
-            Hour = GameTimeMgr.Instance.startHour;
-            Day = GameTimeMgr.Instance.startDay;
-            DayOfWeek = GameTimeMgr.Instance.startDayOfWeek;
-            Month = GameTimeMgr.Instance.startMonth;
-            Year = GameTimeMgr.Instance.startYear;
+            Hour = GameTimeManager.Instance.startHour;
+            Day = GameTimeManager.Instance.startDay;
+            DayOfWeek = GameTimeManager.Instance.startDayOfWeek;
+            Month = GameTimeManager.Instance.startMonth;
+            Year = GameTimeManager.Instance.startYear;
         }
         //报时
         public static string TestMethod()

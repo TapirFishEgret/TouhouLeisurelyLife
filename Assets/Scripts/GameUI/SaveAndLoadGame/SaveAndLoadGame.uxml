@@ -1,0 +1,30 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
+    <engine:VisualElement name="RootPanel" style="flex-grow: 1; flex-direction: row; background-color: rgb(0, 0, 0); display: flex;">
+        <engine:VisualElement name="LeftPanel" style="flex-grow: 1; flex-basis: 34%; padding-left: 96px;">
+            <engine:VisualElement name="TopPanel" style="flex-grow: 1; flex-basis: 12%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; padding-top: 20px; padding-right: 20px; padding-bottom: 5px; padding-left: 20px; flex-direction: column-reverse; -unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
+                <engine:Label text="Game Saves" name="TitleLabel" style="font-size: 60px; border-bottom-width: 3px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="MiddlePanel" style="flex-grow: 1; flex-basis: 76%; padding-top: 0; padding-right: 20px; padding-bottom: 0; padding-left: 20px;">
+                <engine:Label text="測試字符串" name="OptionDescriptionLabel" style="flex-wrap: nowrap; white-space: pre-wrap; font-size: 32px;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="BottomPanel" style="flex-grow: 1; flex-basis: 12%; padding-top: 5px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                <engine:VisualElement name="Space" style="flex-grow: 1; border-top-width: 3px; border-top-color: rgb(255, 255, 255);" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="MiddlePanel" style="flex-grow: 1; flex-basis: 8%;" />
+        <engine:VisualElement name="RightPanel" style="flex-grow: 1; flex-basis: 58%; flex-wrap: wrap-reverse; padding-right: 0; padding-bottom: 0; padding-left: 96px;">
+            <engine:VisualElement name="TopPanel" style="flex-grow: 1; flex-basis: 12%; padding-top: 20px; padding-right: 20px; padding-bottom: 0; padding-left: 20px; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+                <engine:VisualElement name="Space" style="flex-grow: 1; border-bottom-width: 3px; border-bottom-color: rgb(255, 255, 255);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="MiddlePanel" style="flex-grow: 1; flex-basis: 76%; padding-top: 0; padding-right: 20px; padding-bottom: 0; padding-left: 20px;">
+                <engine:ScrollView name="OptionsScrollView" />
+            </engine:VisualElement>
+            <engine:VisualElement name="BottomPanel" style="flex-grow: 1; flex-basis: 12%; padding-top: 0; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                <engine:VisualElement name="ButtonsPanel" style="flex-grow: 1; border-top-width: 3px; border-top-color: rgb(255, 255, 255); flex-direction: row-reverse;">
+                    <engine:Button text="Return" name="ReturnButton" style="width: 250px; font-size: 36px; height: 80px;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
