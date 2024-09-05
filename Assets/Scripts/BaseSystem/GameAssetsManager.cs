@@ -26,10 +26,8 @@ namespace THLL.BaseSystem
             //将自己设定为启用
             enabled = true;
         }
-        #endregion
-
-        #region 初始化及相关方法
-        protected override void Init()
+        //Start
+        private void Start()
         {
             //显示加载界面
             GameUI.AnimationLayer.ShowLoadingScreen();

@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.UISystem.Settings
 {
-    public class GamePlaySettings : BaseGameUI
+    public class GameplaySettings : BaseGameUI
     {
         #region 自身数据
         //四大天王

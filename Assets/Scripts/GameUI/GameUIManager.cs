@@ -14,30 +14,35 @@ namespace THLL.UISystem
 
             //UI管理器比较特殊，直接设定为启用吧
             enabled = true;
+
+            //获取面板
+            GetInterfaces();
+        }
+        //Start
+        private void Start()
+        {
+            //显示主面板
+            GameUI.ShowInterface(GameUI.MainTitleInterface, false);
         }
         #endregion
 
-        #region 初始化及相关方法
-        //初始化
-        protected override void Init()
+        #region 初始化相关方法
+        //获取面板
+        private void GetInterfaces()
         {
-            //获取各个面板
             //系统相关面板
             GameUI.MainTitleInterface = GetComponentInChildren<MainTitle>();
             GameUI.NewGameInterface = GetComponentInChildren<NewGame>();
             GameUI.SaveAndLoadGameInterface = GetComponentInChildren<SaveAndLoadGame>();
             GameUI.GameSettingsInterface = GetComponentInChildren<GameSettings>();
             GameUI.GameSystemSettingsInterface = GetComponentInChildren<GameSystemSettings>();
-            GameUI.GamePlaySettingsInterface = GetComponentInChildren<GamePlaySettings>();
+            GameUI.GameplaySettingsInterface = GetComponentInChildren<GameplaySettings>();
             GameUI.GamePatchesSettingsInterface = GetComponentInChildren<GamePatchesSettings>();
             //游玩面板
             GameUI.PlayInterface = GetComponentInChildren<Play>();
             //辅助面板
             GameUI.BackgroundLayer = GetComponentInChildren<BackgroundLayer>();
             GameUI.AnimationLayer = GetComponentInChildren<AnimationLayer>();
-
-            //显示主面板
-            GameUI.ShowInterface(GameUI.MainTitleInterface, false);
         }
         #endregion
     }

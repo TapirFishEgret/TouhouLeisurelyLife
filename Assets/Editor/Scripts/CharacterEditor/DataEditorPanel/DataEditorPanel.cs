@@ -51,7 +51,7 @@ namespace THLL.GameEditor.CharacterDataEditor
             //计时
             using ExecutionTimer timer = new("数据编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
-            //设置标签页为可延展
+            //设置标签页容器可延展
             style.flexGrow = 1;
             contentContainer.style.flexGrow = 1;
 

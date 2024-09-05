@@ -622,7 +622,10 @@ namespace THLL.GameEditor.CharacterDataEditor
             foreach (TreeViewItemData<ItemDataContainer> item in ItemDicCache.Values)
             {
                 //并将数据设置为脏
-                EditorUtility.SetDirty(item.data.CharacterData);
+                if (item.data.Type == ItemDataContainer.ItemType.CharacterData)
+                {
+                    EditorUtility.SetDirty(item.data.CharacterData);
+                }
             }
             //保存
             AssetDatabase.SaveAssets();

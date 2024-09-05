@@ -59,20 +59,6 @@ namespace THLL.BaseSystem
             //将自身设置为不启用
             enabled = false;
         }
-        //Start
-        protected virtual void Start()
-        {
-            //初始化
-            Init();
-        }
-        #endregion
-
-        #region 其他函数
-        //初始化
-        protected virtual void Init()
-        {
-
-        }
         #endregion
     }
 }

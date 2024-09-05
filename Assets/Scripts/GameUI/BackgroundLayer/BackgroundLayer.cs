@@ -22,10 +22,10 @@ namespace THLL.UISystem
 
         #region 初始化与相关方法
         //初始化
-        protected override void Init()
+        protected override void Start()
         {
-            //父类初始化函数
-            base.Init();
+            //父类Start方法
+            base.Start();
 
             //将协程启用添加到资源加载完成事件中
             GameAssetsManager.Instance.OnAllResourcesLoaded += CycleBackground;

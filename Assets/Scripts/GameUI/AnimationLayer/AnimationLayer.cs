@@ -24,10 +24,10 @@ namespace THLL.UISystem
 
         #region 初始化与相关方法
         //初始化
-        protected override void Init()
+        protected override void Start()
         {
-            //基础初始化
-            base.Init();
+            //父类Start方法
+            base.Start();
 
             //将隐藏加载界面添加到资源加载事件中
             GameAssetsManager.Instance.OnAllResourcesLoaded += HideLoadingScreen;

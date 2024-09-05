@@ -16,26 +16,19 @@ namespace THLL.UISystem
             base.Awake();
             //获取UIDocument组件
             Document = GetComponent<UIDocument>();
+            //获取所有UI元素
+            GetVisualElements();
         }
         protected virtual void Start()
         {
-            //初始化
-            Init();
+            //绑定UI方法
+            RegisterMethods();
+            //检索所有的返回按钮并添加通用返回方法
+            Document.rootVisualElement.Query<Button>("ReturnButton").ForEach(button => button.clicked += () => GameUI.ReturnInterface());
         }
         #endregion
 
         #region 初始化及相关方法
-        //初始化
-        protected virtual void Init()
-        {
-            //获取UI元素
-            GetVisualElements();
-            //绑定UI方法
-            RegisterMethods();
-
-            //检索所有的返回按钮并添加通用返回方法
-            Document.rootVisualElement.Query<Button>("ReturnButton").ForEach(button => button.clicked += () => GameUI.ReturnInterface());
-        }
         //获取UI元素
         protected virtual void GetVisualElements()
         {

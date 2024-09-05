@@ -21,7 +21,7 @@ namespace THLL.UISystem
         //系统设定界面
         public static GameSystemSettings GameSystemSettingsInterface { get; set; }
         //游戏玩法设定界面
-        public static GamePlaySettings GamePlaySettingsInterface { get; set; }
+        public static GameplaySettings GameplaySettingsInterface { get; set; }
         //游戏补丁设定界面
         public static GamePatchesSettings GamePatchesSettingsInterface { get; set; }
 
