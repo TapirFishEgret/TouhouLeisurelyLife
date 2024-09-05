@@ -9,49 +9,49 @@ namespace THLL.TimeSystem
     /// </summary>
     public static class GameTime
     {
-        #region 常量
-        public const int TimePerSecond = 1;
-        public const int SecondsPerMinute = 60;
-        public const int SecondsPerHour = TimePerSecond * SecondsPerMinute;
-        public const int SecondsPerDay = SecondsPerHour * HoursPerDay;
-        public const int SecondsPerWeek = SecondsPerDay * DaysPerWeek;
-        public const int SecondsPerMonth = SecondsPerDay * DaysPerMonth;
-        public const int SecondsPerYear = SecondsPerMonth * MonthsPerYear;
-        public const int MinutesPerHour = 60;
-        public const int MinutesPerDay = MinutesPerHour * HoursPerDay;
-        public const int MinutesPerWeek = MinutesPerDay * DaysPerWeek;
-        public const int MinutesPerMonth = MinutesPerDay * DaysPerMonth;
-        public const int MinutesPerYear = MinutesPerMonth * MonthsPerYear;
-        public const int HoursPerDay = 24;
-        public const int HoursPerWeek = HoursPerDay * DaysPerWeek;
-        public const int HoursPerMonth = HoursPerDay * DaysPerMonth;
-        public const int HoursPerYear = HoursPerMonth * MonthsPerYear;
-        public const int DaysPerWeek = 7;
-        public const int DaysPerMonth = 30;
-        public const int DaysPerYear = DaysPerMonth * MonthsPerYear;
-        public const int MonthsPerYear = 4;
-        public const int YearsPerCycle = 60;
+        #region 常用的量
+        public static int TimePerSecond = 1;
+        public static int SecondsPerMinute = 60;
+        public static int SecondsPerHour = TimePerSecond * SecondsPerMinute;
+        public static int SecondsPerDay = SecondsPerHour * HoursPerDay;
+        public static int SecondsPerWeek = SecondsPerDay * DaysPerWeek;
+        public static int SecondsPerMonth = SecondsPerDay * DaysPerMonth;
+        public static int SecondsPerYear = SecondsPerMonth * MonthsPerYear;
+        public static int MinutesPerHour = 60;
+        public static int MinutesPerDay = MinutesPerHour * HoursPerDay;
+        public static int MinutesPerWeek = MinutesPerDay * DaysPerWeek;
+        public static int MinutesPerMonth = MinutesPerDay * DaysPerMonth;
+        public static int MinutesPerYear = MinutesPerMonth * MonthsPerYear;
+        public static int HoursPerDay = 24;
+        public static int HoursPerWeek = HoursPerDay * DaysPerWeek;
+        public static int HoursPerMonth = HoursPerDay * DaysPerMonth;
+        public static int HoursPerYear = HoursPerMonth * MonthsPerYear;
+        public static int DaysPerWeek = 7;
+        public static int DaysPerMonth = 30;
+        public static int DaysPerYear = DaysPerMonth * MonthsPerYear;
+        public static int MonthsPerYear = 4;
+        public static int YearsPerCycle = 60;
         #endregion
 
         #region 时间数据
         //时间流逝速度
-        public static int TimeScale { get; set; }
+        public static int TimeScale { get; set; } = 1;
         //毫秒
-        public static float Millisecond { get; private set; }
+        public static float Millisecond { get; set; } = 0;
         //秒
-        public static int Second { get; private set; }
+        public static int Second { get; set; } = 0;
         //分
-        public static int Minute { get; private set; }
+        public static int Minute { get; set; } = 0;
         //时
-        public static int Hour { get; private set; }
+        public static int Hour { get; set; } = 7;
         //天
-        public static int Day { get; private set; }
+        public static int Day { get; set; } = 1;
         //星期
-        public static int DayOfWeek { get; private set; }
+        public static int DayOfWeek { get; set; } = 1;
         //月份
-        public static int Month { get; private set; }
+        public static int Month { get; set; } = 1;
         //年份
-        public static int Year { get; private set; }
+        public static int Year { get; set; } = 140;
         //游戏内当日时间
         public static int DayTime_Seconds
         {
@@ -242,31 +242,6 @@ namespace THLL.TimeSystem
                 //触发事件
                 CycleChangedEvent?.Invoke();
             }
-        }
-        #endregion
-
-        #region 其他方法
-        //初始化
-        public static void Init()
-        {
-            TimeScale = 24;
-            Millisecond = 0;
-            Second = 0;
-            Minute = 0;
-            Hour = GameTimeManager.Instance.startHour;
-            Day = GameTimeManager.Instance.startDay;
-            DayOfWeek = GameTimeManager.Instance.startDayOfWeek;
-            Month = GameTimeManager.Instance.startMonth;
-            Year = GameTimeManager.Instance.startYear;
-        }
-        //报时
-        public static string TestMethod()
-        {
-            return string.Join("/", new string[] { Year.ToString(), Month.ToString(), Day.ToString() })
-                + " " +
-                string.Join(":", new string[] { Hour.ToString(), Minute.ToString(), Second.ToString() })
-                + " " +
-                DayOfWeek.ToString();
         }
         #endregion
     }

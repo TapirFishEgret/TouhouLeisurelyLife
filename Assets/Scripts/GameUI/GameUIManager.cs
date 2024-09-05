@@ -1,36 +1,39 @@
 using THLL.BaseSystem;
+using THLL.UISystem.Settings;
 
 namespace THLL.UISystem
 {
     public class GameUIManager : Singleton<GameUIManager>
     {
         #region Unity周期函数
-        protected override void Start()
+        //Awake
+        protected override void Awake()
         {
-            //调用基类函数
-            base.Start();
+            //调用基类
+            base.Awake();
 
-            //设定自身为不销毁
-            DontDestroyOnLoad(this);
-
-            //初始化
-            Init();
+            //UI管理器比较特殊，直接设定为启用吧
+            enabled = true;
         }
         #endregion
 
         #region 初始化及相关方法
         //初始化
-        private void Init()
+        protected override void Init()
         {
             //获取各个面板
-            GameUI.BackgroundLayer = GetComponentInChildren<BackgroundLayer>();
+            //系统相关面板
             GameUI.MainTitleInterface = GetComponentInChildren<MainTitle>();
             GameUI.NewGameInterface = GetComponentInChildren<NewGame>();
             GameUI.SaveAndLoadGameInterface = GetComponentInChildren<SaveAndLoadGame>();
             GameUI.GameSettingsInterface = GetComponentInChildren<GameSettings>();
-            GameUI.GameSystemSettingsInterface = GetComponentInChildren<Settings.GameSystemSettings>();
-            GameUI.GamePlaySettingsInterface = GetComponentInChildren<Settings.GamePlaySettings>();
-            GameUI.GamePatchesSettingsInterface = GetComponentInChildren<Settings.GamePatchesSettings>();
+            GameUI.GameSystemSettingsInterface = GetComponentInChildren<GameSystemSettings>();
+            GameUI.GamePlaySettingsInterface = GetComponentInChildren<GamePlaySettings>();
+            GameUI.GamePatchesSettingsInterface = GetComponentInChildren<GamePatchesSettings>();
+            //游玩面板
+            GameUI.PlayInterface = GetComponentInChildren<Play>();
+            //辅助面板
+            GameUI.BackgroundLayer = GetComponentInChildren<BackgroundLayer>();
             GameUI.AnimationLayer = GetComponentInChildren<AnimationLayer>();
 
             //显示主面板

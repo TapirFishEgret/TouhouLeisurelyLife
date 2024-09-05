@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using THLL.TimeSystem;
-using UnityEngine;
+﻿using THLL.TimeSystem;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem.Settings
@@ -49,9 +47,9 @@ namespace THLL.UISystem.Settings
             //设定每一位的具体功能及描述显示，使用MouseEnterEvent实现悬浮时显示的功能
             //时间流逝速度
             GameTimeScaleSliderInt.RegisterValueChangedCallback(evt => GameTime.TimeScale = evt.newValue);
-            GameTimeScaleSliderInt.RegisterCallback<MouseEnterEvent>(evt => GameUI.GradientDisplayText(this, OptionDescriptionLabel, GameTimeScaleDescription, 0.5f));
+            GameTimeScaleSliderInt.RegisterCallback<MouseEnterEvent>(evt => GameUI.GradientDisplayText(this, OptionDescriptionLabel, GameTimeScaleDescription, 0.3f));
             //测试用的
-            TestTextField.RegisterCallback<MouseEnterEvent>(evt => GameUI.ProgressiveDisplayText(this, OptionDescriptionLabel, TestDescription, 1f));
+            TestTextField.RegisterCallback<MouseEnterEvent>(evt => GameUI.ProgressiveDisplayText(this, OptionDescriptionLabel, TestDescription, 0.5f));
         }
         #endregion
     }

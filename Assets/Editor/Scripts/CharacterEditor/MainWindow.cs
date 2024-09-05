@@ -92,6 +92,7 @@ namespace THLL.GameEditor.CharacterDataEditor
         {
             //保存
             SavePersistentData();
+            DataTreeView.SaveAllData();
         }
         #endregion
 

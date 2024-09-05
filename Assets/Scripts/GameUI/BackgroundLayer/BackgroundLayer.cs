@@ -17,7 +17,7 @@ namespace THLL.UISystem
 
         //背景图相关
         //当前背景所剩时间
-        public float Duration { get; private set; } = 0;
+        public float Duration { get; private set; } = 5f;
         #endregion
 
         #region 初始化与相关方法
@@ -28,7 +28,7 @@ namespace THLL.UISystem
             base.Init();
 
             //将协程启用添加到资源加载完成事件中
-            GameAssetsManager.Instance.OnAllResourcesLoaded += () => StartCoroutine(CycleBackground());
+            GameAssetsManager.Instance.OnAllResourcesLoaded += CycleBackground;
         }
         //获取视觉元素
         protected override void GetVisualElements()
@@ -38,13 +38,24 @@ namespace THLL.UISystem
         #endregion
 
         #region 其他方法
-        //背景图循环方法
-        public IEnumerator CycleBackground()
+        //循环背景图
+        public void CycleBackground()
+        {
+            StartCoroutine(CycleBackgroundCoroutine());
+        }
+        //切换背景图
+        public void ChangeBackground(Location location)
+        {
+            StartCoroutine(ChangeBackgroundCoroutine(location));
+        }
+        #endregion
+
+        #region 协程方法
+        //背景图循环方法本体
+        private IEnumerator CycleBackgroundCoroutine()
         {
             //首先获取可用地点
             List<Location> locations = GameLocation.LocationDb.Datas.ToList();
-            //以及背景图层的颜色
-            Color backgroundImageTintColor = Background.resolvedStyle.unityBackgroundImageTintColor;
 
             //始终循环
             while (true)
@@ -63,28 +74,33 @@ namespace THLL.UISystem
                     //首先获取目标地点
                     Location location = locations[Random.Range(0, locations.Count)];
 
-                    backgroundImageTintColor.a = 0;
-                    Background.style.unityBackgroundImageTintColor = new StyleColor(backgroundImageTintColor);
-                    //协程等待1s(动画用时)
-                    yield return new WaitForSeconds(1f);
-
-                    //更换背景图
-                    Background.style.backgroundImage = new StyleBackground(location.Background);
-                    //更新主面板
-                    GameUI.MainTitleInterface.LocationLabel.text = location.Name;
-                    //协程等待到当前帧结束
-                    yield return new WaitForEndOfFrame();
-
-                    //修改不透明度为1
-                    backgroundImageTintColor.a = 1;
-                    Background.style.unityBackgroundImageTintColor = new StyleColor(backgroundImageTintColor);
-                    //协程等待1s(动画用时)
-                    yield return new WaitForSeconds(1f);
+                    //然后切换背景图
+                    StartCoroutine(ChangeBackgroundCoroutine(location));
 
                     //更新持续时间，测试期间固定5s
                     Duration = 5f;
                 }
             }
+        }
+        //切换背景图本体
+        private IEnumerator ChangeBackgroundCoroutine(Location location)
+        {
+            //更改背景图不透明度为0
+            Background.style.opacity = 0;
+            //协程等待1s(动画用时)
+            yield return new WaitForSeconds(1f);
+
+            //更换背景图
+            Background.style.backgroundImage = new StyleBackground(location.Background);
+            //更新主面板
+            GameUI.MainTitleInterface.LocationLabel.text = location.Name;
+            //协程等待到当前帧结束
+            yield return new WaitForEndOfFrame();
+
+            //修改不透明度为1
+            Background.style.opacity = 1;
+            //协程等待1s(动画用时)
+            yield return new WaitForSeconds(1f);
         }
         #endregion
     }

@@ -6,7 +6,7 @@
                 <engine:Label text="Game System" name="TitleLabel" style="font-size: 60px; border-bottom-width: 3px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
             </engine:VisualElement>
             <engine:VisualElement name="MiddlePanel" style="flex-grow: 1; flex-basis: 76%; padding-top: 0; padding-right: 20px; padding-bottom: 0; padding-left: 20px;">
-                <engine:Label text="測試字符串" name="OptionDescriptionLabel" style="flex-wrap: nowrap; white-space: pre-wrap; font-size: 32px;" />
+                <engine:Label name="OptionDescriptionLabel" style="flex-wrap: nowrap; white-space: pre-wrap; font-size: 32px;" />
             </engine:VisualElement>
             <engine:VisualElement name="BottomPanel" style="flex-grow: 1; flex-basis: 12%; padding-top: 5px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
                 <engine:VisualElement name="Space" style="flex-grow: 1; border-top-width: 3px; border-top-color: rgb(255, 255, 255);" />

@@ -615,6 +615,19 @@ namespace THLL.GameEditor.CharacterDataEditor
             //结束后取差集
             ExpandedStatePersistentData = ExpandedStatePersistentData.Except(removedIDs).ToHashSet();
         }
+        //保存所有数据
+        public void SaveAllData()
+        {
+            //遍历缓存
+            foreach (TreeViewItemData<ItemDataContainer> item in ItemDicCache.Values)
+            {
+                //并将数据设置为脏
+                EditorUtility.SetDirty(item.data.CharacterData);
+            }
+            //保存
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
         #endregion
 
         #region 辅助方法

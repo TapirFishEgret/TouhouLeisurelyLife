@@ -8,6 +8,7 @@ namespace THLL.BaseSystem
     /// </summary>
     public class Singleton<T> : GameBehaviour where T : Singleton<T>
     {
+        #region 数据
         //单例模式
         protected static T instance;
         public static T Instance
@@ -31,10 +32,15 @@ namespace THLL.BaseSystem
                 return instance;
             }
         }
+        #endregion
 
-        //周期函数
-        protected virtual void Awake()
+        #region 周期函数
+        //Awake
+        protected override void Awake()
         {
+            //父类Awake方法
+            base.Awake();
+
             //单例模式的设置
             if (instance == null)
             {
@@ -46,6 +52,27 @@ namespace THLL.BaseSystem
                 //若单例不为当前物体，销毁
                 Destroy(gameObject);
             }
+
+            //把自己添加到静态存储中
+            TouhouLeisurelyLife.Managers.Add(this);
+
+            //将自身设置为不启用
+            enabled = false;
         }
+        //Start
+        protected virtual void Start()
+        {
+            //初始化
+            Init();
+        }
+        #endregion
+
+        #region 其他函数
+        //初始化
+        protected virtual void Init()
+        {
+
+        }
+        #endregion
     }
 }

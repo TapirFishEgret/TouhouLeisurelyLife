@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using THLL.TimeSystem;
+using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
@@ -13,6 +14,8 @@ namespace THLL.UISystem
         public ScrollView OptionsScrollView { get; private set; }
         //返回按键
         public Button ReturnButton { get; private set; }
+        //继续按键
+        public Button ContinueButton { get; private set; }
         #endregion
 
         #region 初始化与相关方法
@@ -23,6 +26,14 @@ namespace THLL.UISystem
             OptionDescriptionLabel = RootPanel.Q<Label>("OptionDescriptionLabel");
             OptionsScrollView = RootPanel.Q<ScrollView>("OptionsScrollView");
             ReturnButton = RootPanel.Q<Button>("ReturnButton");
+            ContinueButton = RootPanel.Q<Button>("ContinueButton");
+        }
+        //绑定方法
+        protected override void RegisterMethods()
+        {
+            //将继续按钮的功能暂时设定开启游玩面板并启用所有管理器
+            ContinueButton.clicked += () => GameUI.ShowInterface(GameUI.PlayInterface);
+            ContinueButton.clicked += TouhouLeisurelyLife.EnableAllManager;
         }
         #endregion
     }

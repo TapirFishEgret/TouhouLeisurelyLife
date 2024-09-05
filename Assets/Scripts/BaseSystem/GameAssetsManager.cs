@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using THLL.CharacterSystem;
 using THLL.GeographySystem;
+using THLL.UISystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -17,10 +18,21 @@ namespace THLL.BaseSystem
         #endregion
 
         #region 周期函数
+        //Awake
         protected override void Awake()
         {
-            //加载时不销毁
-            DontDestroyOnLoad(this);
+            //父类Awake方法
+            base.Awake();
+            //将自己设定为启用
+            enabled = true;
+        }
+        #endregion
+
+        #region 初始化及相关方法
+        protected override void Init()
+        {
+            //显示加载界面
+            GameUI.AnimationLayer.ShowLoadingScreen();
 
             //依次添加加载资源方法
             ResourcesLoadQueue.Enqueue(LoadLocationResource);
@@ -45,7 +57,7 @@ namespace THLL.BaseSystem
             }
             else
             {
-                //若方法执行完成，通知其他脚本
+                //若方法执行完成，发布通知
                 OnAllResourcesLoaded?.Invoke();
             }
         }

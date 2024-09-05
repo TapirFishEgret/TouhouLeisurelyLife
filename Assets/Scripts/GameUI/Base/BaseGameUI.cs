@@ -10,11 +10,16 @@ namespace THLL.UISystem
         #endregion
 
         #region 周期函数
-        protected override void Start()
+        protected override void Awake()
         {
-            //调用父类周期函数
-            base.Start();
-            //执行初始化方法
+            //父类初始化方法
+            base.Awake();
+            //获取UIDocument组件
+            Document = GetComponent<UIDocument>();
+        }
+        protected virtual void Start()
+        {
+            //初始化
             Init();
         }
         #endregion
@@ -23,8 +28,6 @@ namespace THLL.UISystem
         //初始化
         protected virtual void Init()
         {
-            //获取UIDocument组件
-            Document = GetComponent<UIDocument>();
             //获取UI元素
             GetVisualElements();
             //绑定UI方法

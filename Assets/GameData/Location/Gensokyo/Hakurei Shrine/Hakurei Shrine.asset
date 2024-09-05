@@ -16,12 +16,12 @@ MonoBehaviour:
   dataName: Hakurei Shrine
   description: 
   gameDataType: 0
-  sortingOrder: 999
+  sortingOrder: 1
   _fullName:
   - Gensokyo
   - Hakurei Shrine
   _parentData: {fileID: 11400000, guid: 1265b95e104286a438a4bbd660091ddd, type: 2}
-  _background: {fileID: 21300000, guid: 59c27a42b7d74214f9ebdb405e8665d4, type: 3}
+  _background: {fileID: 21300000, guid: f240a6bb404c1784c8ce642cc8124897, type: 3}
   _isGateway: 0
   _connectionKeys: []
   _connectionValues: 

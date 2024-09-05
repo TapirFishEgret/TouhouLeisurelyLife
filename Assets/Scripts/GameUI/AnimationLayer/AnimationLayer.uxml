@@ -1,3 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
+    <engine:VisualElement name="LoadingScreen" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(0, 0, 0); opacity: 0;">
+        <engine:Label text="少女祈祷中..." name="MaidenPrayingLabel" style="font-size: 64px; width: 480px; -unity-text-align: middle-center; position: absolute; top: auto; left: auto; bottom: 100px; right: 150px; background-color: rgba(0, 0, 0, 0.39); opacity: 1; transition-property: opacity; transition-duration: 0.3s;" />
+    </engine:VisualElement>
     <engine:VisualElement name="Cover" style="flex-grow: 1; position: absolute; top: 0; left: 0; bottom: 0; right: 100%; background-color: rgb(0, 0, 0); transition-property: right, left; transition-duration: 0.5s, 0.5s;" />
 </engine:UXML>

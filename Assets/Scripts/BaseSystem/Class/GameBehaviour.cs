@@ -9,9 +9,9 @@ namespace THLL.BaseSystem
     public class GameBehaviour : MonoBehaviour
     {
         #region 周期函数
-        protected virtual void Start()
+        protected virtual void Awake()
         {
-            //开始时增加相关订阅
+            //唤醒时增加相关订阅
             //时间
             GameTime.SecondChangedEvent += OnSecondChanged;
             GameTime.MinuteChangedEvent += OnMinuteChanged;

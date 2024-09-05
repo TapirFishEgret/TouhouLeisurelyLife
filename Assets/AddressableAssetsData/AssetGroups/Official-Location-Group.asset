@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Location
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58a27f3f52848a446bfde90799751796
+    m_Address: Gensokyo_Human-Village
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Location
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3ec060caef8f9948a76a730e7f470fd
     m_Address: Gensokyo_Hakurei-Shrine
     m_ReadOnly: 0

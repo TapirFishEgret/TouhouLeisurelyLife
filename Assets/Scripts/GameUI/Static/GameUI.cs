@@ -9,9 +9,7 @@ namespace THLL.UISystem
     public static class GameUI
     {
         #region 数据
-        //各类界面
-        //背景图层
-        public static BackgroundLayer BackgroundLayer { get; set; }
+        //系统相关界面
         //主标题界面
         public static MainTitle MainTitleInterface { get; set; }
         //新游戏界面
@@ -26,6 +24,14 @@ namespace THLL.UISystem
         public static GamePlaySettings GamePlaySettingsInterface { get; set; }
         //游戏补丁设定界面
         public static GamePatchesSettings GamePatchesSettingsInterface { get; set; }
+
+        //游玩相关界面
+        //游玩界面
+        public static Play PlayInterface { get; set; }
+
+        //辅助界面
+        //背景图层
+        public static BackgroundLayer BackgroundLayer { get; set; }
         //动画图层
         public static AnimationLayer AnimationLayer { get; set; }
 
@@ -41,7 +47,7 @@ namespace THLL.UISystem
             if (needsAnimation)
             {
                 //若需要，执行动画图层方法
-                AnimationLayer.PlayOnce(() => ShowInterface(@interface));
+                AnimationLayer.CoverOnce(() => ShowInterface(@interface));
             }
             else
             {
@@ -66,7 +72,7 @@ namespace THLL.UISystem
             if (needsAnimation)
             {
                 //若需要，借助动画图层执行方法
-                AnimationLayer.PlayOnce(ReturnInterface);
+                AnimationLayer.CoverOnce(ReturnInterface);
             }
             else
             {
@@ -100,13 +106,16 @@ namespace THLL.UISystem
         //渐变式显示文本本体
         private static IEnumerator GradientDisplayText(Label container, string text, float animationDuration)
         {
-            //获取颜色
-            Color color = container.resolvedStyle.color;
+            //检测文本
+            if (container.text == text)
+            {
+                //若文本内容未发生实际更改，则直接返回
+                yield break;
+            }
 
-            //首先，隐藏当前Label，使用更改颜色Alpha的方式来实现
-            color.a = 0;
-            container.style.color = new StyleColor(color);
-            //等待0.15s
+            //首先，隐藏当前Label，更改不透明度，这货是个0-1的浮点数值
+            container.style.opacity = 0f;
+            //等待
             yield return new WaitForSeconds(animationDuration);
 
             //然后更改值
@@ -115,9 +124,8 @@ namespace THLL.UISystem
             yield return new WaitForEndOfFrame();
 
             //然后显示
-            color.a = 1;
-            container.style.color = new StyleColor(color);
-            //等待0.15s
+            container.style.opacity = 1f;
+            //等待
             yield return new WaitForSeconds(animationDuration);
         }
         //逐字式显示文本
@@ -131,6 +139,13 @@ namespace THLL.UISystem
         //逐字式显示文本本体
         private static IEnumerator ProgressiveDisplayText(Label container, string text, float animationDuration)
         {
+            //检测文本
+            if (container.text == text)
+            {
+                //若文本内容未发生实际更改，则直接返回
+                yield break;
+            }
+
             //计算字体显示间隔
             float fontDisplayInterval = animationDuration / text.Length;
 

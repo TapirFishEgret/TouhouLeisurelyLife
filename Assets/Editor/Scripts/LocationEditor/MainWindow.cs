@@ -93,6 +93,8 @@ namespace THLL.GameEditor.LocationDataEditor
         {
             //保存持久化数据到磁盘
             SavePersistentData();
+            //保存所有数据
+            DataTreeView.SaveAllData();
         }
         #endregion
 

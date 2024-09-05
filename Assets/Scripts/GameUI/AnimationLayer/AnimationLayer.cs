@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,10 @@ namespace THLL.UISystem
         //UI数据
         //遮罩
         public VisualElement Cover { get; private set; }
+        //加载画面
+        public VisualElement LoadingScreen { get; private set; }
+        //少女祈祷中
+        public Label MaidenPrayingLabel { get; private set; }
 
         //其他数据
         //动画方向，True为向右，False为向左
@@ -18,21 +23,53 @@ namespace THLL.UISystem
         #endregion
 
         #region 初始化与相关方法
+        //初始化
+        protected override void Init()
+        {
+            //基础初始化
+            base.Init();
+
+            //将隐藏加载界面添加到资源加载事件中
+            GameAssetsManager.Instance.OnAllResourcesLoaded += HideLoadingScreen;
+        }
         //获取视觉元素
         protected override void GetVisualElements()
         {
             Cover = Document.rootVisualElement.Q<VisualElement>("Cover");
+            LoadingScreen = Document.rootVisualElement.Q<VisualElement>("LoadingScreen");
+            MaidenPrayingLabel = Document.rootVisualElement.Q<Label>("MaidenPrayingLabel");
         }
         #endregion
 
         #region 其他方法
-        //播放一次动画
-        public void PlayOnce(Action method)
+        //播放一次遮盖动画
+        public void CoverOnce(Action method)
         {
-            StartCoroutine(PlayOnceCoroutine(method));
+            StartCoroutine(CoverOnceCoroutine(method));
         }
-        //播放一次动画
-        private IEnumerator PlayOnceCoroutine(Action method)
+        //显示加载界面
+        public void ShowLoadingScreen()
+        {
+            //首先将加载界面不透明度设为1
+            LoadingScreen.style.opacity = 1;
+            //然后开始祈祷
+            StartCoroutine(MaidenPrayCoroutine());
+        }
+        //隐藏加载界面
+        public void HideLoadingScreen()
+        {
+            //结束少女祈祷协程
+            StopCoroutine(MaidenPrayCoroutine());
+            //将标签不透明度设为1
+            MaidenPrayingLabel.style.opacity = 1;
+            //遮盖一次，并将加载界面隐藏
+            CoverOnce(() => LoadingScreen.style.opacity = 0);
+        }
+        #endregion
+
+        #region 协程方法
+        //播放一次遮盖动画
+        private IEnumerator CoverOnceCoroutine(Action method)
         {
             //首先判断方向
             if (AnimationDirection)
@@ -68,6 +105,23 @@ namespace THLL.UISystem
             }
             //间隔0.5s
             yield return new WaitForSeconds(0.5f);
+        }
+        //少女祈祷中
+        private IEnumerator MaidenPrayCoroutine()
+        {
+            //没什么事的话就一直运行吧
+            while (true)
+            {
+                //隐藏一下
+                MaidenPrayingLabel.style.opacity = 0;
+                //等0.3s
+                yield return new WaitForSeconds(0.3f);
+
+                //显示一下
+                MaidenPrayingLabel.style.opacity = 1;
+                //等0.3s
+                yield return new WaitForSeconds(0.3f);
+            }
         }
         #endregion
     }
