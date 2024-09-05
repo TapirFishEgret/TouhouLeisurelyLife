@@ -746,7 +746,7 @@ GameObject:
   - component: {fileID: 1239288971}
   - component: {fileID: 1239288972}
   m_Layer: 0
-  m_Name: GamePatches
+  m_Name: GamePatchesSettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -874,7 +874,7 @@ GameObject:
   - component: {fileID: 1586346378}
   - component: {fileID: 1586346379}
   m_Layer: 0
-  m_Name: GamePlay
+  m_Name: GamePlaySettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -982,7 +982,7 @@ GameObject:
   - component: {fileID: 1871676162}
   - component: {fileID: 1871676163}
   m_Layer: 0
-  m_Name: GameSystem
+  m_Name: GameSystemSettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

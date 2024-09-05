@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using THLL.UISystem.Settings;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
@@ -22,11 +21,11 @@ namespace THLL.UISystem
         //设置界面
         public static GameSettings GameSettingsInterface { get; set; }
         //系统设定界面
-        public static Settings.GameSystem GameSystemInterface { get; set; }
+        public static GameSystemSettings GameSystemSettingsInterface { get; set; }
         //游戏玩法设定界面
-        public static Settings.GamePlay GamePlaySInterface { get; set; }
+        public static GamePlaySettings GamePlaySettingsInterface { get; set; }
         //游戏补丁设定界面
-        public static Settings.GamePatches GamePatchesInterface { get; set; }
+        public static GamePatchesSettings GamePatchesSettingsInterface { get; set; }
         //动画图层
         public static AnimationLayer AnimationLayer { get; set; }
 
@@ -88,6 +87,63 @@ namespace THLL.UISystem
                 ShowedInterfaces.Remove(ShowedInterfaces[^1]);
                 //让接下来的最后一个浮于表面
                 ShowedInterfaces[^1].Document.sortingOrder = 1;
+            }
+        }
+        //渐变式显示文本
+        public static void GradientDisplayText(BaseGameUI @interface, Label conatiner, string text, float animationDuration)
+        {
+            //TODO:暂时这么解决吧，停止该界面其他协程
+            @interface.StopAllCoroutines();
+            //让传入的界面运行协程
+            @interface.StartCoroutine(GradientDisplayText(conatiner, text, animationDuration));
+        }
+        //渐变式显示文本本体
+        private static IEnumerator GradientDisplayText(Label container, string text, float animationDuration)
+        {
+            //获取颜色
+            Color color = container.resolvedStyle.color;
+
+            //首先，隐藏当前Label，使用更改颜色Alpha的方式来实现
+            color.a = 0;
+            container.style.color = new StyleColor(color);
+            //等待0.15s
+            yield return new WaitForSeconds(animationDuration);
+
+            //然后更改值
+            container.text = text;
+            //等待到当前帧结束
+            yield return new WaitForEndOfFrame();
+
+            //然后显示
+            color.a = 1;
+            container.style.color = new StyleColor(color);
+            //等待0.15s
+            yield return new WaitForSeconds(animationDuration);
+        }
+        //逐字式显示文本
+        public static void ProgressiveDisplayText(BaseGameUI @interface, Label container, string text, float animationDuration)
+        {
+            //TODO:暂时这么解决吧，停止该界面其他协程
+            @interface.StopAllCoroutines();
+            //让界面运行协程
+            @interface.StartCoroutine(ProgressiveDisplayText(container, text, animationDuration));
+        }
+        //逐字式显示文本本体
+        private static IEnumerator ProgressiveDisplayText(Label container, string text, float animationDuration)
+        {
+            //计算字体显示间隔
+            float fontDisplayInterval = animationDuration / text.Length;
+
+            //清空当前文本
+            container.text = string.Empty;
+
+            //逐字显示
+            foreach (char letter in text)
+            {
+                //添加文本
+                container.text += letter;
+                //等待指定时间
+                yield return new WaitForSeconds(fontDisplayInterval);
             }
         }
         #endregion

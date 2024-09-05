@@ -18,6 +18,7 @@ namespace THLL.UISystem
         #endregion
 
         #region 初始化与相关方法
+        //获取视觉元素
         protected override void GetVisualElements()
         {
             RootPanel = Document.rootVisualElement.Q<VisualElement>("RootPanel");
@@ -25,6 +26,13 @@ namespace THLL.UISystem
             GamePlayButton = RootPanel.Q<Button>("GamePlayButton");
             GamePatchesButton = RootPanel.Q<Button>("GamePatchesButton");
             ReturnButton = RootPanel.Q<Button>("ReturnButton");
+        }
+        //绑定方法
+        protected override void RegisterMethods()
+        {
+            GameSystemButton.clicked += () => GameUI.ShowInterface(GameUI.GameSystemSettingsInterface);
+            GamePlayButton.clicked += () => GameUI.ShowInterface(GameUI.GamePlaySettingsInterface);
+            GamePatchesButton.clicked += () => GameUI.ShowInterface(GameUI.GamePatchesSettingsInterface);
         }
         #endregion
     }

@@ -6,29 +6,128 @@
     color: rgb(255, 255, 255);
 }
 
-Button {
-    background-color: rgba(0, 0, 0, 0);
+.menu-button {
+    margin-top: 2px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+    margin-left: 4px;
+    padding-top: 10px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    font-size: 16px;
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
     border-left-width: 5px;
-    border-left-color: rgba(255, 255, 255, 0);
-    border-right-color: rgba(255, 255, 255, 0);
-    border-top-color: rgba(255, 255, 255, 0);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0.04);
+    border-right-color: rgba(0, 0, 0, 0.04);
+    border-top-color: rgba(0, 0, 0, 0.04);
     border-bottom-color: rgb(255, 255, 255);
 }
 
-Button:hover {
+.menu-button:hover {
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
     border-left-width: 5px;
-    border-bottom-color: rgb(255, 255, 255);
-    transition-delay: 0s, 0s, 0s;
-    transition-timing-function: ease, ease, ease;
-    transition-property: border-top-color, border-right-color, border-left-color;
-    transition-duration: 0.5s, 0.5s, 0.5s;
     border-left-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    transition-property: border-left-color, border-right-color, border-top-color;
+    transition-duration: 0.5s, 0.5s, 0.5s;
+}
+
+.option-title {
+    font-size: 32px;
+    height: 40px;
+    -unity-text-align: middle-center;
+}
+
+.option-item {
+    font-size: 21px;
+    height: 64px;
+    background-color: rgb(50, 50, 50);
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgba(173, 65, 66, 0);
+    border-right-color: rgba(173, 65, 66, 0);
+    border-top-color: rgba(173, 65, 66, 0);
+    border-bottom-color: rgba(173, 65, 66, 0);
+}
+
+.option-item:hover {
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgb(173, 65, 66);
+    border-right-color: rgb(173, 65, 66);
+    border-top-color: rgb(173, 65, 66);
+    border-bottom-color: rgb(173, 65, 66);
+    transition-property: border-left-color, border-right-color, border-top-color, border-bottom-color;
+    transition-duration: 0.3s, 0.3s, 0.3s, 0.3s;
+}
+
+.option-item:focus {
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgb(204, 49, 51);
+    border-right-color: rgb(204, 49, 51);
+    border-top-color: rgb(204, 49, 51);
+    border-bottom-color: rgb(204, 49, 51);
+}
+
+.option-item Label {
+    font-size: 21px;
+    flex-basis: 36%;
+    height: auto;
+    -unity-text-align: middle-left;
+}
+
+.option-item TextInput#unity-text-input {
+    background-color: rgb(100, 100, 100);
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    font-size: 21px;
+}
+
+.option-item TextElement {
+    font-size: 21px;
 }

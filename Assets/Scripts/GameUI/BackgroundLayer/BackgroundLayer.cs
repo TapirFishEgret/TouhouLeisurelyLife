@@ -14,14 +14,10 @@ namespace THLL.UISystem
         //UI相关
         //背景
         public VisualElement Background { get; private set; }
-        //遮罩
-        public VisualElement Cover { get; private set; }
 
         //背景图相关
         //当前背景所剩时间
         public float Duration { get; private set; } = 0;
-        //动画方向，True为向下，False为向上
-        public bool AnimationDirection { get; private set; } = true;
         #endregion
 
         #region 初始化与相关方法
@@ -38,7 +34,6 @@ namespace THLL.UISystem
         protected override void GetVisualElements()
         {
             Background = Document.rootVisualElement.Q<VisualElement>("Background");
-            Cover = Document.rootVisualElement.Q<VisualElement>("Cover");
         }
         #endregion
 
@@ -48,6 +43,8 @@ namespace THLL.UISystem
         {
             //首先获取可用地点
             List<Location> locations = GameLocation.LocationDb.Datas.ToList();
+            //以及背景图层的颜色
+            Color backgroundImageTintColor = Background.resolvedStyle.unityBackgroundImageTintColor;
 
             //始终循环
             while (true)
@@ -66,19 +63,10 @@ namespace THLL.UISystem
                     //首先获取目标地点
                     Location location = locations[Random.Range(0, locations.Count)];
 
-                    //然后遮盖背景，判断动画方向
-                    if (AnimationDirection)
-                    {
-                        //若为向下，则设置遮盖的Bottom数值
-                        Cover.style.bottom = new StyleLength(new Length(0, LengthUnit.Percent));
-                    }
-                    else
-                    {
-                        //反之设置Top
-                        Cover.style.top = new StyleLength(new Length(0, LengthUnit.Percent));
-                    }
-                    //协程等待0.5s(动画用时)
-                    yield return new WaitForSeconds(0.5f);
+                    backgroundImageTintColor.a = 0;
+                    Background.style.unityBackgroundImageTintColor = new StyleColor(backgroundImageTintColor);
+                    //协程等待1s(动画用时)
+                    yield return new WaitForSeconds(1f);
 
                     //更换背景图
                     Background.style.backgroundImage = new StyleBackground(location.Background);
@@ -87,23 +75,11 @@ namespace THLL.UISystem
                     //协程等待到当前帧结束
                     yield return new WaitForEndOfFrame();
 
-                    //取消遮盖背景，同样判断动画方向
-                    if (AnimationDirection)
-                    {
-                        //若为向下，则设置遮盖的Top数值
-                        Cover.style.top = new StyleLength(new Length(100, LengthUnit.Percent));
-                        //并反向
-                        AnimationDirection = !AnimationDirection;
-                    }
-                    else
-                    {
-                        //反之设置Bottom
-                        Cover.style.bottom = new StyleLength(new Length(100, LengthUnit.Percent));
-                        //并反向
-                        AnimationDirection = !AnimationDirection;
-                    }
-                    //协程等待0.5s(动画用时)
-                    yield return new WaitForSeconds(0.5f);
+                    //修改不透明度为1
+                    backgroundImageTintColor.a = 1;
+                    Background.style.unityBackgroundImageTintColor = new StyleColor(backgroundImageTintColor);
+                    //协程等待1s(动画用时)
+                    yield return new WaitForSeconds(1f);
 
                     //更新持续时间，测试期间固定5s
                     Duration = 5f;

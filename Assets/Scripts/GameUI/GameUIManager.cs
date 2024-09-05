@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using THLL.BaseSystem;
 
 namespace THLL.UISystem
@@ -29,9 +28,9 @@ namespace THLL.UISystem
             GameUI.NewGameInterface = GetComponentInChildren<NewGame>();
             GameUI.SaveAndLoadGameInterface = GetComponentInChildren<SaveAndLoadGame>();
             GameUI.GameSettingsInterface = GetComponentInChildren<GameSettings>();
-            GameUI.GameSystemInterface = GetComponentInChildren<Settings.GameSystem>();
-            GameUI.GamePlaySInterface = GetComponentInChildren<Settings.GamePlay>();
-            GameUI.GamePatchesInterface = GetComponentInChildren<Settings.GamePatches>();
+            GameUI.GameSystemSettingsInterface = GetComponentInChildren<Settings.GameSystemSettings>();
+            GameUI.GamePlaySettingsInterface = GetComponentInChildren<Settings.GamePlaySettings>();
+            GameUI.GamePatchesSettingsInterface = GetComponentInChildren<Settings.GamePatchesSettings>();
             GameUI.AnimationLayer = GetComponentInChildren<AnimationLayer>();
 
             //ÏÔÊ¾Ö÷Ãæ°å

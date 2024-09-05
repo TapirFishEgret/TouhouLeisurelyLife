@@ -2,26 +2,26 @@
 
 namespace THLL.UISystem.Settings
 {
-    public class GameSystem : BaseGameUI
+    public class GamePatchesSettings : BaseGameUI
     {
         #region 自身数据
-        //根面板
+        //根界面
         public VisualElement RootPanel { get; private set; }
-        //选项描述标签
-        public Label OptionDescriptionLabel { get; private set; }
-        //选项列表
-        public ScrollView OptionsScrollView { get; private set; }
-        //返回按键
+        //游戏地点按钮
+        public Button GameLocationsButton { get; private set; }
+        //游戏角色按钮
+        public Button GameCharactersButton { get; private set; }
+        //返回按钮
         public Button ReturnButton { get; private set; }
         #endregion
 
         #region 初始化与相关方法
-        //获取视觉元素
+        //绑定UI元素
         protected override void GetVisualElements()
         {
             RootPanel = Document.rootVisualElement.Q<VisualElement>("RootPanel");
-            OptionDescriptionLabel = RootPanel.Q<Label>("OptionDescriptionLabel");
-            OptionsScrollView = RootPanel.Q<ScrollView>("OptionsScrollView");
+            GameLocationsButton = RootPanel.Q<Button>("GameLocationsButton");
+            GameCharactersButton = RootPanel.Q<Button>("GameCharactersButton");
             ReturnButton = RootPanel.Q<Button>("ReturnButton");
         }
         #endregion

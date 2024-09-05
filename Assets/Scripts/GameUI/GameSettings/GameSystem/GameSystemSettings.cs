@@ -2,7 +2,7 @@
 
 namespace THLL.UISystem.Settings
 {
-    public class GamePlay : BaseGameUI
+    public class GameSystemSettings : BaseGameUI
     {
         #region 自身数据
         //根面板

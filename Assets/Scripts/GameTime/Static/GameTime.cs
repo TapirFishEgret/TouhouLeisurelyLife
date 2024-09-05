@@ -35,7 +35,7 @@ namespace THLL.TimeSystem
 
         #region 时间数据
         //时间流逝速度
-        public static int TimeScale { get; private set; }
+        public static int TimeScale { get; set; }
         //毫秒
         public static float Millisecond { get; private set; }
         //秒
