@@ -1,12 +1,18 @@
-﻿using THLL.BaseSystem;
+﻿using System.Collections.Generic;
+using THLL.BaseSystem;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
-    public class BaseGameUI : GameBehaviour
+    public class BaseGameInterface : GameBehaviour
     {
         #region 数据
+        //UI文档组件
         public UIDocument Document { get; protected set; }
+
+        //当前运行的协程的字典
+        public Dictionary<string, Coroutine> CoroutineDic { get; protected set; } = new();
         #endregion
 
         #region 周期函数

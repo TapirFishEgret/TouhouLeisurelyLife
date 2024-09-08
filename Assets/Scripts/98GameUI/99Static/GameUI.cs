@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using THLL.UISystem.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -36,12 +37,12 @@ namespace THLL.UISystem
         public static AnimationLayer AnimationLayer { get; set; }
 
         //界面显示状态存储，主要用于返回功能
-        public static List<BaseGameUI> ShowedInterfaces { get; } = new();
+        public static List<BaseGameInterface> ShowedInterfaces { get; } = new();
         #endregion
 
         #region 静态方法
         //显示界面
-        public static void ShowInterface(BaseGameUI @interface, bool needsAnimation = true)
+        public static void ShowInterface(BaseGameInterface @interface, bool needsAnimation = true)
         {
             //检测是否需要动画
             if (needsAnimation)
@@ -56,7 +57,7 @@ namespace THLL.UISystem
             }
         }
         //显示界面本体
-        private static void ShowInterface(BaseGameUI @interface)
+        private static void ShowInterface(BaseGameInterface @interface)
         {
             //正常执行，首先让存储中的界面归于底层
             ShowedInterfaces.ForEach(i => i.Document.sortingOrder = -1);
@@ -65,6 +66,7 @@ namespace THLL.UISystem
             //将它加入存储中
             ShowedInterfaces.Add(@interface);
         }
+
         //返回上一层界面
         public static void ReturnInterface(bool needsAnimation = true)
         {
@@ -95,23 +97,37 @@ namespace THLL.UISystem
                 ShowedInterfaces[^1].Document.sortingOrder = 1;
             }
         }
+        #endregion
+
+        #region 文本显示
         //渐变式显示文本
-        public static void GradientDisplayText(BaseGameUI @interface, Label conatiner, string text, float animationDuration)
+        public static void GradientDisplayText(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //TODO:暂时这么解决吧，停止该界面其他协程
-            @interface.StopAllCoroutines();
-            //让传入的界面运行协程
-            @interface.StartCoroutine(GradientDisplayText(conatiner, text, animationDuration));
+            //判断并停止、移除协程
+            if (@interface.CoroutineDic.Remove("GradientDisplayText" + container.GetHashCode(), out Coroutine coroutine1))
+            {
+                @interface.StopCoroutine(coroutine1);
+            }
+            //让传入的界面运行协程并获取
+            Coroutine coroutine = @interface.StartCoroutine(GradientDisplayTextCoroutine(@interface, container, text, animationDuration));
+            //存储在界面的协程字典下，Key为协程主名称+容器哈希值
+            @interface.CoroutineDic["GradientDisplayText" + container.GetHashCode()] = coroutine;
         }
         //渐变式显示文本本体
-        private static IEnumerator GradientDisplayText(Label container, string text, float animationDuration)
+        private static IEnumerator GradientDisplayTextCoroutine(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
             //检测文本
             if (container.text == text)
             {
-                //若文本内容未发生实际更改，则直接返回
+                //若文本内容未发生实际更改，则移除自身并直接返回
+                //考虑到协程特性，需要等待一次才可执行移除操作，否则会导致移除操作在添加操作之前
+                yield return new WaitForEndOfFrame();
+                @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
                 yield break;
             }
+
+            //确定执行协程后，更改容器动画时长
+            SetVisualElementAllTransitionAnimationDuration(container, animationDuration);
 
             //首先，隐藏当前Label，更改不透明度，这货是个0-1的浮点数值
             container.style.opacity = 0f;
@@ -127,26 +143,37 @@ namespace THLL.UISystem
             container.style.opacity = 1f;
             //等待
             yield return new WaitForSeconds(animationDuration);
+
+            //协程完成后移除自身与事件
+            @interface.CoroutineDic.Remove("GradientDisplayText" + container.GetHashCode());
         }
+
         //逐字式显示文本
-        public static void ProgressiveDisplayText(BaseGameUI @interface, Label container, string text, float animationDuration)
+        public static void ProgressiveDisplayText(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //TODO:暂时这么解决吧，停止该界面其他协程
-            @interface.StopAllCoroutines();
-            //让界面运行协程
-            @interface.StartCoroutine(ProgressiveDisplayText(container, text, animationDuration));
+            //判断并停止、移除协程
+            if (@interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode(), out Coroutine coroutine1))
+            {
+                @interface.StopCoroutine(coroutine1);
+            }
+            Coroutine coroutine = @interface.StartCoroutine(ProgressiveDisplayTextCoroutine(@interface, container, text, animationDuration));
+            //存储在界面的协程字典下，Key为协程主名称+容器哈希值
+            @interface.CoroutineDic["ProgressiveDisplayText" + container.GetHashCode()] = coroutine;
         }
         //逐字式显示文本本体
-        private static IEnumerator ProgressiveDisplayText(Label container, string text, float animationDuration)
+        private static IEnumerator ProgressiveDisplayTextCoroutine(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
             //检测文本
             if (container.text == text)
             {
-                //若文本内容未发生实际更改，则直接返回
+                //若文本内容未发生实际更改，则移除自身并直接返回
+                //考虑到协程特性，需要等待一次才可执行移除操作，否则会导致移除操作在添加操作之前
+                yield return new WaitForEndOfFrame();
+                @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
                 yield break;
             }
 
-            //计算字体显示间隔
+            //计算字体显示时间间隔
             float fontDisplayInterval = animationDuration / text.Length;
 
             //清空当前文本
@@ -160,6 +187,22 @@ namespace THLL.UISystem
                 //等待指定时间
                 yield return new WaitForSeconds(fontDisplayInterval);
             }
+
+            //协程完成后移除自身
+            @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
+        }
+        #endregion
+
+        #region 辅助方法
+        //设定视觉元素动画间隔时间
+        public static void SetVisualElementAllTransitionAnimationDuration(VisualElement visualElement, float animationDuration)
+        {
+            //需要设置的动画的个数
+            int count = visualElement.resolvedStyle.transitionDuration.Count();
+            //创建新列表
+            StyleList<TimeValue> list = Enumerable.Repeat(new TimeValue(animationDuration, TimeUnit.Second), count).ToList();
+            //赋值
+            visualElement.style.transitionDuration = list;
         }
         #endregion
     }

@@ -2,7 +2,7 @@
 
 namespace THLL.UISystem
 {
-    public class Play : BaseGameUI
+    public class Play : BaseGameInterface
     {
         #region 自身数据
         //UI元素

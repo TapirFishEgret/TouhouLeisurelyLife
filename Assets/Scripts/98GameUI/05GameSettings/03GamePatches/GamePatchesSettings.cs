@@ -2,7 +2,7 @@
 
 namespace THLL.UISystem.Settings
 {
-    public class GamePatchesSettings : BaseGameUI
+    public class GamePatchesSettings : BaseGameInterface
     {
         #region 自身数据
         //根界面

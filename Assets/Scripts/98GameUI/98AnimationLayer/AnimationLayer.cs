@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
-    public class AnimationLayer : BaseGameUI
+    public class AnimationLayer : BaseGameInterface
     {
         #region 自身数据
         //UI数据
@@ -45,7 +46,10 @@ namespace THLL.UISystem
         //播放一次遮盖动画
         public void CoverOnce(Action method)
         {
-            StartCoroutine(CoverOnceCoroutine(method));
+            //获取协程
+            Coroutine coroutine = StartCoroutine(CoverOnceCoroutine(method, 0.5f));
+            //存储协程
+            CoroutineDic["CoverOnce" + method.GetHashCode()] = coroutine;
         }
         //显示加载界面
         public void ShowLoadingScreen()
@@ -53,13 +57,15 @@ namespace THLL.UISystem
             //首先将加载界面不透明度设为1
             LoadingScreen.style.opacity = 1;
             //然后开始祈祷
-            StartCoroutine(MaidenPrayCoroutine());
+            Coroutine coroutine = StartCoroutine(MaidenPrayCoroutine(0.5f));
+            //并存储协程，考虑到祈祷动画唯一，不设置额外Key
+            CoroutineDic["MaidenPray"] = coroutine;
         }
         //隐藏加载界面
         public void HideLoadingScreen()
         {
             //结束少女祈祷协程
-            StopCoroutine(MaidenPrayCoroutine());
+            StopCoroutine(CoroutineDic["MaidenPray"]);
             //将标签不透明度设为1
             MaidenPrayingLabel.style.opacity = 1;
             //遮盖一次，并将加载界面隐藏
@@ -69,9 +75,12 @@ namespace THLL.UISystem
 
         #region 协程方法
         //播放一次遮盖动画
-        private IEnumerator CoverOnceCoroutine(Action method)
+        private IEnumerator CoverOnceCoroutine(Action method, float animationDuration)
         {
-            //首先判断方向
+            //为动画设置间隔时间
+            GameUI.SetVisualElementAllTransitionAnimationDuration(Cover, animationDuration);
+
+            //然后开始判断方向
             if (AnimationDirection)
             {
                 //若向右，则更改Right为0
@@ -83,7 +92,7 @@ namespace THLL.UISystem
                 Cover.style.left = new StyleLength(new Length(0, LengthUnit.Percent));
             }
             //间隔0.5s
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(animationDuration);
 
             //执行方法
             method();
@@ -104,23 +113,26 @@ namespace THLL.UISystem
                 AnimationDirection = !AnimationDirection;
             }
             //间隔0.5s
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(animationDuration);
         }
         //少女祈祷中
-        private IEnumerator MaidenPrayCoroutine()
+        private IEnumerator MaidenPrayCoroutine(float animationDuration)
         {
+            //为动画设置间隔时间
+            GameUI.SetVisualElementAllTransitionAnimationDuration(MaidenPrayingLabel, animationDuration);
+
             //没什么事的话就一直运行吧
             while (true)
             {
                 //隐藏一下
                 MaidenPrayingLabel.style.opacity = 0;
                 //等0.3s
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(animationDuration);
 
                 //显示一下
                 MaidenPrayingLabel.style.opacity = 1;
                 //等0.3s
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(animationDuration);
             }
         }
         #endregion

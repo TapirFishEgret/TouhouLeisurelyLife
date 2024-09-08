@@ -2,7 +2,7 @@
 
 namespace THLL.UISystem
 {
-    public class SaveAndLoadGame : BaseGameUI
+    public class SaveAndLoadGame : BaseGameInterface
     {
         #region 自身数据
         //根面板

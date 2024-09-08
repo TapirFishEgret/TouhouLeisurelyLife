@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
-    public class MainTitle : BaseGameUI
+    public class MainTitle : BaseGameInterface
     {
         #region 数据
         //根界面
