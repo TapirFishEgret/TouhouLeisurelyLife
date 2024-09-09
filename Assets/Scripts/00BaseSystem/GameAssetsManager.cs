@@ -88,12 +88,10 @@ namespace THLL.BaseSystem
                 {
                     //若成功，对地点数据进行初始化
                     GameLocation.Init();
-                    //初始化结束后，加载下一个资源
+                    //输出一条日志信息
+                    GameHistory.LogNormal($"地点数据加载完成，共加载{number}个数据。");
+                    //加载下一个资源
                     LoadNextResource();
-                }
-                else
-                {
-                    //TODO:若不成功
                 }
             };
         }
@@ -124,12 +122,10 @@ namespace THLL.BaseSystem
                 //检测资源加载是否成功
                 if (operation.Status == AsyncOperationStatus.Succeeded)
                 {
-                    //若成功，加载下一个资源
+                    //输出一条日志信息
+                    GameHistory.LogNormal($"地点数据加载完成，共加载{number}个数据。");
+                    //加载下一个资源
                     LoadNextResource();
-                }
-                else
-                {
-                    //TODO:若不成功
                 }
             };
         }

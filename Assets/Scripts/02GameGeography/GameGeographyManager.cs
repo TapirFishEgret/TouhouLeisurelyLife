@@ -4,6 +4,6 @@ namespace THLL.GeographySystem
 {
     public class GameGeographyManager : GameBehaviour
     {
-        
+
     }
 }

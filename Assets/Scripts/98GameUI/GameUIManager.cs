@@ -39,7 +39,7 @@ namespace THLL.UISystem
             GameUI.GameplaySettingsInterface = GetComponentInChildren<GameplaySettings>();
             GameUI.GamePatchesSettingsInterface = GetComponentInChildren<GamePatchesSettings>();
             //”ŒÕÊ√Ê∞Â
-            GameUI.PlayInterface = GetComponentInChildren<Play>();
+            GameUI.BasicPlayInterface = GetComponentInChildren<BasicPlay>();
             //∏®÷˙√Ê∞Â
             GameUI.BackgroundLayer = GetComponentInChildren<BackgroundLayer>();
             GameUI.AnimationLayer = GetComponentInChildren<AnimationLayer>();

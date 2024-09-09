@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
+    <Style src="project://database/Assets/Scripts/98GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
     <engine:VisualElement name="RootPanel" style="flex-grow: 1; flex-direction: row; background-color: rgb(0, 0, 0); display: flex;">
         <engine:VisualElement name="LeftPanel" style="flex-grow: 1; flex-basis: 34%; padding-left: 96px;">
             <engine:VisualElement name="TopPanel" style="flex-grow: 1; flex-basis: 12%; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; padding-top: 20px; padding-right: 20px; padding-bottom: 5px; padding-left: 20px; flex-direction: column-reverse; -unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
@@ -21,7 +21,9 @@
                 <engine:ScrollView name="OptionsScrollView">
                     <engine:Label text="Game Time" name="GameTimeLabel" class="option-title" style="font-size: 48px; height: 64px;" />
                     <engine:SliderInt label="Game Time Scale" value="1" high-value="24" fill="false" show-input-field="true" inverted="false" direction="Horizontal" low-value="1" name="GameTimeScaleSliderInt" class="option-item" />
-                    <engine:TextField label="Test Text Field" is-delayed="true" name="TestTextField" class="option-item" style="color: rgb(255, 255, 255);" />
+                    <engine:Toggle label="Show Seconds" name="ShowSecondsToggle" value="true" class="option-item" />
+                    <engine:Label text="Game User Interface" class="option-title" />
+                    <engine:Toggle label="Show Character Panel" name="ShowCharacterPanelToggle" value="true" class="option-item" />
                 </engine:ScrollView>
             </engine:VisualElement>
             <engine:VisualElement name="BottomPanel" style="flex-grow: 1; flex-basis: 12%; padding-top: 0; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">

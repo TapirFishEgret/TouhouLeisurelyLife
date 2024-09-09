@@ -74,7 +74,8 @@ namespace THLL.BaseSystem
                 }
                 else
                 {
-                    //TODO:报错
+                    //在游戏历史记录中报错
+                    GameHistory.LogError("查询失败，请检查查询条件");
                 }
             }
 

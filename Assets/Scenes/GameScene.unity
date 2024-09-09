@@ -612,6 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8117eebffea4da8458cac325b4dbd461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VTA_History: {fileID: 9197481963319205126, guid: a0a779117bf2d874a8aefcb40d1a65b5, type: 3}
 --- !u!1 &489939469
 GameObject:
   m_ObjectHideFlags: 0

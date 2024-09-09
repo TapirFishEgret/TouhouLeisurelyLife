@@ -5,10 +5,15 @@ namespace THLL.GeographySystem
     public static class GameLocation
     {
         #region 数据
+        //数据库
         //游戏内所有地点实例数据库
         public static LocationDb LocationDb { get; } = new LocationDb();
         //游戏内所有地点连接数据
         public static Dictionary<Location, Dictionary<Location, int>> LocationConnectionDb { get; } = new Dictionary<Location, Dictionary<Location, int>>();
+
+        //其他数据
+        //当前玩家所处地点
+        public static Location PlayerCurrentLocation { get; set; }
         #endregion
 
         #region 方法
@@ -20,6 +25,8 @@ namespace THLL.GeographySystem
             {
                 location.Init(LocationDb, LocationConnectionDb);
             }
+            //暂时将玩家所处地点随便设置一个值
+            PlayerCurrentLocation = LocationDb["Location_Gensokyo_Hakurei-Shrine"];
         }
         //寻路，深度优先搜索获取所有路径
         public static List<List<Location>> FindAllPaths(Location start, Location end)

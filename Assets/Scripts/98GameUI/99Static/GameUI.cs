@@ -28,7 +28,7 @@ namespace THLL.UISystem
 
         //游玩相关界面
         //游玩界面
-        public static Play PlayInterface { get; set; }
+        public static BasicPlay BasicPlayInterface { get; set; }
 
         //辅助界面
         //背景图层
@@ -193,7 +193,7 @@ namespace THLL.UISystem
             //检测并停止，移除协程
             //获取需要停止并移除的协程
             List<string> keysToRemoved = @interface.CoroutineDic.Where(
-                kv => kv.Key.StartsWith("GradientDisplayText" + container.GetHashCode()) || 
+                kv => kv.Key.StartsWith("GradientDisplayText" + container.GetHashCode()) ||
                 kv.Key.StartsWith("ProgressiveDisplayText" + container.GetHashCode()))
                 .Select(kv => kv.Key)
                 .ToList();

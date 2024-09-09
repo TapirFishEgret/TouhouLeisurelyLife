@@ -41,8 +41,8 @@
 }
 
 .option-title {
-    font-size: 32px;
-    height: 40px;
+    font-size: 48px;
+    height: 64px;
     -unity-text-align: middle-center;
 }
 
@@ -180,4 +180,43 @@
     flex-direction: row;
     align-items: flex-start;
     flex-wrap: wrap;
+}
+
+.history-label Label {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    -unity-text-align: middle-left;
+    font-size: 24px;
+}
+
+.option-item {
+    font-size: 21px;
+    height: 64px;
+    background-color: rgb(50, 50, 50);
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgba(173, 65, 66, 0);
+    border-right-color: rgba(173, 65, 66, 0);
+    border-top-color: rgba(173, 65, 66, 0);
+    border-bottom-color: rgba(173, 65, 66, 0);
 }

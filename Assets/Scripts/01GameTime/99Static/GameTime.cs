@@ -84,6 +84,11 @@ namespace THLL.TimeSystem
         }
         #endregion
 
+        #region 时间相关设置
+        //是否显示秒数
+        public static bool ShowSeconds { get; set; } = true;
+        #endregion
+
         #region 时间事件
         //秒
         public static event Action<int> SecondChangedEvent;
