@@ -103,28 +103,25 @@ namespace THLL.UISystem
         //渐变式显示文本
         public static void GradientDisplayText(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //判断并停止、移除协程
-            if (@interface.CoroutineDic.Remove("GradientDisplayText" + container.GetHashCode(), out Coroutine coroutine1))
+            //检测是否有相同协程正在运行及传入文本与目标文本是否相同
+            if (@interface.CoroutineDic.ContainsKey("GradientDisplayText" + container.GetHashCode() + text.GetHashCode()) || container.tooltip == text)
             {
-                @interface.StopCoroutine(coroutine1);
+                //若是，返回
+                return;
             }
+
+            //若不是，则停止显示当前文本(表现为直接全部显示)
+            DirectlyDisplayText(@interface, container);
             //让传入的界面运行协程并获取
             Coroutine coroutine = @interface.StartCoroutine(GradientDisplayTextCoroutine(@interface, container, text, animationDuration));
             //存储在界面的协程字典下，Key为协程主名称+容器哈希值
-            @interface.CoroutineDic["GradientDisplayText" + container.GetHashCode()] = coroutine;
+            @interface.CoroutineDic["GradientDisplayText" + container.GetHashCode() + text.GetHashCode()] = coroutine;
         }
         //渐变式显示文本本体
         private static IEnumerator GradientDisplayTextCoroutine(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //检测文本
-            if (container.text == text)
-            {
-                //若文本内容未发生实际更改，则移除自身并直接返回
-                //考虑到协程特性，需要等待一次才可执行移除操作，否则会导致移除操作在添加操作之前
-                yield return new WaitForEndOfFrame();
-                @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
-                yield break;
-            }
+            //将文本移动至tooltip暂存
+            container.tooltip = text;
 
             //确定执行协程后，更改容器动画时长
             SetVisualElementAllTransitionAnimationDuration(container, animationDuration);
@@ -135,7 +132,7 @@ namespace THLL.UISystem
             yield return new WaitForSeconds(animationDuration);
 
             //然后更改值
-            container.text = text;
+            container.text = container.tooltip;
             //等待到当前帧结束
             yield return new WaitForEndOfFrame();
 
@@ -144,34 +141,32 @@ namespace THLL.UISystem
             //等待
             yield return new WaitForSeconds(animationDuration);
 
-            //协程完成后移除自身与事件
-            @interface.CoroutineDic.Remove("GradientDisplayText" + container.GetHashCode());
+            //协程完成后移除自身
+            @interface.CoroutineDic.Remove("GradientDisplayText" + container.GetHashCode() + text.GetHashCode());
         }
 
         //逐字式显示文本
         public static void ProgressiveDisplayText(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //判断并停止、移除协程
-            if (@interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode(), out Coroutine coroutine1))
+            //检测是否有相同协程正在运行及传入文本与目标文本是否相同
+            if (@interface.CoroutineDic.ContainsKey("ProgressiveDisplayText" + container.GetHashCode() + text.GetHashCode()) || container.tooltip == text)
             {
-                @interface.StopCoroutine(coroutine1);
+                //若是，返回
+                return;
             }
+
+            //若不是，则停止显示当前文本(表现为直接全部显示)
+            DirectlyDisplayText(@interface, container);
+            //获取协程
             Coroutine coroutine = @interface.StartCoroutine(ProgressiveDisplayTextCoroutine(@interface, container, text, animationDuration));
-            //存储在界面的协程字典下，Key为协程主名称+容器哈希值
-            @interface.CoroutineDic["ProgressiveDisplayText" + container.GetHashCode()] = coroutine;
+            //存储在界面的协程字典下，Key为协程主名称+容器哈希值+文本哈希值
+            @interface.CoroutineDic["ProgressiveDisplayText" + container.GetHashCode() + text.GetHashCode()] = coroutine;
         }
         //逐字式显示文本本体
         private static IEnumerator ProgressiveDisplayTextCoroutine(BaseGameInterface @interface, Label container, string text, float animationDuration)
         {
-            //检测文本
-            if (container.text == text)
-            {
-                //若文本内容未发生实际更改，则移除自身并直接返回
-                //考虑到协程特性，需要等待一次才可执行移除操作，否则会导致移除操作在添加操作之前
-                yield return new WaitForEndOfFrame();
-                @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
-                yield break;
-            }
+            //将文本移入tooltip暂存
+            container.tooltip = text;
 
             //计算字体显示时间间隔
             float fontDisplayInterval = animationDuration / text.Length;
@@ -180,7 +175,7 @@ namespace THLL.UISystem
             container.text = string.Empty;
 
             //逐字显示
-            foreach (char letter in text)
+            foreach (char letter in container.tooltip)
             {
                 //添加文本
                 container.text += letter;
@@ -189,7 +184,33 @@ namespace THLL.UISystem
             }
 
             //协程完成后移除自身
-            @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode());
+            @interface.CoroutineDic.Remove("ProgressiveDisplayText" + container.GetHashCode() + text.GetHashCode());
+        }
+
+        //直接显示所有文本
+        public static void DirectlyDisplayText(BaseGameInterface @interface, Label container)
+        {
+            //检测并停止，移除协程
+            //获取需要停止并移除的协程
+            List<string> keysToRemoved = @interface.CoroutineDic.Where(
+                kv => kv.Key.StartsWith("GradientDisplayText" + container.GetHashCode()) || 
+                kv.Key.StartsWith("ProgressiveDisplayText" + container.GetHashCode()))
+                .Select(kv => kv.Key)
+                .ToList();
+            //移除并停止
+            foreach (string key in keysToRemoved)
+            {
+                @interface.CoroutineDic.Remove(key, out Coroutine coroutine);
+                @interface.StopCoroutine(coroutine);
+            }
+
+            //更改元素动画时长为0
+            SetVisualElementAllTransitionAnimationDuration(container, 0f);
+            //更改元素不透明度
+            container.style.opacity = 1f;
+
+            //显示所有文本
+            container.text = container.tooltip;
         }
         #endregion
 

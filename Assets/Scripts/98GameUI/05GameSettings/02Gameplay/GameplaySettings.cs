@@ -47,9 +47,12 @@ namespace THLL.UISystem.Settings
             //设定每一位的具体功能及描述显示，使用MouseEnterEvent实现悬浮时显示的功能
             //时间流逝速度
             GameTimeScaleSliderInt.RegisterValueChangedCallback(evt => GameTime.TimeScale = evt.newValue);
-            GameTimeScaleSliderInt.RegisterCallback<MouseEnterEvent>(evt => GameUI.GradientDisplayText(this, OptionDescriptionLabel, GameTimeScaleDescription, 0.3f));
+            GameTimeScaleSliderInt.RegisterCallback<PointerEnterEvent>(evt => GameUI.GradientDisplayText(this, OptionDescriptionLabel, GameTimeScaleDescription, 0.5f));
             //测试用的
-            TestTextField.RegisterCallback<MouseEnterEvent>(evt => GameUI.ProgressiveDisplayText(this, OptionDescriptionLabel, TestDescription, 0.5f));
+            TestTextField.RegisterCallback<PointerEnterEvent>(evt => GameUI.ProgressiveDisplayText(this, OptionDescriptionLabel, TestDescription, 1.0f));
+
+            //给标签父级增添点击时显示全部文本功能
+            OptionDescriptionLabel.parent.RegisterCallback<PointerDownEvent>(evt => { if (evt.button == 0) GameUI.DirectlyDisplayText(this, OptionDescriptionLabel); });
         }
         #endregion
     }
