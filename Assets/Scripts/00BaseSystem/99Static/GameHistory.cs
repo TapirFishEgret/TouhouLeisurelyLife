@@ -47,7 +47,7 @@ namespace THLL.BaseSystem
         //重设历史记录大小
         public static void ResizeCapacity(int capacity)
         {
-            if (capacity >1)
+            if (capacity > 1)
             {
                 Logs.Resize(capacity);
             }

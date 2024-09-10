@@ -38,9 +38,13 @@ namespace THLL.UISystem
 
         //界面显示状态存储，主要用于返回功能
         public static List<BaseGameInterface> ShowedInterfaces { get; } = new();
+        //默认UI动画时长
+        public static float DefaultUIAnimationDuration { get; set; } = 0.5f;
+        //默认UI文字全显用时
+        public static float DefaultUITextDisplayTime { get; set; } = 0.5f;
         #endregion
 
-        #region 静态方法
+        #region 界面显示
         //显示界面
         public static void ShowInterface(BaseGameInterface @interface, bool needsAnimation = true)
         {

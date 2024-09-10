@@ -46,7 +46,7 @@ namespace THLL.UISystem
         public void CoverOnce(Action method)
         {
             //获取协程
-            Coroutine coroutine = StartCoroutine(CoverOnceCoroutine(method, 0.5f));
+            Coroutine coroutine = StartCoroutine(CoverOnceCoroutine(method, GameUI.DefaultUIAnimationDuration));
             //存储协程
             CoroutineDic["CoverOnce" + method.GetHashCode()] = coroutine;
         }
@@ -56,7 +56,7 @@ namespace THLL.UISystem
             //首先将加载界面不透明度设为1
             LoadingScreen.style.opacity = 1;
             //然后开始祈祷
-            Coroutine coroutine = StartCoroutine(MaidenPrayCoroutine(0.5f));
+            Coroutine coroutine = StartCoroutine(MaidenPrayCoroutine(GameUI.DefaultUIAnimationDuration));
             //并存储协程，考虑到祈祷动画唯一，不设置额外Key
             CoroutineDic["MaidenPray"] = coroutine;
         }

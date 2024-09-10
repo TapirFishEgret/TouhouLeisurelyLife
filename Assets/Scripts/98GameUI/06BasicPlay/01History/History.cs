@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using THLL.BaseSystem;
 using UnityEngine.UIElements;
 
@@ -12,7 +8,11 @@ namespace THLL.UISystem
     {
         #region 构造及初始化及相关方法
         //构造函数
-        public History(BaseGameInterface @interface, VisualTreeAsset visualTreeAsset) : base(@interface, visualTreeAsset) { }
+        public History(BaseGameInterface @interface,
+            VisualTreeAsset visualTreeAsset,
+            VisualElement parent = null,
+            List<BaseGamePanel> storage = null)
+            : base(@interface, visualTreeAsset, parent, storage) { }
         #endregion
 
         #region 显示及隐藏方法

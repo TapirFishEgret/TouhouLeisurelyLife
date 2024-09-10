@@ -21,8 +21,12 @@
                 <engine:ScrollView name="OptionsScrollView">
                     <engine:Label text="Game Time" name="GameTimeLabel" class="option-title" style="font-size: 48px; height: 64px;" />
                     <engine:SliderInt label="Game Time Scale" value="1" high-value="24" fill="false" show-input-field="true" inverted="false" direction="Horizontal" low-value="1" name="GameTimeScaleSliderInt" class="option-item" />
+                    <engine:Toggle label="Long Year" name="LongYearToggle" class="option-item" />
                     <engine:Toggle label="Show Seconds" name="ShowSecondsToggle" value="true" class="option-item" />
-                    <engine:Label text="Game User Interface" class="option-title" />
+                    <engine:Toggle label="Use Gensokyo Year" name="UseGensokyoYearToggle" class="option-item" />
+                    <engine:Toggle label="Use Month Name" name="UseMonthNameToggle" value="true" class="option-item" />
+                    <engine:Toggle label="Use Day Of Week Name" name="UseDayOfWeekNameToggle" value="true" class="option-item" />
+                    <engine:Label text="Game User Interface" name="GameUserInterfaceLabel" class="option-title" />
                     <engine:Toggle label="Show Character Panel" name="ShowCharacterPanelToggle" value="true" class="option-item" />
                 </engine:ScrollView>
             </engine:VisualElement>

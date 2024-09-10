@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
@@ -12,11 +13,15 @@ namespace THLL.UISystem
         public VisualElement RootPanel { get; private set; }
         //容器面板
         public VisualElement ContainerPanel { get; private set; }
+        //父级面板
+        public VisualElement ParentPanel { get; private set; }
+        //其他面板
+        public List<BaseGamePanel> OtherPanels { get; private set; }
         #endregion
 
         #region 构建及初始化与相关方法
         //构建函数
-        public BaseGamePanel(BaseGameInterface @interface, VisualTreeAsset visualTreeAsset)
+        public BaseGamePanel(BaseGameInterface @interface, VisualTreeAsset visualTreeAsset, VisualElement parent = null, List<BaseGamePanel> storage = null)
         {
             //指定所属界面
             BelongingInterface = @interface;
@@ -31,6 +36,12 @@ namespace THLL.UISystem
             style.opacity = 0f;
             //并设置自身动画
             style.transitionProperty = Enumerable.Repeat(new StylePropertyName("opacity"), 1).ToList();
+            //添加到父级中
+            ParentPanel = parent;
+            ParentPanel?.Add(this);
+            //添加到存储池中
+            OtherPanels = storage;
+            OtherPanels?.Add(this);
             //初始化
             Init();
         }
@@ -62,6 +73,12 @@ namespace THLL.UISystem
         //显示面板
         public virtual void ShowPanel(float animationDuration)
         {
+            //首先关闭其他面板显示
+            foreach (BaseGamePanel panel in OtherPanels)
+            {
+                panel.HidePanel(animationDuration);
+            }
+
             //设置动画时长
             GameUI.SetVisualElementAllTransitionAnimationDuration(this, animationDuration);
             //让自己显示

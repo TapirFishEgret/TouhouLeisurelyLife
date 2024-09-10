@@ -1,4 +1,5 @@
-﻿using THLL.GeographySystem;
+﻿using System.Collections.Generic;
+using THLL.GeographySystem;
 using THLL.TimeSystem;
 using UnityEngine.UIElements;
 
@@ -10,6 +11,7 @@ namespace THLL.UISystem
         //历史记录面板
         public VisualTreeAsset VTA_History;
         #endregion
+
         #region 信息面板
         //信息面板
         public VisualElement InfoPanel { get; private set; }
@@ -43,6 +45,8 @@ namespace THLL.UISystem
         public VisualElement FunctionPanel { get; private set; }
         //历史记录面板
         public History HistoryPanel { get; private set; }
+        //功能面板记录
+        public List<BaseGamePanel> FunctionPanels { get; } = new();
         #endregion
 
         #region 操作面板
@@ -81,8 +85,7 @@ namespace THLL.UISystem
 
             //功能面板
             FunctionPanel = Document.rootVisualElement.Q<VisualElement>("FunctionPanel");
-            HistoryPanel = new(this, VTA_History);
-            FunctionPanel.Add(HistoryPanel);
+            HistoryPanel = new(this, VTA_History, FunctionPanel, FunctionPanels);
 
             //操作面板
             OperationPanel = Document.rootVisualElement.Q<VisualElement>("OperationPanel");
@@ -121,36 +124,25 @@ namespace THLL.UISystem
             //更新日期
             DayLabel.text = $"{GameTime.Day:D2}日";
             //更新星期
-            switch (GameTime.DayOfWeek)
-            {
-                case 1:
-                    DayOfWeekLabel.text = "月曜日";
-                    break;
-                case 2:
-                    DayOfWeekLabel.text = "火曜日";
-                    break;
-                case 3:
-                    DayOfWeekLabel.text = "水曜日";
-                    break;
-                case 4:
-                    DayOfWeekLabel.text = "木曜日";
-                    break;
-                case 5:
-                    DayOfWeekLabel.text = "金曜日";
-                    break;
-                case 6:
-                    DayOfWeekLabel.text = "土曜日";
-                    break;
-                case 7:
-                    DayOfWeekLabel.text = "日曜日";
-                    break;
-                default:
-                    break;
-            }
+            DayOfWeekLabel.text = GameTime.DayOfWeekName;
             //更新月份
-            MonthLabel.text = $"{GameTime.Month:D2}月";
+            if (GameTime.UseMonthName)
+            {
+                MonthLabel.text = GameTime.MonthName;
+            }
+            else
+            {
+                MonthLabel.text = $"{GameTime.Month:D2}月";
+            }
             //更新年份
-            YearLabel.text = $"第{GameTime.Year:D3}季";
+            if (GameTime.UseGensokyoYear)
+            {
+                YearLabel.text = $"{GameTime.GensokyoYear}之年";
+            }
+            else
+            {
+                YearLabel.text = $"第{GameTime.Year:D3}季";
+            }
         }
         #endregion
     }

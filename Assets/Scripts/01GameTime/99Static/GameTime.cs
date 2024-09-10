@@ -1,4 +1,5 @@
 ﻿using System;
+using THLL.BaseSystem;
 using UnityEngine;
 
 namespace THLL.TimeSystem
@@ -82,11 +83,84 @@ namespace THLL.TimeSystem
                 return Hour + ((Day - 1) * HoursPerDay);
             }
         }
+        //幻想乡年
+        public static string GensokyoYear
+        {
+            get
+            {
+                int sanseiIndex = Year % 3;
+                int shikiIndex = Year % 4;
+                int goyoIndex = (Year - 1) % 5; //只有五行比较特殊，纪年法中五行以土为起始
+
+                return $"{Sansei[sanseiIndex]}与{Shiki[shikiIndex]}与{Goyo[goyoIndex]}";
+            }
+        }
+        //月份名称
+        public static string MonthName
+        {
+            get
+            {
+                //检测月份数量
+                if (MonthsPerYear == 4)
+                {
+                    //若是短月份制
+                    return MonthNameFor4[Month - 1];
+                }
+                else if (MonthsPerYear == 12)
+                {
+                    //若是长月份制
+                    return MonthNameFor12[Month - 1];
+                }
+                //若都不是，记录
+                GameHistory.LogError("检查一下每年月份是否设置正确");
+                //返回空
+                return string.Empty;
+            }
+        }
+        //星期名称
+        public static string DayOfWeekName
+        {
+            get
+            {
+                //检测是否启用
+                if (UseDayOfWeekName)
+                {
+                    return DayOfWeekNameOld[DayOfWeek - 1];
+                }
+                else
+                {
+                    return DayOfWeekNameNormal[DayOfWeek - 1];
+                }
+            }
+        }
+        #endregion
+
+        #region 其他数据
+        //用于幻想乡纪年的三精
+        private static readonly string[] Sansei = { "日", "月", "星" };
+        //及四季
+        private static readonly string[] Shiki = { "春", "夏", "秋", "冬" };
+        //与五行
+        private static readonly string[] Goyo = { "火", "水", "木", "金", "土" };
+        //用于月份名称的春夏秋冬月
+        private static readonly string[] MonthNameFor4 = { "春之月", "夏之月", "秋之月", "冬之月" };
+        //及旧式月份名称
+        private static readonly string[] MonthNameFor12 = { "睦月", "如月", "弥生", "卯月", "皋月", "水無月", "文月", "葉月", "長月", "神無月", "霜月", "師走" };
+        //用于星期名称的普通星期名称
+        private static readonly string[] DayOfWeekNameNormal = { "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日" };
+        //及日式星期名称
+        private static readonly string[] DayOfWeekNameOld = { "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日" };
         #endregion
 
         #region 时间相关设置
         //是否显示秒数
         public static bool ShowSeconds { get; set; } = true;
+        //是否启用幻想乡纪年法
+        public static bool UseGensokyoYear { get; set; } = false;
+        //是否启用特殊月份名称
+        public static bool UseMonthName { get; set; } = true;
+        //是否启用特殊星期名称
+        public static bool UseDayOfWeekName { get; set; } = true;
         #endregion
 
         #region 时间事件
