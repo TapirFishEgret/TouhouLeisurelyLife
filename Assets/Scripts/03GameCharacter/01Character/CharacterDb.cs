@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using THLL.BaseSystem;
 
 namespace THLL.CharacterSystem
 {

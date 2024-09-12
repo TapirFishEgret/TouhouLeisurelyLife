@@ -8,13 +8,13 @@ namespace THLL.CharacterSystem
     {
         #region 来自角色数据类的数据成员
         //角色所属系列
-        public string OriginatingSeries => BaseData.OriginatingSeries;
+        public string OriginatingSeries => BaseGameData.OriginatingSeries;
         //角色所属组织
-        public string Affiliation => BaseData.Affiliation;
+        public string Affiliation => BaseGameData.Affiliation;
         //角色头像
-        public Sprite Avatar => BaseData.Avatar;
+        public Sprite Avatar => BaseGameData.Avatar;
         //角色立绘
-        public Sprite Portrait => BaseData.Portrait;
+        public Sprite Portrait => BaseGameData.Portrait;
         #endregion
 
         #region 角色自身数据成员

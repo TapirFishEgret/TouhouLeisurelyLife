@@ -9,15 +9,15 @@ namespace THLL.GeographySystem
     {
         #region 从数据中获取的数据成员
         //全名
-        public List<string> FullName => BaseData.FullName;
+        public List<string> FullName => BaseGameData.FullName;
         //父级地点实例
         public Location Parent { get; private set; }
         //背景图
-        public Sprite Background => BaseData.Background;
+        public Sprite Background => BaseGameData.Background;
         //地点连接情况
         public Dictionary<Location, int> Connections { get; } = new();
         //是否为出入口
-        public bool IsGateway => BaseData.IsGateway;
+        public bool IsGateway => BaseGameData.IsGateway;
         #endregion
 
         #region 实例特有的数据成员
@@ -34,9 +34,9 @@ namespace THLL.GeographySystem
         public void Init(LocationDb globalData, Dictionary<Location, Dictionary<Location, int>> globalConnData)
         {
             //设定父级
-            if (BaseData.ParentData != null)
+            if (BaseGameData.ParentData != null)
             {
-                Parent = globalData[BaseData.ParentData];
+                Parent = globalData[BaseGameData.ParentData];
             }
 
             //设定子级
@@ -46,12 +46,12 @@ namespace THLL.GeographySystem
             }
 
             //将加载连接数据并放入全局
-            foreach (LocationData locUnitData in BaseData.ConnectionKeys)
+            foreach (LocationData locUnitData in BaseGameData.ConnectionKeys)
             {
                 //序号
-                int index = BaseData.ConnectionKeys.IndexOf(locUnitData);
+                int index = BaseGameData.ConnectionKeys.IndexOf(locUnitData);
                 //耗时
-                int duration = BaseData.ConnectionValues[index];
+                int duration = BaseGameData.ConnectionValues[index];
                 //实例
                 Location location = globalData[locUnitData];
                 //存放在自身
