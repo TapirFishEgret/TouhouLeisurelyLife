@@ -104,7 +104,7 @@ namespace THLL.UISystem
             //更新UI信息
             UpdateTimeInfo();
             //TODO:更新地点信息
-            LocationLabel.text = GameLocation.PlayerCurrentLocation?.Name;
+            LocationLabel.text = GameGeography.PlayerCurrentLocation?.Name;
         }
         #endregion
 

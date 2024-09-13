@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace THLL.BaseSystem
 {
-    public abstract class BaseGameEntityDatabase<TData, TEntity> : BaseGameDatabase<string, TEntity> where TEntity: BaseGameEntity<TData> where TData: BaseGameData
+    public abstract class BaseGameEntityDatabase<TData, TEntity> : BaseGameDatabase<string, TEntity> where TEntity : BaseGameEntity<TData> where TData : BaseGameData
     {
         #region 新增存储及索引
         //作者索引

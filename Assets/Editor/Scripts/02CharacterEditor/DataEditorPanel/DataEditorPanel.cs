@@ -190,7 +190,7 @@ namespace THLL.GameEditor.CharacterDataEditor
         private void OnLivingAreaChanged(ChangeEvent<Object> evt)
         {
             //检测传入数据
-            if (evt.newValue is LocationData livingArea)
+            if (evt.newValue is SceneData livingArea)
             {
                 //设置头像
                 ShowedCharacter.LivingArea = livingArea;

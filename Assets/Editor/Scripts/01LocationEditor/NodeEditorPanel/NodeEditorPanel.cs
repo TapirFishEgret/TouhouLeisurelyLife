@@ -181,8 +181,8 @@ namespace THLL.GameEditor.LocationDataEditor
             ShowedNodeLines.Clear();
 
             //做好显示新系节点的准备
-            List<TreeViewItemData<LocationData>> peers;
-            LocationData parentData = MainWindow.DataTreeView.ActiveSelection.ParentData;
+            List<TreeViewItemData<SceneData>> peers;
+            SceneData parentData = MainWindow.DataTreeView.ActiveSelection.ParentData;
             //随后对传入数据进行分析，检测其有无父级
             if (parentData != null)
             {
@@ -196,7 +196,7 @@ namespace THLL.GameEditor.LocationDataEditor
             }
 
             //对新系列节点进行生成或显示
-            foreach (TreeViewItemData<LocationData> item in peers)
+            foreach (TreeViewItemData<SceneData> item in peers)
             {
                 //获取其资源哈希值
                 int id = item.data.GetAssetHashCode();
@@ -265,7 +265,7 @@ namespace THLL.GameEditor.LocationDataEditor
             ShowedNodeLines.Clear();
 
             //生成所有节点
-            foreach (TreeViewItemData<LocationData> item in MainWindow.DataTreeView.ItemDicCache.Values)
+            foreach (TreeViewItemData<SceneData> item in MainWindow.DataTreeView.ItemDicCache.Values)
             {
                 //生成节点
                 Node newNode = new(item.data, this);
@@ -276,7 +276,7 @@ namespace THLL.GameEditor.LocationDataEditor
             foreach (Node node in NodeDicCache.Values)
             {
                 //根据数据中存储的地点连接信息来生成连接
-                foreach (LocationData locUnitData in node.TargetData.ConnectionKeys)
+                foreach (SceneData locUnitData in node.TargetData.ConnectionKeys)
                 {
                     Node otherNode = NodeDicCache[locUnitData.GetAssetHashCode()];
                     //检测父子级关系

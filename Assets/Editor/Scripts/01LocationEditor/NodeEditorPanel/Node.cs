@@ -12,7 +12,7 @@ namespace THLL.GameEditor.LocationDataEditor
         public NodeEditorPanel NodeEditorPanel { get; private set; }
 
         //此节点对应数据
-        public LocationData TargetData { get; private set; }
+        public SceneData TargetData { get; private set; }
         //是否为出入口
         public bool IsGateway { get; private set; }
 
@@ -33,7 +33,7 @@ namespace THLL.GameEditor.LocationDataEditor
         #endregion
 
         //构造函数
-        public Node(LocationData targetData, NodeEditorPanel nodeEditorPanel)
+        public Node(SceneData targetData, NodeEditorPanel nodeEditorPanel)
         {
             //赋值
             TargetData = targetData;

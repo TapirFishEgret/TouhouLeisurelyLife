@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace THLL.GameEditor.LocationDataEditor
 {
-    [CustomEditor(typeof(LocationData))]
+    [CustomEditor(typeof(SceneData))]
     public class LocationDataInspector : Editor
     {
         //覆写Inspector的UI界面，使元素只读，并添加按钮打开编辑窗口

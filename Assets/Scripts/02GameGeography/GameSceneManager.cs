@@ -2,7 +2,7 @@
 
 namespace THLL.GeographySystem
 {
-    public class GameGeographyManager : GameBehaviour
+    public class GameSceneManager : GameBehaviour
     {
 
     }

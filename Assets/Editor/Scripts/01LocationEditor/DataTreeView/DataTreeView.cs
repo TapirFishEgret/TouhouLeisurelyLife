@@ -18,16 +18,16 @@ namespace THLL.GameEditor.LocationDataEditor
         public MainWindow MainWindow { get; private set; }
 
         //根数据缓存
-        public List<TreeViewItemData<LocationData>> RootItemCache { get; private set; } = new();
+        public List<TreeViewItemData<SceneData>> RootItemCache { get; private set; } = new();
         //ID-地点查询字典缓存
-        public Dictionary<int, TreeViewItemData<LocationData>> ItemDicCache { get; private set; } = new();
+        public Dictionary<int, TreeViewItemData<SceneData>> ItemDicCache { get; private set; } = new();
         //ID-子级查询字典缓存
-        public Dictionary<int, List<TreeViewItemData<LocationData>>> ChildrenDicCache { get; private set; } = new();
+        public Dictionary<int, List<TreeViewItemData<SceneData>>> ChildrenDicCache { get; private set; } = new();
         //展开状态缓存
         public HashSet<int> ExpandedStateCache { get; private set; } = new();
 
         //当前活跃选中项
-        public LocationData ActiveSelection { get; private set; }
+        public SceneData ActiveSelection { get; private set; }
         #endregion
 
         #region 树形图的初始化及数据更新
@@ -63,7 +63,7 @@ namespace THLL.GameEditor.LocationDataEditor
             };
             bindItem = (element, i) =>
             {
-                LocationData locUnitData = GetItemDataForIndex<LocationData>(i);
+                SceneData locUnitData = GetItemDataForIndex<SceneData>(i);
                 Label label = element as Label;
                 label.text = locUnitData.name;
             };
@@ -78,7 +78,7 @@ namespace THLL.GameEditor.LocationDataEditor
             selectionChanged += (selections) =>
             {
                 //获取活跃数据
-                LocationData activeSelection = selections.Cast<LocationData>().FirstOrDefault();
+                SceneData activeSelection = selections.Cast<SceneData>().FirstOrDefault();
                 //检测活跃数据
                 if (activeSelection != null)
                 {
@@ -118,22 +118,22 @@ namespace THLL.GameEditor.LocationDataEditor
             RootItemCache.Clear();
 
             //读取数据，并进行缓存
-            List<LocationData> locUnitDatas = AssetDatabase.FindAssets("t:LocationData")
-                .Select(guid => AssetDatabase.LoadAssetAtPath<LocationData>(AssetDatabase.GUIDToAssetPath(guid)))
+            List<SceneData> locUnitDatas = AssetDatabase.FindAssets("t:LocationData")
+                .Select(guid => AssetDatabase.LoadAssetAtPath<SceneData>(AssetDatabase.GUIDToAssetPath(guid)))
                 .ToList();
-            foreach (LocationData locUnitData in locUnitDatas)
+            foreach (SceneData locUnitData in locUnitDatas)
             {
                 //子级列表的创建
-                List<TreeViewItemData<LocationData>> children = new();
+                List<TreeViewItemData<SceneData>> children = new();
                 //数据的创建
-                TreeViewItemData<LocationData> item = new(locUnitData.GetAssetHashCode(), locUnitData, children);
+                TreeViewItemData<SceneData> item = new(locUnitData.GetAssetHashCode(), locUnitData, children);
                 //添加到字典中去
                 ItemDicCache[locUnitData.GetAssetHashCode()] = item;
                 ChildrenDicCache[locUnitData.GetAssetHashCode()] = children;
             }
 
             //构建树形结构
-            foreach (TreeViewItemData<LocationData> item in ItemDicCache.Values)
+            foreach (TreeViewItemData<SceneData> item in ItemDicCache.Values)
             {
                 //判断该地点数据是否有父级
                 if (item.data.ParentData == null)
@@ -144,7 +144,7 @@ namespace THLL.GameEditor.LocationDataEditor
                 else
                 {
                     //若有，则获取其父级树形图数据
-                    TreeViewItemData<LocationData> parentItem = ItemDicCache[item.data.ParentData.GetAssetHashCode()];
+                    TreeViewItemData<SceneData> parentItem = ItemDicCache[item.data.ParentData.GetAssetHashCode()];
                     //向父级树形图数据的子级列表中添加
                     ChildrenDicCache[parentItem.id].Add(item);
                 }
@@ -152,7 +152,7 @@ namespace THLL.GameEditor.LocationDataEditor
 
             //结束后按文件名称进行重新排序
             RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-            foreach (List<TreeViewItemData<LocationData>> items in ChildrenDicCache.Values)
+            foreach (List<TreeViewItemData<SceneData>> items in ChildrenDicCache.Values)
             {
                 items.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
             }
@@ -207,7 +207,7 @@ namespace THLL.GameEditor.LocationDataEditor
                 {
                     //当按下Ctrl+左键时
                     //获取新的选中项数据
-                    LocationData newSelection = selectedItems.Cast<LocationData>().FirstOrDefault();
+                    SceneData newSelection = selectedItems.Cast<SceneData>().FirstOrDefault();
                     //比较
                     if (newSelection == ActiveSelection)
                     {
@@ -254,7 +254,7 @@ namespace THLL.GameEditor.LocationDataEditor
 
                 //若路径不存在，而包存在，则开始生成物体
                 //创建新资源
-                LocationData newLocData = ScriptableObject.CreateInstance<LocationData>();
+                SceneData newLocData = ScriptableObject.CreateInstance<SceneData>();
                 //设置相关数据
                 newLocData.GameDataType = BaseSystem.GameDataTypeEnum.Location;
                 newLocData.Name = newName;
@@ -278,8 +278,8 @@ namespace THLL.GameEditor.LocationDataEditor
 
                 //处理缓存数据
                 //创建新实例对应的树形图数据
-                List<TreeViewItemData<LocationData>> newChildren = new();
-                TreeViewItemData<LocationData> newItem = new(newLocData.GetAssetHashCode(), newLocData, newChildren);
+                List<TreeViewItemData<SceneData>> newChildren = new();
+                TreeViewItemData<SceneData> newItem = new(newLocData.GetAssetHashCode(), newLocData, newChildren);
                 //判断选中项是否为空
                 if (ActiveSelection != null)
                 {
@@ -360,7 +360,7 @@ namespace THLL.GameEditor.LocationDataEditor
                 //获取路径
                 string deletedFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(ActiveSelection));
                 //从其连接项中删除自身
-                foreach (LocationData otherLocation in ActiveSelection.ConnectionKeys)
+                foreach (SceneData otherLocation in ActiveSelection.ConnectionKeys)
                 {
                     otherLocation.Editor_RemoveConnection(ActiveSelection);
                 }
@@ -422,7 +422,7 @@ namespace THLL.GameEditor.LocationDataEditor
         public void SaveAllData()
         {
             //遍历缓存
-            foreach (TreeViewItemData<LocationData> item in ItemDicCache.Values)
+            foreach (TreeViewItemData<SceneData> item in ItemDicCache.Values)
             {
                 //并将数据设置为脏
                 EditorUtility.SetDirty(item.data);

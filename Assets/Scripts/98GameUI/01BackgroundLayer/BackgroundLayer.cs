@@ -55,7 +55,7 @@ namespace THLL.UISystem
             CoroutineDic["MoveBackground"] = coroutine;
         }
         //切换背景图
-        public void SwitchBackground(Location location)
+        public void SwitchBackground(Scene location)
         {
             //获取协程
             Coroutine coroutine = StartCoroutine(SwitchBackgroundCoroutine(location));
@@ -69,7 +69,7 @@ namespace THLL.UISystem
         private IEnumerator CycleBackgroundCoroutine()
         {
             //首先获取可用地点
-            List<Location> locations = GameLocation.LocationDb.Datas.ToList();
+            List<Scene> locations = GameGeography.LocationDb.Datas.ToList();
 
             //始终循环
             while (true)
@@ -86,7 +86,7 @@ namespace THLL.UISystem
                 {
                     //若大于0，更换背景图
                     //首先获取目标地点
-                    Location location = locations[Random.Range(0, locations.Count)];
+                    Scene location = locations[Random.Range(0, locations.Count)];
 
                     //然后切换背景图
                     SwitchBackground(location);
@@ -123,7 +123,7 @@ namespace THLL.UISystem
         }
 
         //切换背景图本体
-        private IEnumerator SwitchBackgroundCoroutine(Location location)
+        private IEnumerator SwitchBackgroundCoroutine(Scene location)
         {
             //更改背景图不透明度为0
             Background.style.opacity = 0;

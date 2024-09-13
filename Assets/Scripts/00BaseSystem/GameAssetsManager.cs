@@ -66,15 +66,15 @@ namespace THLL.BaseSystem
             int number = 0;
 
             //获取操作句柄
-            AsyncOperationHandle handle = Addressables.LoadAssetsAsync<LocationData>
+            AsyncOperationHandle handle = Addressables.LoadAssetsAsync<SceneData>
                 (
                 "Location",
                 (resource) =>
                 {
                     //加载
                     //生成实例并移交至数据库中
-                    Location locUnit = new(resource);
-                    GameLocation.LocationDb.Add(resource, locUnit);
+                    Scene locUnit = new(resource);
+                    GameGeography.LocationDb.Add(resource, locUnit);
                     //计数
                     number++;
                 }
@@ -87,7 +87,7 @@ namespace THLL.BaseSystem
                 if (operation.Status == AsyncOperationStatus.Succeeded)
                 {
                     //若成功，对地点数据进行初始化
-                    GameLocation.Init();
+                    GameGeography.Init();
                     //输出一条日志信息
                     GameHistory.LogNormal($"地点数据加载完成，共加载{number}个数据。");
                     //加载下一个资源
