@@ -18,6 +18,8 @@ namespace THLL.BaseSystem
         #endregion
 
         #region 基础其他数据
+        //包
+        public string Package { get; set; }
         //作者
         public string Author { get; set; }
         //版本
@@ -37,19 +39,21 @@ namespace THLL.BaseSystem
             Description = string.Empty;
             SortOrder = 0;
 
+            Package = string.Empty;
             Author = string.Empty;
             Version = string.Empty;
             CreateTime = DateTime.Now;
             UpdateTime = DateTime.Now;
         }
         //有参构造函数
-        public BaseGameData(string id, string name, string description, int sortOrder, string author, string version)
+        public BaseGameData(string id, string name, string description, int sortOrder,string package, string author, string version)
         {
             ID = id;
             Name = name;
             Description = description;
             SortOrder = sortOrder;
 
+            Package = package;
             Author = author;
             Version = version;
             CreateTime = DateTime.Now;

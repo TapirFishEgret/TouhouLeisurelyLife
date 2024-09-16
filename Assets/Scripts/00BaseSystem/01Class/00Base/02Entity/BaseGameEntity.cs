@@ -7,8 +7,6 @@ namespace THLL.BaseSystem
     public abstract class BaseGameEntity<TData> where TData : BaseGameData
     {
         #region 基础游戏数据
-        //未经处理的数据
-        protected TData RawData { get; set; }
         //ID
         public string ID { get; set; }
         //名称
@@ -20,6 +18,8 @@ namespace THLL.BaseSystem
         #endregion
 
         #region 基础其他数据
+        //包
+        public string Package { get; set; }
         //作者
         public string Author { get; set; }
         //版本
@@ -40,6 +40,7 @@ namespace THLL.BaseSystem
             Description = string.Empty;
             SortOrder = 0;
             //其他数据
+            Package = string.Empty;
             Author = string.Empty;
             Version = string.Empty;
             CreateTime = DateTime.Now;
@@ -49,44 +50,37 @@ namespace THLL.BaseSystem
         public BaseGameEntity(BaseGameData baseGameData)
         {
             //传入数据时，直接配置
-            Configure(baseGameData);
+            Init(baseGameData);
         }
         //有参构造函数，传入文件路径版
         public BaseGameEntity(string filePath)
         {
             //传入文件路径时，读取
             BaseGameData baseGameData = LoadFromXml(filePath);
-            //然后进行配置
-            Configure(baseGameData);
+            //进行初始化
+            Init(baseGameData);
         }
 
-        //配置
-        protected virtual void Configure(BaseGameData baseGameData)
+        public virtual void Init(BaseGameData baseGameData)
         {
             //检测传入数据
-            if (baseGameData is TData rawData)
-            {
-                //若数据类型匹配，则赋值
-                RawData = rawData;
-            }
-            else
+            if (baseGameData.GetType() != typeof(TData))
             {
                 //若数据类型不匹配，则抛出异常
                 throw new ArgumentException("传入数据类型不匹配");
             }
-            //接着赋值基础数据
-            ID = RawData.ID;
-            Name = RawData.Name;
-            Description = RawData.Description;
-            SortOrder = RawData.SortOrder;
+            //赋值基础数据
+            ID = baseGameData.ID;
+            Name = baseGameData.Name;
+            Description = baseGameData.Description;
+            SortOrder = baseGameData.SortOrder;
             //然后赋值其他数据
-            Author = RawData.Author;
-            Version = RawData.Version;
-            CreateTime = RawData.CreateTime;
-            UpdateTime = RawData.UpdateTime;
+            Package = baseGameData.Package;
+            Author = baseGameData.Author;
+            Version = baseGameData.Version;
+            CreateTime = baseGameData.CreateTime;
+            UpdateTime = baseGameData.UpdateTime;
         }
-        //初始化
-        public abstract void Init();
         #endregion
 
         #region 数据驱动设计方法

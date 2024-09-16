@@ -1,6 +1,6 @@
 ﻿using THLL.BaseSystem;
 
-namespace THLL.GeographySystem
+namespace THLL.SceneSystem
 {
     public class GameSceneManager : GameBehaviour
     {

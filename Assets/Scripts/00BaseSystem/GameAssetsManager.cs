@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using THLL.CharacterSystem;
-using THLL.GeographySystem;
+using THLL.SceneSystem;
 using THLL.UISystem;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -74,7 +74,7 @@ namespace THLL.BaseSystem
                     //加载
                     //生成实例并移交至数据库中
                     Scene locUnit = new(resource);
-                    GameGeography.LocationDb.Add(resource, locUnit);
+                    GameScene.LocationDb.Add(resource, locUnit);
                     //计数
                     number++;
                 }
@@ -87,7 +87,7 @@ namespace THLL.BaseSystem
                 if (operation.Status == AsyncOperationStatus.Succeeded)
                 {
                     //若成功，对地点数据进行初始化
-                    GameGeography.Init();
+                    GameScene.Init();
                     //输出一条日志信息
                     GameHistory.LogNormal($"地点数据加载完成，共加载{number}个数据。");
                     //加载下一个资源

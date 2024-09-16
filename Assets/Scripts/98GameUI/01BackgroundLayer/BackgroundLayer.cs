@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using THLL.BaseSystem;
-using THLL.GeographySystem;
+using THLL.SceneSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -69,7 +69,7 @@ namespace THLL.UISystem
         private IEnumerator CycleBackgroundCoroutine()
         {
             //首先获取可用地点
-            List<Scene> locations = GameGeography.LocationDb.Datas.ToList();
+            List<Scene> locations = GameScene.LocationDb.Datas.ToList();
 
             //始终循环
             while (true)

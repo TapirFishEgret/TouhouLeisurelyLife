@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using THLL.GeographySystem;
+using THLL.SceneSystem;
 using THLL.TimeSystem;
 using UnityEngine.UIElements;
 
@@ -104,7 +104,7 @@ namespace THLL.UISystem
             //更新UI信息
             UpdateTimeInfo();
             //TODO:更新地点信息
-            LocationLabel.text = GameGeography.PlayerCurrentLocation?.Name;
+            LocationLabel.text = GameScene.PlayerCurrentLocation?.Name;
         }
         #endregion
 
