@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace THLL.GameEditor
+namespace THLL.EditorSystem
 {
     //文本输入窗口，用于弹出文本输入框
     public class TextInputWindow : EditorWindow

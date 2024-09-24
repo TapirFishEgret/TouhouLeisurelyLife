@@ -8,12 +8,14 @@ namespace THLL.BaseSystem
     public abstract class BaseGameDatabase<TKey, TValue> : IDictionary<TKey, TValue>
     {
         #region 数据存储
+        //完整数据存储
+        public Dictionary<TKey, List<TValue>> FullStorage { get; private set; } = new();
         //基础数据存储
-        protected Dictionary<TKey, TValue> BasicStorage { get; } = new();
+        public Dictionary<TKey, TValue> BasicStorage { get; } = new();
         //过滤器存储
-        protected Dictionary<QueryKeyWordEnum, FilterDelegate<TValue>> FilterStorage { get; } = new();
+        public Dictionary<QueryKeyWordEnum, FilterDelegate<TValue>> FilterStorage { get; } = new();
         //查询缓存
-        protected Dictionary<string, IEnumerable<TValue>> QueryCache { get; } = new();
+        public Dictionary<string, IEnumerable<TValue>> QueryCache { get; } = new();
         #endregion
 
         #region 其他操作方法
@@ -54,13 +56,19 @@ namespace THLL.BaseSystem
         #endregion
 
         #region 辅助方法
-        //获取查询缓存键
-        public string GetQueryCacheKey(Dictionary<QueryKeyWordEnum, string> queryParameters)
+        //初始化
+        public virtual void Init()
         {
-            return string.Join(";", queryParameters.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+            //初始化筛选器
+            InitFilter();
         }
         //初始化筛选器
         protected abstract void InitFilter();
+        //获取查询缓存键
+        private string GetQueryCacheKey(Dictionary<QueryKeyWordEnum, string> queryParameters)
+        {
+            return string.Join(";", queryParameters.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+        }
         #endregion
 
         #region IDictionary<TKey, TValue> 接口实现
@@ -71,7 +79,7 @@ namespace THLL.BaseSystem
         //计数
         public int Count => BasicStorage.Count;
         //只读属性
-        public bool IsReadOnly => true;
+        public bool IsReadOnly => false;
 
         //索引器
         public virtual TValue this[TKey key]
@@ -95,32 +103,47 @@ namespace THLL.BaseSystem
         //添加，不过提交的是键和值
         public virtual void Add(TKey key, TValue value)
         {
+            //清除缓存
             QueryCache.Clear();
+            //基础存储添加
             BasicStorage.Add(key, value);
+            //完整存储添加
+            if (!FullStorage.ContainsKey(key))
+            {
+                FullStorage[key] = new List<TValue>();
+            }
+            FullStorage[key].Add(value);
         }
         //添加，不过提交的是键值对
         public virtual void Add(KeyValuePair<TKey, TValue> item)
         {
+            //清除缓存
             QueryCache.Clear();
+            //基础存储添加
             BasicStorage.Add(item.Key, item.Value);
+            //完整存储添加
+            if (!FullStorage.ContainsKey(item.Key))
+            {
+                FullStorage[item.Key] = new List<TValue>();
+            }
+            FullStorage[item.Key].Add(item.Value);
         }
-        //移除，不过以键为参数
-        public virtual bool Remove(TKey key)
+        //移除，不实现
+        public bool Remove(TKey key)
         {
-            QueryCache.Clear();
-            return BasicStorage.Remove(key);
+            throw new NotImplementedException();
         }
-        //移除，不过以键值对为参数
-        public virtual bool Remove(KeyValuePair<TKey, TValue> item)
+        //移除，不实现
+        public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            QueryCache.Clear();
-            return BasicStorage.Remove(item.Key);
+            throw new NotImplementedException();
         }
         //清除
         public virtual void Clear()
         {
             QueryCache.Clear();
             BasicStorage.Clear();
+            FullStorage.Clear();
         }
 
         //判断是否包含键值对

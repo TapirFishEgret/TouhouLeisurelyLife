@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor
+namespace THLL.EditorSystem
 {
     public static class EditorExtensions
     {

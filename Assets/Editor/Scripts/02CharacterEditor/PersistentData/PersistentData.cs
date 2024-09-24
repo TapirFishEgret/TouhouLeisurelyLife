@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace THLL.GameEditor.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterDataEditor
 {
     [Serializable]
     public class PersistentData

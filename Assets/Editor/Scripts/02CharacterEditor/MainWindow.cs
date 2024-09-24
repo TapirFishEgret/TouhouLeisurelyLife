@@ -6,7 +6,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterDataEditor
 {
     public class MainWindow : EditorWindow
     {
@@ -50,7 +50,7 @@ namespace THLL.GameEditor.CharacterDataEditor
         public DataEditorPanel DataEditorPanel { get; private set; }
 
         //窗口菜单
-        [MenuItem("GameEditor/CharacterDataEditor")]
+        [MenuItem("EditorSystem/CharacterDataEditor")]
         public static void OpenWindow()
         {
             MainWindow mainWindow = GetWindow<MainWindow>("Character Editor Window");

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.LocationDataEditor
+namespace THLL.EditorSystem.LocationDataEditor
 {
     public class NodeLine : VisualElement
     {

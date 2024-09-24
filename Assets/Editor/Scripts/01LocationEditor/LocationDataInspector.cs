@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace THLL.GameEditor.LocationDataEditor
+namespace THLL.EditorSystem.LocationDataEditor
 {
     [CustomEditor(typeof(SceneData))]
     public class LocationDataInspector : Editor

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace THLL.GameEditor.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterDataEditor
 {
     [CustomEditor(typeof(CharacterData))]
     public class CharacterDataInspector : Editor

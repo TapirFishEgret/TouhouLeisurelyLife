@@ -25,6 +25,19 @@ namespace THLL.BaseSystem
             };
             //添加到循环缓冲区中
             Logs.Add(label);
+            //顺便让Debug也显示一下
+            if (color == Color.red)
+            {
+                Debug.LogError(message);
+            }
+            else if (color == Color.yellow)
+            {
+                Debug.LogWarning(message);
+            }
+            else
+            {
+                Debug.Log(message);
+            }
         }
         //记录一条普通信息
         public static void LogNormal(string message)

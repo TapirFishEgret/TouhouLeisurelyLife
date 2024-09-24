@@ -6,7 +6,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.LocationDataEditor
+namespace THLL.EditorSystem.LocationDataEditor
 {
     public class MainWindow : EditorWindow
     {
@@ -47,7 +47,7 @@ namespace THLL.GameEditor.LocationDataEditor
         public NodeEditorPanel NodeEditorPanel { get; private set; }
 
         //窗口菜单
-        [MenuItem("GameEditor/LocationDataEditor")]
+        [MenuItem("EditorSystem/LocationDataEditor")]
         public static void ShowWindow()
         {
             //窗口设置

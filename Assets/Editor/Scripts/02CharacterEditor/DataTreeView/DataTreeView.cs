@@ -10,7 +10,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterDataEditor
 {
     public class DataTreeView : TreeView
     {

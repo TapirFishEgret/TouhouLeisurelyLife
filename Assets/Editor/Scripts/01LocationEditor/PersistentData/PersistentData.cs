@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace THLL.GameEditor.LocationDataEditor
+namespace THLL.EditorSystem.LocationDataEditor
 {
     [Serializable]
     public class PersistentData

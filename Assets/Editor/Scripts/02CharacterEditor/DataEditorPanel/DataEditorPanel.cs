@@ -5,7 +5,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.GameEditor.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterDataEditor
 {
     public class DataEditorPanel : Tab
     {

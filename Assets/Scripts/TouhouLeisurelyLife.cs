@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using THLL.BaseSystem;
 using THLL.UISystem;
@@ -9,6 +10,12 @@ namespace THLL
         #region 数据
         //启用的管理器们
         public static HashSet<GameBehaviour> Managers { get; } = new();
+        #endregion
+
+        #region 杂项
+        //可用图片文件扩展名
+        public static HashSet<string> ImageExtensions { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        { ".jpg", ".png", ".jpeg", ".bmp", ".webp", ".tiff", ".tif" };
         #endregion
 
         #region 方法
