@@ -6,7 +6,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.EditorSystem.LocationDataEditor
+namespace THLL.EditorSystem.SceneEditor
 {
     public class MainWindow : EditorWindow
     {
@@ -43,11 +43,9 @@ namespace THLL.EditorSystem.LocationDataEditor
         public TabView MultiTabView { get; private set; }
         //数据编辑面板
         public DataEditorPanel DataEditorPanel { get; private set; }
-        //连接编辑面板
-        public NodeEditorPanel NodeEditorPanel { get; private set; }
 
         //窗口菜单
-        [MenuItem("EditorSystem/LocationDataEditor")]
+        [MenuItem("EditorSystem/SceneEditor")]
         public static void ShowWindow()
         {
             //窗口设置
@@ -84,17 +82,12 @@ namespace THLL.EditorSystem.LocationDataEditor
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
             MultiTabView.Add(DataEditorPanel);
-            //创建连接面板并添加
-            NodeEditorPanel = new NodeEditorPanel(this);
-            MultiTabView.Add(NodeEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()
         {
             //保存持久化数据到磁盘
             SavePersistentData();
-            //保存所有数据
-            DataTreeView.SaveAllData();
         }
         #endregion
 
@@ -108,14 +101,7 @@ namespace THLL.EditorSystem.LocationDataEditor
                 //设置其数值
                 TimerDebugLogState = TimerDebugLogToggle.value,
                 ExpandedState = DataTreeView.ExpandedStateCache.ToList(),
-                NodePositions = new()
             };
-            //生成节点位置数据
-            foreach (Node node in NodeEditorPanel.NodeDicCache.Values)
-            {
-                //存入
-                persistentData.NodePositions[node.TargetData.GetAssetHashCode()] = (node.style.left.value.value, node.style.top.value.value);
-            }
             //将永久性存储实例转化为文本
             string jsonString = JsonConvert.SerializeObject(persistentData, Formatting.Indented);
             //写入文件中

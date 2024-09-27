@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using THLL.BaseSystem;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace THLL.SceneSystem
 {
@@ -22,7 +19,7 @@ namespace THLL.SceneSystem
 
         #region 资源
         //场景背景图片字典
-        public Dictionary<string, Sprite> BackgroundsDict { get; private set; } = new();
+        public Dictionary<string, Sprite> BackgroundsDict => Data.BackgroundsDict;
         #endregion
 
         #region 构造与初始化相关
@@ -77,50 +74,16 @@ namespace THLL.SceneSystem
 
         #region 数据读取相关
         //获取场景背景
-        public IEnumerator LoadBackgrounds()
+        public void LoadBackgrounds(MonoBehaviour mono)
         {
-            //获取到目录
-            string dir = Path.Combine(DataDirectoryPath, "Backgrounds");
-
-            //获取目录下所有图片文件
-            //首先获取所有文件
-            string[] files = Directory.GetFiles(dir, "*", SearchOption.TopDirectoryOnly);
-            //然后进行遍历
-            foreach (string filePath in files)
-            {
-                //判断是否是图片文件
-                if (TouhouLeisurelyLife.ImageExtensions.Contains(Path.GetExtension(filePath)))
-                {
-                    //若是，获取文件名
-                    string fileName = Path.GetFileNameWithoutExtension(filePath);
-                    //然后，启动请求加载图片
-                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
-                    //等待
-                    yield return request.SendWebRequest();
-
-                    //等待结束后判断结果
-                    if (request.result != UnityWebRequest.Result.Success)
-                    {
-                        //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load background image: " + filePath);
-                    }
-                    else
-                    {
-                        //若成功，获取到Texture2D
-                        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-                        //创建Sprite
-                        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        //添加到字典中
-                        BackgroundsDict.Add(fileName, sprite);
-                    }
-                }
-            }
+            //利用Mono启动协程
+            mono.StartCoroutine(Data.LoadBackgrounds(DataDirectoryPath));
         }
         //卸载所有资源
         public void UnloadAllResources()
         {
-            //直接将对应资源标记为空
-            BackgroundsDict.Clear();
+            //使用数据中的卸载函数
+            Data.UnloadAllResources();
         }
         #endregion
     }

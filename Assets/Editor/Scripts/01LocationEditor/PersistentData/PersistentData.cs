@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace THLL.EditorSystem.LocationDataEditor
+namespace THLL.EditorSystem.SceneEditor
 {
     [Serializable]
     public class PersistentData
@@ -9,6 +9,5 @@ namespace THLL.EditorSystem.LocationDataEditor
         //要保存的数据
         public bool TimerDebugLogState;
         public List<int> ExpandedState;
-        public Dictionary<int, (float, float)> NodePositions;
     }
 }

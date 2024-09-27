@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using THLL.BaseSystem;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace THLL.CharacterSystem
 {
@@ -20,9 +17,9 @@ namespace THLL.CharacterSystem
 
         #region 资源
         //头像字典
-        public Dictionary<string, Sprite> AvatarsDict { get; private set; } = new();
+        public Dictionary<string, Sprite> AvatarsDict => Data.AvatarsDict;
         //立绘字典
-        public Dictionary<string, Sprite> ProtraitsDict { get; private set; } = new();
+        public Dictionary<string, Sprite> ProtraitsDict => Data.ProtraitsDict;
         #endregion
 
         #region 初始化及相关方法
@@ -52,91 +49,22 @@ namespace THLL.CharacterSystem
 
         #region 资源相关方法
         //获取头像
-        public IEnumerator LoadAvatars()
+        public void LoadAvatars(MonoBehaviour mono)
         {
-            //获取到目录
-            string dir = Path.Combine(DataDirectoryPath, "Avatars");
-
-            //获取目录下所有图片文件
-            //首先获取所有文件
-            string[] files = Directory.GetFiles(dir, "*", SearchOption.TopDirectoryOnly);
-            //然后进行遍历
-            foreach (string filePath in files)
-            {
-                //判断是否是图片文件
-                if (TouhouLeisurelyLife.ImageExtensions.Contains(Path.GetExtension(filePath)))
-                {
-                    //若是，获取文件名
-                    string fileName = Path.GetFileNameWithoutExtension(filePath);
-                    //然后，启动请求加载图片
-                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
-                    //等待
-                    yield return request.SendWebRequest();
-                    
-                    //等待结束后判断结果
-                    if (request.result != UnityWebRequest.Result.Success)
-                    {
-                        //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load avatar image: " + filePath);
-                    }
-                    else
-                    {
-                        //若成功，获取到Texture2D
-                        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-                        //创建Sprite
-                        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        //添加到字典中
-                        AvatarsDict.Add(fileName, sprite);
-                    }
-                }
-            }
+            //通过Mono使用协程加载
+            mono.StartCoroutine(Data.LoadAvatars(DataDirectoryPath));
         }
         //获取立绘
-        public IEnumerator LoadProtraits()
+        public void LoadProtraits(MonoBehaviour mono)
         {
-            //获取到目录
-            string dir = Path.Combine(DataDirectoryPath, "Protraits");
-
-            //获取目录下所有图片文件
-            //首先获取所有文件
-            string[] files = Directory.GetFiles(dir, "*", SearchOption.TopDirectoryOnly);
-            //然后进行遍历
-            foreach (string filePath in files)
-            {
-                //判断是否是图片文件
-                if (TouhouLeisurelyLife.ImageExtensions.Contains(Path.GetExtension(filePath)))
-                {
-                    //若是，获取文件名
-                    string fileName = Path.GetFileNameWithoutExtension(filePath);
-                    //然后，启动请求加载图片
-                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
-                    //等待
-                    yield return request.SendWebRequest();
-
-                    //等待结束后判断结果
-                    if (request.result != UnityWebRequest.Result.Success)
-                    {
-                        //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load protrait image: " + filePath);
-                    }
-                    else
-                    {
-                        //若成功，获取到Texture2D
-                        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-                        //创建Sprite
-                        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        //添加到字典中
-                        ProtraitsDict.Add(fileName, sprite);
-                    }
-                }
-            }
+            //通过Mono使用协程加载
+            mono.StartCoroutine(Data.LoadProtraits(DataDirectoryPath));
         }
         //卸载所有资源
         public void UnloadAllResources()
         {
-            //将资源设定为空
-            AvatarsDict.Clear();
-            ProtraitsDict.Clear();
+            //使用数据类中的卸载方法
+            Data.UnloadAllResources();
         }
         #endregion
     }

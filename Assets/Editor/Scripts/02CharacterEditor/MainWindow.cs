@@ -6,7 +6,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.EditorSystem.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterEditor
 {
     public class MainWindow : EditorWindow
     {
@@ -50,10 +50,10 @@ namespace THLL.EditorSystem.CharacterDataEditor
         public DataEditorPanel DataEditorPanel { get; private set; }
 
         //窗口菜单
-        [MenuItem("EditorSystem/CharacterDataEditor")]
+        [MenuItem("EditorSystem/CharacterEditor")]
         public static void OpenWindow()
         {
-            MainWindow mainWindow = GetWindow<MainWindow>("Character Editor Window");
+            MainWindow mainWindow = GetWindow<MainWindow>("CharacterEditor Editor Window");
             mainWindow.position = new Rect(100, 100, 1440, 810);
         }
         #endregion
@@ -92,7 +92,14 @@ namespace THLL.EditorSystem.CharacterDataEditor
         {
             //保存
             SavePersistentData();
-            DataTreeView.SaveAllData();
+            //将数据转移到静态类中
+            foreach (var item in DataTreeView.ItemDicCache.Values)
+            {
+                if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                {
+                    GameEditor.CharacterDataDict[item.data.Data.ID] = item.data.Data;
+                }
+            }
         }
         #endregion
 

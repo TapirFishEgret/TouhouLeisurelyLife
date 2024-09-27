@@ -5,25 +5,3 @@
     -unity-text-outline-color: rgba(0, 0, 0, 0);
     color: rgb(255, 255, 255);
 }
-
-.treeview-item-location {
-    background-color: rgb(58, 58, 74);
-    border-left-color: rgb(74, 74, 90);
-    border-right-color: rgb(74, 74, 90);
-    border-top-color: rgb(74, 74, 90);
-    border-bottom-color: rgb(74, 74, 90);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    color: rgb(160, 160, 255);
-}
-
-.treeview-item-character {
-    color: rgb(145, 255, 255);
-    -unity-background-image-tint-color: rgb(76, 175, 80);
-}

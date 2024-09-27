@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Xml.Serialization;
 
 namespace THLL.BaseSystem
 {
@@ -51,14 +50,8 @@ namespace THLL.BaseSystem
         //从XML文件中读取数据
         public virtual TData LoadDataFromXml(string filePath)
         {
-            //反序列化
-            XmlSerializer xmlSerializer = new(typeof(TData));
-            //创建文件流
-            using StreamReader reader = new(filePath);
-            //反序列化
-            TData data = (TData)xmlSerializer.Deserialize(reader);
-            //返回数据
-            return data;
+            //读取数据
+            return BaseGameData.LoadFromXML<TData>(filePath);
         }
         #endregion
     }

@@ -69,7 +69,7 @@ namespace THLL.UISystem
         private IEnumerator CycleBackgroundCoroutine()
         {
             //首先获取可用地点
-            List<Scene> locations = GameScene.LocationDb.Datas.ToList();
+            List<Scene> locations = GameScene.SceneDB.Values.ToList();
 
             //始终循环
             while (true)
@@ -123,7 +123,7 @@ namespace THLL.UISystem
         }
 
         //切换背景图本体
-        private IEnumerator SwitchBackgroundCoroutine(Scene location)
+        private IEnumerator SwitchBackgroundCoroutine(Scene scene)
         {
             //更改背景图不透明度为0
             Background.style.opacity = 0;
@@ -131,9 +131,9 @@ namespace THLL.UISystem
             yield return new WaitForSeconds(1.0f);
 
             //更换背景图
-            Background.style.backgroundImage = new StyleBackground(location.Background);
+            Background.style.backgroundImage = new StyleBackground(scene.BackgroundsDict.Values.ToList()[Random.Range(0, scene.BackgroundsDict.Count)]);
             //更新主面板
-            GameUI.MainTitleInterface.LocationLabel.text = location.Name;
+            GameUI.MainTitleInterface.LocationLabel.text = scene.Name;
             //协程等待到当前帧结束
             yield return new WaitForEndOfFrame();
 

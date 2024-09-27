@@ -1,20 +1,4 @@
 {
   "TimerDebugLogState": false,
-  "ExpandedState": [
-    -1086469323
-  ],
-  "NodePositions": {
-    "-1086469323": {
-      "Item1": 0.0,
-      "Item2": 0.0
-    },
-    "-125489253": {
-      "Item1": 0.0,
-      "Item2": 0.0
-    },
-    "1012490403": {
-      "Item1": 0.0,
-      "Item2": 0.0
-    }
-  }
+  "ExpandedState": []
 }

@@ -1,11 +1,8 @@
 ﻿using THLL.CharacterSystem;
-using THLL.SceneSystem;
 using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace THLL.EditorSystem.CharacterDataEditor
+namespace THLL.EditorSystem.CharacterEditor
 {
     public class DataEditorPanel : Tab
     {
@@ -14,21 +11,15 @@ namespace THLL.EditorSystem.CharacterDataEditor
         public MainWindow MainWindow { get; private set; }
 
         //显示数据
-        public CharacterData ShowedCharacter { get { return MainWindow.DataTreeView.ActiveSelection.CharacterData; } }
+        public CharacterData ShowedCharacter { get { return MainWindow.DataTreeView.ActiveSelection.Data; } }
 
         //基础面板
         private VisualElement EditorRootPanel { get; set; }
-        //角色头像与立绘
-        private VisualElement CharacterAvatar { get; set; }
-        private VisualElement CharacterPortrait { get; set; }
         //信息显示
         private Label FullInfoLabel { get; set; }
         //数据编辑
         private TextField DescriptionField { get; set; }
         private IntegerField SortingOrderField { get; set; }
-        private ObjectField AvatarField { get; set; }
-        private ObjectField PortraitField { get; set; }
-        private ObjectField LivingAreaField { get; set; }
         #endregion
 
         #region 构造及初始化
@@ -60,14 +51,9 @@ namespace THLL.EditorSystem.CharacterDataEditor
 
             //获取UI控件
             EditorRootPanel = this.Q<VisualElement>("DataEditorPanel");
-            CharacterAvatar = this.Q<VisualElement>("CharacterAvatar");
-            CharacterPortrait = this.Q<VisualElement>("CharacterPortrait");
             FullInfoLabel = this.Q<Label>("FullInfoLabel");
             DescriptionField = this.Q<TextField>("DescriptionField");
             SortingOrderField = this.Q<IntegerField>("SortingOrderField");
-            AvatarField = this.Q<ObjectField>("AvatarField");
-            PortraitField = this.Q<ObjectField>("PortraitField");
-            LivingAreaField = this.Q<ObjectField>("LivingAreaField");
 
             //绑定事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -79,7 +65,7 @@ namespace THLL.EditorSystem.CharacterDataEditor
             EditorRootPanel.style.width = evt.newRect.width;
             EditorRootPanel.style.height = evt.newRect.height;
             //同时更改Label字体大小
-            EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
+            GameEditor.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
         }
         #endregion
 
@@ -107,28 +93,19 @@ namespace THLL.EditorSystem.CharacterDataEditor
         {
             //绑定前以不通知的形式设置显示数据
             DescriptionField.SetValueWithoutNotify(ShowedCharacter.Description);
-            SortingOrderField.SetValueWithoutNotify(ShowedCharacter.SortingOrder);
-            AvatarField.SetValueWithoutNotify(ShowedCharacter.Avatar);
-            PortraitField.SetValueWithoutNotify(ShowedCharacter.Portrait);
-            LivingAreaField.SetValueWithoutNotify(ShowedCharacter.LivingArea);
-
-            //显示角色头像与立绘
-            CharacterAvatar.style.backgroundImage = new StyleBackground(ShowedCharacter.Avatar);
-            CharacterPortrait.style.backgroundImage = new StyleBackground(ShowedCharacter.Portrait);
+            SortingOrderField.SetValueWithoutNotify(ShowedCharacter.SortOrder);
 
             //显示全部信息
-            FullInfoLabel.text = ($"{ShowedCharacter.OriginatingSeries}" +
-                $"_{ShowedCharacter.Affiliation}" +
-                $"_{ShowedCharacter.Name}").Replace(" ", "-");
+            FullInfoLabel.text = ($"{ShowedCharacter.Series}" +
+                $"_{ShowedCharacter.Group}" +
+                $"_{ShowedCharacter.Name}" +
+                $"_{ShowedCharacter.Version}").Replace(" ", "-");
             //同时更改Label字体大小
-            EditorExtensions.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
+            GameEditor.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
 
             //绑定
             DescriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
             SortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
-            AvatarField.RegisterValueChangedCallback(OnAvatarChanged);
-            PortraitField.RegisterValueChangedCallback(OnPortraitChanged);
-            LivingAreaField.RegisterValueChangedCallback(OnLivingAreaChanged);
         }
         #endregion
 
@@ -142,67 +119,13 @@ namespace THLL.EditorSystem.CharacterDataEditor
         private void OnSortingOrderChanged(ChangeEvent<int> evt)
         {
             //设置排序
-            ShowedCharacter.SortingOrder = evt.newValue;
+            ShowedCharacter.SortOrder = evt.newValue;
             //重排
-            MainWindow.DataTreeView.AffiliationCharacterDicCache
-                [ShowedCharacter.Affiliation.GetHashCode()]
-                .Sort((a, b) => a.data.SortingOrder.CompareTo(b.data.SortingOrder));
+            MainWindow.DataTreeView.CharacterVersionDicCache
+                [ShowedCharacter.Character.GetHashCode()]
+                .Sort((a, b) => a.data.SortOrder.CompareTo(b.data.SortOrder));
             //刷新
             MainWindow.DataTreeView.TRefresh();
-        }
-        //头像更改
-        private void OnAvatarChanged(ChangeEvent<Object> evt)
-        {
-            //检测传入数据
-            if (evt.newValue is Sprite avatar)
-            {
-                //设置头像
-                ShowedCharacter.Avatar = avatar;
-                //设置显示
-                CharacterAvatar.style.backgroundImage = new StyleBackground(avatar);
-            }
-            else
-            {
-                //若不是，均设置为空
-                ShowedCharacter.Avatar = null;
-                CharacterAvatar.style.backgroundImage = null;
-            }
-        }
-        //立绘更改
-        private void OnPortraitChanged(ChangeEvent<Object> evt)
-        {
-            //检测传入数据
-            if (evt.newValue is Sprite portrait)
-            {
-                //设置头像
-                ShowedCharacter.Portrait = portrait;
-                //设置显示
-                CharacterPortrait.style.backgroundImage = new StyleBackground(portrait);
-            }
-            else
-            {
-                //若不是，均设置为空
-                ShowedCharacter.Portrait = null;
-                CharacterPortrait.style.backgroundImage = null;
-            }
-        }
-        //居住地区更改
-        private void OnLivingAreaChanged(ChangeEvent<Object> evt)
-        {
-            //检测传入数据
-            if (evt.newValue is SceneData livingArea)
-            {
-                //设置头像
-                ShowedCharacter.LivingArea = livingArea;
-                //设置显示
-                //EditorRootPanel.style.backgroundImage = new StyleBackground(livingArea.BackgroundView);
-            }
-            else
-            {
-                //若不是，均设置为空
-                ShowedCharacter.LivingArea = null;
-                //EditorRootPanel.style.backgroundImage = null;
-            }
         }
         #endregion
     }

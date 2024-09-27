@@ -3,18 +3,9 @@
     <engine:VisualElement name="DataEditorPanel" style="flex-grow: 1; width: auto; height: auto; -unity-background-scale-mode: scale-and-crop; min-height: auto; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px;">
         <engine:VisualElement name="BackgroundView" style="flex-grow: 1;">
             <engine:VisualElement name="Filter" style="width: auto; height: auto; position: relative; background-color: rgba(0, 0, 0, 0.7); flex-grow: 1;">
-                <engine:VisualElement name="BaseInfo" style="flex-direction: row; justify-content: space-between;">
-                    <editor:ObjectField label="Parent" enabled="false" type="THLL.GeographySystem.LocationData, Assembly-CSharp" name="ParentDataField" style="width: auto; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement name="Space" style="height: 10px;" />
                 <engine:Label text="FullName" name="FullNameLabel" style="font-size: 32px; -unity-text-align: middle-center; align-items: stretch; justify-content: flex-start; height: 54px;" />
-                <engine:VisualElement name="Space" style="height: 10px;" />
                 <engine:TextField label="Description" hide-placeholder-on-focus="true" multiline="true" name="DescriptionField" is-delayed="true" />
                 <engine:IntegerField label="Sorting Order" value="0" name="SortingOrderField" max-length="10000" is-delayed="true" />
-                <editor:ObjectField label="Background" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="BackgroundField" />
-                <engine:MultiColumnListView show-foldout-header="true" allow-add="false" allow-remove="false" header-title="Connections" name="ConnectionsShowView" enabled="false" fixed-item-height="30">
-                    <engine:Columns />
-                </engine:MultiColumnListView>
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>
