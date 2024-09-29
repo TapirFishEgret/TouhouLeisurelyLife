@@ -170,45 +170,8 @@ namespace THLL.EditorSystem.SceneEditor
                 Debug.LogError(e.Message);
             }
 
-            ////读取数据，并进行缓存
-            //List<SceneData> locUnitDatas = AssetDatabase.FindAssets("t:LocationData")
-            //    .Select(guid => AssetDatabase.LoadAssetAtPath<SceneData>(AssetDatabase.GUIDToAssetPath(guid)))
-            //    .ToList();
-            //foreach (SceneData locUnitData in locUnitDatas)
-            //{
-            //    //子级列表的创建
-            //    List<TreeViewItemData<SceneData>> children = new();
-            //    //数据的创建
-            //    TreeViewItemData<SceneData> item = new(locUnitData.GetAssetHashCode(), locUnitData, children);
-            //    //添加到字典中去
-            //    ItemDicCache[locUnitData.GetAssetHashCode()] = item;
-            //    ChildrenDicCache[locUnitData.GetAssetHashCode()] = children;
-            //}
-
-            ////构建树形结构
-            //foreach (TreeViewItemData<SceneData> item in ItemDicCache.Values)
-            //{
-            //    //判断该地点数据是否有父级
-            //    if (item.data.ParentData == null)
-            //    {
-            //        //若无，则添加入根级别中
-            //        RootItemCache.Add(item);
-            //    }
-            //    else
-            //    {
-            //        //若有，则获取其父级树形图数据
-            //        TreeViewItemData<SceneData> parentItem = ItemDicCache[item.data.ParentData.GetAssetHashCode()];
-            //        //向父级树形图数据的子级列表中添加
-            //        ChildrenDicCache[parentItem.id].Add(item);
-            //    }
-            //}
-
-            ////结束后按文件名称进行重新排序
-            //RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-            //foreach (List<TreeViewItemData<SceneData>> items in ChildrenDicCache.Values)
-            //{
-            //    items.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-            //}
+            //对根数据进行排序
+            RootItemCache.Sort((x, y) => x.data.Data.SortOrder.CompareTo(y.data.Data.SortOrder));
 
             //设置数据源
             SetRootItems(RootItemCache);
@@ -308,8 +271,8 @@ namespace THLL.EditorSystem.SceneEditor
                         newIDPart,
                         //描述为空
                         string.Empty,
-                        //排序为父级的子级数加1
-                        ChildrenDicCache[ActiveSelection.ID].Count + 1,
+                        //排序为父级的序号加子级数 + 1(以序号的形式)
+                        int.Parse(ActiveSelection.Data.SortOrder.ToString("D2") + (ChildrenDicCache[ActiveSelection.ID].Count + 1).ToString("D2")),
                         //父级ID为选中项
                         ActiveSelection.Data.ID
                         );
@@ -328,8 +291,8 @@ namespace THLL.EditorSystem.SceneEditor
                         newIDPart,
                         //描述为空
                         string.Empty,
-                        //排序为根存储的元素数量
-                        RootItemCache.Count,
+                        //排序为根存储的元素数量 + 1
+                        RootItemCache.Count + 1,
                         //父级ID为空
                         string.Empty
                         );
@@ -349,10 +312,16 @@ namespace THLL.EditorSystem.SceneEditor
                 string newFilePath = Path.Combine(newDirectory, "SceneData.xml");
                 //记录存储地址
                 newContainer.Data.SavePath = newFilePath;
-                //生成文件与附属文件夹
+                //生成文件
                 SceneData.SaveToXML(newSceneData, newFilePath);
+                //生成占位文件
+                GameEditor.GeneratePlaceHolderTextFile(newDirectory);
+                //生成附属文件夹
                 Directory.CreateDirectory(Path.Combine(newDirectory, "ChildScene"));
                 Directory.CreateDirectory(Path.Combine(newDirectory, "Backgrounds"));
+                //配备占位文件
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "ChildScene"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "Backgrounds"));
 
                 //处理缓存数据
                 //创建新实例对应的树形图数据的子级
@@ -385,87 +354,11 @@ namespace THLL.EditorSystem.SceneEditor
                 AssetDatabase.SaveAssets();
                 //并刷新一下Assets
                 AssetDatabase.Refresh();
-
-                ////创建路径
-                //string newFolderPath = "Assets\\GameData\\Location";
-                ////判断选中项
-                //if (ActiveSelection != null)
-                //{
-                //    //不为空的情况下，路径更改为父级路径加上新文件夹名称
-                //    newFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(ActiveSelection)) + $"\\{newIDPart}";
-                //}
-                //else
-                //{
-                //    //为空的情况下，路径扩展为新路径
-                //    newFolderPath += $"\\{newIDPart}";
-                //}
-
-                ////检查路径存在状态
-                //if (GameEditor.MakeSureFolderPathExist(newFolderPath))
-                //{
-                //    //若已存在，提示并返回
-                //    Debug.LogWarning("该地点已经存在，请重新创建！");
-                //    return;
-                //}
-
-                ////若路径不存在，而包存在，则开始生成物体
-                ////创建新资源
-                //SceneData newLocData = ScriptableObject.CreateInstance<SceneData>();
-                ////设置相关数据
-                //newLocData.GameDataType = BaseSystem.GameDataTypeEnum.Location;
-                //newLocData.Name = newIDPart;
-                //newLocData.SortingOrder = 999;
-                //newLocData.Background = MainWindow.DefaultLocationBackground;
-                ////更改文件名
-                //newLocData.name = newIDPart;
-                ////更改父级
-                //newLocData.ParentData = ActiveSelection;
-                ////生成全名
-                //newLocData.Editor_GenerateFullName();
-                ////生成ID
-                //newLocData.Editor_GenerateID();
-                ////获取资源文件夹地址
-                //string newLocDataPath = Path.Combine(newFolderPath, $"{newIDPart}.asset").Replace("\\", "/");
-                ////新建资源
-                //AssetDatabase.CreateAsset(newLocData, newLocDataPath);
-                ////保存文件更改
-                //AssetDatabase.SaveAssets();
-                //AssetDatabase.Refresh();
-
-                ////处理缓存数据
-                ////创建新实例对应的树形图数据
-                //List<TreeViewItemData<SceneData>> newChildren = new();
-                //TreeViewItemData<SceneData> newItem = new(newLocData.GetAssetHashCode(), newLocData, newChildren);
-                ////判断选中项是否为空
-                //if (ActiveSelection != null)
-                //{
-                //    //当选中项不为空时，新数据作为被选中的数据的子级被添加
-                //    ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Add(newItem);
-                //    //并赋予序号
-                //    newItem.data.SortingOrder = ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Count;
-                //    //重排
-                //    ChildrenDicCache[ActiveSelection.GetAssetHashCode()].Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-                //}
-                //else
-                //{
-                //    //若为空，则认定为顶级数据
-                //    //添加到顶级数据中
-                //    RootItemCache.Add(newItem);
-                //    //并赋予序号
-                //    newItem.data.SortingOrder = RootItemCache.Count;
-                //    //重排
-                //    RootItemCache.Sort((x, y) => x.data.SortingOrder.CompareTo(y.data.SortingOrder));
-                //}
-                ////添加到其他缓存中
-                //ItemDicCache[newLocData.GetAssetHashCode()] = newItem;
-                //ChildrenDicCache[newLocData.GetAssetHashCode()] = newChildren;
-                ////重构树形图
-                //TRefresh();
             },
-            "Create New Location Unit",
-            "Please Input New Location Unit Name",
-            "New Location Unit Name",
-            "New Name",
+            "Create New Scene",
+            "Please Input New Scene ID Part",
+            "New Scene ID Part",
+            "New ID Part",
             EditorWindow.focusedWindow
             );
         }
@@ -503,18 +396,11 @@ namespace THLL.EditorSystem.SceneEditor
                 //删除
                 GameEditor.DeleteFolder(deletedDirectory);
 
-                ////获取路径
-                //string deletedFolderPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(ActiveSelection));
-                ////从其连接项中删除自身
-                //foreach (SceneData otherLocation in ActiveSelection.ConnectionKeys)
-                //{
-                //    otherLocation.Editor_RemoveConnection(ActiveSelection);
-                //}
-                ////删除
-                //GameEditor.DeleteFolder(deletedFolderPath);
-
                 //由于情况复杂且不好分类，所以直接重构面板
                 GenerateItems();
+
+                //删除结束后，将活跃数据设为空
+                ActiveSelection = null;
 
                 //保存更改
                 AssetDatabase.SaveAssets();

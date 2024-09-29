@@ -53,7 +53,7 @@ namespace THLL.EditorSystem.CharacterEditor
         [MenuItem("EditorSystem/CharacterEditor")]
         public static void OpenWindow()
         {
-            MainWindow mainWindow = GetWindow<MainWindow>("CharacterEditor Editor Window");
+            MainWindow mainWindow = GetWindow<MainWindow>("Character Editor Window");
             mainWindow.position = new Rect(100, 100, 1440, 810);
         }
         #endregion

@@ -19,9 +19,9 @@ namespace THLL.EditorSystem
 
         #region 构造函数
         //字符串数据类型
-        public TreeViewItemDataContainer(string stringData, int sortOrder, TreeViewItemDataContainer<T> parent)
+        public TreeViewItemDataContainer(string id, string stringData, int sortOrder, TreeViewItemDataContainer<T> parent)
         {
-            ID = stringData.GetHashCode();
+            ID = id.GetHashCode();
             StringData = stringData;
             SortOrder = sortOrder;
             Data = default;

@@ -22,8 +22,8 @@ namespace THLL.EditorSystem.CharacterEditor
 
         #region 构造函数
         //字符串数据类型
-        public CharacterSystemDataContainer(string stringData, int sortOrder, CharacterSystemDataContainer parent, ItemDataType type)
-            : base(stringData, sortOrder, parent)
+        public CharacterSystemDataContainer(string id, string stringData, int sortOrder, CharacterSystemDataContainer parent, ItemDataType type)
+            : base(id, stringData, sortOrder, parent)
         {
             Type = type;
         }

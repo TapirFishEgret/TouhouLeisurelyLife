@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CharacterData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ID>Character_Touhou-Project_Main-Character_Hakurei-Reimu_Original</ID>
+  <IDPart>Original</IDPart>
+  <Name>Hakurei Reimu</Name>
+  <Description />
+  <SortOrder>1</SortOrder>
+  <Series>Touhou Project</Series>
+  <Group>Main Character</Group>
+  <Character>Hakurei Reimu</Character>
+  <Version>Original</Version>
+</CharacterData>

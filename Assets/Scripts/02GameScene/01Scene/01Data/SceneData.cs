@@ -41,7 +41,7 @@ namespace THLL.SceneSystem
 
         #region 数据读取相关
         //获取场景背景
-        public IEnumerator LoadBackgrounds(string directoryPath)
+        public IEnumerator LoadBackgroundsCoroutine(string directoryPath)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Backgrounds");

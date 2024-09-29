@@ -77,7 +77,7 @@ namespace THLL.SceneSystem
         public void LoadBackgrounds(MonoBehaviour mono)
         {
             //利用Mono启动协程
-            mono.StartCoroutine(Data.LoadBackgrounds(DataDirectoryPath));
+            mono.StartCoroutine(Data.LoadBackgroundsCoroutine(DataDirectoryPath));
         }
         //卸载所有资源
         public void UnloadAllResources()

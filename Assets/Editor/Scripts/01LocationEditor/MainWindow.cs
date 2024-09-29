@@ -49,7 +49,7 @@ namespace THLL.EditorSystem.SceneEditor
         public static void ShowWindow()
         {
             //窗口设置
-            MainWindow window = GetWindow<MainWindow>("Location Unit Editor Window");
+            MainWindow window = GetWindow<MainWindow>("Scene Editor Window");
             window.position = new Rect(100, 100, 1440, 810);
         }
         #endregion
@@ -88,6 +88,11 @@ namespace THLL.EditorSystem.SceneEditor
         {
             //保存持久化数据到磁盘
             SavePersistentData();
+            //把数据扔到静态类中
+            foreach (var item in DataTreeView.ItemDicCache.Values)
+            {
+                GameEditor.SceneDataDict[item.data.Data.ID] = item.data.Data;
+            }
         }
         #endregion
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CharacterData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ID>Character_Touhou-Project_Main-Character_Kirisame-Marisa_Original</ID>
+  <IDPart>Original</IDPart>
+  <Name>Kirisame Marisa</Name>
+  <Description />
+  <SortOrder>2</SortOrder>
+  <Series>Touhou Project</Series>
+  <Group>Main Character</Group>
+  <Character>Kirisame Marisa</Character>
+  <Version>Original</Version>
+</CharacterData>

@@ -52,13 +52,13 @@ namespace THLL.CharacterSystem
         public void LoadAvatars(MonoBehaviour mono)
         {
             //通过Mono使用协程加载
-            mono.StartCoroutine(Data.LoadAvatars(DataDirectoryPath));
+            mono.StartCoroutine(Data.LoadAvatarsCoroutine(DataDirectoryPath));
         }
         //获取立绘
         public void LoadProtraits(MonoBehaviour mono)
         {
             //通过Mono使用协程加载
-            mono.StartCoroutine(Data.LoadProtraits(DataDirectoryPath));
+            mono.StartCoroutine(Data.LoadProtraitsCoroutine(DataDirectoryPath));
         }
         //卸载所有资源
         public void UnloadAllResources()

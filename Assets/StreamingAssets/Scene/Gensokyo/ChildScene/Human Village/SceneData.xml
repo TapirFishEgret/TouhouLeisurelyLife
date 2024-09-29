@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SceneData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ID>Scene_Gensokyo_Human-Village</ID>
+  <IDPart>Human Village</IDPart>
+  <Name>Human Village</Name>
+  <Description />
+  <SortOrder>102</SortOrder>
+  <ParentSceneID>Scene_Gensokyo</ParentSceneID>
+</SceneData>

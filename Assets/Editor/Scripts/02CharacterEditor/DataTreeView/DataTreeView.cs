@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace THLL.EditorSystem.CharacterEditor
             RegisterEvents();
         }
         //生成物体方法
-        private void GenerateItems()
+        private async void GenerateItems()
         {
             //清除现有缓存
             RootItemCache.Clear();
@@ -122,7 +123,8 @@ namespace THLL.EditorSystem.CharacterEditor
                     //创建系列名称物体数据容器
                     CharacterSystemDataContainer seriesItemDataContainer = new(
                         seriesName,
-                        RootItemCache.Count,
+                        seriesName,
+                        RootItemCache.Count + 1,
                         null,
                         CharacterSystemDataContainer.ItemDataType.Series
                         );
@@ -150,8 +152,9 @@ namespace THLL.EditorSystem.CharacterEditor
                         string groupName = Path.GetFileName(secondLevelDir);
                         //创建组织名称物体数据容器
                         CharacterSystemDataContainer groupItemDataContainer = new(
+                            seriesName + "_" + groupName,
                             groupName,
-                            RootItemCache.Count,
+                            SeriesGroupDicCache[seriesItemDataContainer.ID].Count + 1,
                             seriesItemDataContainer,
                             CharacterSystemDataContainer.ItemDataType.Group
                             );
@@ -179,8 +182,9 @@ namespace THLL.EditorSystem.CharacterEditor
                             string characterName = Path.GetFileName(thirdLevelDir);
                             //创建角色名称物体数据容器
                             CharacterSystemDataContainer characterItemDataContainer = new(
+                                (seriesName + "_" + groupName + "_" + characterName).Replace(" ", "-"),
                                 characterName,
-                                RootItemCache.Count,
+                                GroupCharacterDicCache[groupItemDataContainer.ID].Count + 1,
                                 groupItemDataContainer,
                                 CharacterSystemDataContainer.ItemDataType.Character
                                 );
@@ -231,6 +235,9 @@ namespace THLL.EditorSystem.CharacterEditor
                                         ItemDicCache[versionItemDataContainer.ID] = versionItem;
                                         //添加到上层子级中
                                         characterChildren.Add(versionItem);
+                                        //顺便读取资源数据
+                                        await versionData.LoadAvatarsAsync(Path.GetDirectoryName(filePath));
+                                        await versionData.LoadPortraitsAsync(Path.GetDirectoryName(filePath));
                                     }
                                 }
                             }
@@ -238,165 +245,11 @@ namespace THLL.EditorSystem.CharacterEditor
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 //处理异常时报错
                 Debug.LogError(e.Message);
             }
-
-            ////构建数据结构
-            ////总字典
-            //Dictionary<string, Dictionary<string, Dictionary<string, List<CharacterData>>>> totalDataDic = new();
-            ////总路径存储
-            //List<string> characterDataPaths = new();
-            ////构建字典，此处依靠文件夹构建，以免出现空文件夹所代表的数据未被识别的情况
-            //if (AssetDatabase.IsValidFolder(rootPath))
-            //{
-            //    //若存在，获取第一级的所有文件夹地址，也就是系列作品文件夹，作为总字典第一层Key
-            //    string[] firstLevelDirs = AssetDatabase.GetSubFolders(rootPath);
-            //    //并对其进行遍历
-            //    foreach (string firstLevelDir in firstLevelDirs)
-            //    {
-            //        //从地址中获取名称，也就是Key
-            //        string firstLevelName = Path.GetFileName(firstLevelDir);
-            //        //并针对每一个Key创建第一级对应的值，也就是包含了第二级的字典，即组织-角色字典
-            //        Dictionary<string, Dictionary<string, List<CharacterData>>> secondLevelDic = new();
-
-            //        //获取第二级所有文件夹地址，也就是组织文件夹
-            //        string[] secondLevelDirs = AssetDatabase.GetSubFolders(firstLevelDir);
-            //        //遍历
-            //        foreach (var secondLevelDir in secondLevelDirs)
-            //        {
-            //            //从地址中获取名称作为Key
-            //            string secondLevelName = Path.GetFileName(secondLevelDir);
-            //            //并针对每一个Key创建第三级对应的值，即角色-版本字典
-            //            Dictionary<string, List<CharacterData>> thirdLevelDic = new();
-
-            //            //获取第三级所有文件夹地址，也就是角色文件夹
-            //            string[] thirdLevelDirs = AssetDatabase.GetSubFolders(secondLevelDir);
-            //            //遍历
-            //            foreach (var thirdLevelDir in thirdLevelDirs)
-            //            {
-            //                //从地址中获取名称作为Key
-            //                string thirdLevelName = Path.GetFileName(thirdLevelDir);
-            //                //并针对每一个Key创建第四级对应的值，即角色数据列表
-            //                List<CharacterData> characterDatas = new();
-            //                //并添加键值对
-            //                thirdLevelDic[thirdLevelName] = characterDatas;
-            //            }
-            //            //添加键值对
-            //            secondLevelDic[secondLevelName] = thirdLevelDic;
-            //        }
-            //        //添加到字典中键值对
-            //        totalDataDic[firstLevelName] = secondLevelDic;
-            //    }
-            //}
-            ////填充字典，如果是从编辑器创建的数据，那么此处应该是正确无误的
-            //foreach (CharacterData versionData in characterDatas)
-            //{
-            //    //添加数据
-            //    totalDataDic[versionData.OriginatingSeries][versionData.Affiliation].Add(versionData);
-            //}
-
-            ////随后开始构建树形图物体
-            ////遍历第一层
-            //foreach (var series in totalDataDic)
-            //{
-            //    //获取字符串排序
-            //    int seriesSortingOrder;
-            //    if (StringSortingOrderPersistentData.ContainsKey(series.Key))
-            //    {
-            //        seriesSortingOrder = StringSortingOrderPersistentData[series.Key];
-            //    }
-            //    else
-            //    {
-            //        seriesSortingOrder = RootItemCache.Count + 1;
-            //    }
-            //    //创造物体容器
-            //    CharacterSystemDataContainer seriesItemDataContainer = new(
-            //        series.Key,
-            //        CharacterSystemDataContainer.Type.OriginatingSeries,
-            //        null,
-            //        seriesSortingOrder
-            //        );
-            //    //创建系列名称的子级的集合，即存储组织名称的地方
-            //    List<TreeViewItemData<CharacterSystemDataContainer>> seriesChildren = new();
-            //    //创建物体
-            //    TreeViewItemData<CharacterSystemDataContainer> seriesItem = new(
-            //        series.Key.GetHashCode(),
-            //        seriesItemDataContainer,
-            //        seriesChildren
-            //        );
-            //    //设置对应缓存
-            //    SeriesGroupDicCache[series.Key.GetHashCode()] = seriesChildren;
-            //    //添加到总集缓存与一层缓存中
-            //    ItemDicCache[series.Key.GetHashCode()] = seriesItem;
-            //    RootItemCache.Add(seriesItem);
-
-            //    //填充其子级
-            //    //遍历该数据的第二层
-            //    foreach (var affiliation in series.Value)
-            //    {
-            //        //获取字符串排序
-            //        int affiliationSortingOrder;
-            //        if (StringSortingOrderPersistentData.ContainsKey(affiliation.Key))
-            //        {
-            //            affiliationSortingOrder = StringSortingOrderPersistentData[affiliation.Key];
-            //        }
-            //        else
-            //        {
-            //            affiliationSortingOrder = seriesChildren.Count + 1;
-            //        }
-            //        //创建物体容器
-            //        CharacterSystemDataContainer characterItemDataContainer = new(
-            //            affiliation.Key,
-            //            CharacterSystemDataContainer.Type.Affiliation,
-            //            seriesItemDataContainer,
-            //            affiliationSortingOrder
-            //            );
-            //        //创建组织名称的子级的集合，即存储角色名称的地方
-            //        List<TreeViewItemData<CharacterSystemDataContainer>> affiliationChildren = new();
-            //        //创建物体
-            //        TreeViewItemData<CharacterSystemDataContainer> affiliationItem = new(
-            //            affiliation.Key.GetHashCode(),
-            //            characterItemDataContainer,
-            //            affiliationChildren
-            //            );
-            //        //添加到上层子级中
-            //        seriesChildren.Add(affiliationItem);
-            //        //对对应的存储角色名称的地方设定为缓存
-            //        GroupCharacterDicCache[affiliation.Key.GetHashCode()] = affiliationChildren;
-            //        //添加到总集缓存与存储组织名称的地方的缓存中
-            //        ItemDicCache[affiliation.Key.GetHashCode()] = affiliationItem;
-
-            //        //填充其子级
-            //        //遍历该数据的第三层，即角色
-            //        foreach (var character in affiliation.Value)
-            //        {
-            //            //创建角色名称物体数据容器
-            //            CharacterSystemDataContainer characterItemDataContainer = new(
-            //                character,
-            //                characterItemDataContainer
-            //                );
-            //            //创建角色名称物体
-            //            TreeViewItemData<CharacterSystemDataContainer> characterItem = new(
-            //                character.GetAssetHashCode(),
-            //                characterItemDataContainer,
-            //                null
-            //                );
-            //            //添加到上层子级中
-            //            affiliationChildren.Add(characterItem);
-            //            //添加到总集缓存中
-            //            ItemDicCache[character.GetAssetHashCode()] = characterItem;
-            //        }
-
-            //        //结束之后对角色数据集合进行排序
-            //        affiliationChildren.Sort((a, b) => a.data.SortingOrder.CompareTo(b.data.SortingOrder));
-            //    }
-
-            //    //结束之后对组织名称集合进行排序
-            //    seriesChildren.Sort((a, b) => a.data.SortingOrder.CompareTo(b.data.SortingOrder));
-            //}
 
             //对一层缓存进行排序
             RootItemCache.Sort((a, b) => a.data.SortOrder.CompareTo(b.data.SortOrder));
@@ -501,7 +354,7 @@ namespace THLL.EditorSystem.CharacterEditor
             if (ActiveSelection == null)
             {
                 //若当前选中项为空，则说明要创建根部物体，即系列名称，创建文本输入窗口
-                TextInputWindow.ShowWindow((System.Action<string>)(newSeriesName =>
+                TextInputWindow.ShowWindow(newSeriesName =>
                 {
                     //计时
                     using ExecutionTimer timer = new("创建新系列", MainWindow.TimerDebugLogToggle.value);
@@ -525,6 +378,7 @@ namespace THLL.EditorSystem.CharacterEditor
                         //若不存在，则生成物体容器
                         CharacterSystemDataContainer newDataContainer = new(
                             newSeriesName,
+                            newSeriesName,
                             RootItemCache.Count + 1,
                             null,
                             CharacterSystemDataContainer.ItemDataType.Series
@@ -547,7 +401,7 @@ namespace THLL.EditorSystem.CharacterEditor
                         //刷新
                         TRefresh();
                     }
-                }),
+                },
                 "Create New Series",
                 "Please Input New Series ID Part",
                 "New Series ID Part",
@@ -561,7 +415,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Series)
                 {
                     //选中系列的情况下，创建组织
-                    TextInputWindow.ShowWindow((System.Action<string>)(newAffiliationName =>
+                    TextInputWindow.ShowWindow(newAffiliationName =>
                     {
                         //计时
                         using ExecutionTimer timer = new("创建新组", MainWindow.TimerDebugLogToggle.value);
@@ -585,6 +439,7 @@ namespace THLL.EditorSystem.CharacterEditor
                         {
                             //若不存在，则生成物体容器
                             CharacterSystemDataContainer newDataContainer = new(
+                                (ActiveSelection.StringData + "_" + newAffiliationName).Replace(" ", "-"),
                                 newAffiliationName,
                                 SeriesGroupDicCache[ActiveSelection.ID].Count + 1,
                                 ActiveSelection,
@@ -608,7 +463,7 @@ namespace THLL.EditorSystem.CharacterEditor
                             //刷新
                             TRefresh();
                         }
-                    }),
+                    },
                     "Create New Group",
                     "Please Input New Group ID Part",
                     "New Group ID Part",
@@ -619,7 +474,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Group)
                 {
                     //选中组织的情况下，创建角色
-                    TextInputWindow.ShowWindow((System.Action<string>)(newCharacterName =>
+                    TextInputWindow.ShowWindow(newCharacterName =>
                     {
                         //计时
                         using ExecutionTimer timer = new("创建新角色", MainWindow.TimerDebugLogToggle.value);
@@ -644,10 +499,11 @@ namespace THLL.EditorSystem.CharacterEditor
                         {
                             //若不存在，则生成物体容器
                             CharacterSystemDataContainer newDataContainer = new(
+                                (ActiveSelection.Parent.StringData + "_" + ActiveSelection.StringData + "_" + newCharacterName).Replace(" ", "-"),
                                 newCharacterName,
                                 GroupCharacterDicCache[ActiveSelection.ID].Count + 1,
                                 ActiveSelection,
-                                CharacterSystemDataContainer.ItemDataType.Group
+                                CharacterSystemDataContainer.ItemDataType.Character
                                 );
                             //生成子级列表
                             List<TreeViewItemData<CharacterSystemDataContainer>> newChildren = new();
@@ -667,7 +523,7 @@ namespace THLL.EditorSystem.CharacterEditor
                             //刷新
                             TRefresh();
                         }
-                    }),
+                    },
                     "Create New Character",
                     "Please Input New Character ID Part",
                     "New Character ID Part",
@@ -911,7 +767,7 @@ namespace THLL.EditorSystem.CharacterEditor
                     CharacterData newCharacterData = new(
                         //ID，由系列、组织、角色、版本组成，用下划线连接，并将空格替换为-
                         string.Join("_", new string[] {
-                            "CharacterEditor",
+                            "Character",
                             characterItemDataContainer.Parent.Parent.StringData,
                             characterItemDataContainer.Parent.StringData,
                             characterItemDataContainer.StringData,
@@ -922,8 +778,8 @@ namespace THLL.EditorSystem.CharacterEditor
                         characterItemDataContainer.StringData,
                         //Description，暂时为空
                         string.Empty,
-                        //排序，由角色版本数量决定
-                        CharacterVersionDicCache[characterItemDataContainer.ID].Count,
+                        //排序，由角色数量决定
+                        CharacterVersionDicCache.Count,
                         //系列名称，从容器中获取
                         characterItemDataContainer.Parent.Parent.StringData,
                         //组名称，从容器中获取
@@ -938,12 +794,17 @@ namespace THLL.EditorSystem.CharacterEditor
                     //首先获取存放路径
                     string filePath = Path.Combine(newFolderPath, $"CharacterData.xml");
                     //创建文件
-                    CharacterData.SaveToXML<CharacterData>(newCharacterData, filePath);
+                    CharacterData.SaveToXML(newCharacterData, filePath);
+                    //新增占位文件
+                    GameEditor.GeneratePlaceHolderTextFile(newFolderPath);
                     //设定其存放路径
                     newCharacterData.SavePath = filePath;
                     //创建配备文件夹
                     Directory.CreateDirectory(Path.Combine(newFolderPath, "Avatars"));
                     Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
+                    //并配备占位符
+                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Avatars"));
+                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Portraits"));
 
                     //随后处理树状图与缓存
                     //新建物体容器
@@ -963,66 +824,12 @@ namespace THLL.EditorSystem.CharacterEditor
                     CharacterVersionDicCache[characterItemDataContainer.ID].Add(newItem);
                     //刷新
                     TRefresh();
-
-                    ////若不存在，开始生成物体
-                    ////创建新资源
-                    //CharacterData newCharacterData = ScriptableObject.CreateInstance<CharacterData>();
-                    ////设置相关数据
-                    //newCharacterData.GameDataType = GameDataTypeEnum.CharacterEditor;
-                    //newCharacterData.Name = newCharacterVersionName;
-                    //newCharacterData.OriginatingSeries = characterItemDataContainer.Parent.StringData;
-                    //newCharacterData.Affiliation = characterItemDataContainer.StringData;
-                    //newCharacterData.SortingOrder = ItemDicCache[characterItemDataContainer.StringData.GetHashCode()].children.Count() + 1;
-                    //newCharacterData.Avatar = MainWindow.DefaultCharacterAvatar;
-                    //newCharacterData.Portrait = MainWindow.DefaultCharacterPortrait;
-                    //newCharacterData.Editor_GenerateID();
-                    ////更改文件名
-                    //newCharacterData.name = newCharacterVersionName;
-                    ////获取文件地址
-                    //string newFilePath = Path.Combine(newFolderPath, $"{newCharacterData.name}.asset").Replace("\\", "/");
-                    ////创建资源
-                    //AssetDatabase.CreateAsset(newCharacterData, newFilePath);
-                    ////保存
-                    //AssetDatabase.SaveAssets();
-                    //AssetDatabase.Refresh();
-
-                    ////随后生成树状图物体
-                    ////新建物体容器
-                    //CharacterSystemDataContainer newDataContainer = new(
-                    //    newCharacterData,
-                    //    characterItemDataContainer
-                    //    );
-                    ////生成树状图物体
-                    //TreeViewItemData<CharacterSystemDataContainer> newItem = new(
-                    //    newCharacterData.GetAssetHashCode(),
-                    //    newDataContainer,
-                    //    null
-                    //    );
-                    ////添加到总缓存中
-                    //ItemDicCache[newCharacterData.GetAssetHashCode()] = newItem;
-                    ////添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
-                    //GroupCharacterDicCache[characterItemDataContainer.StringData.GetHashCode()].Add(newItem);
-                    ////刷新
-                    //TRefresh();
-
-                    ////随后处理资源组问题
-                    ////创建新的资源索引
-                    //AddressableAssetEntry entry = AddressableAssetSettingsDefaultObject
-                    //.GetSettings(true)
-                    //.CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newCharacterData)), MainWindow.AssetGroup);
-                    ////设定索引名称为全名
-                    //entry.SetAddress($"{newCharacterData.OriginatingSeries}_{newCharacterData.Affiliation}_{newCharacterData.Name}".Replace(" ", "-"));
-                    ////并设定标签
-                    //entry.SetLabel("CharacterEditor", true, true);
-                    ////保存设置
-                    //MainWindow.AssetGroup.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
-                    //AssetDatabase.SaveAssets();
                 }
             },
             "Create New Character Version",
-            "Please Input New Character Version",
-            "New Character Version",
-            "New Version",
+            "Please Input New Character Version ID Part",
+            "New Character Version ID Part",
+            "New Version ID Part",
             EditorWindow.focusedWindow
             );
         }

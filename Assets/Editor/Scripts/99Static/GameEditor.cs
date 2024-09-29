@@ -141,6 +141,23 @@ namespace THLL.EditorSystem
                 AssetDatabase.Refresh();
             }
         }
+        //生成占位文本文档
+        public static void GeneratePlaceHolderTextFile(string directoryPath)
+        {
+            //确保路径存在
+            MakeSureFolderPathExist(directoryPath);
+            //生成文件
+            string filePath = Path.Combine(directoryPath, "PlaceHolder.txt");
+            File.WriteAllText(filePath,
+                "这是一个占位文件。" +
+                "\n主要是为了防止Unity在构建过程中自动删除StreamingAssets中的空文件夹" +
+                "\nThis file is a placeholder." +
+                "\nIt is mainly used to prevent Unity from automatically deleting empty folders in StreamingAssets during the build process.");
+            //保存更改
+            AssetDatabase.SaveAssets();
+            //刷新资源视图
+            AssetDatabase.Refresh();
+        }
         #endregion
 
         #region 视觉元素功能扩展

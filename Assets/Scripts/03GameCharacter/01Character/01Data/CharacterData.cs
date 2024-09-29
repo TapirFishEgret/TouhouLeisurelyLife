@@ -51,7 +51,7 @@ namespace THLL.CharacterSystem
 
         #region 资源加载相关方法
         //获取头像
-        public IEnumerator LoadAvatars(string directoryPath)
+        public IEnumerator LoadAvatarsCoroutine(string directoryPath)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Avatars");
@@ -107,7 +107,7 @@ namespace THLL.CharacterSystem
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
                     //然后，启动请求加载图片
-                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(new Uri(filePath).AbsoluteUri);
+                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
 
                     //等待请求完成
                     await request.SendWebRequest();
@@ -131,7 +131,7 @@ namespace THLL.CharacterSystem
             }
         }
         //获取立绘
-        public IEnumerator LoadProtraits(string directoryPath)
+        public IEnumerator LoadProtraitsCoroutine(string directoryPath)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Protraits");
@@ -170,10 +170,10 @@ namespace THLL.CharacterSystem
                 }
             }
         }
-        public async Task LoadProtraitsAsync(string directoryPath)
+        public async Task LoadPortraitsAsync(string directoryPath)
         {
             //获取到目录
-            string dir = Path.Combine(directoryPath, "Protraits");
+            string dir = Path.Combine(directoryPath, "Portraits");
 
             //获取目录下所有图片文件
             //首先获取所有文件
@@ -187,7 +187,7 @@ namespace THLL.CharacterSystem
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
                     //然后，启动请求加载图片
-                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(new Uri(filePath).AbsoluteUri);
+                    UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
 
                     //等待
                     await request.SendWebRequest();
