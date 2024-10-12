@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using THLL.SceneSystem;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
@@ -88,10 +89,13 @@ namespace THLL.EditorSystem.SceneEditor
         {
             //保存持久化数据到磁盘
             SavePersistentData();
-            //把数据扔到静态类中
+            //对数据进行处理，扔到静态类中的同时进行保存
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
+                //向静态类中添加数据
                 GameEditor.SceneDataDict[item.data.Data.ID] = item.data.Data;
+                //保存数据
+                SceneData.SaveToXML(item.data.Data, item.data.Data.SavePath);
             }
         }
         #endregion

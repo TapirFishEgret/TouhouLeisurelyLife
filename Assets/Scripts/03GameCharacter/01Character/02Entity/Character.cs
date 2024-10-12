@@ -11,6 +11,8 @@ namespace THLL.CharacterSystem
         public string Series => Data.Series;
         //组织
         public string Group => Data.Group;
+        //角色
+        public string Chara => Data.Chara;
         //版本
         public string Version => Data.Version;
         #endregion

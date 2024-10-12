@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
+using THLL.CharacterSystem;
 
 namespace THLL.EditorSystem.CharacterEditor
 {
@@ -92,12 +93,13 @@ namespace THLL.EditorSystem.CharacterEditor
         {
             //保存
             SavePersistentData();
-            //将数据转移到静态类中
+            //对数据进行处理，所有数据进行保存
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
                 if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
                 {
                     GameEditor.CharacterDataDict[item.data.Data.ID] = item.data.Data;
+                    CharacterData.SaveToXML(item.data.Data, item.data.Data.SavePath);
                 }
             }
         }

@@ -18,8 +18,15 @@ namespace THLL.EditorSystem.CharacterEditor
         //信息显示
         private Label FullInfoLabel { get; set; }
         //数据编辑
+        private TextField IDField { get; set; }
+        private TextField IDPartField { get; set; }
+        private TextField NameField { get; set; }
         private TextField DescriptionField { get; set; }
         private IntegerField SortingOrderField { get; set; }
+        private TextField SeriesField { get; set; }
+        private TextField GroupField { get; set; }
+        private TextField CharaField { get; set; }
+        private TextField VersionField { get; set; }
         #endregion
 
         #region 构造及初始化
@@ -52,8 +59,15 @@ namespace THLL.EditorSystem.CharacterEditor
             //获取UI控件
             EditorRootPanel = this.Q<VisualElement>("DataEditorPanel");
             FullInfoLabel = this.Q<Label>("FullInfoLabel");
+            IDField = this.Q<TextField>("IDField");
+            IDPartField = this.Q<TextField>("IDPartField");
+            NameField = this.Q<TextField>("NameField");
             DescriptionField = this.Q<TextField>("DescriptionField");
-            SortingOrderField = this.Q<IntegerField>("SortingOrderField");
+            SortingOrderField = this.Q<IntegerField>("SortOrderField");
+            SeriesField = this.Q<TextField>("SeriesField");
+            GroupField = this.Q<TextField>("GroupField");
+            CharaField = this.Q<TextField>("CharaField");
+            VersionField = this.Q<TextField>("VersionField");
 
             //绑定事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -64,8 +78,6 @@ namespace THLL.EditorSystem.CharacterEditor
             //面板大小更改时，数据编辑面板大小同步更改
             EditorRootPanel.style.width = evt.newRect.width;
             EditorRootPanel.style.height = evt.newRect.height;
-            //同时更改Label字体大小
-            GameEditor.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
         }
         #endregion
 
@@ -92,40 +104,44 @@ namespace THLL.EditorSystem.CharacterEditor
         private void Bind()
         {
             //绑定前以不通知的形式设置显示数据
+            IDField.SetValueWithoutNotify(ShowedCharacter.ID);
+            IDPartField.SetValueWithoutNotify(ShowedCharacter.IDPart);
+            NameField.SetValueWithoutNotify(ShowedCharacter.Name);
             DescriptionField.SetValueWithoutNotify(ShowedCharacter.Description);
             SortingOrderField.SetValueWithoutNotify(ShowedCharacter.SortOrder);
+            SeriesField.SetValueWithoutNotify(ShowedCharacter.Series);
+            GroupField.SetValueWithoutNotify(ShowedCharacter.Group);
+            CharaField.SetValueWithoutNotify(ShowedCharacter.Chara);
+            VersionField.SetValueWithoutNotify(ShowedCharacter.Version);
 
             //显示全部信息
-            FullInfoLabel.text = ($"{ShowedCharacter.Series}" +
-                $"_{ShowedCharacter.Group}" +
-                $"_{ShowedCharacter.Name}" +
-                $"_{ShowedCharacter.Version}").Replace(" ", "-");
-            //同时更改Label字体大小
-            GameEditor.SingleLineLabelAdjustFontSizeToFit(FullInfoLabel);
+            SetFullInfo();
 
             //绑定
-            DescriptionField.RegisterValueChangedCallback(OnDescriptionChanged);
-            SortingOrderField.RegisterValueChangedCallback(OnSortingOrderChanged);
+            IDField.RegisterValueChangedCallback(evt => ShowedCharacter.ID = evt.newValue);
+            IDPartField.RegisterValueChangedCallback(evt => ShowedCharacter.IDPart = evt.newValue);
+            NameField.RegisterValueChangedCallback(evt => ShowedCharacter.Name = evt.newValue);
+            DescriptionField.RegisterValueChangedCallback(evt => ShowedCharacter.Description = evt.newValue);
+            SortingOrderField.RegisterValueChangedCallback(evt => ShowedCharacter.SortOrder = evt.newValue);
+            SeriesField.RegisterValueChangedCallback(evt => { ShowedCharacter.Series = evt.newValue; SetFullInfo(); });
+            GroupField.RegisterValueChangedCallback(evt => { ShowedCharacter.Group = evt.newValue; SetFullInfo(); });
+            CharaField.RegisterValueChangedCallback(evt => { ShowedCharacter.Chara = evt.newValue; SetFullInfo(); });
+            VersionField.RegisterValueChangedCallback(evt => { ShowedCharacter.Version = evt.newValue; SetFullInfo(); });
         }
         #endregion
 
-        #region 数据更改事件与事件
-        //描述更改
-        private void OnDescriptionChanged(ChangeEvent<string> evt)
+        #region 辅助方法
+        //生成全部信息
+        private void SetFullInfo()
         {
-            ShowedCharacter.Description = evt.newValue;
-        }
-        //排序更改
-        private void OnSortingOrderChanged(ChangeEvent<int> evt)
-        {
-            //设置排序
-            ShowedCharacter.SortOrder = evt.newValue;
-            //重排
-            MainWindow.DataTreeView.CharacterVersionDicCache
-                [ShowedCharacter.Character.GetHashCode()]
-                .Sort((a, b) => a.data.SortOrder.CompareTo(b.data.SortOrder));
-            //刷新
-            MainWindow.DataTreeView.TRefresh();
+            if (ShowedCharacter == null)
+            {
+                return;
+            }
+            FullInfoLabel.text = ($"{ShowedCharacter.Series}" +
+                $"_{ShowedCharacter.Group}" +
+                $"_{ShowedCharacter.Chara}" +
+                $"_{ShowedCharacter.Version}").Replace(" ", "-");
         }
         #endregion
     }

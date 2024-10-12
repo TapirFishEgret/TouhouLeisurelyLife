@@ -48,6 +48,8 @@ namespace THLL.BaseSystem
         //保存为XML文件
         public static void SaveToXML<T>(T data, string filePath) where T : BaseGameData
         {
+            //确定路径存在
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
             //序列化对象
             XmlSerializer serializer = new(data.GetType());
             //创建文件流

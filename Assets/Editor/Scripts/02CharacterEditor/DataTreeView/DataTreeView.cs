@@ -49,6 +49,7 @@ namespace THLL.EditorSystem.CharacterEditor
 
             //更改颜色为皇帝的新衣
             style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0));
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
 
             //初始化
             Init();
@@ -87,6 +88,12 @@ namespace THLL.EditorSystem.CharacterEditor
                 Label label = element as Label;
                 //设置展示形态显示内容
                 label.text = itemDataContainer.StringData;
+                //检查容器数据
+                if (itemDataContainer.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                {
+                    //若为版本数据，更改标签名称
+                    label.name = "Version";
+                }
             };
 
             //总之先生成物体

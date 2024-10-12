@@ -2,11 +2,13 @@
 <CharacterData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ID>Character_Touhou-Project_Main-Character_Hakurei-Reimu_Original</ID>
   <IDPart>Original</IDPart>
-  <Name>Hakurei Reimu</Name>
-  <Description />
+  <Name>博丽灵梦</Name>
+  <Description>博丽灵梦，飞翔于天空的不可思议的巫女。
+多行于XML中的测试。
+好像显示起来特别丑，淦哦。</Description>
   <SortOrder>1</SortOrder>
-  <Series>Touhou Project</Series>
-  <Group>Main Character</Group>
-  <Character>Hakurei Reimu</Character>
-  <Version>Original</Version>
+  <Series>东方Project</Series>
+  <Group>主角组</Group>
+  <Chara>博丽灵梦</Chara>
+  <Version>原版</Version>
 </CharacterData>

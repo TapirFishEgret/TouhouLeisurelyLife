@@ -4,4 +4,80 @@
     -unity-text-outline-width: 0;
     -unity-text-outline-color: rgba(0, 0, 0, 0);
     color: rgb(255, 255, 255);
+    white-space: pre-wrap;
+    flex-wrap: nowrap;
+}
+
+.tree-view-item-normal-style Label {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    height: auto;
+    transition-property: border-color;
+    transition-duration: 0.3s;
+    -unity-text-align: middle-left;
+}
+
+.tree-view-item-normal-style Label#Version {
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.tree-view-item-normal-style Label:hover {
+    border-left-color: rgb(200, 200, 0);
+    border-right-color: rgb(200, 200, 0);
+    border-top-color: rgb(200, 200, 0);
+    border-bottom-color: rgb(200, 200, 0);
+}
+
+.tree-view-item-normal-style Label#Version:hover {
+    border-left-color: rgb(0, 200, 200);
+    border-right-color: rgb(0, 200, 200);
+    border-top-color: rgb(0, 200, 200);
+    border-bottom-color: rgb(0, 200, 200);
+}
+
+.editor-normal-text-field Label {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    -unity-text-align: middle-left;
+    width: 15%;
+}
+
+.editor-normal-text-field {
+    margin-top: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    width: auto;
+    flex-wrap: wrap-reverse;
 }

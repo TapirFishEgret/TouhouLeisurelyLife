@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CharacterData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ID>Character_Touhou-Project_Main-Character_Kirisame-Marisa_Original</ID>
+  <ID>Character_Touhou-Project_TH01-Highly-Responsive-to-Prayers_Hakurei-Reimu_Original</ID>
   <IDPart>Original</IDPart>
-  <Name>Kirisame Marisa</Name>
+  <Name>Hakurei Reimu</Name>
   <Description />
-  <SortOrder>2</SortOrder>
+  <SortOrder>3</SortOrder>
   <Series>Touhou Project</Series>
-  <Group>Main Character</Group>
+  <Group>TH01 Highly Responsive to Prayers</Group>
   <Version>Original</Version>
 </CharacterData>

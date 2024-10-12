@@ -37,6 +37,7 @@ namespace THLL.EditorSystem.SceneEditor
 
             //更改自身属性
             style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0));
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
 
             //初始化
             Init();
@@ -259,7 +260,15 @@ namespace THLL.EditorSystem.SceneEditor
                 //判断选中项
                 if (ActiveSelection != null)
                 {
-                    //不为空的情况下，路径为父级路径的子级文件夹
+                    //不为空的情况下，检测是否有同名数据
+                    if (ChildrenDicCache[ActiveSelection.ID].Any(x => x.data.Data.IDPart == newIDPart))
+                    {
+                        //若有，提示并返回
+                        Debug.LogWarning("该地点已经存在，请重新创建！");
+                        return;
+                    }
+
+                    //路径为父级路径的子级文件夹
                     newDirectory = Path.Combine(Path.GetDirectoryName(ActiveSelection.Data.SavePath), "ChildScene");
                     //并生成新数据
                     newSceneData = new SceneData(
@@ -281,7 +290,15 @@ namespace THLL.EditorSystem.SceneEditor
                 }
                 else
                 {
-                    //若为空，则生成新数据
+                    //若为空，则在根数据中检测是否有同名数据
+                    if (RootItemCache.Any(x => x.data.Data.IDPart == newIDPart))
+                    {
+                        //若有，提示并返回
+                        Debug.LogWarning("该地点已经存在，请重新创建！");
+                        return;
+                    }
+
+                    //生成新数据
                     newSceneData = new SceneData(
                         //ID为"Scene"+新ID分块，并替换空格为-
                         ("Scene" + $"_{newIDPart}").Replace(" ", "-"),
@@ -301,18 +318,11 @@ namespace THLL.EditorSystem.SceneEditor
                 }
                 //随后扩展路径
                 newDirectory = Path.Combine(newDirectory, newIDPart);
-                //检查路径存在状态
-                if (GameEditor.MakeSureFolderPathExist(newDirectory))
-                {
-                    //若已存在，提示并返回
-                    Debug.LogWarning("该地点已经存在，请重新创建！");
-                    return;
-                }
                 //确认文件存储地址
                 string newFilePath = Path.Combine(newDirectory, "SceneData.xml");
                 //记录存储地址
                 newContainer.Data.SavePath = newFilePath;
-                //生成文件
+                //保存数据到磁盘
                 SceneData.SaveToXML(newSceneData, newFilePath);
                 //生成占位文件
                 GameEditor.GeneratePlaceHolderTextFile(newDirectory);

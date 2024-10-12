@@ -18,7 +18,7 @@ namespace THLL.CharacterSystem
         //角色所属组织名
         public string Group { get; set; }
         //角色名
-        public string Character { get; set; }
+        public string Chara { get; set; }
         //版本名
         public string Version { get; set; }
         #endregion
@@ -39,12 +39,12 @@ namespace THLL.CharacterSystem
 
         }
         //有参
-        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string character, string version)
+        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version)
             : base(id, idPart, name, description, sortOrder)
         {
             Series = series;
             Group = group;
-            Character = character;
+            Chara = chara;
             Version = version;
         }
         #endregion
