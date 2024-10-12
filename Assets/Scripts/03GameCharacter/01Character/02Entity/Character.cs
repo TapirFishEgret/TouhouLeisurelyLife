@@ -15,6 +15,9 @@ namespace THLL.CharacterSystem
         public string Chara => Data.Chara;
         //版本
         public string Version => Data.Version;
+
+        //颜色
+        public Color Color => Data.Color;
         #endregion
 
         #region 资源

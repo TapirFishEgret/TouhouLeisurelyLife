@@ -794,7 +794,9 @@ namespace THLL.EditorSystem.CharacterEditor
                         //角色名称，从容器中获取
                         characterItemDataContainer.StringData,
                         //版本名称，直接获取
-                        newCharacterVersionName
+                        newCharacterVersionName,
+                        //颜色，默认白色
+                        Color.white
                         );
 
                     //随后将其保存在硬盘上并创建标准配备文件夹

@@ -97,6 +97,9 @@ namespace THLL.EditorSystem.SceneEditor
                 //保存数据
                 SceneData.SaveToXML(item.data.Data, item.data.Data.SavePath);
             }
+            //保存
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
         #endregion
 

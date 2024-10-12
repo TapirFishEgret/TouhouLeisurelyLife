@@ -11,4 +11,10 @@
   <Group>主角组</Group>
   <Chara>博丽灵梦</Chara>
   <Version>原版</Version>
+  <Color>
+    <r>1</r>
+    <g>1</g>
+    <b>1</b>
+    <a>1</a>
+  </Color>
 </CharacterData>

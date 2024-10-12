@@ -102,6 +102,9 @@ namespace THLL.EditorSystem.CharacterEditor
                     CharacterData.SaveToXML(item.data.Data, item.data.Data.SavePath);
                 }
             }
+            //保存
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
         #endregion
 

@@ -21,6 +21,9 @@ namespace THLL.CharacterSystem
         public string Chara { get; set; }
         //版本名
         public string Version { get; set; }
+
+        //颜色
+        public Color Color { get; set; }
         #endregion
 
         #region 资源
@@ -39,13 +42,14 @@ namespace THLL.CharacterSystem
 
         }
         //有参
-        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version)
+        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version, Color color)
             : base(id, idPart, name, description, sortOrder)
         {
             Series = series;
             Group = group;
             Chara = chara;
             Version = version;
+            Color = color;
         }
         #endregion
 

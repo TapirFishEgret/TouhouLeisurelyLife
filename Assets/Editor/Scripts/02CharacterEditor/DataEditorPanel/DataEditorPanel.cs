@@ -1,5 +1,6 @@
 ﻿using THLL.CharacterSystem;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.CharacterEditor
@@ -27,6 +28,7 @@ namespace THLL.EditorSystem.CharacterEditor
         private TextField GroupField { get; set; }
         private TextField CharaField { get; set; }
         private TextField VersionField { get; set; }
+        private ColorField ColorField { get; set; }
         #endregion
 
         #region 构造及初始化
@@ -68,6 +70,7 @@ namespace THLL.EditorSystem.CharacterEditor
             GroupField = this.Q<TextField>("GroupField");
             CharaField = this.Q<TextField>("CharaField");
             VersionField = this.Q<TextField>("VersionField");
+            ColorField = this.Q<ColorField>("ColorField");
 
             //绑定事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -113,6 +116,7 @@ namespace THLL.EditorSystem.CharacterEditor
             GroupField.SetValueWithoutNotify(ShowedCharacter.Group);
             CharaField.SetValueWithoutNotify(ShowedCharacter.Chara);
             VersionField.SetValueWithoutNotify(ShowedCharacter.Version);
+            ColorField.SetValueWithoutNotify(ShowedCharacter.Color);
 
             //显示全部信息
             SetFullInfo();
@@ -127,6 +131,7 @@ namespace THLL.EditorSystem.CharacterEditor
             GroupField.RegisterValueChangedCallback(evt => { ShowedCharacter.Group = evt.newValue; SetFullInfo(); });
             CharaField.RegisterValueChangedCallback(evt => { ShowedCharacter.Chara = evt.newValue; SetFullInfo(); });
             VersionField.RegisterValueChangedCallback(evt => { ShowedCharacter.Version = evt.newValue; SetFullInfo(); });
+            ColorField.RegisterValueChangedCallback(evt => { ShowedCharacter.Color = evt.newValue; FullInfoLabel.style.color = evt.newValue; });
         }
         #endregion
 
@@ -138,10 +143,13 @@ namespace THLL.EditorSystem.CharacterEditor
             {
                 return;
             }
-            FullInfoLabel.text = ($"{ShowedCharacter.Series}" +
-                $"_{ShowedCharacter.Group}" +
-                $"_{ShowedCharacter.Chara}" +
-                $"_{ShowedCharacter.Version}").Replace(" ", "-");
+            //以/分割各字段
+            FullInfoLabel.text = string.Join("/", new string[] { 
+                ShowedCharacter.Series, 
+                ShowedCharacter.Group, 
+                ShowedCharacter.Chara, 
+                ShowedCharacter.Version
+            });
         }
         #endregion
     }

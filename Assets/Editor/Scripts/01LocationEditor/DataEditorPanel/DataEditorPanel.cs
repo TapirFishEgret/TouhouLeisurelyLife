@@ -126,7 +126,7 @@ namespace THLL.EditorSystem.SceneEditor
             BasePanel.style.height = evt.newRect.height;
         }
         #endregion
-
+        
         #region 辅助方法
         //获取场景的全名
         public void SetFullName()

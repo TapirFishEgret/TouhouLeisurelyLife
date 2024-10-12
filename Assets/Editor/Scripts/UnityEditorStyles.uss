@@ -56,7 +56,7 @@
     border-bottom-color: rgb(0, 200, 200);
 }
 
-.editor-normal-text-field Label {
+.editor-normal-field Label {
     margin-top: 2px;
     margin-right: 2px;
     margin-bottom: 2px;
@@ -69,7 +69,7 @@
     width: 15%;
 }
 
-.editor-normal-text-field {
+.editor-normal-field {
     margin-top: 1px;
     margin-right: 1px;
     margin-bottom: 1px;
