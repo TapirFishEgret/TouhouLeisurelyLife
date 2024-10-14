@@ -41,10 +41,10 @@ namespace THLL.SceneSystem
 
         #region 数据读取相关
         //获取场景背景
-        public IEnumerator LoadBackgroundsCoroutine(string directoryPath)
+        public IEnumerator LoadBackgroundsCoroutine(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null)
         {
             //获取到目录
-            string dir = Path.Combine(directoryPath, "Backgrounds");
+            string dir = Path.Combine(dataDirectoryPath, "Backgrounds");
 
             //获取目录下所有图片文件
             //首先获取所有文件
@@ -75,15 +75,18 @@ namespace THLL.SceneSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        BackgroundsDict.Add(fileName, sprite);
+                        BackgroundsDict[fileName] = sprite;
+
+                        //触发事件
+                        onBackgroundLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }
         }
-        public async Task LoadBackgroundsAsync(string directoryPath)
+        public async Task LoadBackgroundsAsync(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null)
         {
             //获取到目录
-            string dir = Path.Combine(directoryPath, "Backgrounds");
+            string dir = Path.Combine(dataDirectoryPath, "Backgrounds");
 
             //获取目录下所有图片文件
             //首先获取所有文件
@@ -101,7 +104,6 @@ namespace THLL.SceneSystem
 
                     //等待
                     await request.SendWebRequest();
-
                     //等待结束后判断结果
                     if (request.result != UnityWebRequest.Result.Success)
                     {
@@ -115,7 +117,10 @@ namespace THLL.SceneSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        BackgroundsDict.Add(fileName, sprite);
+                        BackgroundsDict[fileName] = sprite;
+
+                        //触发事件
+                        onBackgroundLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }

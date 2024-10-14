@@ -32,7 +32,7 @@ namespace THLL.CharacterSystem
         public Dictionary<string, Sprite> AvatarsDict { get; set; } = new();
         //立绘字典
         [XmlIgnore]
-        public Dictionary<string, Sprite> ProtraitsDict { get; set; } = new();
+        public Dictionary<string, Sprite> PortraitsDict { get; set; } = new();
         #endregion
 
         #region 构造函数
@@ -55,7 +55,7 @@ namespace THLL.CharacterSystem
 
         #region 资源加载相关方法
         //获取头像
-        public IEnumerator LoadAvatarsCoroutine(string directoryPath)
+        public IEnumerator LoadAvatarsCoroutine(string directoryPath, Action<string, Sprite> onAvatarLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Avatars");
@@ -89,12 +89,15 @@ namespace THLL.CharacterSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        AvatarsDict.Add(fileName, sprite);
+                        AvatarsDict[fileName] = sprite;
+
+                        //触发事件
+                        onAvatarLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }
         }
-        public async Task LoadAvatarsAsync(string directoryPath)
+        public async Task LoadAvatarsAsync(string directoryPath, Action<string, Sprite> onAvatarLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Avatars");
@@ -129,16 +132,19 @@ namespace THLL.CharacterSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        AvatarsDict.Add(fileName, sprite);
+                        AvatarsDict[fileName] = sprite;
+
+                        //触发事件
+                        onAvatarLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }
         }
         //获取立绘
-        public IEnumerator LoadProtraitsCoroutine(string directoryPath)
+        public IEnumerator LoadPortraitsCoroutine(string directoryPath, Action<string, Sprite> onPortraitLoaded = null)
         {
             //获取到目录
-            string dir = Path.Combine(directoryPath, "Protraits");
+            string dir = Path.Combine(directoryPath, "Portraits");
 
             //获取目录下所有图片文件
             //首先获取所有文件
@@ -160,7 +166,7 @@ namespace THLL.CharacterSystem
                     if (request.result != UnityWebRequest.Result.Success)
                     {
                         //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load protrait image: " + filePath);
+                        GameHistory.LogError("Failed to load portrait image: " + filePath);
                     }
                     else
                     {
@@ -169,12 +175,15 @@ namespace THLL.CharacterSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        ProtraitsDict.Add(fileName, sprite);
+                        PortraitsDict[fileName] = sprite;
+
+                        //触发事件
+                        onPortraitLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }
         }
-        public async Task LoadPortraitsAsync(string directoryPath)
+        public async Task LoadPortraitsAsync(string directoryPath, Action<string, Sprite> onPortraitLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Portraits");
@@ -200,7 +209,7 @@ namespace THLL.CharacterSystem
                     if (request.result != UnityWebRequest.Result.Success)
                     {
                         //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load protrait image: " + filePath);
+                        GameHistory.LogError("Failed to load portrait image: " + filePath);
                     }
                     else
                     {
@@ -209,7 +218,10 @@ namespace THLL.CharacterSystem
                         //创建Sprite
                         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                         //添加到字典中
-                        ProtraitsDict.Add(fileName, sprite);
+                        PortraitsDict[fileName] = sprite;
+
+                        //触发事件
+                        onPortraitLoaded?.Invoke(fileName, sprite);
                     }
                 }
             }
@@ -219,7 +231,7 @@ namespace THLL.CharacterSystem
         {
             //将资源设定为空
             AvatarsDict.Clear();
-            ProtraitsDict.Clear();
+            PortraitsDict.Clear();
         }
         #endregion
     }

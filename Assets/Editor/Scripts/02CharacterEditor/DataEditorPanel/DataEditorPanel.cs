@@ -15,7 +15,7 @@ namespace THLL.EditorSystem.CharacterEditor
         public CharacterData ShowedCharacter { get { return MainWindow.DataTreeView.ActiveSelection.Data; } }
 
         //基础面板
-        private VisualElement EditorRootPanel { get; set; }
+        private VisualElement DataEditorRootPanel { get; set; }
         //信息显示
         private Label FullInfoLabel { get; set; }
         //数据编辑
@@ -59,7 +59,7 @@ namespace THLL.EditorSystem.CharacterEditor
             label = "数据编辑面板";
 
             //获取UI控件
-            EditorRootPanel = this.Q<VisualElement>("DataEditorPanel");
+            DataEditorRootPanel = this.Q<VisualElement>("DataEditorRootPanel");
             FullInfoLabel = this.Q<Label>("FullInfoLabel");
             IDField = this.Q<TextField>("IDField");
             IDPartField = this.Q<TextField>("IDPartField");
@@ -71,16 +71,6 @@ namespace THLL.EditorSystem.CharacterEditor
             CharaField = this.Q<TextField>("CharaField");
             VersionField = this.Q<TextField>("VersionField");
             ColorField = this.Q<ColorField>("ColorField");
-
-            //绑定事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-        }
-        //面板大小更改事件
-        private void OnGeometryChanged(GeometryChangedEvent evt)
-        {
-            //面板大小更改时，数据编辑面板大小同步更改
-            EditorRootPanel.style.width = evt.newRect.width;
-            EditorRootPanel.style.height = evt.newRect.height;
         }
         #endregion
 
@@ -150,6 +140,8 @@ namespace THLL.EditorSystem.CharacterEditor
                 ShowedCharacter.Chara, 
                 ShowedCharacter.Version
             });
+            //设置颜色
+            FullInfoLabel.style.color = ShowedCharacter.Color;
         }
         #endregion
     }

@@ -72,8 +72,8 @@ namespace THLL.EditorSystem.SceneEditor
             //实现展开状态保存
             itemExpandedChanged += SaveExpandedState;
 
-            //实现有选中项时获取活跃数据与打开编辑窗口
-            selectionChanged += (selections) =>
+            //实现有选中项时获取活跃数据与刷新编辑面板
+            selectionChanged += async (selections) =>
             {
                 //获取活跃数据
                 SceneSystemDataContainer activeSelection = selections.Cast<SceneSystemDataContainer>().FirstOrDefault();
@@ -84,6 +84,8 @@ namespace THLL.EditorSystem.SceneEditor
                     ActiveSelection = activeSelection;
                     //刷新数据编辑面板
                     MainWindow.DataEditorPanel.DRefresh();
+                    //刷新资源编辑面板
+                    await MainWindow.AssetsEditorPanel.ARefresh();
                 }
             };
 

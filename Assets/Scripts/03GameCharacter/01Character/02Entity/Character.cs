@@ -24,7 +24,7 @@ namespace THLL.CharacterSystem
         //头像字典
         public Dictionary<string, Sprite> AvatarsDict => Data.AvatarsDict;
         //立绘字典
-        public Dictionary<string, Sprite> ProtraitsDict => Data.ProtraitsDict;
+        public Dictionary<string, Sprite> PortraitsDict => Data.PortraitsDict;
         #endregion
 
         #region 初始化及相关方法
@@ -60,10 +60,10 @@ namespace THLL.CharacterSystem
             mono.StartCoroutine(Data.LoadAvatarsCoroutine(DataDirectoryPath));
         }
         //获取立绘
-        public void LoadProtraits(MonoBehaviour mono)
+        public void LoadPortraits(MonoBehaviour mono)
         {
             //通过Mono使用协程加载
-            mono.StartCoroutine(Data.LoadProtraitsCoroutine(DataDirectoryPath));
+            mono.StartCoroutine(Data.LoadPortraitsCoroutine(DataDirectoryPath));
         }
         //卸载所有资源
         public void UnloadAllResources()

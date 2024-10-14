@@ -20,14 +20,15 @@ namespace THLL.EditorSystem.CharacterEditor
         [SerializeField]
         private VisualTreeAsset _dataEditorVisualTree;
         public VisualTreeAsset DataEditorVisualTree => _dataEditorVisualTree;
+        //资源编辑面板UI文档
+        [SerializeField]
+        private VisualTreeAsset _assetsEditorVisualTree;
+        //Sprite显示模板
+        public VisualTreeAsset SpriteVisualElementTemplate;
         //永久性存储数据
         [SerializeField]
         private TextAsset _persistentDataFile;
         public TextAsset PersistentDataFile => _persistentDataFile;
-        //可寻址资源包
-        [SerializeField]
-        private AddressableAssetGroup _assetGroup;
-        public AddressableAssetGroup AssetGroup => _assetGroup;
         //默认角色头像
         [SerializeField]
         private Sprite _defaultCharacterAvatar;
@@ -49,6 +50,8 @@ namespace THLL.EditorSystem.CharacterEditor
         public TabView MultiTabView { get; private set; }
         //数据编辑窗口
         public DataEditorPanel DataEditorPanel { get; private set; }
+        //资源编辑面板
+        public AssetsEditorPanel AssetsEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("EditorSystem/CharacterEditor")]
@@ -87,6 +90,9 @@ namespace THLL.EditorSystem.CharacterEditor
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
             MultiTabView.Add(DataEditorPanel);
+            //创建资源编辑面板并添加
+            AssetsEditorPanel = new AssetsEditorPanel(_assetsEditorVisualTree, this);
+            MultiTabView.Add(AssetsEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()

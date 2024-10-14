@@ -15,7 +15,7 @@ namespace THLL.EditorSystem.SceneEditor
         public SceneData ShowedScene { get => MainWindow.DataTreeView.ActiveSelection.Data; }
 
         //基层面板
-        private VisualElement BasePanel { get; set; }
+        private VisualElement DataEditorRootPanel { get; set; }
         //全名
         private Label FullNameLabel { get; set; }
         //ID
@@ -52,16 +52,12 @@ namespace THLL.EditorSystem.SceneEditor
             //计时
             using ExecutionTimer timer = new("数据编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
-            //设置标签页容器可延展
-            style.flexGrow = 1;
-            contentContainer.style.flexGrow = 1;
-
             //设定名称
-            label = "数据编辑窗口";
+            label = "数据编辑面板";
 
             //获取UI控件
             //基层面板
-            BasePanel = this.Q<VisualElement>("DataEditorPanel");
+            DataEditorRootPanel = this.Q<VisualElement>("DataEditorRootPanel");
             //全名
             FullNameLabel = this.Q<Label>("FullNameLabel");
             //ID
@@ -79,9 +75,6 @@ namespace THLL.EditorSystem.SceneEditor
 
             //绑定UI控件
             Bind();
-
-            //注册事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
         //刷新面板
         public void DRefresh()
@@ -117,13 +110,6 @@ namespace THLL.EditorSystem.SceneEditor
             DescriptionField.RegisterValueChangedCallback(evt => ShowedScene.Description = evt.newValue);
             SortOrderField.RegisterValueChangedCallback(evt => ShowedScene.SortOrder = evt.newValue);
             ParentSceneIDField.RegisterValueChangedCallback(evt => ShowedScene.ParentSceneID = evt.newValue);
-        }
-        //几何图形改变时手动调整窗口大小
-        private void OnGeometryChanged(GeometryChangedEvent evt)
-        {
-            //触发更改
-            BasePanel.style.width = evt.newRect.width;
-            BasePanel.style.height = evt.newRect.height;
         }
         #endregion
         

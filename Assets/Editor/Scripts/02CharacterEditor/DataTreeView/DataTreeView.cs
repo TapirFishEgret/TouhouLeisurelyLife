@@ -274,13 +274,14 @@ namespace THLL.EditorSystem.CharacterEditor
         private void RegisterEvents()
         {
             //首先绑定的是，当选择发生更改时，更改活跃选中项
-            selectionChanged += (selections) =>
+            selectionChanged += async (selections) =>
             {
                 CharacterSystemDataContainer newSelection = selectedItems.Cast<CharacterSystemDataContainer>().FirstOrDefault();
                 if (newSelection != null)
                 {
                     ActiveSelection = newSelection;
                     MainWindow.DataEditorPanel.DRefresh();
+                    await MainWindow.AssetsEditorPanel.ARefresh();
                 }
             };
 

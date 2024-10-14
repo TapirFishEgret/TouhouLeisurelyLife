@@ -14,13 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Official-Character-Group
   m_GUID: d58d4b4bdb909cc4da635d31db8d980b
-  m_SerializeEntries:
-  - m_GUID: 8a3819e42500e364fb10c1a03c54bafa
-    m_Address: Touhou-Project_Main-Characters_Hakurei-Reimu
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Character
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be86ecd0df245c5458db9dd2b62dbc48, type: 2}
   m_SchemaSet:

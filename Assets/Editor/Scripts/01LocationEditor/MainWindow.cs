@@ -18,14 +18,15 @@ namespace THLL.EditorSystem.SceneEditor
         //数据编辑面板UXML文件
         [SerializeField]
         private VisualTreeAsset _dataEditorVisualTree;
+        //资源编辑面板UXML文件
+        [SerializeField]
+        private VisualTreeAsset _assetsEditorVisualTree;
+        //背景图容器UXML文件
+        public VisualTreeAsset BackgroundAssetContainerVisualTree;
         //永久性存储文件
         [SerializeField]
         private TextAsset _persistentDataFile;
         public TextAsset PersistentDataFile => _persistentDataFile;
-        //可寻址资源包
-        [SerializeField]
-        private AddressableAssetGroup _assetGroup;
-        public AddressableAssetGroup AssetGroup => _assetGroup;
         //默认地点背景图
         [SerializeField]
         private Sprite _defaultLocationBackground;
@@ -44,6 +45,8 @@ namespace THLL.EditorSystem.SceneEditor
         public TabView MultiTabView { get; private set; }
         //数据编辑面板
         public DataEditorPanel DataEditorPanel { get; private set; }
+        //资源编辑面板
+        public AssetsEditorPanel AssetsEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("EditorSystem/SceneEditor")]
@@ -83,6 +86,9 @@ namespace THLL.EditorSystem.SceneEditor
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
             MultiTabView.Add(DataEditorPanel);
+            //创建资源编辑面板并添加
+            AssetsEditorPanel = new AssetsEditorPanel(_assetsEditorVisualTree, this);
+            MultiTabView.Add(AssetsEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()
