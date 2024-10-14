@@ -17,7 +17,7 @@ namespace THLL.UISystem
 
         //背景图相关
         //当前背景所剩时间
-        public float Duration { get; private set; } = 180f;
+        public float Duration { get; private set; } = -1f;
         #endregion
 
         #region 初始化与相关方法
@@ -68,10 +68,10 @@ namespace THLL.UISystem
         //背景图循环方法本体
         private IEnumerator CycleBackgroundCoroutine()
         {
-            //首先获取可用地点
-            List<Scene> locations = GameScene.SceneDB.Values.ToList();
+            //首先获取可用地点，此处为主界面循环，仅循环根场景
+            List<Scene> locations = GameScene.SceneDB.RootSceneStorage.Values.ToList();
 
-            //始终循环
+            //不设置终止条件，除非协程被强制终止，否则一直循环
             while (true)
             {
                 //判断剩余时间
@@ -94,7 +94,7 @@ namespace THLL.UISystem
                     MoveBackground();
 
                     //更新持续时间
-                    Duration = 60f;
+                    Duration = 180f;
                 }
             }
         }

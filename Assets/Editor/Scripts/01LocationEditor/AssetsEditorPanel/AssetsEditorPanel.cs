@@ -95,7 +95,7 @@ namespace THLL.EditorSystem.SceneEditor
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
             //调整背景容器高度
-            NameBackgroundContainerDict.Values.ToList().ForEach(backgroundContainer => 
+            NameBackgroundContainerDict.Values.ToList().ForEach(backgroundContainer =>
                 backgroundContainer.Q<VisualElement>("Container").style.height = backgroundContainer.resolvedStyle.width * 9 / 16);
         }
         #endregion
@@ -157,7 +157,7 @@ namespace THLL.EditorSystem.SceneEditor
                     string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds", backgroundName + ".png");
                     //复制文件
                     File.Copy(sourceFilePath, targetFilePath, true);
-                    
+
                     //结束后直接刷新面板
                     await ARefresh();
                 }
@@ -175,7 +175,7 @@ namespace THLL.EditorSystem.SceneEditor
             //首先，隐藏背景图
             HideBackground(name);
             //然后，获取存放背景图的目录的信息
-            DirectoryInfo directory = new (Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds"));
+            DirectoryInfo directory = new(Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds"));
             //遍历目录，删除文件
             foreach (FileInfo file in directory.GetFiles())
             {

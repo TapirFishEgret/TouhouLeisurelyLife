@@ -29,7 +29,7 @@ namespace THLL.EditorSystem.SceneEditor
         //排序位置
         private IntegerField SortOrderField { get; set; }
         //父级ID
-        private TextField ParentSceneIDField { get; set; } 
+        private TextField ParentSceneIDField { get; set; }
         #endregion
 
         #region 数据编辑面板的初始化以及数据更新
@@ -112,7 +112,7 @@ namespace THLL.EditorSystem.SceneEditor
             ParentSceneIDField.RegisterValueChangedCallback(evt => ShowedScene.ParentSceneID = evt.newValue);
         }
         #endregion
-        
+
         #region 辅助方法
         //获取场景的全名
         public void SetFullName()

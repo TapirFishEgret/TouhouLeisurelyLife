@@ -41,7 +41,7 @@ namespace THLL.SceneSystem
 
         #region 数据读取相关
         //获取场景背景
-        public IEnumerator LoadBackgroundsCoroutine(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null)
+        public IEnumerator LoadBackgroundsCoroutine(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null, Action onAllBackgroundsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(dataDirectoryPath, "Backgrounds");
@@ -82,8 +82,10 @@ namespace THLL.SceneSystem
                     }
                 }
             }
+            //全部加载完成，触发事件
+            onAllBackgroundsLoaded?.Invoke();
         }
-        public async Task LoadBackgroundsAsync(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null)
+        public async Task LoadBackgroundsAsync(string dataDirectoryPath, Action<string, Sprite> onBackgroundLoaded = null, Action onAllBackgroundsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(dataDirectoryPath, "Backgrounds");
@@ -124,6 +126,8 @@ namespace THLL.SceneSystem
                     }
                 }
             }
+            //全部加载完成，触发事件
+            onAllBackgroundsLoaded?.Invoke();
         }
         //卸载所有资源
         public void UnloadAllResources()

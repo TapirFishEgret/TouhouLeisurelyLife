@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using THLL.BaseSystem;
+using UnityEngine.TextCore.Text;
 
 namespace THLL.CharacterSystem
 {
@@ -41,6 +42,27 @@ namespace THLL.CharacterSystem
                 //若不是，返回对items筛选后的列表
                 return items.Where(item => item.Group == filterValue);
             });
+        }
+        #endregion
+
+        #region 方法重写
+        //添加
+        public override void Add(Character entity)
+        {
+            //父类方法
+            base.Add(entity);
+            //完善系列索引
+            if (!SeriesIndex.ContainsKey(entity.Series))
+            {
+                SeriesIndex.Add(entity.Series, new HashSet<Character>());
+            }
+            SeriesIndex[entity.Series].Add(entity);
+            //完善组织索引
+            if (!GroupIndex.ContainsKey(entity.Group))
+            {
+                GroupIndex.Add(entity.Group, new HashSet<Character>());
+            }
+            GroupIndex[entity.Group].Add(entity);
         }
         #endregion
     }

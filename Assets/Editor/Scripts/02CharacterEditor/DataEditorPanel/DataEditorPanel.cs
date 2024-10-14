@@ -134,10 +134,10 @@ namespace THLL.EditorSystem.CharacterEditor
                 return;
             }
             //以/分割各字段
-            FullInfoLabel.text = string.Join("/", new string[] { 
-                ShowedCharacter.Series, 
-                ShowedCharacter.Group, 
-                ShowedCharacter.Chara, 
+            FullInfoLabel.text = string.Join("/", new string[] {
+                ShowedCharacter.Series,
+                ShowedCharacter.Group,
+                ShowedCharacter.Chara,
                 ShowedCharacter.Version
             });
             //设置颜色

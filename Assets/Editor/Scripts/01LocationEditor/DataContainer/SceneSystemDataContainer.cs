@@ -7,7 +7,7 @@ namespace THLL.EditorSystem.SceneEditor
         #region 构造函数
         //传入文字数据时
         public SceneSystemDataContainer(string id, string stringData, int sortOrder, TreeViewItemDataContainer<SceneData> parent)
-            : base(id,stringData, sortOrder, parent)
+            : base(id, stringData, sortOrder, parent)
         {
 
         }

@@ -106,7 +106,7 @@ namespace THLL.BaseSystem
             //清除缓存
             QueryCache.Clear();
             //基础存储添加
-            BasicStorage.Add(key, value);
+            BasicStorage[key] = value;
             //完整存储添加
             if (!FullStorage.ContainsKey(key))
             {
@@ -120,7 +120,7 @@ namespace THLL.BaseSystem
             //清除缓存
             QueryCache.Clear();
             //基础存储添加
-            BasicStorage.Add(item.Key, item.Value);
+            BasicStorage[item.Key] = item.Value;
             //完整存储添加
             if (!FullStorage.ContainsKey(item.Key))
             {

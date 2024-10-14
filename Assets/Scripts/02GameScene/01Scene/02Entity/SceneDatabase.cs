@@ -6,6 +6,8 @@ namespace THLL.SceneSystem
     public class SceneDatabase : BaseGameEntityDatabase<SceneData, Scene>
     {
         #region 新增存储
+        //根场景存储
+        public Dictionary<string, Scene> RootSceneStorage { get; private set; } = new();
         //路径存储-场景ID版本
         public Dictionary<string, Dictionary<string, int>> PathStorageIDVersion { get; private set; } = new();
         //路径存储，场景版本
@@ -35,6 +37,21 @@ namespace THLL.SceneSystem
         protected override void InitFilter()
         {
             //暂时没有查询关键字需要初始化
+        }
+        #endregion
+
+        #region 方法重写
+        //添加方法
+        public override void Add(Scene scene)
+        {
+            //父类添加
+            base.Add(scene);
+            //检测是否有父级
+            if (string.IsNullOrEmpty(scene.ParentSceneID))
+            {
+                //若无父级，则添加到根场景存储
+                RootSceneStorage[scene.ID] = scene;
+            }
         }
         #endregion
     }

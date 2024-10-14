@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using THLL.CharacterSystem;
 using UnityEditor;
-using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using THLL.CharacterSystem;
 
 namespace THLL.EditorSystem.CharacterEditor
 {

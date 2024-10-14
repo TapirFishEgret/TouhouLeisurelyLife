@@ -22,6 +22,17 @@ namespace THLL.UISystem
         public Button QuitGameButton { get; private set; }
         #endregion
 
+        #region 周期函数
+        //Awake
+        protected override void Awake()
+        {
+            //父类Awake
+            base.Awake();
+            //设定版本号
+            VersionLabel.text = TouhouLeisurelyLife.Version;
+        }
+        #endregion 
+
         #region 初始化与相关方法
         //绑定UI元素
         protected override void GetVisualElements()

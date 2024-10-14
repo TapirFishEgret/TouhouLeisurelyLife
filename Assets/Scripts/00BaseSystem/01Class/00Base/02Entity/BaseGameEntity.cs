@@ -32,7 +32,7 @@ namespace THLL.BaseSystem
             Configure(baseGameData);
         }
 
-        //配置
+        //配置，自身的配置
         protected virtual void Configure(BaseGameData baseGameData)
         {
             //检测传入数据

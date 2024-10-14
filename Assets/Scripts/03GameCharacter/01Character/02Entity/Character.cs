@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using THLL.BaseSystem;
 using UnityEngine;
 
@@ -37,33 +40,35 @@ namespace THLL.CharacterSystem
         //配置函数重载
         protected void Configure(CharacterDatabase characterDb)
         {
-            //首先完善系列索引
-            if (!characterDb.SeriesIndex.ContainsKey(Series))
-            {
-                characterDb.SeriesIndex.Add(Series, new HashSet<Character>());
-            }
-            characterDb.SeriesIndex[Series].Add(this);
-            //然后完善组织索引
-            if (!characterDb.GroupIndex.ContainsKey(Group))
-            {
-                characterDb.GroupIndex.Add(Group, new HashSet<Character>());
-            }
-            characterDb.GroupIndex[Group].Add(this);
+            //将自身添加到数据库中
+            characterDb.Add(this);
         }
         #endregion
 
         #region 资源相关方法
-        //获取头像
-        public void LoadAvatars(MonoBehaviour mono)
+        //加载头像，协程版本
+        public IEnumerator LoadAvatarsCoroutine(Action<string, Sprite> onAvatarLoaded = null)
         {
-            //通过Mono使用协程加载
-            mono.StartCoroutine(Data.LoadAvatarsCoroutine(DataDirectoryPath));
+            //返回协程
+            yield return Data.LoadAvatarsCoroutine(DataDirectoryPath, onAvatarLoaded);
         }
-        //获取立绘
-        public void LoadPortraits(MonoBehaviour mono)
+        //加载头像，异步版本
+        public async Task LoadAvatarsAsync(Action<string, Sprite> onAvatarLoaded = null)
         {
-            //通过Mono使用协程加载
-            mono.StartCoroutine(Data.LoadPortraitsCoroutine(DataDirectoryPath));
+            //调用异步函数
+            await Data.LoadAvatarsAsync(DataDirectoryPath, onAvatarLoaded);
+        }
+        //加载立绘，协程版本
+        public IEnumerator LoadPortraitsCoroutine(Action<string, Sprite> onPortraitLoaded = null)
+        {
+            //返回协程
+            yield return Data.LoadPortraitsCoroutine(DataDirectoryPath, onPortraitLoaded);
+        }
+        //加载立绘，异步版本
+        public async Task LoadPortraitsAsync(Action<string, Sprite> onPortraitLoaded = null)
+        {
+            //调用异步函数
+            await Data.LoadPortraitsAsync(DataDirectoryPath, onPortraitLoaded);
         }
         //卸载所有资源
         public void UnloadAllResources()

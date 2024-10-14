@@ -116,7 +116,7 @@ namespace THLL.EditorSystem.CharacterEditor
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
             //头像保持长宽一致
-            NameAvatarContainerDict.Values.ToList().ForEach(avatarContainer => 
+            NameAvatarContainerDict.Values.ToList().ForEach(avatarContainer =>
                 avatarContainer.Q<VisualElement>("Container").style.height = avatarContainer.resolvedStyle.width);
             //立绘不做更改
         }

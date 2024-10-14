@@ -8,6 +8,8 @@ namespace THLL
     public static class TouhouLeisurelyLife
     {
         #region 数据
+        //版本号字符串
+        public const string Version = "0.0.2_2024.10.14_17:24";
         //启用的管理器们
         public static HashSet<GameBehaviour> Managers { get; } = new();
         #endregion
