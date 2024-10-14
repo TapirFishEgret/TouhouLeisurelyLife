@@ -112,16 +112,61 @@ namespace THLL.EditorSystem.CharacterEditor
             SetFullInfo();
 
             //绑定
-            IDField.RegisterValueChangedCallback(evt => ShowedCharacter.ID = evt.newValue);
-            IDPartField.RegisterValueChangedCallback(evt => ShowedCharacter.IDPart = evt.newValue);
-            NameField.RegisterValueChangedCallback(evt => ShowedCharacter.Name = evt.newValue);
-            DescriptionField.RegisterValueChangedCallback(evt => ShowedCharacter.Description = evt.newValue);
-            SortingOrderField.RegisterValueChangedCallback(evt => ShowedCharacter.SortOrder = evt.newValue);
-            SeriesField.RegisterValueChangedCallback(evt => { ShowedCharacter.Series = evt.newValue; SetFullInfo(); });
-            GroupField.RegisterValueChangedCallback(evt => { ShowedCharacter.Group = evt.newValue; SetFullInfo(); });
-            CharaField.RegisterValueChangedCallback(evt => { ShowedCharacter.Chara = evt.newValue; SetFullInfo(); });
-            VersionField.RegisterValueChangedCallback(evt => { ShowedCharacter.Version = evt.newValue; SetFullInfo(); });
-            ColorField.RegisterValueChangedCallback(evt => { ShowedCharacter.Color = evt.newValue; FullInfoLabel.style.color = evt.newValue; });
+            NameField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                    ShowedCharacter.Name = evt.newValue; 
+            });
+            DescriptionField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                    ShowedCharacter.Description = evt.newValue; 
+            });
+            SortingOrderField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                    ShowedCharacter.SortOrder = evt.newValue; 
+            });
+            SeriesField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                {
+                    ShowedCharacter.Series = evt.newValue;
+                    SetFullInfo(); 
+                }
+            });
+            GroupField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                {                    
+                    ShowedCharacter.Group = evt.newValue;
+                    SetFullInfo(); 
+                }
+            });
+            CharaField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                {                    
+                    ShowedCharacter.Chara = evt.newValue;
+                    SetFullInfo(); 
+                }
+            });
+            VersionField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                {                    
+                    ShowedCharacter.Version = evt.newValue;
+                    SetFullInfo(); 
+                }
+            });
+            ColorField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedCharacter != null) 
+                {                    
+                    ShowedCharacter.Color = evt.newValue;
+                    FullInfoLabel.style.color = evt.newValue; 
+                }
+            });
         }
         #endregion
 

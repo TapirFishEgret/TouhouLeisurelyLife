@@ -55,7 +55,7 @@ namespace THLL.CharacterSystem
 
         #region 资源加载相关方法
         //获取头像
-        public IEnumerator LoadAvatarsCoroutine(string directoryPath, Action<string, Sprite> onAvatarLoaded = null)
+        public IEnumerator LoadAvatarsCoroutine(string directoryPath, Action<string, Sprite> onAvatarLoaded = null, Action onAllAvatarsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Avatars");
@@ -96,8 +96,10 @@ namespace THLL.CharacterSystem
                     }
                 }
             }
+            //所有图片加载完成后触发事件
+            onAllAvatarsLoaded?.Invoke();
         }
-        public async Task LoadAvatarsAsync(string directoryPath, Action<string, Sprite> onAvatarLoaded = null)
+        public async Task LoadAvatarsAsync(string directoryPath, Action<string, Sprite> onAvatarLoaded = null, Action onAllAvatarsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Avatars");
@@ -139,9 +141,11 @@ namespace THLL.CharacterSystem
                     }
                 }
             }
+            //所有图片加载完成后触发事件
+            onAllAvatarsLoaded?.Invoke();
         }
         //获取立绘
-        public IEnumerator LoadPortraitsCoroutine(string directoryPath, Action<string, Sprite> onPortraitLoaded = null)
+        public IEnumerator LoadPortraitsCoroutine(string directoryPath, Action<string, Sprite> onPortraitLoaded = null, Action onAllPortraitsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Portraits");
@@ -182,8 +186,10 @@ namespace THLL.CharacterSystem
                     }
                 }
             }
+            //所有图片加载完成后触发事件
+            onAllPortraitsLoaded?.Invoke();
         }
-        public async Task LoadPortraitsAsync(string directoryPath, Action<string, Sprite> onPortraitLoaded = null)
+        public async Task LoadPortraitsAsync(string directoryPath, Action<string, Sprite> onPortraitLoaded = null, Action onAllPortraitsLoaded = null)
         {
             //获取到目录
             string dir = Path.Combine(directoryPath, "Portraits");
@@ -225,6 +231,8 @@ namespace THLL.CharacterSystem
                     }
                 }
             }
+            //所有图片加载完成后触发事件
+            onAllPortraitsLoaded?.Invoke();
         }
         //卸载所有资源
         public void UnloadAllResources()

@@ -16,7 +16,19 @@ namespace THLL.EditorSystem.SceneEditor
         public MainWindow MainWindow { get; private set; }
 
         //显示的场景
-        public SceneData ShowedScene { get => MainWindow.DataTreeView.ActiveSelection.Data; }
+        public SceneData ShowedScene
+        {
+            get
+            {
+                //判断是否有数据被选中
+                if (MainWindow.DataTreeView.ActiveSelection == null)
+                {
+                    return null;
+                }
+                //获取选中数据
+                return MainWindow.DataTreeView.ActiveSelection.Data;
+            }
+        }
 
         //基层面板
         private VisualElement AssetsEditorRootPanel { get; set; }
@@ -136,38 +148,65 @@ namespace THLL.EditorSystem.SceneEditor
             }
         }
         //添加背景图资源
-        public void AddBackground()
+        public async void AddBackground()
         {
-            //显示输入窗口
-            TextInputWindow.ShowWindow(async backgroundName =>
+            //检测是否有数据被选择
+            if (ShowedScene == null)
             {
-                //检查输入的名称是否已存在或为空
-                if (string.IsNullOrEmpty(backgroundName) || NameBackgroundContainerDict.ContainsKey(backgroundName))
-                {
-                    EditorUtility.DisplayDialog("Error", "Background Name is already exists or is empty!", "OK");
-                    return;
-                }
-
+                EditorUtility.DisplayDialog("Error", "Please select a scene first!", "OK");
+                return;
+            }
+            //检测背景图数量
+            if (ShowedScene.BackgroundsDict.Count == 0)
+            {
+                //若等于0，则为首个背景图，名称固定为“0”
                 //选择目标文件
                 string sourceFilePath = EditorUtility.OpenFilePanel("Select Background Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
                 //判断选择情况
                 if (!string.IsNullOrEmpty(sourceFilePath))
                 {
                     //若有选中，则首先指定路径
-                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds", backgroundName + ".png");
+                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds", "0" + Path.GetExtension(sourceFilePath));
                     //复制文件
                     File.Copy(sourceFilePath, targetFilePath, true);
 
                     //结束后直接刷新面板
                     await ARefresh();
                 }
-            },
-            "Add New Background",
-            "Please Input New Background Name",
-            "New Background Name",
-            "New Name",
-            EditorWindow.focusedWindow
-            );
+            }
+            else
+            {
+                //显示输入窗口
+                TextInputWindow.ShowWindow(async backgroundName =>
+                {
+                    //检查输入的名称是否已存在或为空
+                    if (string.IsNullOrEmpty(backgroundName) || NameBackgroundContainerDict.ContainsKey(backgroundName))
+                    {
+                        EditorUtility.DisplayDialog("Error", "Background Name is already exists or is empty!", "OK");
+                        return;
+                    }
+
+                    //选择目标文件
+                    string sourceFilePath = EditorUtility.OpenFilePanel("Select Background Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+                    //判断选择情况
+                    if (!string.IsNullOrEmpty(sourceFilePath))
+                    {
+                        //若有选中，则首先指定路径
+                        string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds", backgroundName + Path.GetExtension(sourceFilePath));
+                        //复制文件
+                        File.Copy(sourceFilePath, targetFilePath, true);
+
+                        //结束后直接刷新面板
+                        await ARefresh();
+                    }
+                },
+                "Add New Background",
+                "Please Input New Background Name",
+                "New Background Name",
+                "New Name",
+                EditorWindow.focusedWindow
+                );
+            }
         }
         //移除背景图资源
         public void RemoveBackground(string name)

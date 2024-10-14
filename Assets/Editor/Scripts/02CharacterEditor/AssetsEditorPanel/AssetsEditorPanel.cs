@@ -16,7 +16,19 @@ namespace THLL.EditorSystem.CharacterEditor
         public MainWindow MainWindow { get; private set; }
 
         //显示的角色
-        public CharacterData ShowedCharacter { get { return MainWindow.DataTreeView.ActiveSelection.Data; } }
+        public CharacterData ShowedCharacter
+        {
+            get
+            {
+                //检测是否有数据被选择
+                if (MainWindow.DataTreeView.ActiveSelection == null)
+                {
+                    return null;
+                }
+                //若有，则返回角色数据
+                return MainWindow.DataTreeView.ActiveSelection.Data;
+            }
+        }
 
         //基础
         private VisualElement AssetsEditorRootPanel { get; set; }
@@ -156,38 +168,65 @@ namespace THLL.EditorSystem.CharacterEditor
             }
         }
         //添加头像资源
-        public void AddAvatar()
+        public async void AddAvatar()
         {
-            //显示输入窗口
-            TextInputWindow.ShowWindow(async avatarName =>
+            //判断是否有数据被选择
+            if (ShowedCharacter == null)
             {
-                //检查输入的名称是否已存在或为空
-                if (string.IsNullOrEmpty(avatarName) || NameAvatarContainerDict.ContainsKey(avatarName))
-                {
-                    EditorUtility.DisplayDialog("Error", "Avatar Name is already exists or is empty!", "OK");
-                    return;
-                }
-
+                EditorUtility.DisplayDialog("Error", "Please select a character first!", "OK");
+                return;
+            }
+            //检测头像数量
+            if (ShowedCharacter.AvatarsDict.Count == 0)
+            {
+                //若等于0，则为首个头像，名称固定为0
                 //选择目标文件
                 string sourceFilePath = EditorUtility.OpenFilePanel("Select Avatar Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
                 //判断选择情况
                 if (!string.IsNullOrEmpty(sourceFilePath))
                 {
                     //若有选中，则首先指定路径
-                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Avatars", avatarName + ".png");
+                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Avatars", "0" + Path.GetExtension(sourceFilePath));
                     //复制文件
                     File.Copy(sourceFilePath, targetFilePath, true);
 
                     //结束后直接刷新面板
                     await ARefresh();
                 }
-            },
-            "Add New Avatar",
-            "Please Input New Avatar Name",
-            "New Avatar Name",
-            "New Name",
-            EditorWindow.focusedWindow
-            );
+            }
+            else
+            {
+                //显示输入窗口
+                TextInputWindow.ShowWindow(async avatarName =>
+                {
+                    //检查输入的名称是否已存在或为空
+                    if (string.IsNullOrEmpty(avatarName) || NameAvatarContainerDict.ContainsKey(avatarName))
+                    {
+                        EditorUtility.DisplayDialog("Error", "Avatar Name is already exists or is empty!", "OK");
+                        return;
+                    }
+
+                    //选择目标文件
+                    string sourceFilePath = EditorUtility.OpenFilePanel("Select Avatar Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+                    //判断选择情况
+                    if (!string.IsNullOrEmpty(sourceFilePath))
+                    {
+                        //若有选中，则首先指定路径
+                        string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Avatars", avatarName + Path.GetExtension(sourceFilePath));
+                        //复制文件
+                        File.Copy(sourceFilePath, targetFilePath, true);
+
+                        //结束后直接刷新面板
+                        await ARefresh();
+                    }
+                },
+                "Add New Avatar",
+                "Please Input New Avatar Name",
+                "New Avatar Name",
+                "New Name",
+                EditorWindow.focusedWindow
+                );
+            }
         }
         //移除头像资源
         public void RemoveAvatar(string name)
@@ -247,38 +286,65 @@ namespace THLL.EditorSystem.CharacterEditor
             }
         }
         //添加立绘资源
-        public void AddPortrait()
+        public async void AddPortrait()
         {
-            //显示输入窗口
-            TextInputWindow.ShowWindow(async portraitName =>
+            //判断是否有数据被选择
+            if (ShowedCharacter == null)
             {
-                //检查输入的名称是否已存在或为空
-                if (string.IsNullOrEmpty(portraitName) || NamePortraitContainerDict.ContainsKey(portraitName))
-                {
-                    EditorUtility.DisplayDialog("Error", "Portrait Name is already exists or is empty!", "OK");
-                    return;
-                }
-
+                EditorUtility.DisplayDialog("Error", "Please select a character first!", "OK");
+                return;
+            }
+            //判断立绘数量
+            if (ShowedCharacter.PortraitsDict.Count == 0)
+            {
+                //若等于0，则为首个立绘，名称固定为0
                 //选择目标文件
                 string sourceFilePath = EditorUtility.OpenFilePanel("Select Portrait Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
                 //判断选择情况
                 if (!string.IsNullOrEmpty(sourceFilePath))
                 {
                     //若有选中，则首先指定路径
-                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Portraits", portraitName + ".png");
+                    string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Portraits", "0" + Path.GetExtension(sourceFilePath));
                     //复制文件
                     File.Copy(sourceFilePath, targetFilePath, true);
 
                     //结束后直接刷新面板
                     await ARefresh();
                 }
-            },
-            "Add New Portrait",
-            "Please Input New Portrait Name",
-            "New Portrait Name",
-            "New Name",
-            EditorWindow.focusedWindow
-            );
+            }
+            else
+            {
+                //显示输入窗口
+                TextInputWindow.ShowWindow(async portraitName =>
+                {
+                    //检查输入的名称是否已存在或为空
+                    if (string.IsNullOrEmpty(portraitName) || NamePortraitContainerDict.ContainsKey(portraitName))
+                    {
+                        EditorUtility.DisplayDialog("Error", "Portrait Name is already exists or is empty!", "OK");
+                        return;
+                    }
+
+                    //选择目标文件
+                    string sourceFilePath = EditorUtility.OpenFilePanel("Select Portrait Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+                    //判断选择情况
+                    if (!string.IsNullOrEmpty(sourceFilePath))
+                    {
+                        //若有选中，则首先指定路径
+                        string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.SavePath), "Portraits", portraitName + Path.GetExtension(sourceFilePath));
+                        //复制文件
+                        File.Copy(sourceFilePath, targetFilePath, true);
+
+                        //结束后直接刷新面板
+                        await ARefresh();
+                    }
+                },
+                "Add New Portrait",
+                "Please Input New Portrait Name",
+                "New Portrait Name",
+                "New Name",
+                EditorWindow.focusedWindow
+                );
+            }
         }
         //移除立绘资源
         public void RemovePortrait(string name)

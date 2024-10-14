@@ -12,8 +12,10 @@ namespace THLL.UISystem
     {
         #region 自身数据
         //UI相关
-        //背景
-        public VisualElement Background { get; private set; }
+        //主界面背景
+        public VisualElement MainTitleBackground { get; private set; }
+        //场景背景
+        public VisualElement SceneBackground { get; private set; }
 
         //背景图相关
         //当前背景所剩时间
@@ -28,45 +30,60 @@ namespace THLL.UISystem
             base.Start();
 
             //将协程启用添加到资源加载完成事件中并手动启用一次移动操作
-            GameAssetsManager.Instance.OnAllResourcesLoaded += () => { CycleBackground(); MoveBackground(); };
+            GameAssetsManager.Instance.OnAllResourcesLoaded += () => CycleMainTitleBackground();
         }
         //获取视觉元素
         protected override void GetVisualElements()
         {
-            Background = Document.rootVisualElement.Q<VisualElement>("Background");
+            MainTitleBackground = Document.rootVisualElement.Q<VisualElement>("MainTitleBackground");
+            SceneBackground = Document.rootVisualElement.Q<VisualElement>("SceneBackground");
         }
         #endregion
 
-        #region 其他方法
-        //循环背景图
-        public void CycleBackground()
+        #region 主界面背景图相关方法
+        //循环主界面背景图
+        public void CycleMainTitleBackground()
         {
-            //获取协程
-            Coroutine coroutine = StartCoroutine(CycleBackgroundCoroutine());
+            //场景背景图隐藏，主界面背景图显示，伴随不透明度更改
+            SceneBackground.style.display = DisplayStyle.None;
+            SceneBackground.style.opacity = 0;
+            MainTitleBackground.style.display = DisplayStyle.Flex;
+            MainTitleBackground.style.opacity = 1;
+            //开始并获取协程
+            Coroutine coroutine = StartCoroutine(CycleMainTitleBackgroundCoroutine());
             //存储协程，循环背景图仅仅会存在一份，所以直接以方法名为Key
-            CoroutineDic["CycleBackground"] = coroutine;
+            CoroutineDic["CycleMainTitleBackground"] = coroutine;
         }
-        //移动背景图
-        public void MoveBackground()
+        //停止循环背景图
+        public void StopCycleMainTitleBackground()
+        {
+            //场景背景图显示，主界面背景图隐藏，伴随不透明度更改
+            SceneBackground.style.display = DisplayStyle.Flex;
+            SceneBackground.style.opacity = 1;
+            MainTitleBackground.style.display = DisplayStyle.None;
+            MainTitleBackground.style.opacity = 0;
+            //获取协程
+            Coroutine coroutine = CoroutineDic["CycleMainTitleBackground"];
+            //停止协程
+            StopCoroutine(coroutine);
+            //从字典中移除
+            CoroutineDic.Remove("CycleMainTitleBackground");
+            //复原背景偏移
+            MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0)));
+        }
+        //切换主界面背景图
+        public void SwitchMainTitleBackground(Scene location)
         {
             //获取协程
-            Coroutine coroutine = StartCoroutine(MoveBackgroundCoroutine());
-            //存储
-            CoroutineDic["MoveBackground"] = coroutine;
-        }
-        //切换背景图
-        public void SwitchBackground(Scene location)
-        {
-            //获取协程
-            Coroutine coroutine = StartCoroutine(SwitchBackgroundCoroutine(location));
+            Coroutine coroutine = StartCoroutine(SwitchMainTitleBackgroundCoroutine(location));
             //存储协程，同理仅存储一份
-            CoroutineDic["SwitchBackground"] = coroutine;
+            CoroutineDic["SwitchMainTitleBackground"] = coroutine;
         }
         #endregion
 
-        #region 协程方法
-        //背景图循环方法本体
-        private IEnumerator CycleBackgroundCoroutine()
+        #region 主界面背景图相关协程方法
+        //主界面背景图循环方法本体
+        private IEnumerator CycleMainTitleBackgroundCoroutine()
         {
             //首先获取可用地点，此处为主界面循环，仅循环根场景
             List<Scene> locations = GameScene.SceneDB.RootSceneStorage.Values.ToList();
@@ -89,56 +106,57 @@ namespace THLL.UISystem
                     Scene location = locations[Random.Range(0, locations.Count)];
 
                     //然后切换背景图
-                    SwitchBackground(location);
+                    SwitchMainTitleBackground(location);
                     //开启新一轮背景图移动
-                    MoveBackground();
+                    StartCoroutine(MoveMainTitleBackgroundCoroutine());
 
                     //更新持续时间
                     Duration = 180f;
                 }
             }
         }
-
-        //移动背景图
-        private IEnumerator MoveBackgroundCoroutine()
+        //移动主界面背景图
+        private IEnumerator MoveMainTitleBackgroundCoroutine()
         {
             //首先，更改背景图位置偏移为Y轴20%
-            Background.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(20, LengthUnit.Percent)));
+            MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(20, LengthUnit.Percent)));
             //然后等待15s
             yield return new WaitForSeconds(45f);
 
             //然后，偏移更改为0
-            Background.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0)));
+            MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0)));
             //再等待15s
             yield return new WaitForSeconds(45f);
 
             //然后，偏移更改为-20%
-            Background.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(-20, LengthUnit.Percent)));
+            MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(-20, LengthUnit.Percent)));
             //再等待15s
             yield return new WaitForSeconds(45f);
 
             //最后，偏移更改回0%
-            Background.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0, LengthUnit.Percent)));
+            MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0, LengthUnit.Percent)));
             //不等待，协程到此结束
         }
-
-        //切换背景图本体
-        private IEnumerator SwitchBackgroundCoroutine(Scene scene)
+        //TODO:切换主界面背景图本体，暂时让场景背景更换与此同步
+        private IEnumerator SwitchMainTitleBackgroundCoroutine(Scene scene)
         {
             //更改背景图不透明度为0
-            Background.style.opacity = 0;
+            MainTitleBackground.style.opacity = 0;
+            SceneBackground.style.opacity = 0;
             //协程等待1s(动画用时)
             yield return new WaitForSeconds(1.0f);
 
             //更换背景图
-            Background.style.backgroundImage = new StyleBackground(scene.BackgroundsDict.Values.ToList()[Random.Range(0, scene.BackgroundsDict.Count)]);
+            MainTitleBackground.style.backgroundImage = new StyleBackground(scene.BackgroundsDict.Values.ToList()[Random.Range(0, scene.BackgroundsDict.Count)]);
+            SceneBackground.style.backgroundImage = MainTitleBackground.style.backgroundImage;
             //更新主面板
             GameUI.MainTitleInterface.LocationLabel.text = scene.Name;
             //协程等待到当前帧结束
             yield return new WaitForEndOfFrame();
 
             //修改不透明度为1
-            Background.style.opacity = 1;
+            MainTitleBackground.style.opacity = 1;
+            SceneBackground.style.opacity = 1;
             //协程等待1s(动画用时)
             yield return new WaitForSeconds(1.0f);
         }

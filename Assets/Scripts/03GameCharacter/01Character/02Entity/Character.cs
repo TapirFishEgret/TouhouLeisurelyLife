@@ -25,9 +25,39 @@ namespace THLL.CharacterSystem
 
         #region 资源
         //头像字典
-        public Dictionary<string, Sprite> AvatarsDict => Data.AvatarsDict;
+        public Dictionary<string, Sprite> AvatarsDict
+        {
+            get
+            {
+                if (Data.AvatarsDict.Count == 0)
+                {
+                    //如果字典为空，则返回默认头像
+                    return new Dictionary<string, Sprite>() { { "0", GameAssetsManager.Instance.DefaultAvatar } };
+                }
+                else
+                {
+                    //否则返回字典
+                    return Data.AvatarsDict;
+                }
+            }
+        }
         //立绘字典
-        public Dictionary<string, Sprite> PortraitsDict => Data.PortraitsDict;
+        public Dictionary<string, Sprite> PortraitsDict
+        {
+            get
+            {
+                if (Data.PortraitsDict.Count == 0)
+                {
+                    //如果字典为空，则返回默认立绘
+                    return new Dictionary<string, Sprite>() { { "0", GameAssetsManager.Instance.DefaultPortrait } };
+                }
+                else
+                {
+                    //否则返回字典
+                    return Data.PortraitsDict;
+                }
+            }
+        }
         #endregion
 
         #region 初始化及相关方法
@@ -47,28 +77,28 @@ namespace THLL.CharacterSystem
 
         #region 资源相关方法
         //加载头像，协程版本
-        public IEnumerator LoadAvatarsCoroutine(Action<string, Sprite> onAvatarLoaded = null)
+        public IEnumerator LoadAvatarsCoroutine(Action<string, Sprite> onAvatarLoaded = null, Action onAllAvatarsLoaded = null)
         {
             //返回协程
-            yield return Data.LoadAvatarsCoroutine(DataDirectoryPath, onAvatarLoaded);
+            yield return Data.LoadAvatarsCoroutine(DataDirectoryPath, onAvatarLoaded, onAllAvatarsLoaded);
         }
         //加载头像，异步版本
-        public async Task LoadAvatarsAsync(Action<string, Sprite> onAvatarLoaded = null)
+        public async Task LoadAvatarsAsync(Action<string, Sprite> onAvatarLoaded = null, Action onAllAvatarsLoaded = null)
         {
             //调用异步函数
-            await Data.LoadAvatarsAsync(DataDirectoryPath, onAvatarLoaded);
+            await Data.LoadAvatarsAsync(DataDirectoryPath, onAvatarLoaded, onAllAvatarsLoaded);
         }
         //加载立绘，协程版本
-        public IEnumerator LoadPortraitsCoroutine(Action<string, Sprite> onPortraitLoaded = null)
+        public IEnumerator LoadPortraitsCoroutine(Action<string, Sprite> onPortraitLoaded = null, Action onAllPortraitsLoaded = null)
         {
             //返回协程
-            yield return Data.LoadPortraitsCoroutine(DataDirectoryPath, onPortraitLoaded);
+            yield return Data.LoadPortraitsCoroutine(DataDirectoryPath, onPortraitLoaded, onAllPortraitsLoaded);
         }
         //加载立绘，异步版本
-        public async Task LoadPortraitsAsync(Action<string, Sprite> onPortraitLoaded = null)
+        public async Task LoadPortraitsAsync(Action<string, Sprite> onPortraitLoaded = null, Action onAllPortraitsLoaded = null)
         {
             //调用异步函数
-            await Data.LoadPortraitsAsync(DataDirectoryPath, onPortraitLoaded);
+            await Data.LoadPortraitsAsync(DataDirectoryPath, onPortraitLoaded, onAllPortraitsLoaded);
         }
         //卸载所有资源
         public void UnloadAllResources()

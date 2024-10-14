@@ -21,7 +21,22 @@ namespace THLL.SceneSystem
 
         #region 资源
         //场景背景图片字典
-        public Dictionary<string, Sprite> BackgroundsDict => Data.BackgroundsDict;
+        public Dictionary<string, Sprite> BackgroundsDict
+        {
+            get
+            {
+                if (Data.BackgroundsDict.Count == 0)
+                {
+                    //若字典为空，返回默认背景字典
+                    return new Dictionary<string, Sprite>() { { "0", GameAssetsManager.Instance.DefaultBackground } };
+                }
+                else
+                {
+                    //若字典不为空，返回数据中的字典
+                    return Data.BackgroundsDict;
+                }
+            }
+        }
         #endregion
 
         #region 构造与初始化相关

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using THLL.CharacterSystem;
 using THLL.SceneSystem;
@@ -12,10 +11,14 @@ namespace THLL.BaseSystem
     public class GameAssetsManager : Singleton<GameAssetsManager>
     {
         #region 数据
+        //默认背景图(白)
+        public Sprite DefaultBackground;
+        //默认头像
+        public Sprite DefaultAvatar;
+        //默认立绘
+        public Sprite DefaultPortrait;
         //资源加载事件
         public event Action OnAllResourcesLoaded;
-        //资源加载队列
-        public Queue<Action> ResourcesLoadQueue { get; private set; } = new();
         #endregion
 
         #region 周期函数
@@ -69,6 +72,8 @@ namespace THLL.BaseSystem
             }
             //场景数据一次加载完成后，进行数据库的初始化
             GameScene.SceneDB.Init();
+            //并进行记录
+            GameHistory.LogNormal($"场景数据加载完成，共加载{GameScene.SceneDB.Count}个场景数据。");
         }
         //加载所有角色数据
         public void LoadAllCharacterData()
@@ -96,6 +101,8 @@ namespace THLL.BaseSystem
             }
             //角色数据一次加载完成后，进行数据库的初始化
             GameCharacter.CharacterDB.Init();
+            //并进行记录
+            GameHistory.LogNormal($"角色数据加载完成，共加载{GameCharacter.CharacterDB.Count}个角色数据。");
         }
         #endregion
 

@@ -12,7 +12,19 @@ namespace THLL.EditorSystem.SceneEditor
         public MainWindow MainWindow { get; private set; }
 
         //显示的场景
-        public SceneData ShowedScene { get => MainWindow.DataTreeView.ActiveSelection.Data; }
+        public SceneData ShowedScene
+        {
+            get
+            {
+                //检测当前选中项是否为空
+                if (MainWindow.DataTreeView.ActiveSelection == null)
+                {
+                    return null;
+                }
+                //获取选中项的数据
+                return MainWindow.DataTreeView.ActiveSelection.Data;
+            }
+        }
 
         //基层面板
         private VisualElement DataEditorRootPanel { get; set; }
@@ -106,10 +118,28 @@ namespace THLL.EditorSystem.SceneEditor
         private void Bind()
         {
             //将控件绑定至新数据上
-            NameField.RegisterValueChangedCallback(evt => ShowedScene.Name = evt.newValue);
-            DescriptionField.RegisterValueChangedCallback(evt => ShowedScene.Description = evt.newValue);
-            SortOrderField.RegisterValueChangedCallback(evt => ShowedScene.SortOrder = evt.newValue);
-            ParentSceneIDField.RegisterValueChangedCallback(evt => ShowedScene.ParentSceneID = evt.newValue);
+            NameField.RegisterValueChangedCallback(evt => 
+            {
+                if (ShowedScene != null)
+                {
+                    ShowedScene.Name = evt.newValue;
+                    SetFullName();
+                }
+            });
+            DescriptionField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedScene != null) 
+                    ShowedScene.Description = evt.newValue; 
+            });
+            SortOrderField.RegisterValueChangedCallback(evt => 
+            { 
+                if (ShowedScene != null) 
+                    ShowedScene.SortOrder = evt.newValue; 
+            });
+            ParentSceneIDField.RegisterValueChangedCallback(evt => 
+            { if (ShowedScene != null) 
+                    ShowedScene.ParentSceneID = evt.newValue; 
+            });
         }
         #endregion
 

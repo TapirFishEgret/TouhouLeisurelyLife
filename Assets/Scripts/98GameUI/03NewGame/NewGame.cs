@@ -30,9 +30,10 @@ namespace THLL.UISystem
         //绑定方法
         protected override void RegisterMethods()
         {
-            //将继续按钮的功能暂时设定开启游玩面板并启用所有管理器
+            //将继续按钮的功能暂时设定开启游玩面板并启用所有管理器并关闭背景移动
             ContinueButton.clicked += () => GameUI.ShowInterface(GameUI.BasicPlayInterface);
             ContinueButton.clicked += TouhouLeisurelyLife.EnableAllManager;
+            ContinueButton.clicked += GameUI.BackgroundLayer.StopCycleMainTitleBackground;
         }
         #endregion
     }
