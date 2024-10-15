@@ -1,0 +1,9 @@
+{
+  "ID": "Scene_Gensokyo",
+  "IDPart": "Gensokyo",
+  "Name": "幻想乡",
+  "Description": "幻想乡，东方Project故事发生的主舞台。",
+  "SortOrder": 1,
+  "ParentSceneID": "",
+  "ChildScenePathDatas": []
+}

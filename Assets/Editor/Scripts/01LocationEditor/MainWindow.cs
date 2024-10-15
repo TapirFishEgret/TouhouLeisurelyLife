@@ -100,7 +100,7 @@ namespace THLL.EditorSystem.SceneEditor
                 //向静态类中添加数据
                 GameEditor.SceneDataDict[item.data.Data.ID] = item.data.Data;
                 //保存数据
-                SceneData.SaveToXML(item.data.Data, item.data.Data.SavePath);
+                SceneData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
             }
             //保存
             AssetDatabase.SaveAssets();

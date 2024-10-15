@@ -1,6 +1,7 @@
 ﻿using THLL.CharacterSystem;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.CharacterEditor
@@ -106,65 +107,72 @@ namespace THLL.EditorSystem.CharacterEditor
             GroupField.SetValueWithoutNotify(ShowedCharacter.Group);
             CharaField.SetValueWithoutNotify(ShowedCharacter.Chara);
             VersionField.SetValueWithoutNotify(ShowedCharacter.Version);
-            ColorField.SetValueWithoutNotify(ShowedCharacter.Color);
+            if (ColorUtility.TryParseHtmlString("#" + ShowedCharacter.ColorString, out Color color))
+            {
+                ColorField.SetValueWithoutNotify(color);
+            }
+            else
+            {
+                ColorField.SetValueWithoutNotify(Color.white);
+            }
 
             //显示全部信息
             SetFullInfo();
 
             //绑定
-            NameField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                    ShowedCharacter.Name = evt.newValue; 
+            NameField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                    ShowedCharacter.Name = evt.newValue;
             });
-            DescriptionField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                    ShowedCharacter.Description = evt.newValue; 
+            DescriptionField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                    ShowedCharacter.Description = evt.newValue;
             });
-            SortingOrderField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                    ShowedCharacter.SortOrder = evt.newValue; 
+            SortingOrderField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                    ShowedCharacter.SortOrder = evt.newValue;
             });
-            SeriesField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
+            SeriesField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
                 {
                     ShowedCharacter.Series = evt.newValue;
-                    SetFullInfo(); 
+                    SetFullInfo();
                 }
             });
-            GroupField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                {                    
+            GroupField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                {
                     ShowedCharacter.Group = evt.newValue;
-                    SetFullInfo(); 
+                    SetFullInfo();
                 }
             });
-            CharaField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                {                    
+            CharaField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                {
                     ShowedCharacter.Chara = evt.newValue;
-                    SetFullInfo(); 
+                    SetFullInfo();
                 }
             });
-            VersionField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                {                    
+            VersionField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                {
                     ShowedCharacter.Version = evt.newValue;
-                    SetFullInfo(); 
+                    SetFullInfo();
                 }
             });
-            ColorField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedCharacter != null) 
-                {                    
-                    ShowedCharacter.Color = evt.newValue;
-                    FullInfoLabel.style.color = evt.newValue; 
+            ColorField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedCharacter != null)
+                {
+                    ShowedCharacter.ColorString = ColorUtility.ToHtmlStringRGB(evt.newValue);
+                    FullInfoLabel.style.color = evt.newValue;
                 }
             });
         }
@@ -186,7 +194,14 @@ namespace THLL.EditorSystem.CharacterEditor
                 ShowedCharacter.Version
             });
             //设置颜色
-            FullInfoLabel.style.color = ShowedCharacter.Color;
+            if (ColorUtility.TryParseHtmlString("#" + ShowedCharacter.ColorString, out Color color))
+            {
+                FullInfoLabel.style.color = color;
+            }
+            else
+            {
+                FullInfoLabel.style.color = Color.white;
+            }
         }
         #endregion
     }

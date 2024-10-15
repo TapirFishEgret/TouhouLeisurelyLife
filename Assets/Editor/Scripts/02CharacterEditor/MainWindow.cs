@@ -104,7 +104,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
                 {
                     GameEditor.CharacterDataDict[item.data.Data.ID] = item.data.Data;
-                    CharacterData.SaveToXML(item.data.Data, item.data.Data.SavePath);
+                    CharacterData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
                 }
             }
             //保存

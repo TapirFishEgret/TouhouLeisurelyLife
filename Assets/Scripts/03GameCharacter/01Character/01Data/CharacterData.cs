@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,24 +14,29 @@ namespace THLL.CharacterSystem
     {
         #region 数据
         //角色所属作品名
+        [JsonProperty(Order = 6)]
         public string Series { get; set; }
         //角色所属组织名
+        [JsonProperty(Order = 7)]
         public string Group { get; set; }
         //角色名
+        [JsonProperty(Order = 8)]
         public string Chara { get; set; }
         //版本名
+        [JsonProperty(Order = 9)]
         public string Version { get; set; }
 
         //颜色
-        public Color Color { get; set; }
+        [JsonProperty(Order = 10)]
+        public string ColorString { get; set; }
         #endregion
 
         #region 资源
         //头像字典
-        [XmlIgnore]
+        [JsonIgnore]
         public Dictionary<string, Sprite> AvatarsDict { get; set; } = new();
         //立绘字典
-        [XmlIgnore]
+        [JsonIgnore]
         public Dictionary<string, Sprite> PortraitsDict { get; set; } = new();
         #endregion
 
@@ -42,14 +47,14 @@ namespace THLL.CharacterSystem
 
         }
         //有参
-        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version, Color color)
+        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version, string colorString)
             : base(id, idPart, name, description, sortOrder)
         {
             Series = series;
             Group = group;
             Chara = chara;
             Version = version;
-            Color = color;
+            ColorString = colorString;
         }
         #endregion
 

@@ -25,7 +25,7 @@ namespace THLL.BaseSystem
         public BaseGameEntity(string filePath)
         {
             //传入文件路径时，读取
-            BaseGameData baseGameData = LoadDataFromXml(filePath);
+            BaseGameData baseGameData = LoadDataFromJson(filePath);
             //设定数据存储目录路径
             DataDirectoryPath = Path.GetDirectoryName(filePath);
             //进行配置
@@ -48,10 +48,10 @@ namespace THLL.BaseSystem
 
         #region 数据驱动设计方法
         //从XML文件中读取数据
-        public virtual TData LoadDataFromXml(string filePath)
+        public virtual TData LoadDataFromJson(string filePath)
         {
             //读取数据
-            return BaseGameData.LoadFromXML<TData>(filePath);
+            return BaseGameData.LoadFromJson<TData>(filePath);
         }
         #endregion
     }

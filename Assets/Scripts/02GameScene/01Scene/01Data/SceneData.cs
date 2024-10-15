@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,14 +14,16 @@ namespace THLL.SceneSystem
     {
         #region 数据
         //父级场景ID
+        [JsonProperty(Order = 6)]
         public string ParentSceneID { get; set; }
         //子级场景间路径列表
-        public List<ScenePathData> ChildScenePathDatas { get; set; }
+        [JsonProperty(Order = 7)]
+        public List<ScenePathData> ChildScenePathDatas { get; set; } = new();
         #endregion
 
         #region 资源
         //场景背景图片字典
-        [XmlIgnore]
+        [JsonIgnore]
         public Dictionary<string, Sprite> BackgroundsDict { get; set; } = new();
         #endregion
 

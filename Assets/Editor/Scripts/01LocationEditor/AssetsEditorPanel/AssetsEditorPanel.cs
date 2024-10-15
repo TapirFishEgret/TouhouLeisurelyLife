@@ -100,7 +100,7 @@ namespace THLL.EditorSystem.SceneEditor
                 //设置全名
                 SetFullName();
                 //加载并显示背景图
-                await ShowedScene.LoadBackgroundsAsync(Path.GetDirectoryName(ShowedScene.SavePath), (name, background) => ShowBackground(name, background));
+                await ShowedScene.LoadBackgroundsAsync(Path.GetDirectoryName(ShowedScene.JsonFileSavePath), (name, background) => ShowBackground(name, background));
             }
         }
         //几何图形改变时手动容器大小
@@ -190,7 +190,7 @@ namespace THLL.EditorSystem.SceneEditor
             if (!string.IsNullOrEmpty(sourceFilePath))
             {
                 //若有选中，则首先指定路径
-                string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds", backgroundName + Path.GetExtension(sourceFilePath));
+                string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedScene.JsonFileSavePath), "Backgrounds", backgroundName + Path.GetExtension(sourceFilePath));
                 //复制文件
                 File.Copy(sourceFilePath, targetFilePath, true);
 
@@ -204,7 +204,7 @@ namespace THLL.EditorSystem.SceneEditor
             //首先，隐藏背景图
             HideBackground(name);
             //然后，获取存放背景图的目录的信息
-            DirectoryInfo directory = new(Path.Combine(Path.GetDirectoryName(ShowedScene.SavePath), "Backgrounds"));
+            DirectoryInfo directory = new(Path.Combine(Path.GetDirectoryName(ShowedScene.JsonFileSavePath), "Backgrounds"));
             //遍历目录，删除文件
             foreach (FileInfo file in directory.GetFiles())
             {

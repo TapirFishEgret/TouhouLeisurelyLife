@@ -59,7 +59,7 @@ namespace THLL.BaseSystem
                 Application.Quit();
             }
             //确认路径存在后，获取所有文件
-            string[] allFilePaths = Directory.GetFiles(dataPath, "*.xml", SearchOption.AllDirectories);
+            string[] allFilePaths = Directory.GetFiles(dataPath, "*.json", SearchOption.AllDirectories);
             //遍历所有文件
             foreach (string filePath in allFilePaths)
             {
@@ -88,7 +88,7 @@ namespace THLL.BaseSystem
                 Application.Quit();
             }
             //确认路径存在后，获取所有文件
-            string[] allFilePaths = Directory.GetFiles(dataPath, "*.xml", SearchOption.AllDirectories);
+            string[] allFilePaths = Directory.GetFiles(dataPath, "*.json", SearchOption.AllDirectories);
             //遍历所有文件
             foreach (string filePath in allFilePaths)
             {

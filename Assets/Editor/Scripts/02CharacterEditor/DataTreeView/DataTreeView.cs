@@ -220,13 +220,13 @@ namespace THLL.EditorSystem.CharacterEditor
                                 //遍历
                                 foreach (string filePath in filePaths)
                                 {
-                                    //找出其中以XMl结尾的文件，以Character开头的文件
-                                    if (Path.GetExtension(filePath) == ".xml" && Path.GetFileNameWithoutExtension(filePath).StartsWith("Character"))
+                                    //找出其中以Json结尾的文件，以Character开头的文件
+                                    if (Path.GetExtension(filePath) == ".json" && Path.GetFileNameWithoutExtension(filePath).StartsWith("Character"))
                                     {
                                         //创建新角色版本数据
-                                        CharacterData versionData = CharacterData.LoadFromXML<CharacterData>(filePath);
+                                        CharacterData versionData = CharacterData.LoadFromJson<CharacterData>(filePath);
                                         //设定其路径
-                                        versionData.SavePath = filePath;
+                                        versionData.JsonFileSavePath = filePath;
                                         //创建角色数据物体数据容器
                                         CharacterSystemDataContainer versionItemDataContainer = new(
                                             versionData,
@@ -747,7 +747,7 @@ namespace THLL.EditorSystem.CharacterEditor
         //生成新版本角色数据
         private void CreateNewCharacterData(CharacterSystemDataContainer characterItemDataContainer)
         {
-            TextInputWindow.ShowWindow(newCharacterVersionName =>
+            TextInputWindow.ShowWindow((Action<string>)(newCharacterVersionName =>
             {
                 //计时
                 using ExecutionTimer timer = new("创建新角色版本名称", MainWindow.TimerDebugLogToggle.value);
@@ -797,18 +797,18 @@ namespace THLL.EditorSystem.CharacterEditor
                         //版本名称，直接获取
                         newCharacterVersionName,
                         //颜色，默认白色
-                        Color.white
+                        ColorUtility.ToHtmlStringRGBA(Color.white)
                         );
 
                     //随后将其保存在硬盘上并创建标准配备文件夹
                     //首先获取存放路径
-                    string filePath = Path.Combine(newFolderPath, $"CharacterData.xml");
+                    string JsonFilePath = Path.Combine(newFolderPath, "CharacterData.json");
+                    //设定其存放路径
+                    newCharacterData.JsonFileSavePath = JsonFilePath;
                     //创建文件
-                    CharacterData.SaveToXML(newCharacterData, filePath);
+                    CharacterData.SaveToJson(newCharacterData, JsonFilePath);
                     //新增占位文件
                     GameEditor.GeneratePlaceHolderTextFile(newFolderPath);
-                    //设定其存放路径
-                    newCharacterData.SavePath = filePath;
                     //创建配备文件夹
                     Directory.CreateDirectory(Path.Combine(newFolderPath, "Avatars"));
                     Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
@@ -835,7 +835,7 @@ namespace THLL.EditorSystem.CharacterEditor
                     //刷新
                     TRefresh();
                 }
-            },
+            }),
             "Create New Character Version",
             "Please Input New Character Version ID Part",
             "New Character Version ID Part",

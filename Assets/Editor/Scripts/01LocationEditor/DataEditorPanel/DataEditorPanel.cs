@@ -118,7 +118,7 @@ namespace THLL.EditorSystem.SceneEditor
         private void Bind()
         {
             //将控件绑定至新数据上
-            NameField.RegisterValueChangedCallback(evt => 
+            NameField.RegisterValueChangedCallback(evt =>
             {
                 if (ShowedScene != null)
                 {
@@ -126,19 +126,20 @@ namespace THLL.EditorSystem.SceneEditor
                     SetFullName();
                 }
             });
-            DescriptionField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedScene != null) 
-                    ShowedScene.Description = evt.newValue; 
+            DescriptionField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedScene != null)
+                    ShowedScene.Description = evt.newValue;
             });
-            SortOrderField.RegisterValueChangedCallback(evt => 
-            { 
-                if (ShowedScene != null) 
-                    ShowedScene.SortOrder = evt.newValue; 
+            SortOrderField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedScene != null)
+                    ShowedScene.SortOrder = evt.newValue;
             });
-            ParentSceneIDField.RegisterValueChangedCallback(evt => 
-            { if (ShowedScene != null) 
-                    ShowedScene.ParentSceneID = evt.newValue; 
+            ParentSceneIDField.RegisterValueChangedCallback(evt =>
+            {
+                if (ShowedScene != null)
+                    ShowedScene.ParentSceneID = evt.newValue;
             });
         }
         #endregion

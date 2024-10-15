@@ -125,7 +125,7 @@ namespace THLL.EditorSystem.SceneEditor
             try
             {
                 //获取所有文件
-                string[] filePaths = Directory.GetFiles(rootPath, "*.xml", SearchOption.AllDirectories);
+                string[] filePaths = Directory.GetFiles(rootPath, "*.json", SearchOption.AllDirectories);
                 //遍历所有文件
                 foreach (string filePath in filePaths)
                 {
@@ -133,9 +133,9 @@ namespace THLL.EditorSystem.SceneEditor
                     if (Path.GetFileNameWithoutExtension(filePath).StartsWith("Scene"))
                     {
                         //若是，读取数据
-                        SceneData sceneData = SceneData.LoadFromXML<SceneData>(filePath);
+                        SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
                         //设定读取地址
-                        sceneData.SavePath = filePath;
+                        sceneData.JsonFileSavePath = filePath;
                         //生成物体容器
                         SceneSystemDataContainer container = new(sceneData, null);
                         //生成其子级
@@ -247,7 +247,7 @@ namespace THLL.EditorSystem.SceneEditor
         private void CreateItemData()
         {
             //显示输入窗口
-            TextInputWindow.ShowWindow(newIDPart =>
+            TextInputWindow.ShowWindow((System.Action<string>)(newIDPart =>
             {
                 //计时
                 using ExecutionTimer timer = new("新增地点数据", MainWindow.TimerDebugLogToggle.value);
@@ -271,7 +271,7 @@ namespace THLL.EditorSystem.SceneEditor
                     }
 
                     //路径为父级路径的子级文件夹
-                    newDirectory = Path.Combine(Path.GetDirectoryName(ActiveSelection.Data.SavePath), "ChildScene");
+                    newDirectory = Path.Combine(Path.GetDirectoryName((string)ActiveSelection.Data.JsonFileSavePath), "ChildScene");
                     //并生成新数据
                     newSceneData = new SceneData(
                         //ID为父级ID加上新ID分块，并替换空格为-
@@ -321,11 +321,11 @@ namespace THLL.EditorSystem.SceneEditor
                 //随后扩展路径
                 newDirectory = Path.Combine(newDirectory, newIDPart);
                 //确认文件存储地址
-                string newFilePath = Path.Combine(newDirectory, "SceneData.xml");
+                string newJsonFilePath = Path.Combine(newDirectory, "SceneData.json");
                 //记录存储地址
-                newContainer.Data.SavePath = newFilePath;
+                newContainer.Data.JsonFileSavePath = newJsonFilePath;
                 //保存数据到磁盘
-                SceneData.SaveToXML(newSceneData, newFilePath);
+                SceneData.SaveToJson(newSceneData, newJsonFilePath);
                 //生成占位文件
                 GameEditor.GeneratePlaceHolderTextFile(newDirectory);
                 //生成附属文件夹
@@ -366,7 +366,7 @@ namespace THLL.EditorSystem.SceneEditor
                 AssetDatabase.SaveAssets();
                 //并刷新一下Assets
                 AssetDatabase.Refresh();
-            },
+            }),
             "Create New Scene",
             "Please Input New Scene ID Part",
             "New Scene ID Part",
@@ -404,7 +404,7 @@ namespace THLL.EditorSystem.SceneEditor
                 using ExecutionTimer timer = new("移除地点数据", MainWindow.TimerDebugLogToggle.value);
 
                 //获取路径
-                string deletedDirectory = Path.GetDirectoryName(ActiveSelection.Data.SavePath);
+                string deletedDirectory = Path.GetDirectoryName(ActiveSelection.Data.JsonFileSavePath);
                 //删除
                 GameEditor.DeleteFolder(deletedDirectory);
 
