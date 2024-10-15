@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,20 +21,39 @@ namespace THLL.EditorSystem
         //结果字段
         //文本
         private string newText = string.Empty;
+        //异步任务
+        private TaskCompletionSource<string> taskCompletionSource;
         //原窗口
         private EditorWindow originalWindow;
 
-        //弹出窗口方法
-        public static void ShowWindow(Action<string> onConfirm, string wndName, string wndDesc, string labelName, string newText, EditorWindow originalWindow)
+        //弹出窗口方法，普通版
+        public static void ShowWindow(Action<string> onConfirm, string wndName, string wndDesc, string labelName, string defaultText, EditorWindow originalWindow)
         {
             TextInputWindow window = GetWindow<TextInputWindow>(wndName);
             window.onConfirm = onConfirm;
             window.wndDesc = wndDesc;
             window.labelName = labelName;
-            window.newText = newText;
+            window.newText = defaultText;
             window.originalWindow = originalWindow;
             //聚焦新窗口
             window.Focus();
+        }
+        //弹出窗口方法，异步版，此时不需要回调函数
+        public static Task<string> ShowWindowWithResult(string wndName, string wndDesc, string labelName, string defaultText, EditorWindow originalWindow)
+        {
+            //窗口
+            TextInputWindow window = GetWindow<TextInputWindow>(wndName);
+            //设置字段
+            window.wndDesc = wndDesc;
+            window.labelName = labelName;
+            window.newText = defaultText;
+            window.originalWindow = originalWindow;
+            //聚焦新窗口
+            window.Focus();
+            //创建异步任务
+            window.taskCompletionSource = new TaskCompletionSource<string>();
+            //返回异步任务
+            return window.taskCompletionSource.Task;
         }
 
         //UI绘制
@@ -75,8 +95,10 @@ namespace THLL.EditorSystem
             //检测名称是否为空
             if (!string.IsNullOrEmpty(newText))
             {
-                //不为空，触发
+                //不为空，触发事件
                 onConfirm?.Invoke(newText);
+                //设置异步任务结果
+                taskCompletionSource?.TrySetResult(newText);
                 //关闭窗口
                 Close();
                 //恢复窗口聚焦到原窗口

@@ -10,7 +10,7 @@
         </engine:VisualElement>
         <engine:VisualElement style="flex-grow: 1; flex-direction: row; flex-basis: auto;">
             <engine:ScrollView name="AvatarContainerScrollView" mode="Vertical" class="scroll-view-container-flex" style="flex-grow: 1; flex-direction: column; align-content: flex-start; align-items: stretch; flex-basis: 20%;" />
-            <engine:ScrollView name="PortraitContainerScrollView" mode="Horizontal" class="scroll-view-container-flex" style="flex-grow: 1; flex-basis: 80%; flex-direction: row;" />
+            <engine:ScrollView name="PortraitContainerScrollView" mode="Horizontal" class="scroll-view-container-flex" style="flex-grow: 1; flex-basis: 80%; flex-direction: column;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>
