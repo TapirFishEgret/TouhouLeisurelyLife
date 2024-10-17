@@ -7,8 +7,297 @@
   "ParentSceneID": "",
   "ChildScenePathDatas": [],
   "Map": {
-    "Rows": 0,
-    "Cols": 0,
-    "Cells": {}
+    "Cols": 9,
+    "Rows": 5,
+    "Cells": {
+      "0": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      },
+      "1": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      },
+      "2": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        }
+      },
+      "3": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      },
+      "4": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "門",
+          "TextColorString": "BCBCBCFF"
+        }
+      },
+      "5": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      },
+      "6": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        }
+      },
+      "7": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "樹",
+          "TextColorString": "228B22FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      },
+      "8": {
+        "0": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "1": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "2": {
+          "X": 0,
+          "Y": 0,
+          "Text": "窗",
+          "TextColorString": "87CEEBFF"
+        },
+        "3": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        },
+        "4": {
+          "X": 0,
+          "Y": 0,
+          "Text": "墻",
+          "TextColorString": "8B4513FF"
+        }
+      }
+    }
   }
 }

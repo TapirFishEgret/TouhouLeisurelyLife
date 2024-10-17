@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Text.RegularExpressions;
 using THLL.SceneSystem;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,16 +33,27 @@ namespace THLL.EditorSystem.SceneEditor
         private VisualElement MapEditorRootPanel { get; set; }
         //全名
         private Label FullNameLabel { get; set; }
-        //行数整形输入框
-        private IntegerField RowCountIntegerField { get; set; }
         //列数整形输入框
         private IntegerField ColCountIntegerField { get; set; }
+        //行数整形输入框
+        private IntegerField RowCountIntegerField { get; set; }
+        //笔刷容器
+        private VisualElement BrushContainer { get; set; }
         //地图容器
         private VisualElement MapContainer { get; set; }
+        //笔刷文字输入框
+        private TextField BrushTextField { get; set; }
+        //笔刷颜色选择器
+        private ColorField BrushColorField { get; set; }
         //创建地图按钮
         private Button CreateMapButton { get; set; }
         //删除地图按钮
         private Button DeleteMapButton { get; set; }
+        #endregion
+
+        #region 数据
+        //指针是否按下
+        private bool IsPointerDown { get; set; }
         #endregion
 
         #region 数据编辑面板的初始化以及数据更新
@@ -72,12 +84,18 @@ namespace THLL.EditorSystem.SceneEditor
             MapEditorRootPanel = this.Q<VisualElement>("MapEditorRootPanel");
             //全名
             FullNameLabel = MapEditorRootPanel.Q<Label>("FullNameLabel");
-            //行数整形输入框
-            RowCountIntegerField = MapEditorRootPanel.Q<IntegerField>("RowCountIntegerField");
             //列数整形输入框
             ColCountIntegerField = MapEditorRootPanel.Q<IntegerField>("ColCountIntegerField");
+            //行数整形输入框
+            RowCountIntegerField = MapEditorRootPanel.Q<IntegerField>("RowCountIntegerField");
+            //笔刷容器
+            BrushContainer = MapEditorRootPanel.Q<VisualElement>("BrushContainer");
             //地图容器
             MapContainer = MapEditorRootPanel.Q<VisualElement>("MapContainer");
+            //笔刷文字输入框
+            BrushTextField = MapEditorRootPanel.Q<TextField>("BrushTextField");
+            //笔刷颜色选择器
+            BrushColorField = MapEditorRootPanel.Q<ColorField>("BrushColorField");
             //创建地图按钮
             CreateMapButton = MapEditorRootPanel.Q<Button>("CreateMapButton");
             //删除地图按钮
@@ -105,8 +123,8 @@ namespace THLL.EditorSystem.SceneEditor
                 //获取地图
                 ShowNewMap();
                 //更新数值
-                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
             }
         }
         //注册事件
@@ -114,30 +132,6 @@ namespace THLL.EditorSystem.SceneEditor
         {
             //注册几何图形改变事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-            //注册行数输入框改变事件
-            RowCountIntegerField.RegisterValueChangedCallback(evt =>
-            {
-                //检测是否有数据被选中
-                if (ShowedScene == null)
-                {
-                    //若没有，返回
-                    return;
-                }
-                //获取新数值
-                int newValue = evt.newValue;
-                //检测是否合法
-                if (newValue < 1)
-                {
-                    //若不合法，更改为1
-                    RowCountIntegerField.value = 1;
-                    //并返回以推动进程
-                    return;
-                }
-                //更改数值
-                ShowedScene.Map.Rows = newValue;
-                //显示获取新地图
-                ShowNewMap();
-            });
             //注册列数输入框改变事件
             ColCountIntegerField.RegisterValueChangedCallback(evt =>
             {
@@ -162,6 +156,82 @@ namespace THLL.EditorSystem.SceneEditor
                 //显示新地图
                 ShowNewMap();
             });
+            //注册行数输入框改变事件
+            RowCountIntegerField.RegisterValueChangedCallback(evt =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //获取新数值
+                int newValue = evt.newValue;
+                //检测是否合法
+                if (newValue < 1)
+                {
+                    //若不合法，更改为1
+                    RowCountIntegerField.value = 1;
+                    //并返回以推动进程
+                    return;
+                }
+                //更改数值
+                ShowedScene.Map.Rows = newValue;
+                //显示获取新地图
+                ShowNewMap();
+            });
+            //为每个笔刷按钮注册点击事件
+            BrushContainer.Query<Button>().ForEach(button =>
+            {
+                //检测是否为笔刷
+                if (button.name.StartsWith("Brush"))
+                {
+                    //若是，注册点击事件
+                    button.clicked += () =>
+                    {
+                        //设置当前笔刷字体为按钮显示文本
+                        BrushTextField.value = button.text;
+                        //设置当前笔刷颜色为按钮颜色
+                        BrushColorField.value = button.resolvedStyle.color;
+                    };
+                }
+            });
+            //为地图容器创建鼠标按下事件
+            MapContainer.RegisterCallback<PointerDownEvent>(evt =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //检测笔刷元素是否被设置
+                if (string.IsNullOrEmpty(BrushTextField.value))
+                {
+                    //若没有，返回
+                    return;
+                }
+                //设置指针按下标志
+                IsPointerDown = true;
+                //并启动一次笔刷
+                BrushCell(evt.target as VisualElement);
+            });
+            //为地图容器创建笔刷移动上色方法
+            MapContainer.RegisterCallback<PointerMoveEvent>(evt =>
+            {
+                //检测指针是否按下
+                if (IsPointerDown)
+                {
+                    //若是，粉刷单元格
+                    BrushCell(evt.target as VisualElement);
+                }
+            });
+            //为地图容器创建鼠标抬起事件
+            MapContainer.RegisterCallback<PointerUpEvent>(evt =>
+            {
+                //设置指针按下标志
+                IsPointerDown = false;
+            });
             //注册创建地图按钮点击事件
             CreateMapButton.clicked += () =>
             {
@@ -172,10 +242,10 @@ namespace THLL.EditorSystem.SceneEditor
                     return;
                 }
                 //若有，则新建地图
-                ShowedScene.Map = new Map(5, 9);
+                ShowedScene.Map = new Map(9, 5);
                 //不触发通知的情况下更改行列显示数值
-                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 //显示新地图
                 ShowNewMap();
             };
@@ -191,8 +261,8 @@ namespace THLL.EditorSystem.SceneEditor
                 //若有，则删除地图，表现为新建实例
                 ShowedScene.Map = new();
                 //不触发通知的情况下更改行列显示数值
-                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 //显示新地图
                 ShowNewMap();
             };
@@ -249,6 +319,40 @@ namespace THLL.EditorSystem.SceneEditor
             //重新生成地图以适应窗口大小
             MapContainer.Clear();
             MapContainer.Add(ShowedScene.Map.GetMap(MapContainer));
+        }
+        //粉刷单元格
+        private void BrushCell(VisualElement visualElement)
+        {
+            //判断传入数据
+            if (visualElement is Label label)
+            {
+                //使用正则表达式尝试获取提取坐标
+                Match match = Regex.Match(label.name, @"Cell_\((\d+),(\d+)\)");
+                //检测匹配结果
+                if (match.Success)
+                {
+                    //若匹配成功，获取x,y坐标
+                    int x = int.Parse(match.Groups[1].Value);
+                    int y = int.Parse(match.Groups[2].Value);
+
+                    //在字典中查找列
+                    if (ShowedScene.Map.Cells.TryGetValue(x, out Dictionary<int, MapCell> row))
+                    {
+                        //若找到列，则查找单元格
+                        if (row.TryGetValue(y, out MapCell cell))
+                        {
+                            //若找到单元格，则设置单元格文字为笔刷文字
+                            cell.Text = BrushTextField.value;
+                            label.text = BrushTextField.value;
+                            //设置单元格颜色为笔刷颜色
+                            cell.TextColorString = ColorUtility.ToHtmlStringRGBA(BrushColorField.value);
+                            label.style.color = BrushColorField.value;
+                            //并调整单元格字体大小
+                            label.style.fontSize = new StyleLength(new Length(label.resolvedStyle.width / label.text.Length, LengthUnit.Pixel));
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }

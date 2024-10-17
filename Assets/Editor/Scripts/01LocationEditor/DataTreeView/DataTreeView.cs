@@ -276,7 +276,7 @@ namespace THLL.EditorSystem.SceneEditor
                     newDirectory = Path.Combine(Path.GetDirectoryName((string)ActiveSelection.Data.JsonFileSavePath), "ChildScene");
                     //并生成新数据
                     newSceneData = new SceneData()
-                    { 
+                    {
                         //ID为父级ID加上新ID分块，并替换空格为-
                         ID = (ActiveSelection.Data.ID + $"_{newIDPart}").Replace(" ", "-"),
                         //IDPart为输入的数据

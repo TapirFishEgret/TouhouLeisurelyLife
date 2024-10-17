@@ -7,8 +7,8 @@
   "ParentSceneID": "Scene_Gensokyo",
   "ChildScenePathDatas": [],
   "Map": {
-    "Rows": 0,
     "Cols": 0,
+    "Rows": 0,
     "Cells": {}
   }
 }

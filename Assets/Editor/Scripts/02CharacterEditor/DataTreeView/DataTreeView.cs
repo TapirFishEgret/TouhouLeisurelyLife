@@ -783,13 +783,13 @@ namespace THLL.EditorSystem.CharacterEditor
                     CharacterData newCharacterData = new()
                     {
                         //ID，由系列、组织、角色、版本组成，用下划线连接，并将空格替换为-
-                        ID = string.Join("_", new string[] 
-                        { 
-                            "Character", 
-                            characterItemDataContainer.Parent.Parent.StringData, 
-                            characterItemDataContainer.Parent.StringData, 
-                            characterItemDataContainer.StringData, 
-                            newCharacterVersionName 
+                        ID = string.Join("_", new string[]
+                        {
+                            "Character",
+                            characterItemDataContainer.Parent.Parent.StringData,
+                            characterItemDataContainer.Parent.StringData,
+                            characterItemDataContainer.StringData,
+                            newCharacterVersionName
                         })
                         .Replace(" ", "-"),
                         //IDPart,此处应该是版本名称
