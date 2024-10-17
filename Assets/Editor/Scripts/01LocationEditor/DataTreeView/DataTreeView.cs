@@ -275,20 +275,21 @@ namespace THLL.EditorSystem.SceneEditor
                     //路径为父级路径的子级文件夹
                     newDirectory = Path.Combine(Path.GetDirectoryName((string)ActiveSelection.Data.JsonFileSavePath), "ChildScene");
                     //并生成新数据
-                    newSceneData = new SceneData(
+                    newSceneData = new SceneData()
+                    { 
                         //ID为父级ID加上新ID分块，并替换空格为-
-                        (ActiveSelection.Data.ID + $"_{newIDPart}").Replace(" ", "-"),
+                        ID = (ActiveSelection.Data.ID + $"_{newIDPart}").Replace(" ", "-"),
                         //IDPart为输入的数据
-                        newIDPart,
+                        IDPart = newIDPart,
                         //名称暂定为输入数据
-                        newIDPart,
+                        Name = newIDPart,
                         //描述为空
-                        string.Empty,
+                        Description = string.Empty,
                         //排序为父级的序号加子级数 + 1(以序号的形式)
-                        int.Parse(ActiveSelection.Data.SortOrder.ToString("D2") + (ChildrenDicCache[ActiveSelection.ID].Count + 1).ToString("D2")),
+                        SortOrder = int.Parse(ActiveSelection.Data.SortOrder.ToString("D2") + (ChildrenDicCache[ActiveSelection.ID].Count + 1).ToString("D2")),
                         //父级ID为选中项
-                        ActiveSelection.Data.ID
-                        );
+                        ParentSceneID = ActiveSelection.Data.ID
+                    };
                     //并生成数据容器
                     newContainer = new SceneSystemDataContainer(newSceneData, ActiveSelection);
                 }
@@ -303,20 +304,21 @@ namespace THLL.EditorSystem.SceneEditor
                     }
 
                     //生成新数据
-                    newSceneData = new SceneData(
+                    newSceneData = new SceneData()
+                    {
                         //ID为"Scene"+新ID分块，并替换空格为-
-                        ("Scene" + $"_{newIDPart}").Replace(" ", "-"),
+                        ID = ("Scene" + $"_{newIDPart}").Replace(" ", "-"),
                         //IDPart为输入的数据
-                        newIDPart,
+                        IDPart = newIDPart,
                         //名称暂定为输入数据
-                        newIDPart,
+                        Name = newIDPart,
                         //描述为空
-                        string.Empty,
+                        Description = string.Empty,
                         //排序为根存储的元素数量 + 1
-                        RootItemCache.Count + 1,
+                        SortOrder = RootItemCache.Count + 1,
                         //父级ID为空
-                        string.Empty
-                        );
+                        ParentSceneID = string.Empty
+                    };
                     //并生成数据容器
                     newContainer = new SceneSystemDataContainer(newSceneData, null);
                 }

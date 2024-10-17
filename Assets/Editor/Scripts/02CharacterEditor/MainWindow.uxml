@@ -7,7 +7,13 @@
                 <engine:Toggle label="Timer Debug Log" name="TimerDebugLogToggle" value="true" />
             </engine:VisualElement>
             <engine:VisualElement name="EditorPanel" style="width: auto; background-color: rgb(56, 142, 60); margin-top: 6px; margin-right: 3px; margin-bottom: 6px; margin-left: 3px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; flex-grow: 1; flex-basis: 75%;">
-                <engine:TabView name="MultiTabView" style="width: 100%; height: 100%; flex-grow: 1;" />
+                <engine:VisualElement style="flex-grow: 1; flex-basis: 5%;">
+                    <engine:ToggleButtonGroup label="Panels" class="toggle-button-group-normal-style">
+                        <engine:Button text="Data Editor Panel" />
+                        <engine:Button text="Assets Editor Panel" />
+                    </engine:ToggleButtonGroup>
+                </engine:VisualElement>
+                <engine:VisualElement name="EditorContainer" style="flex-grow: 1; flex-basis: 95%;" />
             </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>

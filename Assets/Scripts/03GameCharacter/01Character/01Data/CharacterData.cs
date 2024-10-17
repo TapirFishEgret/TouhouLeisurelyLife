@@ -44,17 +44,11 @@ namespace THLL.CharacterSystem
         //无参
         public CharacterData()
         {
-
-        }
-        //有参
-        public CharacterData(string id, string idPart, string name, string description, int sortOrder, string series, string group, string chara, string version, string colorString)
-            : base(id, idPart, name, description, sortOrder)
-        {
-            Series = series;
-            Group = group;
-            Chara = chara;
-            Version = version;
-            ColorString = colorString;
+            Series = string.Empty;
+            Group = string.Empty;
+            Chara = string.Empty;
+            Version = string.Empty;
+            ColorString = string.Empty;
         }
         #endregion
 

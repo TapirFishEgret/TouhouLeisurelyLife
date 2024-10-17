@@ -95,3 +95,39 @@
 .scroll-view-container-flex #unity-content-container {
     flex-grow: 1;
 }
+
+.toggle-button-group-normal-style {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.toggle-button-group-normal-style Label {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    min-width: 80px;
+    -unity-text-align: middle-left;
+}
+
+.toggle-button-group-normal-style Button {
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    width: 180px;
+}

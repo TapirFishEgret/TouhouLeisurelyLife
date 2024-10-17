@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.SceneEditor
 {
-    public class MapEditorPanel : Tab
+    public class MapEditorPanel : VisualElement
     {
         #region 自身构成
         //主面板
@@ -35,7 +35,7 @@ namespace THLL.EditorSystem.SceneEditor
         //行数整形输入框
         private IntegerField RowCountIntegerField { get; set; }
         //列数整形输入框
-        private IntegerField ColumnCountIntegerField { get; set; }
+        private IntegerField ColCountIntegerField { get; set; }
         //地图容器
         private VisualElement MapContainer { get; set; }
         #endregion
@@ -44,9 +44,12 @@ namespace THLL.EditorSystem.SceneEditor
         //构建函数
         public MapEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
         {
+            //设置自身为可扩展并隐藏
+            style.flexGrow = 1;
+            style.display = DisplayStyle.None;
+
             //获取面板
-            VisualElement panel = visualTree.CloneTree();
-            Add(panel);
+            visualTree.CloneTree(this);
 
             //指定主窗口
             MainWindow = mainWindow;
@@ -60,12 +63,6 @@ namespace THLL.EditorSystem.SceneEditor
             //计时
             using ExecutionTimer timer = new("地图编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
-            //设定名称与样式
-            label = "地图编辑面板";
-            style.flexGrow = 1;
-            contentContainer.style.flexGrow = 1;
-            contentContainer.style.backgroundColor = Color.gray;
-
             //获取UI控件
             //基层面板
             MapEditorRootPanel = this.Q<VisualElement>("MapEditorRootPanel");
@@ -74,12 +71,46 @@ namespace THLL.EditorSystem.SceneEditor
             //行数整形输入框
             RowCountIntegerField = MapEditorRootPanel.Q<IntegerField>("RowCountIntegerField");
             //列数整形输入框
-            ColumnCountIntegerField = MapEditorRootPanel.Q<IntegerField>("ColumnCountIntegerField");
+            ColCountIntegerField = MapEditorRootPanel.Q<IntegerField>("ColCountIntegerField");
             //地图容器
             MapContainer = MapEditorRootPanel.Q<VisualElement>("MapContainer");
 
             //注册事件
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            RowCountIntegerField.RegisterValueChangedCallback(evt =>
+            {
+                //获取新数值
+                int newValue = evt.newValue;
+                //检测是否合法
+                if (newValue < 1)
+                {
+                    //若不合法，更改为1
+                    RowCountIntegerField.value = 1;
+                    //并返回以推动进程
+                    return;
+                }
+                //更改数值
+                ShowedScene.Map.Rows = newValue;
+                //获取新地图
+                GetNewMap();
+            });
+            ColCountIntegerField.RegisterValueChangedCallback(evt =>
+            {
+                //获取新数值
+                int newValue = evt.newValue;
+                //检测是否合法
+                if (newValue < 1)
+                {
+                    //若不合法，更改为1
+                    ColCountIntegerField.value = 1;
+                    //并返回以推动进程
+                    return;
+                }
+                //更改数值
+                ShowedScene.Map.Cols = newValue;
+                //获取新地图
+                GetNewMap();
+            });
             RegisterCallback<MouseDownEvent>(evt => Debug.Log(evt.target.ToString()));
         }
         //刷新面板
@@ -98,24 +129,24 @@ namespace THLL.EditorSystem.SceneEditor
                 //若有
                 //设置全名
                 SetFullName();
-                //清空地图容器
-                MapContainer.Clear();
-                //生成地图
-                ShowedScene.Map = new();
                 //获取地图
-                MapContainer.Add(ShowedScene.Map.GetMap());
+                GetNewMap();
+                //更新数值
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
+                ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
             }
         }
-        //几何图形改变时手动容器大小
+        //几何图形改变时
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            
+            //获取新地图(其实是顺便改变单元格大小)
+            GetNewMap();
         }
         #endregion
 
         #region 辅助方法
         //获取场景的全名
-        public void SetFullName()
+        private void SetFullName()
         {
             //全名列表
             List<string> names = new();
@@ -144,6 +175,19 @@ namespace THLL.EditorSystem.SceneEditor
             }
             //设置全名显示
             FullNameLabel.text = string.Join("/", names);
+        }
+        //获取新地图
+        private void GetNewMap()
+        {
+            //检测选中场景是否为空
+            if (ShowedScene == null)
+            {
+                //若是，返回
+                return;
+            }
+            //重新生成地图以适应窗口大小
+            MapContainer.Clear();
+            MapContainer.Add(ShowedScene.Map.GetMap(MapContainer));
         }
         #endregion
     }

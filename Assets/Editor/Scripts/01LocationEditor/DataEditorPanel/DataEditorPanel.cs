@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using THLL.SceneSystem;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.SceneEditor
 {
-    public class DataEditorPanel : Tab
+    public class DataEditorPanel : VisualElement
     {
         #region 自身构成
         //主面板
@@ -48,9 +49,12 @@ namespace THLL.EditorSystem.SceneEditor
         //构建函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
         {
+            //设置自己为可延展并显示
+            style.flexGrow = 1;
+            style.display = DisplayStyle.Flex;
+
             //获取面板
-            VisualElement panel = visualTree.CloneTree();
-            Add(panel);
+            visualTree.CloneTree(this);
 
             //指定主窗口
             MainWindow = mainWindow;
@@ -64,26 +68,23 @@ namespace THLL.EditorSystem.SceneEditor
             //计时
             using ExecutionTimer timer = new("数据编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
 
-            //设定名称
-            label = "数据编辑面板";
-
             //获取UI控件
             //基层面板
             DataEditorRootPanel = this.Q<VisualElement>("DataEditorRootPanel");
             //全名
-            FullNameLabel = this.Q<Label>("FullNameLabel");
+            FullNameLabel = DataEditorRootPanel.Q<Label>("FullNameLabel");
             //ID
-            IDField = this.Q<TextField>("IDField");
+            IDField = DataEditorRootPanel.Q<TextField>("IDField");
             //IDPart
-            IDPartField = this.Q<TextField>("IDPartField");
+            IDPartField = DataEditorRootPanel.Q<TextField>("IDPartField");
             //名称
-            NameField = this.Q<TextField>("NameField");
+            NameField = DataEditorRootPanel.Q<TextField>("NameField");
             //排序位置
-            SortOrderField = this.Q<IntegerField>("SortOrderField");
+            SortOrderField = DataEditorRootPanel.Q<IntegerField>("SortOrderField");
             //描述
-            DescriptionField = this.Q<TextField>("DescriptionField");
+            DescriptionField = DataEditorRootPanel.Q<TextField>("DescriptionField");
             //父级ID
-            ParentSceneIDField = this.Q<TextField>("ParentSceneIDField");
+            ParentSceneIDField = DataEditorRootPanel.Q<TextField>("ParentSceneIDField");
 
             //绑定UI控件
             Bind();

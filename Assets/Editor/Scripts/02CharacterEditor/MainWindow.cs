@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using THLL.CharacterSystem;
+using THLL.EditorSystem.SceneEditor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -45,8 +46,10 @@ namespace THLL.EditorSystem.CharacterEditor
         //计时器Debug面板显示开关
         public Toggle TimerDebugLogToggle { get; private set; }
         //编辑器面板
-        //多标签页窗口
-        public TabView MultiTabView { get; private set; }
+        //编辑器选择器
+        public ToggleButtonGroup EditorSelector { get; private set; }
+        //编辑器容纳容器
+        public VisualElement EditorContainer { get; private set; }
         //数据编辑窗口
         public DataEditorPanel DataEditorPanel { get; private set; }
         //资源编辑面板
@@ -71,11 +74,8 @@ namespace THLL.EditorSystem.CharacterEditor
             //获取UI控件
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             DataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
-            MultiTabView = rootVisualElement.Q<TabView>("MultiTabView");
-
-            //设置标签页面容器为可延展
-            MultiTabView.contentContainer.style.flexGrow = 1;
-            MultiTabView.contentContainer.style.flexShrink = 1;
+            EditorSelector = rootVisualElement.Q<ToggleButtonGroup>();
+            EditorContainer = rootVisualElement.Q<VisualElement>("EditorContainer");
 
             //读取永久性存储文件
             LoadPersistentData();
@@ -88,10 +88,26 @@ namespace THLL.EditorSystem.CharacterEditor
             //编辑面板
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
-            MultiTabView.Add(DataEditorPanel);
+            EditorContainer.Add(DataEditorPanel);
             //创建资源编辑面板并添加
             AssetsEditorPanel = new AssetsEditorPanel(_assetsEditorVisualTree, this);
-            MultiTabView.Add(AssetsEditorPanel);
+            EditorContainer.Add(AssetsEditorPanel);
+
+            //设定编辑器选择器逻辑
+            EditorSelector.RegisterValueChangedCallback(evt =>
+            {
+                //首先关闭其他面板
+                EditorContainer.Children().ToList().ForEach(visualElement => visualElement.style.display = DisplayStyle.None);
+                //根据选择开启面板，0为数据编辑面板，1为资源编辑面板
+                if (evt.newValue[0])
+                {
+                    DataEditorPanel.style.display = DisplayStyle.Flex;
+                }
+                if (evt.newValue[1])
+                {
+                    AssetsEditorPanel.style.display = DisplayStyle.Flex;
+                }
+            });
         }
         //窗口关闭时
         private void OnDestroy()

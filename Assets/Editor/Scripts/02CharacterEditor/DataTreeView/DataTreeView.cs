@@ -772,33 +772,37 @@ namespace THLL.EditorSystem.CharacterEditor
                 else
                 {
                     //若不存在，开始生成数据
-                    CharacterData newCharacterData = new(
+                    CharacterData newCharacterData = new()
+                    {
                         //ID，由系列、组织、角色、版本组成，用下划线连接，并将空格替换为-
-                        string.Join("_", new string[] {
-                            "Character",
-                            characterItemDataContainer.Parent.Parent.StringData,
-                            characterItemDataContainer.Parent.StringData,
-                            characterItemDataContainer.StringData,
-                            newCharacterVersionName}).Replace(" ", "-"),
+                        ID = string.Join("_", new string[] 
+                        { 
+                            "Character", 
+                            characterItemDataContainer.Parent.Parent.StringData, 
+                            characterItemDataContainer.Parent.StringData, 
+                            characterItemDataContainer.StringData, 
+                            newCharacterVersionName 
+                        })
+                        .Replace(" ", "-"),
                         //IDPart,此处应该是版本名称
-                        newCharacterVersionName,
+                        IDPart = newCharacterVersionName,
                         //Name，暂时由角色名称代替
-                        characterItemDataContainer.StringData,
+                        Name = characterItemDataContainer.StringData,
                         //Description，暂时为空
-                        string.Empty,
+                        Description = string.Empty,
                         //排序，由角色数量决定
-                        CharacterVersionDicCache.Count,
+                        SortOrder = CharacterVersionDicCache.Count,
                         //系列名称，从容器中获取
-                        characterItemDataContainer.Parent.Parent.StringData,
+                        Series = characterItemDataContainer.Parent.Parent.StringData,
                         //组名称，从容器中获取
-                        characterItemDataContainer.Parent.StringData,
+                        Group = characterItemDataContainer.Parent.StringData,
                         //角色名称，从容器中获取
-                        characterItemDataContainer.StringData,
+                        Chara = characterItemDataContainer.StringData,
                         //版本名称，直接获取
-                        newCharacterVersionName,
+                        Version = newCharacterVersionName,
                         //颜色，默认白色
-                        ColorUtility.ToHtmlStringRGBA(Color.white)
-                        );
+                        ColorString = ColorUtility.ToHtmlStringRGBA(Color.white)
+                    };
 
                     //随后将其保存在硬盘上并创建标准配备文件夹
                     //首先获取存放路径

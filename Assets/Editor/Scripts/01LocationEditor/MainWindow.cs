@@ -43,8 +43,10 @@ namespace THLL.EditorSystem.SceneEditor
         //计时器Debug面板显示开关
         public Toggle TimerDebugLogToggle { get; private set; }
         //编辑器面板
-        //多标签页面板
-        public TabView MultiTabView { get; private set; }
+        //编辑器选择器
+        public ToggleButtonGroup EditorSelector { get; private set; }
+        //编辑器容器
+        public VisualElement EditorContainer { get; private set; }
         //数据编辑面板
         public DataEditorPanel DataEditorPanel { get; private set; }
         //资源编辑面板
@@ -73,11 +75,8 @@ namespace THLL.EditorSystem.SceneEditor
             //获取
             TimerDebugLogToggle = rootVisualElement.Q<Toggle>("TimerDebugLogToggle");
             DataTreeViewContainer = rootVisualElement.Q<VisualElement>("DataTreeViewContainer");
-            MultiTabView = rootVisualElement.Q<TabView>("EditorContainer");
-
-            //设置标签页面容器为可延展
-            MultiTabView.contentContainer.style.flexGrow = 1;
-            MultiTabView.contentContainer.style.flexShrink = 1;
+            EditorSelector = rootVisualElement.Q<ToggleButtonGroup>();
+            EditorContainer = rootVisualElement.Q<VisualElement>("EditorContainer");
 
             //读取持久化数据
             LoadPersistentData();
@@ -89,13 +88,33 @@ namespace THLL.EditorSystem.SceneEditor
             //编辑面板
             //创建数据编辑面板并添加
             DataEditorPanel = new DataEditorPanel(_dataEditorVisualTree, this);
-            MultiTabView.Add(DataEditorPanel);
+            EditorContainer.Add(DataEditorPanel);
             //创建资源编辑面板并添加
             AssetsEditorPanel = new AssetsEditorPanel(_assetsEditorVisualTree, this);
-            MultiTabView.Add(AssetsEditorPanel);
+            EditorContainer.Add(AssetsEditorPanel);
             //创建地图编辑面板并添加
             MapEditorPanel = new MapEditorPanel(_mapEditorVisualTree, this);
-            MultiTabView.Add(MapEditorPanel);
+            EditorContainer.Add(MapEditorPanel);
+
+            //设定编辑器选择逻辑
+            EditorSelector.RegisterValueChangedCallback(evt =>
+            {
+                //关闭所有面板
+                EditorContainer.Children().ToList().ForEach(visualElement => visualElement.style.display = DisplayStyle.None);
+                //根据选择开启面板，0为数据编辑面板，1为资源编辑面板，2为地图编辑面板
+                if (evt.newValue[0])
+                {
+                    DataEditorPanel.style.display = DisplayStyle.Flex;
+                }
+                if (evt.newValue[1])
+                {
+                    AssetsEditorPanel.style.display = DisplayStyle.Flex;
+                }
+                if (evt.newValue[2])
+                {
+                    MapEditorPanel.style.display = DisplayStyle.Flex;
+                }
+            });
         }
         //窗口关闭时
         private void OnDestroy()

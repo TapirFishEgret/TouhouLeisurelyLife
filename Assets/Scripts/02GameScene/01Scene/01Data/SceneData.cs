@@ -34,13 +34,7 @@ namespace THLL.SceneSystem
         //无参
         public SceneData()
         {
-
-        }
-        //有参
-        public SceneData(string id, string idPart, string name, string description, int sortOrder, string parentSceneID)
-            : base(id, idPart, name, description, sortOrder)
-        {
-            ParentSceneID = parentSceneID;
+            ParentSceneID = string.Empty;
         }
         #endregion
 

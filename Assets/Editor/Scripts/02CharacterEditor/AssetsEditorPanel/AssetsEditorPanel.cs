@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.CharacterEditor
 {
-    public class AssetsEditorPanel : Tab
+    public class AssetsEditorPanel : VisualElement
     {
         #region 自身构成
         //主面板
@@ -52,9 +52,12 @@ namespace THLL.EditorSystem.CharacterEditor
         //构建函数
         public AssetsEditorPanel(VisualTreeAsset visualTree, MainWindow mainWindow)
         {
+            //设置面板为可延展并隐藏
+            style.flexGrow = 1;
+            style.display = DisplayStyle.None;
+
             //获取面板
-            VisualElement panel = visualTree.CloneTree();
-            Add(panel);
+            visualTree.CloneTree(this);
 
             //指定主窗口
             MainWindow = mainWindow;
@@ -67,13 +70,6 @@ namespace THLL.EditorSystem.CharacterEditor
         {
             //计时
             using ExecutionTimer timer = new("资源编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
-
-            //设置标签页容器可延展
-            style.flexGrow = 1;
-            contentContainer.style.flexGrow = 1;
-
-            //设定名称
-            label = "资源编辑面板";
 
             //获取UI控件
             //基层面板

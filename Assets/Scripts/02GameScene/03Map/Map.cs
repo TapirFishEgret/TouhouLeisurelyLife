@@ -15,14 +15,40 @@ namespace THLL.SceneSystem
     {
         #region 数据
         //行数
-        public int Rows { get; set; } = 5;
+        [JsonIgnore]
+        private int _rows = 5;
+        public int Rows
+        {
+            get
+            {
+                return _rows;
+            }
+            set
+            {
+                _rows = value;
+                ResizeMap();
+            }
+        }
         //列数
-        public int Cols { get; set; } = 10;
+        [JsonIgnore]
+        private int _cols = 9;
+        public int Cols
+        {
+            get
+            {
+                return _cols;
+            }
+            set
+            {
+                _cols = value;
+                ResizeMap();
+            }
+        }
         //单元格数据字典
         public Dictionary<int, Dictionary<int, MapCell>> Cells { get; } = new();
         #endregion
 
-        #region 构造函数
+        #region 构造函数与初始化
         //无参构造函数
         public Map() 
         {
@@ -35,9 +61,6 @@ namespace THLL.SceneSystem
             Cols = cols;
             GenerateMap();
         }
-        #endregion
-
-        #region 公共方法
         //根据数据创建地图
         private void GenerateMap()
         {
@@ -46,15 +69,18 @@ namespace THLL.SceneSystem
             //根据行数和列数创建单元格数据字典
             for (int i = 0; i < Rows; i++)
             {
-                Cells.Add(i, new Dictionary<int, MapCell>());
+                Cells[i] = new Dictionary<int, MapCell>();
                 for (int j = 0; j < Cols; j++)
                 {
-                    Cells[i].Add(j, new MapCell() { Text = "空", TextColorString = "000000" });
+                    Cells[i][j] = new MapCell() { Text = "占", TextColorString = "000000" };
                 }
             }
         }
+        #endregion
+
+        #region 公共方法
         //根据数据获取地图视觉元素
-        public VisualElement GetMap()
+        public VisualElement GetMap(VisualElement container)
         {
             //创建根元素
             VisualElement root = new()
@@ -70,6 +96,8 @@ namespace THLL.SceneSystem
                     flexDirection = FlexDirection.Column
                 }
             };
+            //获取单元格大小
+            float cellSize = GetSuitableCellSize(container);
 
             //创建单元格元素，首先对行进行遍历
             foreach (var row in Cells)
@@ -83,7 +111,7 @@ namespace THLL.SceneSystem
                     style =
                     {
                         //内容物排布方向为向右
-                        flexDirection = FlexDirection.Row
+                        flexDirection = FlexDirection.Row,
                     }
                 };
                 //对每行的单元格进行遍历
@@ -99,8 +127,26 @@ namespace THLL.SceneSystem
                         //设置样式
                         style =
                         {
+                            //设置宽度
+                            width = new StyleLength(new Length(cellSize, LengthUnit.Pixel)),
+                            //设置高度
+                            height = new StyleLength(new Length(cellSize, LengthUnit.Pixel)),
+                            //设置字体大小
+                            fontSize = new StyleLength(new Length(cellSize, LengthUnit.Pixel)),
                             //设置文本颜色
                             color = ColorUtility.TryParseHtmlString(cell.Value.TextColorString, out Color color) ? color : Color.white,
+                            //设置文字居中
+                            unityTextAlign = TextAnchor.MiddleCenter,
+                            //设置边距
+                            marginTop = 0,
+                            marginBottom = 0,
+                            marginLeft = 0,
+                            marginRight = 0,
+                            //设置内边距
+                            paddingTop = 0,
+                            paddingBottom = 0,
+                            paddingLeft = 0,
+                            paddingRight = 0,
                         }
                     };
                     //添加到单元格容器
@@ -116,19 +162,55 @@ namespace THLL.SceneSystem
         #endregion
 
         #region 辅助方法
+        //重设地图大小
+        private void ResizeMap()
+        {
+            //遍历行数
+            for (int i = 0; i < Rows; i++)
+            {
+                //检测行是否存在
+                if (!Cells.ContainsKey(i))
+                {
+                    //如果不存在，则创建行
+                    Cells[i] = new Dictionary<int, MapCell>();
+                }
+
+                //遍历本行单元格
+                for (int j = 0; j < Cols; j++)
+                {
+                    //检测列是否存在
+                    if (!Cells[i].ContainsKey(j))
+                    {
+                        //如果不存在，则占位单元格
+                        Cells[i][j] = new MapCell() { Text = "占", TextColorString = "000000" };
+                    }
+                }
+
+                //删除多余的单元格
+                List<int> cellsToRemove = Cells[i].Keys.Where(k => k >= Cols).ToList();
+                foreach (int key in cellsToRemove)
+                {
+                    Cells[i].Remove(key);
+                }
+            }
+
+            //删除多余的行
+            List<int> rowsToRemove = Cells.Keys.Where(k => k >= Rows).ToList();
+            foreach (int key in rowsToRemove)
+            {
+                Cells.Remove(key);
+            }
+        }
         //获取合适的单元格大小
-        private float GetSuitableCellSize(VisualElement container)
+        public float GetSuitableCellSize(VisualElement container)
         {
             //获取容器的宽度和高度
-            float containerWidth = container.resolvedStyle.width;
-            float containerHeight = container.resolvedStyle.height;
-            //获取单元格的宽度和高度
-            float cellWidth = containerWidth / Cols;
-            float cellHeight = containerHeight / Rows;
-            //获取单元格的最小边长
-            float minCellSize = Math.Min(cellWidth, cellHeight);
-            //返回单元格的最小边长
-            return minCellSize;
+            float containerWidth = container.layout.width;
+            float containerHeight = container.layout.height;
+            //计算单元格大小
+            float cellSize = Math.Min(containerWidth / Cols, containerHeight / Rows);
+            //返回单元格大小
+            return cellSize;
         }
         #endregion
     }

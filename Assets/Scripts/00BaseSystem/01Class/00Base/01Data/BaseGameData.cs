@@ -38,15 +38,6 @@ namespace THLL.BaseSystem
             Description = string.Empty;
             SortOrder = 0;
         }
-        //有参构造函数
-        public BaseGameData(string id, string idPart, string name, string description, int sortOrder)
-        {
-            ID = id;
-            IDPart = idPart;
-            Name = name;
-            Description = description;
-            SortOrder = sortOrder;
-        }
         #endregion
 
         #region 数据驱动设计方法

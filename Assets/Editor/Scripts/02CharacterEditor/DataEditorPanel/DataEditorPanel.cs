@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem.CharacterEditor
 {
-    public class DataEditorPanel : Tab
+    public class DataEditorPanel : VisualElement
     {
         #region 基础构成
         //主面板
@@ -36,9 +36,12 @@ namespace THLL.EditorSystem.CharacterEditor
         //构造函数
         public DataEditorPanel(VisualTreeAsset visualTree, MainWindow window)
         {
+            //设置面板为可延展并显示
+            style.flexGrow = 1;
+            style.display = DisplayStyle.Flex;
+
             //获取面板
-            VisualElement panel = visualTree.CloneTree();
-            Add(panel);
+            visualTree.CloneTree(this);
 
             //指定主窗口
             MainWindow = window;
@@ -51,13 +54,6 @@ namespace THLL.EditorSystem.CharacterEditor
         {
             //计时
             using ExecutionTimer timer = new("数据编辑面板初始化", MainWindow.TimerDebugLogToggle.value);
-
-            //设置标签页容器可延展
-            style.flexGrow = 1;
-            contentContainer.style.flexGrow = 1;
-
-            //设置标签页名称
-            label = "数据编辑面板";
 
             //获取UI控件
             DataEditorRootPanel = this.Q<VisualElement>("DataEditorRootPanel");

@@ -8,67 +8,61 @@
   "ChildScenePathDatas": [],
   "Map": {
     "Rows": 5,
-    "Cols": 10,
+    "Cols": 9,
     "Cells": {
       "0": {
         "0": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "1": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "2": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "3": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "4": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "5": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "6": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "7": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "8": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
-          "TextColorString": "000000"
-        },
-        "9": {
-          "X": 0,
-          "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         }
       },
@@ -76,61 +70,55 @@
         "0": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "1": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "2": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "3": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "4": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "5": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "6": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "7": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "8": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
-          "TextColorString": "000000"
-        },
-        "9": {
-          "X": 0,
-          "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         }
       },
@@ -138,61 +126,55 @@
         "0": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "1": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "2": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "3": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "4": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "5": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "6": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "7": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "8": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
-          "TextColorString": "000000"
-        },
-        "9": {
-          "X": 0,
-          "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         }
       },
@@ -200,61 +182,55 @@
         "0": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "1": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "2": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "3": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "4": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "5": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "6": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "7": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "8": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
-          "TextColorString": "000000"
-        },
-        "9": {
-          "X": 0,
-          "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         }
       },
@@ -262,61 +238,55 @@
         "0": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "1": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "2": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "3": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "4": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "5": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "6": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "7": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         },
         "8": {
           "X": 0,
           "Y": 0,
-          "Text": "空",
-          "TextColorString": "000000"
-        },
-        "9": {
-          "X": 0,
-          "Y": 0,
-          "Text": "空",
+          "Text": "占",
           "TextColorString": "000000"
         }
       }
