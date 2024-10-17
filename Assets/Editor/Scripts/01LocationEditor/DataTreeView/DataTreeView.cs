@@ -86,6 +86,8 @@ namespace THLL.EditorSystem.SceneEditor
                     MainWindow.DataEditorPanel.DRefresh();
                     //刷新资源编辑面板
                     await MainWindow.AssetsEditorPanel.ARefresh();
+                    //刷新地图编辑面板
+                    MainWindow.MapEditorPanel.MRefresh();
                 }
             };
 

@@ -27,6 +27,21 @@ namespace THLL.SceneSystem
             {
                 if (Data.BackgroundsDict.Count == 0)
                 {
+                    //若字典为空，则向上循环获取父级的背景图字典直到找到非空字典或毫无结果为止
+                    Scene parentScene = ParentScene;
+                    while (parentScene != null)
+                    {
+                        if (parentScene.Data.BackgroundsDict.Count > 0)
+                        {
+                            //若父级有背景图字典，则返回父级的字典
+                            return parentScene.Data.BackgroundsDict;
+                        }
+                        else
+                        {
+                            //若父级没有背景图字典，则继续向上查找
+                            parentScene = parentScene.ParentScene;
+                        }
+                    }
                     //若字典为空，返回默认背景字典
                     return new Dictionary<string, Sprite>() { { "0", GameAssetsManager.Instance.DefaultBackground } };
                 }

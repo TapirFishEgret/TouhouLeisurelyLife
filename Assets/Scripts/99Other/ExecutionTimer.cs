@@ -32,10 +32,8 @@ namespace THLL
                         //若计时器颜色为空，默认为瀑布蓝
                         _timeHexColor = ColorUtility.ToHtmlStringRGBA(ChineseColor.Blue_瀑布蓝);
                     }
-                    //然后Unity输出日志
-                    UnityEngine.Debug.Log($"{_operationName}完成，耗时<color=#{_timeHexColor}>{_stopwatch.ElapsedMilliseconds}</color>ms");
                     //让游戏内也输出日志
-                    THLL.BaseSystem.GameHistory.LogNormal($"{_operationName}完成，耗时<color=#{_timeHexColor}>{_stopwatch.ElapsedMilliseconds}</color>ms");
+                    BaseSystem.GameHistory.LogNormal($"{_operationName}完成，耗时<color=#{_timeHexColor}>{_stopwatch.ElapsedMilliseconds}</color>ms");
                 }
             }
         }

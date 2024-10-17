@@ -20,6 +20,9 @@ namespace THLL.EditorSystem.SceneEditor
         //资源编辑面板UXML文件
         [SerializeField]
         private VisualTreeAsset _assetsEditorVisualTree;
+        //地图编辑面板UXML文件
+        [SerializeField]
+        private VisualTreeAsset _mapEditorVisualTree;
         //背景图容器UXML文件
         public VisualTreeAsset BackgroundAssetContainerVisualTree;
         //永久性存储文件
@@ -46,6 +49,8 @@ namespace THLL.EditorSystem.SceneEditor
         public DataEditorPanel DataEditorPanel { get; private set; }
         //资源编辑面板
         public AssetsEditorPanel AssetsEditorPanel { get; private set; }
+        //地图编辑面板
+        public MapEditorPanel MapEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("EditorSystem/SceneEditor")]
@@ -88,6 +93,9 @@ namespace THLL.EditorSystem.SceneEditor
             //创建资源编辑面板并添加
             AssetsEditorPanel = new AssetsEditorPanel(_assetsEditorVisualTree, this);
             MultiTabView.Add(AssetsEditorPanel);
+            //创建地图编辑面板并添加
+            MapEditorPanel = new MapEditorPanel(_mapEditorVisualTree, this);
+            MultiTabView.Add(MapEditorPanel);
         }
         //窗口关闭时
         private void OnDestroy()
