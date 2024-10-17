@@ -121,11 +121,9 @@ namespace THLL.EditorSystem.SceneEditor
         {
             //保存持久化数据到磁盘
             SavePersistentData();
-            //对数据进行处理，扔到静态类中的同时进行保存
+            //对数据进行进行保存
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
-                //向静态类中添加数据
-                GameEditor.SceneDataDict[item.data.Data.ID] = item.data.Data;
                 //保存数据
                 SceneData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
             }

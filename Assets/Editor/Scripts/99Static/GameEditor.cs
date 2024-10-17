@@ -1,18 +1,132 @@
 using System.Collections.Generic;
 using System.IO;
 using THLL.CharacterSystem;
+using THLL.EditorSystem.SceneEditor;
 using THLL.SceneSystem;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.EditorSystem
 {
     public static class GameEditor
     {
         #region 游戏数据存储
-        //角色数据存储
-        public static Dictionary<string, CharacterData> CharacterDataDict { get; } = new();
+        //场景数据是否需要被重建
+        public static bool IsSceneDataDirty { get; set; } = true;
         //场景数据存储
-        public static Dictionary<string, SceneData> SceneDataDict { get; } = new();
+        private static Dictionary<string, SceneData> _sceneDataDict;
+        public static Dictionary<string, SceneData> SceneDataDict
+        {
+            get
+            {
+                //检测是否需要重建
+                if (IsSceneDataDirty)
+                {
+                    //若需要，则重建
+                    ReadSceneData();
+                    //重建完成后清除标记
+                    IsSceneDataDirty = false;
+                }
+                //返回场景数据字典
+                return _sceneDataDict;
+            }
+        }
+        //角色数据是否需要被重建
+        public static bool IsCharacterDataDirty { get; set; } = true;
+        //角色数据存储
+        private static Dictionary<string, CharacterData> _characterDataDict;
+        public static Dictionary<string, CharacterData> CharacterDataDict
+        {
+            get
+            {
+                //检测是否需要重建
+                if (IsCharacterDataDirty)
+                {
+                    //若需要，则重建
+                    ReadCharacterData();
+                    //重建完成后清除标记
+                    IsCharacterDataDirty = false;
+                }
+                //返回角色数据字典
+                return _characterDataDict;
+            }
+        }
+        #endregion
+
+        #region 数据读取相关方法
+        //场景数据读取
+        private static void ReadSceneData()
+        {
+            //初始化场景数据字典
+            _sceneDataDict = new Dictionary<string, SceneData>();
+
+            //数据存储路径
+            string rootPath = Path.Combine(Application.streamingAssetsPath, "Scene");
+            //确认路径存在
+            MakeSureFolderPathExist(rootPath);
+
+            //读取所有场景数据
+            try
+            {
+                //获取所有文件
+                string[] filePaths = Directory.GetFiles(rootPath, "*.json", SearchOption.AllDirectories);
+                //遍历所有文件
+                foreach (string filePath in filePaths)
+                {
+                    //检测是否为目标数据文件
+                    if (Path.GetFileNameWithoutExtension(filePath).StartsWith("SceneData"))
+                    {
+                        //若是，读取数据
+                        SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
+                        //设定读取地址
+                        sceneData.JsonFileSavePath = filePath;
+                        //添加到字典
+                        _sceneDataDict[sceneData.ID] = sceneData;
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("读取场景数据失败！" + e.Message);
+            }
+        }
+        //角色数据读取
+        private static void ReadCharacterData()
+        {
+            //初始化角色数据字典
+            _characterDataDict = new Dictionary<string, CharacterData>();
+
+            //数据存储路径
+            string rootPath = Path.Combine(Application.streamingAssetsPath, "Character");
+            //确认路径存在
+            MakeSureFolderPathExist(rootPath);
+
+            //读取所有角色数据
+            try
+            {
+                //获取所有文件
+                string[] filePaths = Directory.GetFiles(rootPath, "*.json", SearchOption.AllDirectories);
+                //遍历所有文件
+                foreach (string filePath in filePaths)
+                {
+                    //检测是否为目标数据文件
+                    if (Path.GetFileNameWithoutExtension(filePath).StartsWith("CharacterData"))
+                    {
+                        //若是，读取数据
+                        CharacterData characterData = CharacterData.LoadFromJson<CharacterData>(filePath);
+                        //设定读取地址
+                        characterData.JsonFileSavePath = filePath;
+                        //添加到字典
+                        _characterDataDict[characterData.ID] = characterData;
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("读取角色数据失败！" + e.Message);
+            }
+        }
         #endregion
 
         #region 文件相关方法

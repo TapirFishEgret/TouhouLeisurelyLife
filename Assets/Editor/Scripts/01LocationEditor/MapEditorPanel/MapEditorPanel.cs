@@ -38,6 +38,10 @@ namespace THLL.EditorSystem.SceneEditor
         private IntegerField ColCountIntegerField { get; set; }
         //地图容器
         private VisualElement MapContainer { get; set; }
+        //创建地图按钮
+        private Button CreateMapButton { get; set; }
+        //删除地图按钮
+        private Button DeleteMapButton { get; set; }
         #endregion
 
         #region 数据编辑面板的初始化以及数据更新
@@ -74,44 +78,13 @@ namespace THLL.EditorSystem.SceneEditor
             ColCountIntegerField = MapEditorRootPanel.Q<IntegerField>("ColCountIntegerField");
             //地图容器
             MapContainer = MapEditorRootPanel.Q<VisualElement>("MapContainer");
+            //创建地图按钮
+            CreateMapButton = MapEditorRootPanel.Q<Button>("CreateMapButton");
+            //删除地图按钮
+            DeleteMapButton = MapEditorRootPanel.Q<Button>("DeleteMapButton");
 
             //注册事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-            RowCountIntegerField.RegisterValueChangedCallback(evt =>
-            {
-                //获取新数值
-                int newValue = evt.newValue;
-                //检测是否合法
-                if (newValue < 1)
-                {
-                    //若不合法，更改为1
-                    RowCountIntegerField.value = 1;
-                    //并返回以推动进程
-                    return;
-                }
-                //更改数值
-                ShowedScene.Map.Rows = newValue;
-                //获取新地图
-                GetNewMap();
-            });
-            ColCountIntegerField.RegisterValueChangedCallback(evt =>
-            {
-                //获取新数值
-                int newValue = evt.newValue;
-                //检测是否合法
-                if (newValue < 1)
-                {
-                    //若不合法，更改为1
-                    ColCountIntegerField.value = 1;
-                    //并返回以推动进程
-                    return;
-                }
-                //更改数值
-                ShowedScene.Map.Cols = newValue;
-                //获取新地图
-                GetNewMap();
-            });
-            RegisterCallback<MouseDownEvent>(evt => Debug.Log(evt.target.ToString()));
+            RegisterEvents();
         }
         //刷新面板
         public void MRefresh()
@@ -130,17 +103,105 @@ namespace THLL.EditorSystem.SceneEditor
                 //设置全名
                 SetFullName();
                 //获取地图
-                GetNewMap();
+                ShowNewMap();
                 //更新数值
                 RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
                 ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
             }
         }
+        //注册事件
+        private void RegisterEvents()
+        {
+            //注册几何图形改变事件
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            //注册行数输入框改变事件
+            RowCountIntegerField.RegisterValueChangedCallback(evt =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //获取新数值
+                int newValue = evt.newValue;
+                //检测是否合法
+                if (newValue < 1)
+                {
+                    //若不合法，更改为1
+                    RowCountIntegerField.value = 1;
+                    //并返回以推动进程
+                    return;
+                }
+                //更改数值
+                ShowedScene.Map.Rows = newValue;
+                //显示获取新地图
+                ShowNewMap();
+            });
+            //注册列数输入框改变事件
+            ColCountIntegerField.RegisterValueChangedCallback(evt =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //获取新数值
+                int newValue = evt.newValue;
+                //检测是否合法
+                if (newValue < 1)
+                {
+                    //若不合法，更改为1
+                    ColCountIntegerField.value = 1;
+                    //并返回以推动进程
+                    return;
+                }
+                //更改数值
+                ShowedScene.Map.Cols = newValue;
+                //显示新地图
+                ShowNewMap();
+            });
+            //注册创建地图按钮点击事件
+            CreateMapButton.clicked += () =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //若有，则新建地图
+                ShowedScene.Map = new Map(5, 9);
+                //不触发通知的情况下更改行列显示数值
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
+                ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
+                //显示新地图
+                ShowNewMap();
+            };
+            //注册删除地图按钮点击事件
+            DeleteMapButton.clicked += () =>
+            {
+                //检测是否有数据被选中
+                if (ShowedScene == null)
+                {
+                    //若没有，返回
+                    return;
+                }
+                //若有，则删除地图，表现为新建实例
+                ShowedScene.Map = new();
+                //不触发通知的情况下更改行列显示数值
+                RowCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Rows);
+                ColCountIntegerField.SetValueWithoutNotify(ShowedScene.Map.Cols);
+                //显示新地图
+                ShowNewMap();
+            };
+        }
         //几何图形改变时
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
             //获取新地图(其实是顺便改变单元格大小)
-            GetNewMap();
+            ShowNewMap();
         }
         #endregion
 
@@ -176,8 +237,8 @@ namespace THLL.EditorSystem.SceneEditor
             //设置全名显示
             FullNameLabel.text = string.Join("/", names);
         }
-        //获取新地图
-        private void GetNewMap()
+        //显示新地图
+        private void ShowNewMap()
         {
             //检测选中场景是否为空
             if (ShowedScene == null)

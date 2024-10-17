@@ -132,7 +132,7 @@ namespace THLL.EditorSystem.SceneEditor
                 foreach (string filePath in filePaths)
                 {
                     //检测是否为目标数据文件
-                    if (Path.GetFileNameWithoutExtension(filePath).StartsWith("Scene"))
+                    if (Path.GetFileNameWithoutExtension(filePath).StartsWith("SceneData"))
                     {
                         //若是，读取数据
                         SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
@@ -366,6 +366,9 @@ namespace THLL.EditorSystem.SceneEditor
                 //重构树形图
                 TRefresh();
 
+                //设定地点类为脏
+                GameEditor.IsSceneDataDirty = true;
+
                 //保存更改
                 AssetDatabase.SaveAssets();
                 //并刷新一下Assets
@@ -417,6 +420,9 @@ namespace THLL.EditorSystem.SceneEditor
 
                 //删除结束后，将活跃数据设为空
                 ActiveSelection = null;
+
+                //设定地点类为脏
+                GameEditor.IsSceneDataDirty = true;
 
                 //保存更改
                 AssetDatabase.SaveAssets();

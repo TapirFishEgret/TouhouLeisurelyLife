@@ -114,12 +114,11 @@ namespace THLL.EditorSystem.CharacterEditor
         {
             //保存
             SavePersistentData();
-            //对数据进行处理，所有数据进行保存
+            //对数据进行保存
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
                 if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
                 {
-                    GameEditor.CharacterDataDict[item.data.Data.ID] = item.data.Data;
                     CharacterData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
                 }
             }

@@ -16,7 +16,7 @@ namespace THLL.SceneSystem
         #region 数据
         //行数
         [JsonIgnore]
-        private int _rows = 5;
+        private int _rows = 0;
         public int Rows
         {
             get
@@ -31,7 +31,7 @@ namespace THLL.SceneSystem
         }
         //列数
         [JsonIgnore]
-        private int _cols = 9;
+        private int _cols = 0;
         public int Cols
         {
             get
@@ -46,6 +46,9 @@ namespace THLL.SceneSystem
         }
         //单元格数据字典
         public Dictionary<int, Dictionary<int, MapCell>> Cells { get; } = new();
+        //是否为空地图
+        [JsonIgnore]
+        public bool IsEmpty => Rows == 0 || Cols == 0;
         #endregion
 
         #region 构造函数与初始化
@@ -64,8 +67,6 @@ namespace THLL.SceneSystem
         //根据数据创建地图
         private void GenerateMap()
         {
-            //清空单元格数据字典
-            Cells.Clear();
             //根据行数和列数创建单元格数据字典
             for (int i = 0; i < Rows; i++)
             {
@@ -98,6 +99,39 @@ namespace THLL.SceneSystem
             };
             //获取单元格大小
             float cellSize = GetSuitableCellSize(container);
+
+            //检测是否真的有地图
+            if (IsEmpty)
+            {
+                //如果没有地图，生成标签表示无地图
+                Label noMapLabel = new()
+                {
+                    //设置文本
+                    text = "无地图",
+                    //设置样式
+                    style =
+                    {
+                        //设置字体大小
+                        fontSize = new StyleLength(new Length(20, LengthUnit.Pixel)),
+                        //设置文字居中
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        //设置边距
+                        marginTop = 10,
+                        marginBottom = 10,
+                        marginLeft = 10,
+                        marginRight = 10,
+                        //设置内边距
+                        paddingTop = 10,
+                        paddingBottom = 10,
+                        paddingLeft = 10,
+                        paddingRight = 10,
+                    }
+                };
+                //添加到根元素
+                root.Add(noMapLabel);
+                //返回根元素
+                return root;
+            }
 
             //创建单元格元素，首先对行进行遍历
             foreach (var row in Cells)

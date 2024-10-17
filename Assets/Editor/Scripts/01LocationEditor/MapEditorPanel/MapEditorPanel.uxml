@@ -4,14 +4,17 @@
         <engine:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row; background-color: rgba(0, 0, 0, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-basis: auto;">
             <engine:Label text="Full Name" name="FullNameLabel" style="align-items: stretch; -unity-text-align: middle-center; font-size: 32px; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgb(255, 255, 255); border-bottom-width: 3px; border-top-width: 3px; border-right-width: 3px; border-left-width: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; align-self: stretch; justify-content: flex-start; flex-shrink: 1; flex-grow: 1; flex-basis: 80%;" />
             <engine:VisualElement style="flex-grow: 1; flex-basis: 20%;">
-                <engine:IntegerField label="Row Count" value="5" name="RowCountIntegerField" is-delayed="true" max-length="10000" />
-                <engine:IntegerField label="Col Count" value="9" name="ColCountIntegerField" is-delayed="true" max-length="10000" />
+                <engine:IntegerField label="Row Count" value="0" name="RowCountIntegerField" is-delayed="true" max-length="10000" />
+                <engine:IntegerField label="Col Count" value="0" name="ColCountIntegerField" is-delayed="true" max-length="10000" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement style="flex-grow: 1; flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgba(0, 0, 0, 0); flex-basis: auto;">
             <engine:VisualElement style="flex-grow: 1; flex-basis: 10%; background-color: rgba(0, 0, 0, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
             <engine:VisualElement name="MapContainer" style="flex-grow: 1; flex-basis: 80%; background-color: rgba(0, 0, 0, 0); align-self: auto; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
-            <engine:VisualElement style="flex-grow: 1; flex-basis: 10%; background-color: rgba(0, 0, 0, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            <engine:VisualElement name="FunctionContainer" style="flex-grow: 1; flex-basis: 10%; background-color: rgba(0, 0, 0, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                <engine:Button text="Create" name="CreateMapButton" />
+                <engine:Button text="Delete" name="DeleteMapButton" />
+            </engine:VisualElement>
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

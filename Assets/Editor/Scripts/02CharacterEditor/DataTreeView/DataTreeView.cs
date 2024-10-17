@@ -103,7 +103,7 @@ namespace THLL.EditorSystem.CharacterEditor
             RegisterEvents();
         }
         //生成物体方法
-        private async void GenerateItems()
+        private void GenerateItems()
         {
             //清除现有缓存
             RootItemCache.Clear();
@@ -221,7 +221,7 @@ namespace THLL.EditorSystem.CharacterEditor
                                 foreach (string filePath in filePaths)
                                 {
                                     //找出其中以Json结尾的文件，以Character开头的文件
-                                    if (Path.GetExtension(filePath) == ".json" && Path.GetFileNameWithoutExtension(filePath).StartsWith("Character"))
+                                    if (Path.GetExtension(filePath) == ".json" && Path.GetFileNameWithoutExtension(filePath).StartsWith("CharacterData"))
                                     {
                                         //创建新角色版本数据
                                         CharacterData versionData = CharacterData.LoadFromJson<CharacterData>(filePath);
@@ -242,9 +242,6 @@ namespace THLL.EditorSystem.CharacterEditor
                                         ItemDicCache[versionItemDataContainer.ID] = versionItem;
                                         //添加到上层子级中
                                         characterChildren.Add(versionItem);
-                                        //顺便读取资源数据
-                                        await versionData.LoadAvatarsAsync(Path.GetDirectoryName(filePath));
-                                        await versionData.LoadPortraitsAsync(Path.GetDirectoryName(filePath));
                                     }
                                 }
                             }
@@ -550,6 +547,10 @@ namespace THLL.EditorSystem.CharacterEditor
                     CreateNewCharacterData(ActiveSelection.Parent as CharacterSystemDataContainer);
                 }
             }
+
+            //保存数据
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
         //数据的删除
         private void DeleteData()
@@ -679,6 +680,13 @@ namespace THLL.EditorSystem.CharacterEditor
 
             //删除结束后，将活跃数据设为空
             ActiveSelection = null;
+
+            //将角色数据标记为脏
+            GameEditor.IsCharacterDataDirty = true;
+
+            //保存数据
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
         #endregion
 
@@ -838,6 +846,13 @@ namespace THLL.EditorSystem.CharacterEditor
                     CharacterVersionDicCache[characterItemDataContainer.ID].Add(newItem);
                     //刷新
                     TRefresh();
+
+                    //将角色数据标记为脏
+                    GameEditor.IsCharacterDataDirty = true;
+
+                    //保存数据
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
                 }
             }),
             "Create New Character Version",
