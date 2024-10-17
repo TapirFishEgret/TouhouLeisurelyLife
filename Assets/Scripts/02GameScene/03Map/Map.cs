@@ -64,8 +64,8 @@ namespace THLL.SceneSystem
                 //设置样式
                 style =
                 {
-                    //样式为可延展
-                    flexGrow = 1,
+                    //自身位置为居中
+                    alignSelf = Align.Center,
                     //内容物排布方向为向下
                     flexDirection = FlexDirection.Column
                 }
@@ -82,10 +82,6 @@ namespace THLL.SceneSystem
                     //设置样式
                     style =
                     {
-                        //样式为可延展
-                        flexGrow = 1,
-                        //延展百分比固定为平均
-                        flexBasis = new StyleLength(new Length((100 / Cols), LengthUnit.Percent)),
                         //内容物排布方向为向右
                         flexDirection = FlexDirection.Row
                     }
@@ -103,10 +99,6 @@ namespace THLL.SceneSystem
                         //设置样式
                         style =
                         {
-                            //可延展
-                            flexGrow = 1,
-                            //延展百分比固定为平均
-                            flexBasis = new StyleLength(new Length((100 / Rows), LengthUnit.Percent)),
                             //设置文本颜色
                             color = ColorUtility.TryParseHtmlString(cell.Value.TextColorString, out Color color) ? color : Color.white,
                         }
@@ -120,6 +112,23 @@ namespace THLL.SceneSystem
 
             //返回根元素
             return root;
+        }
+        #endregion
+
+        #region 辅助方法
+        //获取合适的单元格大小
+        private float GetSuitableCellSize(VisualElement container)
+        {
+            //获取容器的宽度和高度
+            float containerWidth = container.resolvedStyle.width;
+            float containerHeight = container.resolvedStyle.height;
+            //获取单元格的宽度和高度
+            float cellWidth = containerWidth / Cols;
+            float cellHeight = containerHeight / Rows;
+            //获取单元格的最小边长
+            float minCellSize = Math.Min(cellWidth, cellHeight);
+            //返回单元格的最小边长
+            return minCellSize;
         }
         #endregion
     }
