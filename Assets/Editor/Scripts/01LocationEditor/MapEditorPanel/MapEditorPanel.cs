@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using THLL.SceneSystem;
@@ -152,8 +153,8 @@ namespace THLL.EditorSystem.SceneEditor
                     //并返回以推动进程
                     return;
                 }
-                //更改数值
-                ShowedScene.Map.Cols = newValue;
+                //重设大小
+                ShowedScene.Map.ResizeMap((newValue, ShowedScene.Map.Rows));
                 //显示新地图
                 ShowNewMap();
             });
@@ -176,8 +177,8 @@ namespace THLL.EditorSystem.SceneEditor
                     //并返回以推动进程
                     return;
                 }
-                //更改数值
-                ShowedScene.Map.Rows = newValue;
+                //更改重设大小
+                ShowedScene.Map.ResizeMap((ShowedScene.Map.Cols, newValue));
                 //显示获取新地图
                 ShowNewMap();
             });
@@ -274,7 +275,9 @@ namespace THLL.EditorSystem.SceneEditor
                     return;
                 }
                 //若有，则新建地图
-                ShowedScene.Map = new Map(9, 5);
+                ShowedScene.Map = new Map();
+                //并调整大小
+                ShowedScene.Map.ResizeMap((9, 5));
                 //显示新地图
                 ShowNewMap();
             };
@@ -355,15 +358,12 @@ namespace THLL.EditorSystem.SceneEditor
             //判断传入数据
             if (visualElement is Label label)
             {
-                //使用正则表达式尝试获取提取坐标
-                Match match = Regex.Match(label.name, @"Cell_\((\d+),(\d+)\)");
-                //检测匹配结果
-                if (match.Success)
+                //若是Label，尝试获取userData
+                if (label.userData is ValueTuple<int, int> coords)
                 {
-                    //若匹配成功，获取x,y坐标
-                    int x = int.Parse(match.Groups[1].Value);
-                    int y = int.Parse(match.Groups[2].Value);
-
+                    //若有userData，则获取单元格
+                    int x = coords.Item1;
+                    int y = coords.Item2;
                     //在字典中查找单元格
                     if (ShowedScene.Map.Cells.TryGetValue((x, y), out MapCell cell))
                     {

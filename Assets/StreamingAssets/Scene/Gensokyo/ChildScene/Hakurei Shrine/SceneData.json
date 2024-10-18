@@ -7,8 +7,109 @@
   "ParentSceneID": "Scene_Gensokyo",
   "ChildScenePathDatas": [],
   "Map": {
-    "Cols": 0,
-    "Rows": 0,
-    "Cells": {}
+    "Cols": 5,
+    "Rows": 5,
+    "Cells": {
+      "(0,0)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(0,1)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(0,2)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(0,3)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(0,4)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(1,0)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(1,1)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(1,2)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(1,3)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(1,4)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(2,0)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(2,1)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(2,2)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(2,3)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(2,4)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(3,0)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(3,1)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(3,2)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(3,3)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(3,4)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(4,0)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(4,1)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(4,2)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(4,3)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      },
+      "(4,4)": {
+        "Text": "占",
+        "TextColorString": "000000"
+      }
+    }
   }
 }

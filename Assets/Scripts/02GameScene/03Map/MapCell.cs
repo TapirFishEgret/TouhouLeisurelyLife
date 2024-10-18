@@ -8,13 +8,6 @@ namespace THLL.SceneSystem
     public class MapCell
     {
         #region 数据
-        //X坐标
-        [JsonIgnore]
-        public int X { get; set; }
-        //Y坐标
-        [JsonIgnore]
-        public int Y { get; set; }
-
         //文字
         public string Text { get; set; }
         //文字颜色字符串
