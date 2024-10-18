@@ -9,8 +9,10 @@ namespace THLL.SceneSystem
     {
         #region 数据
         //X坐标
+        [JsonIgnore]
         public int X { get; set; }
         //Y坐标
+        [JsonIgnore]
         public int Y { get; set; }
 
         //文字
