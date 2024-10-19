@@ -27,6 +27,10 @@ namespace THLL.SceneSystem
                     return Color.white;
                 }
             }
+            set
+            {
+                TextColorString = ColorUtility.ToHtmlStringRGBA(value);
+            }
         }
         #endregion
 

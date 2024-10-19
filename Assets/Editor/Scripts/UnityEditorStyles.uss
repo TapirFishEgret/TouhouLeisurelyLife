@@ -134,12 +134,18 @@
 
 .map-editor-brush-button Button {
     -unity-text-align: middle-center;
-    margin-top: 2px;
-    margin-right: 2px;
-    margin-bottom: 2px;
-    margin-left: 2px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+    width: 33%;
+    height: auto;
+    flex-grow: 0;
+    flex-basis: auto;
+    min-width: auto;
+    min-height: auto;
 }

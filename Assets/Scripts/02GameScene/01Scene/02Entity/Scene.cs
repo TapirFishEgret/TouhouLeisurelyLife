@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using THLL.BaseSystem;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace THLL.SceneSystem
 {
@@ -17,36 +18,8 @@ namespace THLL.SceneSystem
         public HashSet<Scene> ChildScenesHashSet { get; private set; } = new();
         //场景路径字典
         public Dictionary<Scene, int> PathsDict { get; private set; } = new();
-        //场景地图
-        public Map Map
-        {
-            get
-            {
-                //从数据中获取地图
-                Map map = Data.Map;
-                //检测地图是否为空
-                if (map.IsEmpty)
-                {
-                    //若为空，则向上循环获取父级的地图直到找到非空地图或毫无结果为止
-                    Scene parentScene = ParentScene;
-                    while (parentScene != null)
-                    {
-                        if (!parentScene.Data.Map.IsEmpty)
-                        {
-                            //若父级有地图，则返回父级的地图
-                            return parentScene.Data.Map;
-                        }
-                        else
-                        {
-                            //若父级没有地图，则继续向上查找
-                            parentScene = parentScene.ParentScene;
-                        }
-                    }
-                }
-                //若直到最后都无可用地图，则返回当前地图
-                return map;
-            }
-        }
+        //地图
+        public VisualElement Map => Data.MapData.GetMap();
         #endregion
 
         #region 资源

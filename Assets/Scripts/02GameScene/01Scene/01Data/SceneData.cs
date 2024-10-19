@@ -21,7 +21,7 @@ namespace THLL.SceneSystem
         public List<ScenePathData> ChildScenePathDatas { get; set; } = new();
         //地图数据
         [JsonProperty(Order = 8)]
-        public Map Map { get; set; } = new();
+        public MapData MapData { get; set; } = new();
         #endregion
 
         #region 资源

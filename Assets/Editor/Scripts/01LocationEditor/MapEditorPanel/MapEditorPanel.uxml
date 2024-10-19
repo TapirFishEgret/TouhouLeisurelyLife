@@ -11,23 +11,70 @@
         <engine:VisualElement style="flex-grow: 1; flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgba(0, 0, 0, 0); flex-basis: auto;">
             <engine:VisualElement name="BrushContainer" class="map-editor-brush-button" style="flex-grow: 1; flex-basis: 10%; background-color: rgba(0, 0, 0, 0); margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
                 <engine:Label text="Brushes" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; -unity-text-align: middle-center;" />
-                <engine:Button text="空" name="Brush_Space" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgba(0, 0, 0, 0);" />
+                <engine:VisualElement style="flex-grow: 0; flex-direction: row;">
+                    <engine:Button text="空" name="Brush_Space" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgba(0, 0, 0, 0);" />
+                </engine:VisualElement>
                 <engine:VisualElement name="Space" style="flex-grow: 0; height: 10px;" />
-                <engine:Button text="墻" name="Brush_Wall" style="color: rgb(139, 69, 19);" />
-                <engine:Button text="窗" name="Brush_Window" style="color: rgb(135, 206, 235);" />
-                <engine:Button text="門" name="Brush_Door" style="color: rgb(188, 188, 188);" />
+                <engine:VisualElement style="flex-grow: 0; flex-direction: row;">
+                    <engine:Button text="水" name="Brush_Water" style="color: rgb(16, 78, 139);" />
+                    <engine:Button text="樹" name="Brush_Tree" style="color: rgb(34, 139, 34);" />
+                    <engine:Button text="森" name="Brush_Forest" style="color: rgb(0, 100, 0);" />
+                </engine:VisualElement>
                 <engine:VisualElement name="Space" style="flex-grow: 0; height: 10px;" />
-                <engine:Button text="水" name="Brush_Water" style="color: rgb(16, 78, 139);" />
-                <engine:Button text="樹" name="Brush_Tree" style="color: rgb(34, 139, 34);" />
-                <engine:Button text="森" name="Brush_Forest" style="color: rgb(0, 100, 0);" />
+                <engine:VisualElement style="flex-grow: 0; flex-direction: row; flex-wrap: wrap;">
+                    <engine:Button text="━" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="墻" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┃" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┏" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┳" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┓" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┣" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="╋" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┫" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┗" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┻" name="Brush" style="color: rgb(139, 69, 19);" />
+                    <engine:Button text="┛" name="Brush" style="color: rgb(139, 69, 19);" />
+                </engine:VisualElement>
+                <engine:VisualElement name="Space" style="flex-grow: 0; height: 10px;" />
+                <engine:VisualElement style="flex-grow: 0; flex-direction: row; flex-wrap: wrap;">
+                    <engine:Button text="═" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="窗" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="║" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╔" name="Brush" enable-rich-text="true" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╦" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╗" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╠" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╬" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╣" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╚" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╩" name="Brush" style="color: rgb(135, 206, 235);" />
+                    <engine:Button text="╝" name="Brush" style="color: rgb(135, 206, 235);" />
+                </engine:VisualElement>
+                <engine:VisualElement name="Space" style="flex-grow: 0; height: 10px;" />
+                <engine:VisualElement style="flex-grow: 0; flex-direction: row; flex-wrap: wrap;">
+                    <engine:Button text="─" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="雜" name="Brush" style="color: rgb(255, 255, 251);" />
+                    <engine:Button text="│" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┌" name="Brush" enable-rich-text="true" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┬" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┐" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="├" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┼" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┤" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="└" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┴" name="Brush" style="color: rgb(255, 255, 255);" />
+                    <engine:Button text="┘" name="Brush" style="color: rgb(255, 255, 255);" />
+                </engine:VisualElement>
             </engine:VisualElement>
-            <engine:VisualElement style="flex-grow: 1; flex-basis: 80%; align-items: center; justify-content: center;">
-                <engine:ScrollView name="MapContainer" mode="VerticalAndHorizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="align-items: stretch; justify-content: center; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; flex-basis: auto; flex-grow: 0; background-color: rgba(0, 0, 0, 0.59); align-self: center; align-content: auto; flex-shrink: 0;" />
-            </engine:VisualElement>
+            <engine:VisualElement name="MapContainer" style="flex-grow: 1; flex-basis: 80%; align-items: center; justify-content: center; overflow: hidden; align-content: center; background-color: rgba(0, 0, 0, 0.59); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
             <engine:VisualElement name="FunctionContainer" style="flex-grow: 1; flex-basis: 10%; background-color: rgba(0, 0, 0, 0); margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
-                <engine:Label text="Functions" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center;" />
-                <engine:TextField label="Char" placeholder-text="Char" is-delayed="true" name="BrushTextField" style="flex-direction: column;" />
-                <editor:ColorField label="Color" value="#00FFFFFF" name="BrushColorField" style="flex-direction: column;" />
+                <engine:VisualElement style="flex-grow: 1;">
+                    <engine:Label text="Functions" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center;" />
+                    <engine:TextField label="Char" placeholder-text="Char" is-delayed="true" name="BrushTextField" style="flex-direction: column;" />
+                    <editor:ColorField label="Color" value="#00FFFFFF" name="BrushColorField" style="flex-direction: column;" />
+                    <engine:TextField label="Color Search" placeholder-text="Word" name="ColorSearcherField" is-delayed="true" style="flex-direction: column;" />
+                    <engine:ListView header-title="Chinese Colors" allow-add="false" allow-remove="false" show-foldout-header="true" name="ChineseColorSelector" />
+                </engine:VisualElement>
                 <engine:Button text="Create" name="CreateMapButton" />
                 <engine:Button text="Delete" name="DeleteMapButton" />
             </engine:VisualElement>

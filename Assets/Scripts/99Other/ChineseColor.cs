@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace THLL
@@ -530,5 +533,37 @@ namespace THLL
         public static Color Red_淡菽红 = new(0.929f, 0.282f, 0.271f);
         public static Color Red_枸枢红 = new(0.929f, 0.2f, 0.2f);
         public static Color Purple_貂紫 = new(0.365f, 0.192f, 0.192f);
+
+        //获取颜色方法
+        public static (List<string>, Dictionary<string, Color>) FindColors(string searchTerm = "")
+        {
+            //获取所有颜色字段
+            var colorFields = typeof(ChineseColor).GetFields(BindingFlags.Static | BindingFlags.Public).Where(f => f.FieldType == typeof(Color));
+
+            //搜索颜色
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                colorFields = colorFields.Where(f => f.Name.Contains(searchTerm, System.StringComparison.OrdinalIgnoreCase));
+            }
+
+            //准备颜色名称列表和字典
+            var colorNames = new List<string>();
+            var colorDict = new Dictionary<string, Color>();
+
+            //遍历颜色字段
+            foreach (var field in colorFields)
+            {
+                //获取颜色名称
+                string colorName = field.Name;
+                Color color = (Color)field.GetValue(null);
+
+                //添加颜色名称和颜色到列表和字典
+                colorNames.Add(colorName);
+                colorDict[colorName] = color;
+            }
+
+            //返回颜色列表
+            return (colorNames, colorDict);
+        }
     }
 }
