@@ -77,13 +77,13 @@ namespace THLL.SceneSystem
                 //结束后调整地图位置
                 AdjustMapPos();
             });
-            //为地图添加右键拖动功能
+            //为地图添加中键拖动功能
             Map.RegisterCallback<MouseDownEvent>(evt =>
             {
                 //检测鼠标按键
-                if (evt.button == 1)
+                if (evt.button == 2)
                 {
-                    //若为右键，开始拖动
+                    //若为中键，开始拖动
                     IsDragging = true;
                     //记录起始位置
                     DragStartPos = evt.localMousePosition;
@@ -92,7 +92,7 @@ namespace THLL.SceneSystem
             Map.RegisterCallback<MouseUpEvent>(evt =>
             {
                 //检测鼠标按键
-                if (evt.button == 1)
+                if (evt.button == 2)
                 {
                     //结束拖动
                     IsDragging = false;
@@ -238,7 +238,7 @@ namespace THLL.SceneSystem
                         Label cellElement = new()
                         {
                             //命名
-                            name = $"Cell_({x},{y})",
+                            name = $"Cell",
                             //设置文本
                             text = text,
                             //存储数据
@@ -266,8 +266,38 @@ namespace THLL.SceneSystem
                                 paddingBottom = 0,
                                 paddingLeft = 0,
                                 paddingRight = 0,
+                                //设置边框宽度
+                                borderTopWidth = 1,
+                                borderBottomWidth = 1,
+                                borderLeftWidth = 1,
+                                borderRightWidth = 1,
+                                //设置边框颜色
+                                borderTopColor = Color.clear,
+                                borderBottomColor = Color.clear,
+                                borderLeftColor = Color.clear,
+                                borderRightColor = Color.clear,
                             }
                         };
+                        //为单元格元素添加鼠标移入事件
+                        cellElement.RegisterCallback<MouseEnterEvent>(evt =>
+                        {
+                            //修改边框颜色为白
+                            cellElement.style.borderTopColor = Color.white;
+                            cellElement.style.borderBottomColor = Color.white;
+                            cellElement.style.borderLeftColor = Color.white;
+                            cellElement.style.borderRightColor = Color.white;
+                        });
+                        //为单元格元素添加鼠标移出事件
+                        cellElement.RegisterCallback<MouseLeaveEvent>(evt =>
+                        {
+                            //修改边框颜色为透明
+                            cellElement.style.borderTopColor = Color.clear;
+                            cellElement.style.borderBottomColor = Color.clear;
+                            cellElement.style.borderLeftColor = Color.clear;
+                            cellElement.style.borderRightColor = Color.clear;
+                        });
+                        //更改单元格元素动画时长
+                        cellElement.style.transitionDuration = new StyleList<TimeValue>(new List<TimeValue>() { new TimeValue(0.3f) });
                         //添加到单元格容器
                         colContainer.Add(cellElement);
                     }

@@ -46,10 +46,10 @@ namespace THLL.EditorSystem.SceneEditor
         private TextField BrushTextField { get; set; }
         //笔刷颜色选择器
         private ColorField BrushColorField { get; set; }
-        //笔刷颜色搜索器
-        private TextField ColorSearcherField { get; set; }
-        //中国色选择器
-        private ListView ChineseColorSelector { get; set; }
+        ////笔刷颜色搜索器
+        //private TextField ColorSearcherField { get; set; }
+        ////中国色选择器
+        //private ListView ChineseColorSelector { get; set; }
         //创建地图按钮
         private Button CreateMapButton { get; set; }
         //删除地图按钮
@@ -59,8 +59,8 @@ namespace THLL.EditorSystem.SceneEditor
         #region 数据
         //是否在绘画
         private bool IsPainting { get; set; }
-        //中国色存储
-        private (List<string>, Dictionary<string, Color>) ChineseColors { get; set; }
+        ////中国色存储
+        //private (List<string>, Dictionary<string, Color>) ChineseColors { get; set; }
         #endregion
 
         #region 数据编辑面板的初始化以及数据更新
@@ -103,35 +103,35 @@ namespace THLL.EditorSystem.SceneEditor
             BrushTextField = MapEditorRootPanel.Q<TextField>("BrushTextField");
             //笔刷颜色选择器
             BrushColorField = MapEditorRootPanel.Q<ColorField>("BrushColorField");
-            //笔刷颜色搜索器
-            ColorSearcherField = MapEditorRootPanel.Q<TextField>("ColorSearcherField");
-            //中国色选择器
-            ChineseColorSelector = MapEditorRootPanel.Q<ListView>("ChineseColorSelector");
+            ////笔刷颜色搜索器
+            //ColorSearcherField = MapEditorRootPanel.Q<TextField>("ColorSearcherField");
+            ////中国色选择器
+            //ChineseColorSelector = MapEditorRootPanel.Q<ListView>("ChineseColorSelector");
             //创建地图按钮
             CreateMapButton = MapEditorRootPanel.Q<Button>("CreateMapButton");
             //删除地图按钮
             DeleteMapButton = MapEditorRootPanel.Q<Button>("DeleteMapButton");
 
-            //中国色选择器初始化，首先获取所有颜色
-            ChineseColors = ChineseColor.FindColors();
-            //然后设定数据源
-            ChineseColorSelector.itemsSource = ChineseColors.Item1;
-            //然后设定makeItem
-            ChineseColorSelector.makeItem = () =>
-            {
-                //创建普通的Label作为选择项
-                Label item = new();
-                //返回Label
-                return item;
-            };
-            //然后设定bindItem
-            ChineseColorSelector.bindItem = (element, i) =>
-            {
-                //设定Label的文本为颜色名称
-                (element as Label).text = ChineseColorSelector.itemsSource[i] as string;
-                //设定Label的颜色为颜色值
-                (element as Label).style.color = ChineseColors.Item2[ChineseColors.Item1[i]];
-            };
+            ////中国色选择器初始化，首先获取所有颜色
+            //ChineseColors = ChineseColor.FindColors();
+            ////然后设定数据源
+            //ChineseColorSelector.itemsSource = ChineseColors.Item1;
+            ////然后设定makeItem
+            //ChineseColorSelector.makeItem = () =>
+            //{
+            //    //创建普通的Label作为选择项
+            //    Label item = new();
+            //    //返回Label
+            //    return item;
+            //};
+            ////然后设定bindItem
+            //ChineseColorSelector.bindItem = (element, i) =>
+            //{
+            //    //设定Label的文本为颜色名称
+            //    (element as Label).text = ChineseColorSelector.itemsSource[i] as string;
+            //    //设定Label的颜色为颜色值
+            //    (element as Label).style.color = ChineseColors.Item2[ChineseColors.Item1[i]];
+            //};
 
             //注册事件
             RegisterEvents();
@@ -275,26 +275,26 @@ namespace THLL.EditorSystem.SceneEditor
                 //结束绘画
                 IsPainting = false;
             });
-            //为搜索框注册搜索事件
-            ColorSearcherField.RegisterValueChangedCallback(evt =>
-            {
-                //筛选后的颜色列表
-                List<string> filteredColors = ChineseColors.Item1.Where(color => color.Contains(evt.newValue)).ToList();
-                //设定筛选后的颜色列表
-                ChineseColorSelector.itemsSource = filteredColors;
-                //刷新显示
-                ChineseColorSelector.Rebuild();
-            });
-            //为颜色选择器注册选择事件
-            ChineseColorSelector.itemsChosen += (items) =>
-            {
-                //获取选择的颜色名称
-                if (items.First() is string colorName)
-                {
-                    //若获取成功，则设置笔刷颜色
-                    BrushColorField.value = ChineseColors.Item2[colorName];
-                }
-            };
+            ////为搜索框注册搜索事件
+            //ColorSearcherField.RegisterValueChangedCallback(evt =>
+            //{
+            //    //筛选后的颜色列表
+            //    List<string> filteredColors = ChineseColors.Item1.Where(color => color.Contains(evt.newValue)).ToList();
+            //    //设定筛选后的颜色列表
+            //    ChineseColorSelector.itemsSource = filteredColors;
+            //    //刷新显示
+            //    ChineseColorSelector.Rebuild();
+            //});
+            ////为颜色选择器注册选择事件
+            //ChineseColorSelector.itemsChosen += (items) =>
+            //{
+            //    //获取选择的颜色名称
+            //    if (items.First() is string colorName)
+            //    {
+            //        //若获取成功，则设置笔刷颜色
+            //        BrushColorField.value = ChineseColors.Item2[colorName];
+            //    }
+            //};
             //注册创建地图按钮点击事件
             CreateMapButton.clicked += () =>
             {

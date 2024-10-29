@@ -72,8 +72,8 @@
                     <engine:Label text="Functions" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center;" />
                     <engine:TextField label="Char" placeholder-text="Char" is-delayed="true" name="BrushTextField" style="flex-direction: column;" />
                     <editor:ColorField label="Color" value="#00FFFFFF" name="BrushColorField" style="flex-direction: column;" />
-                    <engine:TextField label="Color Search" placeholder-text="Word" name="ColorSearcherField" is-delayed="true" style="flex-direction: column;" />
-                    <engine:ListView header-title="Chinese Colors" allow-add="false" allow-remove="false" show-foldout-header="true" name="ChineseColorSelector" />
+                    <engine:TextField label="Color Search" placeholder-text="Word" name="ColorSearcherField" is-delayed="true" style="flex-direction: column; display: none;" />
+                    <engine:ListView header-title="Chinese Colors" allow-add="false" allow-remove="false" show-foldout-header="true" name="ChineseColorSelector" style="display: none;" />
                 </engine:VisualElement>
                 <engine:Button text="Create" name="CreateMapButton" />
                 <engine:Button text="Delete" name="DeleteMapButton" />
