@@ -27,7 +27,7 @@ namespace THLL.SceneSystem
         #endregion
 
         #region 面板
-        //地图面板
+        //地图层级
         private VisualElement Map { get; set; }
         //是否在拖动
         private bool IsDragging { get; set; } = false;
@@ -125,7 +125,7 @@ namespace THLL.SceneSystem
             if (Map.childCount == 0)
             {
                 //刷新地图
-                RefreshMap();
+                GenerateMap();
             }
 
             //检查地图单元格数据与行列数值是否匹配
@@ -161,16 +161,16 @@ namespace THLL.SceneSystem
                     if (!Cells.ContainsKey((i, j)))
                     {
                         //如果没有，则新建一个占位单元格
-                        Cells[(i, j)] = new MapCell() { Text = "占", TextColor = Color.white };
+                        Cells[(i, j)] = new MapCell() { StringData = "占", TextColor = Color.white };
                     }
                 }
             }
 
-            //刷新地图
-            RefreshMap();
+            //生成地图
+            GenerateMap();
         }
-        //刷新
-        private void RefreshMap()
+        //生成
+        private void GenerateMap()
         {
             //调用此方法时首先清空地图
             Map.Clear();
@@ -225,49 +225,8 @@ namespace THLL.SceneSystem
                     //对每列的单元格进行遍历，也就是y
                     for (int y = 0; y < Rows; y++)
                     {
-                        //获取文字
-                        string text = Cells.ContainsKey((x, y)) ? Cells[(x, y)].Text : "占";
-                        //获取文字长度
-                        int textLength = text.Length;
-                        //计算文字大小
-                        float fontSize = textLength > 1 ? CellSize / textLength : CellSize;
-                        //获取文字颜色
-                        Color textColor = Cells.ContainsKey((x, y)) ? Cells[(x, y)].TextColor : Color.white;
-
-                        //创建单元格元素
-                        Label cellElement = new()
-                        {
-                            //命名
-                            name = "Cell",
-                            //设置文本
-                            text = text,
-                            //存储数据
-                            userData = (x, y),
-                            //设置样式
-                            style =
-                            {
-                                //设置宽度
-                                width = new StyleLength(new Length(CellSize, LengthUnit.Pixel)),
-                                //设置高度
-                                height = new StyleLength(new Length(CellSize, LengthUnit.Pixel)),
-                                //设置字体大小
-                                fontSize = new StyleLength(new Length(fontSize, LengthUnit.Pixel)),
-                                //设置文本颜色
-                                color = textColor,
-                                //设置文字居中
-                                unityTextAlign = TextAnchor.MiddleCenter,
-                                //设置边距
-                                marginTop = 0,
-                                marginBottom = 0,
-                                marginLeft = 0,
-                                marginRight = 0,
-                                //设置内边距
-                                paddingTop = 0,
-                                paddingBottom = 0,
-                                paddingLeft = 0,
-                                paddingRight = 0,
-                            }
-                        };
+                        //生成单元格
+                        Label cellElement = GenerateCell(x, y);
                         //添加到单元格容器
                         colContainer.Add(cellElement);
                     }
@@ -275,6 +234,83 @@ namespace THLL.SceneSystem
                     Map.Add(colContainer);
                 }
             }
+        }
+        //生成地图单元格
+        private Label GenerateCell(int x, int y)
+        {
+            //获取字符数据
+            string stringData = Cells.ContainsKey((x, y)) ? Cells[(x, y)].StringData : "佔";
+            //声明单元格文字
+            string text = string.Empty;
+            //检测运行环境
+#if UNITY_EDITOR
+            //在编辑器下，尝试对字符串按照"_"进行分割，随后使用"-"进行二次分割并获取首字母作为显示文字
+            foreach (string word in stringData.Split('_').Last().Split('-'))
+            {
+                text += word[..1].ToUpper();
+            }
+#else
+            //游戏运行期间，尝试获取场景数据
+            if (GameScene.SceneDB.TryGetValue(stringData, out Scene scene))
+            {
+                //如果存在场景数据，则获取场景名称
+                text = scene.Name;
+            }
+            else
+            {
+                //若不存在场景数据，则以编辑器情况处理
+                foreach (string word in stringData.Split('_').Last().Split('-'))
+                {
+                    text += word[..1].ToUpper();
+                }
+                //并游戏内报错
+                GameHistory.LogError($"未找到场景数据：{stringData}");
+            }
+#endif
+            //获取文字长度
+            int textLength = text.Length;
+            //计算文字大小
+            float fontSize = textLength > 1 ? CellSize / textLength : CellSize;
+            //获取文字颜色
+            Color textColor = Cells.ContainsKey((x, y)) ? Cells[(x, y)].TextColor : Color.white;
+
+            //创建地图单元格元素
+            Label mapCellElement = new()
+            {
+                //命名
+                name = "Cell",
+                //设置文本
+                text = text,
+                //存储数据
+                userData = (x, y),
+                //设置样式
+                style =
+                {
+                    //设置宽度
+                    width = new StyleLength(new Length(CellSize, LengthUnit.Pixel)),
+                    //设置高度
+                    height = new StyleLength(new Length(CellSize, LengthUnit.Pixel)),
+                    //设置字体大小
+                    fontSize = new StyleLength(new Length(fontSize, LengthUnit.Pixel)),
+                    //设置文本颜色
+                    color = textColor,
+                    //设置文字居中
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    //设置边距
+                    marginTop = 0,
+                    marginBottom = 0,
+                    marginLeft = 0,
+                    marginRight = 0,
+                    //设置内边距
+                    paddingTop = 0,
+                    paddingBottom = 0,
+                    paddingLeft = 0,
+                    paddingRight = 0,
+                }
+            };
+
+            //返回单元格
+            return mapCellElement;
         }
         //调整地图位置
         private void AdjustMapPos(Vector2 offset = default)
@@ -360,6 +396,6 @@ namespace THLL.SceneSystem
                 }
             }
         }
-        #endregion
+#endregion
     }
 }

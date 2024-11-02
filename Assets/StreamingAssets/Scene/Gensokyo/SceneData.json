@@ -11,220 +11,220 @@
     "Rows": 6,
     "Cells": {
       "(0,0)": {
-        "Text": "┏",
-        "TextColorString": "8B4513FF"
+        "StringData": "┏",
+        "ColorString": "8B4513FF"
       },
       "(0,1)": {
-        "Text": "║",
-        "TextColorString": "87CEEBFF"
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
       },
       "(0,2)": {
-        "Text": "┣",
-        "TextColorString": "8B4513FF"
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
       },
       "(0,3)": {
-        "Text": "║",
-        "TextColorString": "87CEEBFF"
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
       },
       "(0,4)": {
-        "Text": "┗",
-        "TextColorString": "8B4513FF"
-      },
-      "(1,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(1,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(1,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(1,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(1,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(2,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(2,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(2,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(2,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(2,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(3,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(3,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(3,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(3,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(3,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(4,0)": {
-        "Text": "─",
-        "TextColorString": "FFFFFFFF"
-      },
-      "(4,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(4,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(4,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(4,4)": {
-        "Text": "─",
-        "TextColorString": "FFFFFFFF"
-      },
-      "(5,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(5,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(5,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(5,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(5,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(6,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(6,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(6,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(6,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(6,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(7,0)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(7,1)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(7,2)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(7,3)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      },
-      "(7,4)": {
-        "Text": "━",
-        "TextColorString": "8B4513FF"
-      },
-      "(8,0)": {
-        "Text": "┓",
-        "TextColorString": "8B4513FF"
-      },
-      "(8,1)": {
-        "Text": "║",
-        "TextColorString": "87CEEBFF"
-      },
-      "(8,2)": {
-        "Text": "┫",
-        "TextColorString": "8B4513FF"
-      },
-      "(8,3)": {
-        "Text": "║",
-        "TextColorString": "87CEEBFF"
-      },
-      "(8,4)": {
-        "Text": "┛",
-        "TextColorString": "8B4513FF"
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
       },
       "(0,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "┗",
+        "ColorString": "8B4513FF"
+      },
+      "(1,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(1,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(1,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(1,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(1,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(1,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(2,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(2,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(2,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(2,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(2,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(2,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(3,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(3,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(3,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(3,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(3,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(3,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(4,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(4,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(4,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(4,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(4,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(4,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(5,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(5,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(5,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(5,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(5,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(5,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(6,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(6,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(6,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(6,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(6,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(6,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(7,0)": {
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(7,1)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(7,2)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(7,3)": {
+        "StringData": "空",
+        "ColorString": "00000000"
+      },
+      "(7,4)": {
+        "StringData": "空",
+        "ColorString": "00000000"
       },
       "(7,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "━",
+        "ColorString": "8B4513FF"
+      },
+      "(8,0)": {
+        "StringData": "┓",
+        "ColorString": "8B4513FF"
+      },
+      "(8,1)": {
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
+      },
+      "(8,2)": {
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
+      },
+      "(8,3)": {
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
+      },
+      "(8,4)": {
+        "StringData": "┃",
+        "ColorString": "8B4513FF"
       },
       "(8,5)": {
-        "Text": "樹",
-        "TextColorString": "228B22FF"
+        "StringData": "┛",
+        "ColorString": "8B4513FF"
       }
     }
   }

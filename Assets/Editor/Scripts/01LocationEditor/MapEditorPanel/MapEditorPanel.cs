@@ -396,7 +396,7 @@ namespace THLL.EditorSystem.SceneEditor
                     if (ShowedScene.MapData.Cells.TryGetValue((x, y), out MapCell cell))
                     {
                         //若找到单元格，则设置单元格文字为笔刷文字
-                        cell.Text = BrushTextField.value;
+                        cell.StringData = BrushTextField.value;
                         label.text = BrushTextField.value;
                         //设置单元格颜色为笔刷颜色
                         cell.TextColor = BrushColorField.value;

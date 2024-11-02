@@ -7,13 +7,8 @@
   "ParentSceneID": "Scene_Gensokyo",
   "ChildScenePathDatas": [],
   "MapData": {
-    "Cols": 1,
-    "Rows": 1,
-    "Cells": {
-      "(0,0)": {
-        "Text": "空",
-        "TextColorString": "00000000"
-      }
-    }
+    "Cols": 0,
+    "Rows": 0,
+    "Cells": {}
   }
 }

@@ -8,17 +8,17 @@ namespace THLL.SceneSystem
     public class MapCell
     {
         #region 数据
-        //文字
-        public string Text { get; set; }
-        //文字颜色字符串
-        public string TextColorString { get; set; }
+        //存储数据
+        public string StringData { get; set; } = "佔";
+        //颜色字符串
+        public string ColorString { get; set; } = "000000FF";
         //文字颜色
         [JsonIgnore]
         public Color TextColor
         {
             get
             {
-                if (ColorUtility.TryParseHtmlString("#" + TextColorString, out Color color))
+                if (ColorUtility.TryParseHtmlString("#" + ColorString, out Color color))
                 {
                     return color;
                 }
@@ -29,7 +29,7 @@ namespace THLL.SceneSystem
             }
             set
             {
-                TextColorString = ColorUtility.ToHtmlStringRGBA(value);
+                ColorString = ColorUtility.ToHtmlStringRGBA(value);
             }
         }
         #endregion
