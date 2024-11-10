@@ -31,8 +31,6 @@ namespace THLL.SceneSystem
         private VisualElement Map { get; set; }
         //是否在拖动
         private bool IsDragging { get; set; } = false;
-        //拖动起始位置
-        private Vector2 DragStartPos { get; set; } = Vector2.zero;
         #endregion
 
         #region 构造函数与初始化
@@ -85,8 +83,6 @@ namespace THLL.SceneSystem
                 {
                     //若为中键，开始拖动
                     IsDragging = true;
-                    //记录起始位置
-                    DragStartPos = evt.localMousePosition;
                 }
             });
             Map.RegisterCallback<MouseUpEvent>(evt =>
@@ -103,8 +99,8 @@ namespace THLL.SceneSystem
                 //检测是否在拖动
                 if (IsDragging)
                 {
-                    //计算偏移量
-                    Vector2 offset = evt.localMousePosition - DragStartPos;
+                    //获取偏移量
+                    Vector2 offset = evt.mouseDelta;
                     //设置偏移
                     AdjustMapPos(offset);
                 }
@@ -161,7 +157,7 @@ namespace THLL.SceneSystem
                     if (!Cells.ContainsKey((i, j)))
                     {
                         //如果没有，则新建一个占位单元格
-                        Cells[(i, j)] = new MapCell() { StringData = "占", TextColor = Color.white };
+                        Cells[(i, j)] = new MapCell() { Text = "占", TextColor = Color.white };
                     }
                 }
             }
@@ -239,7 +235,7 @@ namespace THLL.SceneSystem
         private Label GenerateCell(int x, int y)
         {
             //获取字符数据
-            string stringData = Cells.ContainsKey((x, y)) ? Cells[(x, y)].StringData : "佔";
+            string stringData = Cells.ContainsKey((x, y)) ? Cells[(x, y)].Text : "佔";
             //声明单元格文字
             string text = string.Empty;
             //检测运行环境

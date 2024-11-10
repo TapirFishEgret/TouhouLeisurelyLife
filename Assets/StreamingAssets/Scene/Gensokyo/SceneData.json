@@ -7,224 +7,408 @@
   "ParentSceneID": "",
   "ChildScenePathDatas": [],
   "MapData": {
-    "Cols": 9,
-    "Rows": 6,
+    "Cols": 10,
+    "Rows": 10,
     "Cells": {
       "(0,0)": {
-        "StringData": "┏",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(0,1)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(0,2)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(0,3)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(0,4)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(0,5)": {
-        "StringData": "┗",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(1,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(2,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(3,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(4,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(5,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(6,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,0)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,1)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,2)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,3)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,4)": {
-        "StringData": "空",
-        "ColorString": "00000000"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(7,5)": {
-        "StringData": "━",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,0)": {
-        "StringData": "┓",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,1)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,2)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,3)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,4)": {
-        "StringData": "┃",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
       },
       "(8,5)": {
-        "StringData": "┛",
-        "ColorString": "8B4513FF"
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(0,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(0,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(0,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(0,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(1,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(1,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(1,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(1,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(2,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(2,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(2,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(2,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(3,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(3,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(3,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(3,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(4,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(4,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(4,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(4,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(5,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(5,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(5,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(5,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(6,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(6,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(6,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(6,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(7,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(7,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(7,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(7,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(8,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(8,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(8,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(8,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,0)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,1)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,2)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,3)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,4)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,5)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,6)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,7)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,8)": {
+        "Text": "空",
+        "TextColorString": "00000000"
+      },
+      "(9,9)": {
+        "Text": "空",
+        "TextColorString": "00000000"
       }
     }
   }

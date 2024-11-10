@@ -9,16 +9,16 @@ namespace THLL.SceneSystem
     {
         #region 数据
         //存储数据
-        public string StringData { get; set; } = "佔";
+        public string Text { get; set; } = "佔";
         //颜色字符串
-        public string ColorString { get; set; } = "000000FF";
+        public string TextColorString { get; set; } = "000000FF";
         //文字颜色
         [JsonIgnore]
         public Color TextColor
         {
             get
             {
-                if (ColorUtility.TryParseHtmlString("#" + ColorString, out Color color))
+                if (ColorUtility.TryParseHtmlString("#" + TextColorString, out Color color))
                 {
                     return color;
                 }
@@ -29,7 +29,7 @@ namespace THLL.SceneSystem
             }
             set
             {
-                ColorString = ColorUtility.ToHtmlStringRGBA(value);
+                TextColorString = ColorUtility.ToHtmlStringRGBA(value);
             }
         }
         #endregion
