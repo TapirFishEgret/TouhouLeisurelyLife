@@ -4,6 +4,8 @@
   "Name": "博丽灵梦",
   "Description": "博丽灵梦，飞翔于天空的不可思议的巫女。\n嘗試一下多行在Json中是什麼樣子的。\n看起來還蠻順眼的嘛，至少在VS Code裡是這樣的。",
   "SortOrder": 1,
+  "SubDataFiles": [],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Character/Touhou Project/Main Character/Hakurei Reimu/Original/CharacterData.json",
   "Series": "东方Project",
   "Group": "主角组",
   "Chara": "博丽灵梦",

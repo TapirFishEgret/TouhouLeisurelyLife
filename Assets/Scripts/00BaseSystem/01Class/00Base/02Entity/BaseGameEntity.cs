@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace THLL.BaseSystem
 {
@@ -8,8 +7,10 @@ namespace THLL.BaseSystem
         #region 基础游戏数据
         //原数据
         protected TData Data { get; private set; }
+        //数据路径
+        protected string DataPath => Data.DataPath;
         //数据存储目录路径
-        protected string DataDirectoryPath { get; private set; }
+        protected string DataDirectory => Data.DataDirectory;
         //ID
         public string ID => Data.ID;
         //名称
@@ -26,8 +27,6 @@ namespace THLL.BaseSystem
         {
             //传入文件路径时，读取
             BaseGameData baseGameData = LoadDataFromJson(filePath);
-            //设定数据存储目录路径
-            DataDirectoryPath = Path.GetDirectoryName(filePath);
             //进行配置
             Configure(baseGameData);
         }

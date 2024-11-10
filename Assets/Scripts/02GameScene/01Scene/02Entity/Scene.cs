@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using THLL.BaseSystem;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace THLL.SceneSystem
 {
@@ -18,8 +17,6 @@ namespace THLL.SceneSystem
         public HashSet<Scene> ChildScenesHashSet { get; private set; } = new();
         //场景路径字典
         public Dictionary<Scene, int> PathsDict { get; private set; } = new();
-        //地图
-        public VisualElement Map => Data.MapData.GetMap();
         #endregion
 
         #region 资源
@@ -124,13 +121,13 @@ namespace THLL.SceneSystem
         public IEnumerator LoadBackgroundsCoroutine(Action<string, Sprite> onBackgroundLoaded = null, Action onAllBackgroundsLoaded = null)
         {
             //返回协程
-            yield return Data.LoadBackgroundsCoroutine(DataDirectoryPath, onBackgroundLoaded, onAllBackgroundsLoaded);
+            yield return Data.LoadBackgroundsCoroutine(DataDirectory, onBackgroundLoaded, onAllBackgroundsLoaded);
         }
         //使用异步函数获取场景背景
         public async void LoadBackgroundsAsync(Action<string, Sprite> onBackgroundLoaded = null, Action onAllBackgroundsLoaded = null)
         {
             //利用异步函数启动加载
-            await Data.LoadBackgroundsAsync(DataDirectoryPath, onBackgroundLoaded, onAllBackgroundsLoaded);
+            await Data.LoadBackgroundsAsync(DataDirectory, onBackgroundLoaded, onAllBackgroundsLoaded);
         }
         //卸载所有资源
         public void UnloadAllResources()

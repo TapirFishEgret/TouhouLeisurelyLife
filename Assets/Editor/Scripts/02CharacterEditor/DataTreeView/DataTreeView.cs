@@ -226,7 +226,7 @@ namespace THLL.EditorSystem.CharacterEditor
                                         //创建新角色版本数据
                                         CharacterData versionData = CharacterData.LoadFromJson<CharacterData>(filePath);
                                         //设定其路径
-                                        versionData.JsonFileSavePath = filePath;
+                                        versionData.DataPath = filePath.Replace("\\", "/");
                                         //创建角色数据物体数据容器
                                         CharacterSystemDataContainer versionItemDataContainer = new(
                                             versionData,
@@ -816,16 +816,17 @@ namespace THLL.EditorSystem.CharacterEditor
                     //首先获取存放路径
                     string JsonFilePath = Path.Combine(newFolderPath, "CharacterData.json");
                     //设定其存放路径
-                    newCharacterData.JsonFileSavePath = JsonFilePath;
+                    newCharacterData.DataPath = JsonFilePath.Replace("\\", "/");
                     //创建文件
                     CharacterData.SaveToJson(newCharacterData, JsonFilePath);
                     //新增占位文件
                     GameEditor.GeneratePlaceHolderTextFile(newFolderPath);
-                    //创建配备文件夹
+                    //创建配备文件夹并生成占位符
+                    Directory.CreateDirectory(Path.Combine(newFolderPath, "SubData"));
+                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "SubData"));
                     Directory.CreateDirectory(Path.Combine(newFolderPath, "Avatars"));
-                    Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
-                    //并配备占位符
                     GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Avatars"));
+                    Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
                     GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Portraits"));
 
                     //随后处理树状图与缓存

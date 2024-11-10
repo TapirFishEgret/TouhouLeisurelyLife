@@ -115,9 +115,9 @@ namespace THLL.EditorSystem.CharacterEditor
                 //设置全名
                 SetFullInfo();
                 //读取头像资源
-                await ShowedCharacter.LoadAvatarsAsync(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), (name, avatar) => ShowAvatar(name, avatar));
+                await ShowedCharacter.LoadAvatarsAsync(ShowedCharacter.DataDirectory, (name, avatar) => ShowAvatar(name, avatar));
                 //读取立绘资源
-                await ShowedCharacter.LoadPortraitsAsync(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), (name, portrait) => ShowPortrait(name, portrait));
+                await ShowedCharacter.LoadPortraitsAsync(ShowedCharacter.DataDirectory, (name, portrait) => ShowPortrait(name, portrait));
             }
         }
         //几何图形改变时手动容器大小
@@ -205,7 +205,7 @@ namespace THLL.EditorSystem.CharacterEditor
             if (!string.IsNullOrEmpty(sourceFilePath))
             {
                 //若有选中，则首先指定路径
-                string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), "Avatars", avatarName + Path.GetExtension(sourceFilePath));
+                string targetFilePath = Path.Combine(ShowedCharacter.DataDirectory, "Avatars", avatarName + Path.GetExtension(sourceFilePath));
                 //复制文件
                 File.Copy(sourceFilePath, targetFilePath, true);
 
@@ -219,7 +219,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //首先，隐藏头像
             HideAvatar(name);
             //然后，获取存放头像的目录的信息
-            DirectoryInfo directory = new(Path.Combine(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), "Avatars"));
+            DirectoryInfo directory = new(Path.Combine(ShowedCharacter.DataDirectory, "Avatars"));
             //遍历目录，删除文件
             foreach (FileInfo file in directory.GetFiles())
             {
@@ -315,7 +315,7 @@ namespace THLL.EditorSystem.CharacterEditor
             if (!string.IsNullOrEmpty(sourceFilePath))
             {
                 //若有选中，则首先指定路径
-                string targetFilePath = Path.Combine(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), "Portraits", portraitName + Path.GetExtension(sourceFilePath));
+                string targetFilePath = Path.Combine(ShowedCharacter.DataDirectory, "Portraits", portraitName + Path.GetExtension(sourceFilePath));
                 //复制文件
                 File.Copy(sourceFilePath, targetFilePath, true);
 
@@ -329,7 +329,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //首先，隐藏立绘
             HidePortrait(name);
             //然后，获取存放立绘的目录的信息
-            DirectoryInfo directory = new(Path.Combine(Path.GetDirectoryName(ShowedCharacter.JsonFileSavePath), "Portraits"));
+            DirectoryInfo directory = new(Path.Combine(ShowedCharacter.DataDirectory, "Portraits"));
             //遍历目录，删除文件
             foreach (FileInfo file in directory.GetFiles())
             {

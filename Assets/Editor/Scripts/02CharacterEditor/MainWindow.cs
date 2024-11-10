@@ -118,7 +118,7 @@ namespace THLL.EditorSystem.CharacterEditor
             {
                 if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
                 {
-                    CharacterData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
+                    CharacterData.SaveToJson(item.data.Data, item.data.Data.DataPath.Replace("\\", "/"));
                 }
             }
             //保存

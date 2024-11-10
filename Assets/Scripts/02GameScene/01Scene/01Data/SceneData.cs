@@ -14,13 +14,13 @@ namespace THLL.SceneSystem
     {
         #region 数据
         //父级场景ID
-        [JsonProperty(Order = 6)]
-        public string ParentSceneID { get; set; }
+        [JsonProperty(Order = 101)]
+        public string ParentSceneID { get; set; } = string.Empty;
         //子级场景间路径列表
-        [JsonProperty(Order = 7)]
+        [JsonProperty(Order = 102)]
         public List<ScenePathData> ChildScenePathDatas { get; set; } = new();
         //地图数据
-        [JsonProperty(Order = 8)]
+        [JsonIgnore]
         public MapData MapData { get; set; } = new();
         #endregion
 
@@ -34,7 +34,8 @@ namespace THLL.SceneSystem
         //无参
         public SceneData()
         {
-            ParentSceneID = string.Empty;
+            //将地图数据作为子数据添加到列表中
+            SubDataFiles = new HashSet<string>() { "MapData" };
         }
         #endregion
 
@@ -133,6 +134,40 @@ namespace THLL.SceneSystem
         {
             //直接将对应资源标记为空
             BackgroundsDict.Clear();
+        }
+        #endregion
+
+        #region 数据驱动相关
+        //实现获取子数据方法
+        public override object GetSubData(string subDataFile)
+        {
+            //检测传入的数据名
+            return subDataFile switch
+            {
+                "MapData" => MapData,
+                _ => null,
+            };
+        }
+        //实现获取子数据类型方法
+        public override Type GetSubDataType(string subDataFile)
+        {
+            //检测传入的数据名并返回类型
+            return subDataFile switch
+            {
+                "MapData" => typeof(MapData),
+                _ => null,
+            };
+        }
+        //实现设置子数据方法
+        public override void SetSubData(string subDataFile, object subData)
+        {
+            //检测传入的数据名并赋值
+            switch (subDataFile)
+            {
+                case "MapData":
+                    MapData = subData as MapData;
+                    break;
+            }
         }
         #endregion
     }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using THLL.BaseSystem;
+using THLL.SceneSystem;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -14,20 +15,20 @@ namespace THLL.CharacterSystem
     {
         #region 数据
         //角色所属作品名
-        [JsonProperty(Order = 6)]
+        [JsonProperty(Order = 101)]
         public string Series { get; set; }
         //角色所属组织名
-        [JsonProperty(Order = 7)]
+        [JsonProperty(Order = 102)]
         public string Group { get; set; }
         //角色名
-        [JsonProperty(Order = 8)]
+        [JsonProperty(Order = 103)]
         public string Chara { get; set; }
         //版本名
-        [JsonProperty(Order = 9)]
+        [JsonProperty(Order = 104)]
         public string Version { get; set; }
 
         //颜色
-        [JsonProperty(Order = 10)]
+        [JsonProperty(Order = 105)]
         public string ColorString { get; set; }
         #endregion
 
@@ -239,6 +240,24 @@ namespace THLL.CharacterSystem
             //将资源设定为空
             AvatarsDict.Clear();
             PortraitsDict.Clear();
+        }
+        #endregion
+
+        #region 数据驱动相关
+        //实现获取子数据方法
+        public override object GetSubData(string subDataFile)
+        {
+            throw new NotImplementedException();
+        }
+        //实现获取子数据类型方法
+        public override Type GetSubDataType(string subDataFile)
+        {
+            throw new NotImplementedException();
+        }
+        //实现设置子数据方法
+        public override void SetSubData(string subDataFile, object subData)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

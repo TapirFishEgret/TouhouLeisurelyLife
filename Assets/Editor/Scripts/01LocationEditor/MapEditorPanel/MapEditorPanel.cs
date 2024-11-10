@@ -46,10 +46,6 @@ namespace THLL.EditorSystem.SceneEditor
         private TextField BrushTextField { get; set; }
         //笔刷颜色选择器
         private ColorField BrushColorField { get; set; }
-        ////笔刷颜色搜索器
-        //private TextField ColorSearcherField { get; set; }
-        ////中国色选择器
-        //private ListView ChineseColorSelector { get; set; }
         //创建地图按钮
         private Button CreateMapButton { get; set; }
         //删除地图按钮
@@ -59,8 +55,6 @@ namespace THLL.EditorSystem.SceneEditor
         #region 数据
         //是否在绘画
         private bool IsPainting { get; set; }
-        ////中国色存储
-        //private (List<string>, Dictionary<string, Color>) ChineseColors { get; set; }
         #endregion
 
         #region 数据编辑面板的初始化以及数据更新
@@ -103,35 +97,10 @@ namespace THLL.EditorSystem.SceneEditor
             BrushTextField = MapEditorRootPanel.Q<TextField>("BrushTextField");
             //笔刷颜色选择器
             BrushColorField = MapEditorRootPanel.Q<ColorField>("BrushColorField");
-            ////笔刷颜色搜索器
-            //ColorSearcherField = MapEditorRootPanel.Q<TextField>("ColorSearcherField");
-            ////中国色选择器
-            //ChineseColorSelector = MapEditorRootPanel.Q<ListView>("ChineseColorSelector");
             //创建地图按钮
             CreateMapButton = MapEditorRootPanel.Q<Button>("CreateMapButton");
             //删除地图按钮
             DeleteMapButton = MapEditorRootPanel.Q<Button>("DeleteMapButton");
-
-            ////中国色选择器初始化，首先获取所有颜色
-            //ChineseColors = ChineseColor.FindColors();
-            ////然后设定数据源
-            //ChineseColorSelector.itemsSource = ChineseColors.Item1;
-            ////然后设定makeItem
-            //ChineseColorSelector.makeItem = () =>
-            //{
-            //    //创建普通的Label作为选择项
-            //    Label item = new();
-            //    //返回Label
-            //    return item;
-            //};
-            ////然后设定bindItem
-            //ChineseColorSelector.bindItem = (element, i) =>
-            //{
-            //    //设定Label的文本为颜色名称
-            //    (element as Label).text = ChineseColorSelector.itemsSource[i] as string;
-            //    //设定Label的颜色为颜色值
-            //    (element as Label).style.color = ChineseColors.Item2[ChineseColors.Item1[i]];
-            //};
 
             //注册事件
             RegisterEvents();
@@ -152,63 +121,28 @@ namespace THLL.EditorSystem.SceneEditor
                 //若有
                 //设置全名
                 SetFullName();
-                //获取地图
-                ShowNewMap();
             }
         }
         //注册事件
         private void RegisterEvents()
         {
             //注册几何图形改变事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+
+            });
+
             //注册列数输入框改变事件
             ColCountIntegerField.RegisterValueChangedCallback(evt =>
             {
-                //检测是否有数据被选中
-                if (ShowedScene == null)
-                {
-                    //若没有，返回
-                    return;
-                }
-                //获取新数值
-                int newValue = evt.newValue;
-                //检测是否合法
-                if (newValue < 1)
-                {
-                    //若不合法，更改为1
-                    ColCountIntegerField.value = 1;
-                    //并返回以推动进程
-                    return;
-                }
-                //重设大小
-                ShowedScene.MapData.Cols = newValue;
-                //显示新地图
-                ShowNewMap();
+
             });
             //注册行数输入框改变事件
             RowCountIntegerField.RegisterValueChangedCallback(evt =>
             {
-                //检测是否有数据被选中
-                if (ShowedScene == null)
-                {
-                    //若没有，返回
-                    return;
-                }
-                //获取新数值
-                int newValue = evt.newValue;
-                //检测是否合法
-                if (newValue < 1)
-                {
-                    //若不合法，更改为1
-                    RowCountIntegerField.value = 1;
-                    //并返回以推动进程
-                    return;
-                }
-                //更改重设大小
-                ShowedScene.MapData.Rows = newValue;
-                //显示获取新地图
-                ShowNewMap();
+
             });
+
             //为每个笔刷按钮注册点击事件
             BrushContainer.Query<Button>().ForEach(button =>
             {
@@ -245,8 +179,6 @@ namespace THLL.EditorSystem.SceneEditor
                     }
                     //设置指针按下标志
                     IsPainting = true;
-                    //并启动一次笔刷
-                    BrushCell(evt.target as VisualElement);
                 }
             });
             //为地图容器创建笔刷移动上色方法
@@ -255,8 +187,7 @@ namespace THLL.EditorSystem.SceneEditor
                 //检测是否在绘画
                 if (IsPainting)
                 {
-                    //若是，粉刷单元格
-                    BrushCell(evt.target as VisualElement);
+
                 }
             });
             //为地图容器创建鼠标抬起事件
@@ -275,60 +206,17 @@ namespace THLL.EditorSystem.SceneEditor
                 //结束绘画
                 IsPainting = false;
             });
-            ////为搜索框注册搜索事件
-            //ColorSearcherField.RegisterValueChangedCallback(evt =>
-            //{
-            //    //筛选后的颜色列表
-            //    List<string> filteredColors = ChineseColors.Item1.Where(color => color.Contains(evt.newValue)).ToList();
-            //    //设定筛选后的颜色列表
-            //    ChineseColorSelector.itemsSource = filteredColors;
-            //    //刷新显示
-            //    ChineseColorSelector.Rebuild();
-            //});
-            ////为颜色选择器注册选择事件
-            //ChineseColorSelector.itemsChosen += (items) =>
-            //{
-            //    //获取选择的颜色名称
-            //    if (items.First() is string colorName)
-            //    {
-            //        //若获取成功，则设置笔刷颜色
-            //        BrushColorField.value = ChineseColors.Item2[colorName];
-            //    }
-            //};
+
             //注册创建地图按钮点击事件
             CreateMapButton.clicked += () =>
             {
-                //检测是否有数据被选中
-                if (ShowedScene == null)
-                {
-                    //若没有，返回
-                    return;
-                }
-                //若有，则新建地图
-                ShowedScene.MapData = new MapData() { Cols = 10, Rows = 10 };
-                //显示新地图
-                ShowNewMap();
+
             };
             //注册删除地图按钮点击事件
             DeleteMapButton.clicked += () =>
             {
-                //检测是否有数据被选中
-                if (ShowedScene == null)
-                {
-                    //若没有，返回
-                    return;
-                }
-                //若有，则删除地图，表现为新建实例
-                ShowedScene.MapData = new();
-                //显示新地图
-                ShowNewMap();
+
             };
-        }
-        //几何图形改变时
-        private void OnGeometryChanged(GeometryChangedEvent evt)
-        {
-            //获取新地图(其实是顺便改变单元格大小)
-            ShowNewMap();
         }
         #endregion
 
@@ -363,49 +251,6 @@ namespace THLL.EditorSystem.SceneEditor
             }
             //设置全名显示
             FullNameLabel.text = string.Join("/", names);
-        }
-        //显示新地图
-        private void ShowNewMap()
-        {
-            //检测选中场景是否为空
-            if (ShowedScene == null)
-            {
-                //若是，返回
-                return;
-            }
-            //重新生成地图
-            MapContainer.Clear();
-            MapContainer.Add(ShowedScene.MapData.GetMap());
-            //不触发通知的情况下更改行列显示数值
-            ColCountIntegerField.SetValueWithoutNotify(ShowedScene.MapData.Cols);
-            RowCountIntegerField.SetValueWithoutNotify(ShowedScene.MapData.Rows);
-        }
-        //粉刷单元格
-        private void BrushCell(VisualElement visualElement)
-        {
-            //判断传入数据
-            if (visualElement is Label label)
-            {
-                //若是Label，尝试获取userData
-                if (label.userData is ValueTuple<int, int> coords)
-                {
-                    //若有userData，则获取单元格
-                    int x = coords.Item1;
-                    int y = coords.Item2;
-                    //在字典中查找单元格
-                    if (ShowedScene.MapData.Cells.TryGetValue((x, y), out MapCell cell))
-                    {
-                        //若找到单元格，则设置单元格文字为笔刷文字
-                        cell.Text = BrushTextField.value;
-                        label.text = BrushTextField.value;
-                        //设置单元格颜色为笔刷颜色
-                        cell.TextColor = BrushColorField.value;
-                        label.style.color = BrushColorField.value;
-                        //并调整单元格字体大小
-                        label.style.fontSize = new StyleLength(new Length(label.resolvedStyle.width / label.text.Length, LengthUnit.Pixel));
-                    }
-                }
-            }
         }
         #endregion
     }

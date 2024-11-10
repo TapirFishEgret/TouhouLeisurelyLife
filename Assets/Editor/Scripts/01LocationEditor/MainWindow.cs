@@ -125,7 +125,7 @@ namespace THLL.EditorSystem.SceneEditor
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
                 //保存数据
-                SceneData.SaveToJson(item.data.Data, item.data.Data.JsonFileSavePath);
+                SceneData.SaveToJson(item.data.Data, item.data.Data.DataPath.Replace("\\", "/"));
             }
             //保存
             AssetDatabase.SaveAssets();

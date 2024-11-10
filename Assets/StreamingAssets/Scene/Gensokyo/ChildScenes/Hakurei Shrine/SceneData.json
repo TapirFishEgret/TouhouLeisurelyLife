@@ -1,0 +1,13 @@
+{
+  "ID": "Scene_Gensokyo_Hakurei-Shrine",
+  "IDPart": "Hakurei Shrine",
+  "Name": "博丽神社",
+  "Description": "博丽神社，灵梦小姐的家。",
+  "SortOrder": 101,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/Gensokyo/ChildScenes/Hakurei Shrine/SceneData.json",
+  "ParentSceneID": "Scene_Gensokyo",
+  "ChildScenePathDatas": []
+}

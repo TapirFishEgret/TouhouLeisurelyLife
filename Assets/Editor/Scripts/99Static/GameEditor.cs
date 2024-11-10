@@ -78,7 +78,7 @@ namespace THLL.EditorSystem
                         //若是，读取数据
                         SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
                         //设定读取地址
-                        sceneData.JsonFileSavePath = filePath;
+                        sceneData.DataPath = filePath.Replace("\\", "/");
                         //添加到字典
                         _sceneDataDict[sceneData.ID] = sceneData;
                     }
@@ -114,7 +114,7 @@ namespace THLL.EditorSystem
                         //若是，读取数据
                         CharacterData characterData = CharacterData.LoadFromJson<CharacterData>(filePath);
                         //设定读取地址
-                        characterData.JsonFileSavePath = filePath;
+                        characterData.DataPath = filePath.Replace("\\", "/");
                         //添加到字典
                         _characterDataDict[characterData.ID] = characterData;
                     }

@@ -137,7 +137,7 @@ namespace THLL.EditorSystem.SceneEditor
                         //若是，读取数据
                         SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
                         //设定读取地址
-                        sceneData.JsonFileSavePath = filePath;
+                        sceneData.DataPath = filePath.Replace("\\","/");
                         //生成物体容器
                         SceneSystemDataContainer container = new(sceneData, null);
                         //生成其子级
@@ -273,7 +273,7 @@ namespace THLL.EditorSystem.SceneEditor
                     }
 
                     //路径为父级路径的子级文件夹
-                    newDirectory = Path.Combine(Path.GetDirectoryName((string)ActiveSelection.Data.JsonFileSavePath), "ChildScene");
+                    newDirectory = Path.Combine(ActiveSelection.Data.DataDirectory, "ChildScenes");
                     //并生成新数据
                     newSceneData = new SceneData()
                     {
@@ -327,16 +327,17 @@ namespace THLL.EditorSystem.SceneEditor
                 //确认文件存储地址
                 string newJsonFilePath = Path.Combine(newDirectory, "SceneData.json");
                 //记录存储地址
-                newContainer.Data.JsonFileSavePath = newJsonFilePath;
+                newContainer.Data.DataPath = newJsonFilePath.Replace("\\", "/");
                 //保存数据到磁盘
                 SceneData.SaveToJson(newSceneData, newJsonFilePath);
                 //生成占位文件
                 GameEditor.GeneratePlaceHolderTextFile(newDirectory);
-                //生成附属文件夹
-                Directory.CreateDirectory(Path.Combine(newDirectory, "ChildScene"));
+                //生成附属文件夹并配备占位文件
+                Directory.CreateDirectory(Path.Combine(newDirectory, "SubData"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "SubData"));
+                Directory.CreateDirectory(Path.Combine(newDirectory, "ChildScenes"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "ChildScenes"));
                 Directory.CreateDirectory(Path.Combine(newDirectory, "Backgrounds"));
-                //配备占位文件
-                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "ChildScene"));
                 GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newDirectory, "Backgrounds"));
 
                 //处理缓存数据
@@ -411,7 +412,7 @@ namespace THLL.EditorSystem.SceneEditor
                 using ExecutionTimer timer = new("移除地点数据", MainWindow.TimerDebugLogToggle.value);
 
                 //获取路径
-                string deletedDirectory = Path.GetDirectoryName(ActiveSelection.Data.JsonFileSavePath);
+                string deletedDirectory = ActiveSelection.Data.DataDirectory;
                 //删除
                 GameEditor.DeleteFolder(deletedDirectory);
 
