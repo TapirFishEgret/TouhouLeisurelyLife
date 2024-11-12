@@ -16,8 +16,11 @@ namespace THLL.SceneSystem
         //父级场景ID
         [JsonProperty(Order = 101)]
         public string ParentSceneID { get; set; } = string.Empty;
-        //子级场景间路径列表
+        //子级场景相邻状态
         [JsonProperty(Order = 102)]
+        public List<(string, string)> ChildSceneAdjacentStates { get; set; } = new();
+        //子级场景间路径列表
+        [JsonProperty(Order = 103)]
         public List<ScenePathData> ChildScenePathDatas { get; set; } = new();
         //地图数据
         [JsonIgnore]

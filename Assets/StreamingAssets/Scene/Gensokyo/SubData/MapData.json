@@ -1,197 +1,245 @@
 {
   "IsEmpty": false,
-  "Preview": "墻墻墻墻墻墻墻墻\n墻水水水水水水墻\n墻特樹樹樹樹水墻\n墻水樹樹樹樹水墻\n墻水水水水水水墻\n墻墻墻墻墻墻墻墻\n",
+  "Preview": "場墻墻場墻墻墻墻\n水水水水水水水墻\n水水水樹樹樹水墻\n水水水樹樹樹水墻\n水水水水水水水墻\n墻墻墻墻墻墻墻墻\n",
   "Cells": {
     "(0,0)": {
       "Data": "墻",
+      "IsScene": true,
       "ColorString": "8B4513FF"
     },
     "(0,1)": {
-      "Data": "墻",
-      "ColorString": "8B4513FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(0,2)": {
-      "Data": "墻",
-      "ColorString": "8B4513FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(0,3)": {
-      "Data": "墻",
-      "ColorString": "8B4513FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(0,4)": {
-      "Data": "墻",
-      "ColorString": "8B4513FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(0,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(1,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(1,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(1,2)": {
-      "Data": "Scene_Gensokyo_Hakurei-Shrine",
-      "ColorString": "FFFFFFFF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(1,3)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(1,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(1,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(2,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(2,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(2,2)": {
-      "Data": "樹",
-      "ColorString": "228B22FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(2,3)": {
-      "Data": "樹",
-      "ColorString": "228B22FF"
+      "Data": "水",
+      "IsScene": false,
+      "ColorString": "104E8BFF"
     },
     "(2,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(2,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(3,0)": {
       "Data": "墻",
+      "IsScene": true,
       "ColorString": "8B4513FF"
     },
     "(3,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(3,2)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(3,3)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(3,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(3,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(4,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(4,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(4,2)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(4,3)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(4,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(4,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(5,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(5,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(5,2)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(5,3)": {
       "Data": "樹",
+      "IsScene": false,
       "ColorString": "228B22FF"
     },
     "(5,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(5,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(6,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(6,1)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(6,2)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(6,3)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(6,4)": {
       "Data": "水",
+      "IsScene": false,
       "ColorString": "104E8BFF"
     },
     "(6,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,0)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,1)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,2)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,3)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,4)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     },
     "(7,5)": {
       "Data": "墻",
+      "IsScene": false,
       "ColorString": "8B4513FF"
     }
   }

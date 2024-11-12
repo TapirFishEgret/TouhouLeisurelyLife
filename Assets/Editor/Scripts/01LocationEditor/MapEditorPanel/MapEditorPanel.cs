@@ -44,6 +44,8 @@ namespace THLL.EditorSystem.SceneEditor
         private VisualElement MapContainer { get; set; }
         //笔刷文字输入框
         private TextField BrushTextField { get; set; }
+        //场景ID输入框
+        private TextField SceneIDTextField { get; set; }
         //笔刷颜色选择器
         private ColorField BrushColorField { get; set; }
         //子场景列表
@@ -97,6 +99,8 @@ namespace THLL.EditorSystem.SceneEditor
             MapContainer = MapEditorRootPanel.Q<VisualElement>("MapContainer");
             //笔刷文字输入框
             BrushTextField = MapEditorRootPanel.Q<TextField>("BrushTextField");
+            //场景ID输入框
+            SceneIDTextField = MapEditorRootPanel.Q<TextField>("SceneIDTextField");
             //笔刷颜色选择器
             BrushColorField = MapEditorRootPanel.Q<ColorField>("BrushColorField");
             //子场景列表
@@ -214,6 +218,17 @@ namespace THLL.EditorSystem.SceneEditor
                     //进行一次绘制
                     BrushMap(evt.target as VisualElement);
                 }
+                else if (evt.button == 1)
+                {
+                    //若为右键，检测场景ID元素是否被设置
+                    if (string.IsNullOrEmpty(SceneIDTextField.value))
+                    {
+                        //若没有，返回
+                        return;
+                    }
+                    //若有设置，进行一次设置
+                    SetCellScene(evt.target as VisualElement);
+                }
             });
             //为地图容器创建笔刷移动上色方法
             MapContainer.RegisterCallback<MouseMoveEvent>(evt =>
@@ -258,7 +273,9 @@ namespace THLL.EditorSystem.SceneEditor
                         //设置字体大小
                         fontSize = 16,
                         //设置文本居中
-                        unityTextAlign = TextAnchor.MiddleCenter
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        //换行设置为不换行
+                        whiteSpace = WhiteSpace.NoWrap,
                     }
                 };
                 //添加以标签更改笔刷的选项
@@ -267,8 +284,8 @@ namespace THLL.EditorSystem.SceneEditor
                     //检测鼠标按钮
                     if (evt.button == 0)
                     {
-                        //若为鼠标左键，设置笔刷文本为标签数据
-                        BrushTextField.value = label.userData.ToString();
+                        //若为鼠标左键，设置场景ID文本为标签数据
+                        SceneIDTextField.value = label.userData.ToString();
                         //设置笔刷颜色为白色
                         BrushColorField.value = Color.white;
                     }
@@ -407,6 +424,32 @@ namespace THLL.EditorSystem.SceneEditor
                         label.text = BrushTextField.value;
                         label.style.color = BrushColorField.value;
                     }
+                }
+            }
+        }
+        //设定单元格所代表的场景
+        private void SetCellScene(VisualElement visualElement)
+        {
+            //检测目标是否为Label
+            if (visualElement is Label label)
+            {
+                //若是，检测其userData是否为单元格
+                if (label.userData is MapCell cell)
+                {
+                    //若是，检查当前场景中是否已有该场景
+                    if (ShowedScene.MapData.DisplayedScenes.TryGetValue(SceneIDTextField.value, out MapCell oldCell))
+                    {
+                        //若已有，将其粉刷为空
+                        oldCell.Brush("空", Color.clear);
+                        //设定单元格为非场景单元格
+                        oldCell.IsScene = false;
+                    }
+                    //设定单元格所代表的场景
+                    cell.Brush(SceneIDTextField.value, BrushColorField.value);
+                    //将其添加到显示列表中
+                    ShowedScene.MapData.DisplayedScenes[SceneIDTextField.value] = cell;
+                    //设定单元格为场景单元格
+                    cell.IsScene = true;
                 }
             }
         }

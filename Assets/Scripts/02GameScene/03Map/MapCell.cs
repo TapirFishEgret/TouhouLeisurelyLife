@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
+using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,13 +13,17 @@ namespace THLL.SceneSystem
         #region 常量
         //默认单元格大小
         public const int CellSize = 40;
-        //默认字体大小
-        public const int FontSize = 36;
+        //默认单字体大小
+        public const int SingleFontSize = 36;
+        //默认多字体大小
+        public const int MultiFontSize = 24;
         #endregion
 
         #region 数据
-        //单元格显示文字
+        //单元格数据
         public string Data { get; set; } = "佔";
+        //是否表示场景
+        public bool IsScene { get; set; } = false;
         //单元格颜色字符串
         public string ColorString { get; set; } = "FFFFFFFF";
         //单元格颜色
@@ -42,11 +47,6 @@ namespace THLL.SceneSystem
         private VisualElement CellView { get; set; }
         #endregion
 
-        #region 构造函数
-        //无参构造函数
-        public MapCell() { }
-        #endregion
-
         #region 公共方法
         //获取视觉元素
         public VisualElement GetCell()
@@ -60,8 +60,52 @@ namespace THLL.SceneSystem
             Data = data;
             Color = color;
             //刷新视觉元素
-            CellView.Q<Label>("CellLabel").text = Data;
+            CellView.Q<Label>("CellLabel").text = GetText(out float fontSize);
+            CellView.Q<Label>("CellLabel").style.fontSize = fontSize;
             CellView.Q<Label>("CellLabel").style.color = Color;
+        }
+        //获取显示文字
+        public string GetText(out float fontSize)
+        {
+            //声明单元格文字
+            string text = string.Empty;
+
+            //检测是否为场景ID
+            if (IsScene)
+            {
+                //若是，首先尝试从场景数据库中获取数据
+                if (GameScene.SceneDB.TryGetValue(Data, out Scene scene))
+                {
+                    //若成功获取，则取场景名称
+                    text = scene.Name;
+                }
+                else
+                {
+                    //在编辑器模式下不会获取成功，此时对ID进行分割处理并显示
+                    foreach (string word in Data.Split("_").Last().Split("-"))
+                    {
+                        text += word[..1].ToUpper();
+                    }
+                }
+            }
+            else
+            {
+                //若不是，则直接显示数据的第一个字符
+                text = Data[0].ToString();
+            }
+
+            //计算文字大小
+            if (text.Length > 1)
+            {
+                fontSize = MultiFontSize;
+            }
+            else
+            {
+                fontSize = SingleFontSize;
+            }
+
+            //返回显示文字
+            return text;
         }
         #endregion
 
@@ -89,44 +133,8 @@ namespace THLL.SceneSystem
                 }
             };
 
-            //声明单元格文字
-            string text = string.Empty;
-            //检测文本长度
-            if (Data.Length > 1)
-            {
-                //大于1，说明应该为场景ID，检测运行环境
-#if UNITY_EDITOR
-                //编辑器模式下，按照_对ID进行分割，随后使用-二次分割，取首字母大写作为显示文字
-                foreach (string word in Data.Split("_").Last().Split("-"))
-                {
-                    text += word[..1].ToUpper();
-                }
-#else
-                //非编辑器模式下，尝试获取场景数据
-                if (GameScene.SceneDB.TryGetValue(Data, out Scene scene))
-                {
-                    //获取场景名称
-                    text = scene.Name;
-                }
-                else
-                {
-                    //未找到场景数据，等同编辑器进行处理
-                    foreach (string word in Data.Split("_").Last().Split("-"))
-                    {
-                        text += word[..1].ToUpper();
-                    }   
-                    //游戏内报错
-                    GameHistory.LogError("未找到场景数据：" + Data);
-                }
-#endif
-            }
-            else
-            {
-                //长度为1，直接显示
-                text = Data;
-            }
-            //计算文字大小
-            float fontSize = text.Length > 1 ? FontSize / text.Length : FontSize;
+            //获取显示文本
+            string text = GetText(out float fontSize);
             //创建标签作为单元格内容
             Label label = new()
             {
@@ -150,6 +158,8 @@ namespace THLL.SceneSystem
                     fontSize = fontSize,
                     //设置文本颜色
                     color = Color,
+                    //设置文字Warp属性
+                    whiteSpace = WhiteSpace.NoWrap,
                     //设置文字居中
                     unityTextAlign = TextAnchor.MiddleCenter,
                     //设置边距
@@ -164,14 +174,26 @@ namespace THLL.SceneSystem
                     paddingRight = 0,
                 }
             };
+            //注册事件
+            RegisterEvent(label);
+            //添加到容器
+            CellView.Add(label);
+
+            //返回视觉元素
+            return CellView;
+        }
+        //为标签注册事件
+        private void RegisterEvent(Label label)
+        {
+            //首先对运行环境进行检查
 #if UNITY_EDITOR
-            //为标签注册鼠标移入事件
+            //编辑器环境下，为所有单元格注册鼠标移入事件
             label.RegisterCallback<MouseEnterEvent>(evt =>
             {
                 //高亮单元格
                 Highlight();
             });
-            //为标签注册鼠标移出事件
+            //注册鼠标移出事件
             label.RegisterCallback<MouseLeaveEvent>(evt =>
             {
                 //取消高亮单元格
@@ -179,18 +201,31 @@ namespace THLL.SceneSystem
                 //刷新视觉元素
                 RefreshCell();
             });
+#else
+            //非编辑器环境下，仅对场景单元格注册鼠标移入移出事件
+            if (IsScene)
+            {
+                label.RegisterCallback<MouseEnterEvent>(evt =>
+                {
+                    //高亮单元格
+                    Highlight();
+                });
+                label.RegisterCallback<MouseLeaveEvent>(evt =>
+                {
+                    //取消高亮单元格
+                    Unhighlight();
+                    //刷新视觉元素
+                    RefreshCell();
+                });
+            }
 #endif
-            //添加到容器
-            CellView.Add(label);
-
-            //返回视觉元素
-            return CellView;
         }
         //刷新单元格
         private void RefreshCell()
         {
             //刷新视觉元素
-            CellView.Q<Label>("CellLabel").text = Data;
+            CellView.Q<Label>("CellLabel").text = GetText(out float fontSize);
+            CellView.Q<Label>("CellLabel").style.fontSize = fontSize;
             CellView.Q<Label>("CellLabel").style.color = Color;
         }
         //高亮单元格
@@ -211,6 +246,6 @@ namespace THLL.SceneSystem
             CellView.style.borderLeftColor = Color.clear;
             CellView.style.borderRightColor = Color.clear;
         }
-        #endregion
+#endregion
     }
 }

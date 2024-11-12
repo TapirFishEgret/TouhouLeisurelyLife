@@ -9,5 +9,23 @@
   ],
   "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/Gensokyo/ChildScenes/Human Village/SceneData.json",
   "ParentSceneID": "Scene_Gensokyo",
-  "ChildScenePathDatas": []
+  "ChildScenePathDatas": [],
+  "ChildSceneAdjacentStates": [
+    {
+      "Item1": "Left",
+      "Item2": "Right"
+    },
+    {
+      "Item1": "Up",
+      "Item2": "Down"
+    },
+    {
+      "Item1": "Left",
+      "Item2": "Right"
+    },
+    {
+      "Item1": "Up",
+      "Item2": "Down"
+    }
+  ]
 }

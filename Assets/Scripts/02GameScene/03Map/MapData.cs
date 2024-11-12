@@ -42,6 +42,8 @@ namespace THLL.SceneSystem
             {
                 //若有其一为0，则清空数据
                 Cells.Clear();
+                //清空已标注场景
+                DisplayedScenes.Clear();
                 //清空地图元素
                 MapView = null;
                 //清空地图预览
@@ -57,6 +59,8 @@ namespace THLL.SceneSystem
                 IsEmpty = false;
                 //创建新单元格字典
                 Dictionary<(int, int), MapCell> newCells = new();
+                //以及新的已标注场景字典
+                Dictionary<string, MapCell> newDisplayedScenes = new();
                 //对行列进行遍历
                 for (int i = 0; i < cols; i++)
                 {
@@ -67,6 +71,12 @@ namespace THLL.SceneSystem
                         {
                             //单元格存在则直接添加
                             newCells[(i, j)] = cell;
+                            //检测是否为场景单元格
+                            if (cell.IsScene)
+                            {
+                                //若是，则添加到已标注场景字典
+                                newDisplayedScenes[cell.Data] = cell;
+                            }
                         }
                         else
                         {
@@ -79,6 +89,8 @@ namespace THLL.SceneSystem
                 }
                 //更新单元格字典
                 Cells = newCells;
+                //更新已标注场景字典
+                DisplayedScenes = newDisplayedScenes;
                 //生成地图预览
                 GeneratePreview();
                 //生成地图视觉元素
@@ -115,14 +127,14 @@ namespace THLL.SceneSystem
                         //单元格不存在则添加占位符
                         Preview += "ㅇ";
                     }
-                    else if (cell.Data.Length > 1)
+                    else if (cell.IsScene)
                     {
-                        //单元格存在且大于一，以特标记
-                        Preview += "特";
+                        //单元格存在且为场景，以場标记
+                        Preview += "場";
                     }
                     else
                     {
-                        //单元格存在且等于一，则添加
+                        //其他情况添加第一个字符
                         Preview += cell.Data[0];
                     }
                 }
@@ -182,6 +194,12 @@ namespace THLL.SceneSystem
                         cell = new MapCell();
                         //添加到单元格字典
                         Cells[(i, j)] = cell;
+                    }
+                    //检测单元格是否为场景单元格
+                    if (cell.IsScene)
+                    {
+                        //若是，则添加到已标注场景字典
+                        DisplayedScenes[cell.Data] = cell;
                     }
                     //获取单元格视觉元素
                     VisualElement cellView = cell.GetCell();
