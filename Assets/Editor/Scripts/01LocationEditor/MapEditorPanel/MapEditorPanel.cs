@@ -46,6 +46,8 @@ namespace THLL.EditorSystem.SceneEditor
         private TextField BrushTextField { get; set; }
         //笔刷颜色选择器
         private ColorField BrushColorField { get; set; }
+        //子场景列表
+        private ListView ChildScenesListView { get; set; }
         //创建地图按钮
         private Button CreateMapButton { get; set; }
         //删除地图按钮
@@ -97,6 +99,8 @@ namespace THLL.EditorSystem.SceneEditor
             BrushTextField = MapEditorRootPanel.Q<TextField>("BrushTextField");
             //笔刷颜色选择器
             BrushColorField = MapEditorRootPanel.Q<ColorField>("BrushColorField");
+            //子场景列表
+            ChildScenesListView = MapEditorRootPanel.Q<ListView>("ChildScenesListView");
             //创建地图按钮
             CreateMapButton = MapEditorRootPanel.Q<Button>("CreateMapButton");
             //删除地图按钮
@@ -118,29 +122,56 @@ namespace THLL.EditorSystem.SceneEditor
             //检测是否有数据被选择
             if (MainWindow.DataTreeView.ActiveSelection != null)
             {
-                //若有
-                //设置全名
+                //若有，设置全名
                 SetFullName();
+                //设置子级场景列表
+                SetChildScenesList();
+                //显示场景地图
+                ShowSceneMap();
             }
         }
         //注册事件
         private void RegisterEvents()
         {
-            //注册几何图形改变事件
-            RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-
-            });
-
             //注册列数输入框改变事件
             ColCountIntegerField.RegisterValueChangedCallback(evt =>
             {
-
+                //检测地图是否为空
+                if (ShowedScene.MapData.IsEmpty)
+                {
+                    //若为空，则不处理
+                    return;
+                }
+                //检测列数是否有效
+                if (evt.newValue < 1)
+                {
+                    //若无效，则设置为1
+                    ColCountIntegerField.value = 1;
+                }
+                //重创建地图
+                ShowedScene.MapData.CreateMap(evt.newValue, RowCountIntegerField.value);
+                //显示地图
+                ShowSceneMap();
             });
             //注册行数输入框改变事件
             RowCountIntegerField.RegisterValueChangedCallback(evt =>
             {
-
+                //检测地图是否为空
+                if (ShowedScene.MapData.IsEmpty)
+                {
+                    //若为空，则不处理
+                    return;
+                }
+                //检测行数是否有效
+                if (evt.newValue < 1)
+                {
+                    //若无效，则设置为1
+                    RowCountIntegerField.value = 1;
+                }
+                //重创建地图
+                ShowedScene.MapData.CreateMap(ColCountIntegerField.value, evt.newValue);
+                //显示地图
+                ShowSceneMap();
             });
 
             //为每个笔刷按钮注册点击事件
@@ -159,6 +190,7 @@ namespace THLL.EditorSystem.SceneEditor
                     };
                 }
             });
+
             //为地图容器创建鼠标按下事件
             MapContainer.RegisterCallback<MouseDownEvent>(evt =>
             {
@@ -179,16 +211,21 @@ namespace THLL.EditorSystem.SceneEditor
                     }
                     //设置指针按下标志
                     IsPainting = true;
+                    //进行一次绘制
+                    BrushMap(evt.target as VisualElement);
                 }
             });
             //为地图容器创建笔刷移动上色方法
             MapContainer.RegisterCallback<MouseMoveEvent>(evt =>
             {
-                //检测是否在绘画
-                if (IsPainting)
+                //检测笔刷元素是否被设置
+                if (string.IsNullOrEmpty(BrushTextField.value))
                 {
-
+                    //若没有，返回
+                    return;
                 }
+                //移动时绘制
+                BrushMap(evt.target as VisualElement);
             });
             //为地图容器创建鼠标抬起事件
             MapContainer.RegisterCallback<MouseUpEvent>(evt =>
@@ -207,15 +244,68 @@ namespace THLL.EditorSystem.SceneEditor
                 IsPainting = false;
             });
 
+            //对子场景列表进行设置
+            ChildScenesListView.makeItem = () =>
+            {
+                //创建子场景项，以标签形式表示
+                Label label = new()
+                {
+                    //设置标签名称
+                    name = "ChildSceneItem",
+                    //设置标签样式
+                    style =
+                    {
+                        //设置字体大小
+                        fontSize = 16,
+                        //设置文本居中
+                        unityTextAlign = TextAnchor.MiddleCenter
+                    }
+                };
+                //添加以标签更改笔刷的选项
+                label.RegisterCallback<MouseDownEvent>(evt =>
+                {
+                    //检测鼠标按钮
+                    if (evt.button == 0)
+                    {
+                        //若为鼠标左键，设置笔刷文本为标签数据
+                        BrushTextField.value = label.userData.ToString();
+                        //设置笔刷颜色为白色
+                        BrushColorField.value = Color.white;
+                    }
+                });
+                //返回标签
+                return label;
+            };
+            ChildScenesListView.bindItem = (item, index) =>
+            {
+                //绑定子场景项，设置文本
+                (item as Label).text = ChildScenesListView.itemsSource[index].ToString().Split("_").Last();
+                (item as Label).userData = ChildScenesListView.itemsSource[index].ToString();
+            };
+
             //注册创建地图按钮点击事件
             CreateMapButton.clicked += () =>
             {
-
+                //检测是否有地图
+                if (ShowedScene.MapData.IsEmpty)
+                {
+                    //若没有，创建一个5行8列的地图
+                    ShowedScene.MapData.CreateMap(8, 5);
+                    //显示地图
+                    ShowSceneMap();
+                }
             };
             //注册删除地图按钮点击事件
             DeleteMapButton.clicked += () =>
             {
-
+                //检测是否有地图
+                if (!ShowedScene.MapData.IsEmpty)
+                {
+                    //若有
+                    ShowedScene.MapData.CreateMap(0, 0);
+                    //显示地图
+                    ShowSceneMap();
+                }
             };
         }
         #endregion
@@ -251,6 +341,74 @@ namespace THLL.EditorSystem.SceneEditor
             }
             //设置全名显示
             FullNameLabel.text = string.Join("/", names);
+        }
+        //设置子级场景列表
+        private void SetChildScenesList()
+        {
+            //让数据源指定为空
+            ChildScenesListView.itemsSource = null;
+            //获取子级数据
+            var childScenes = MainWindow.DataTreeView.ChildrenDicCache[ShowedScene.ID.GetHashCode()];
+            //获取子级ID字符串
+            List<string> childSceneIDs = childScenes.Select(item => item.data.Data.ID).ToList();
+            //指定数据源
+            ChildScenesListView.itemsSource = childSceneIDs;
+            //刷新列表
+            ChildScenesListView.Rebuild();
+        }
+        //显示场景地图
+        private void ShowSceneMap()
+        {
+            //首先删除当前地图
+            MapContainer.Clear();
+            //然后判断有没有地图数据
+            if (ShowedScene.MapData.IsEmpty)
+            {
+                //若没有，则在容器中放一个提示标签
+                Label noMapLabel = new()
+                {
+                    text = "当前场景没有地图数据",
+                };
+                MapContainer.Add(noMapLabel);
+                //设置列数与行数输入框
+                ColCountIntegerField.SetValueWithoutNotify(0);
+                RowCountIntegerField.SetValueWithoutNotify(0);
+            }
+            else
+            {
+                //若有，则显示地图
+                MapContainer.Add(ShowedScene.MapData.GetMap());
+                //并获取地图行列数
+                int colCount = ShowedScene.MapData.Cells.Keys.Max(item => item.Item1) + 1;
+                int rowCount = ShowedScene.MapData.Cells.Keys.Max(item => item.Item2) + 1;
+                //设置列数与行数输入框
+                ColCountIntegerField.SetValueWithoutNotify(colCount);
+                RowCountIntegerField.SetValueWithoutNotify(rowCount);
+            }
+        }
+        //粉刷地图
+        private void BrushMap(VisualElement visualElement)
+        {
+            //检测目标是否为Label
+            if (visualElement is Label label)
+            {
+                //若是，检测其userData是否为单元格
+                if (label.userData is MapCell cell)
+                {
+                    //若是，检查是否在绘画状态
+                    if (IsPainting)
+                    {
+                        //若在绘画状态，调用粉刷方法
+                        cell.Brush(BrushTextField.value, BrushColorField.value);
+                    }
+                    else
+                    {
+                        //若不在绘画状态，仅预览
+                        label.text = BrushTextField.value;
+                        label.style.color = BrushColorField.value;
+                    }
+                }
+            }
         }
         #endregion
     }

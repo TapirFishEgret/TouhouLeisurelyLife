@@ -141,6 +141,8 @@ namespace THLL.SceneSystem
         //实现获取子数据方法
         public override object GetSubData(string subDataFile)
         {
+            //获取前对数据进行保存
+            MapData.GeneratePreview();
             //检测传入的数据名
             return subDataFile switch
             {
