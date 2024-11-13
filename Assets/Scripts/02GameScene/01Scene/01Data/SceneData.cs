@@ -17,11 +17,8 @@ namespace THLL.SceneSystem
         [JsonProperty(Order = 101)]
         public string ParentSceneID { get; set; } = string.Empty;
         //子级场景相邻状态
-        [JsonProperty(Order = 102)]
-        public List<(string, string)> ChildSceneAdjacentStates { get; set; } = new();
-        //子级场景间路径列表
-        [JsonProperty(Order = 103)]
-        public List<ScenePathData> ChildScenePathDatas { get; set; } = new();
+        [JsonIgnore]
+        public HashSet<(string, string)> ChildScenesAdjacentStates { get; set; } = new();
         //地图数据
         [JsonIgnore]
         public MapData MapData { get; set; } = new();
@@ -38,7 +35,7 @@ namespace THLL.SceneSystem
         public SceneData()
         {
             //将地图数据作为子数据添加到列表中
-            SubDataFiles = new HashSet<string>() { "MapData" };
+            SubDataFiles = new HashSet<string>() { "MapData", "ChildScenesAdjacentStates" };
         }
         #endregion
 
@@ -150,6 +147,7 @@ namespace THLL.SceneSystem
             return subDataFile switch
             {
                 "MapData" => MapData,
+                "ChildScenesAdjacentStates" => ChildScenesAdjacentStates,
                 _ => null,
             };
         }
@@ -160,6 +158,7 @@ namespace THLL.SceneSystem
             return subDataFile switch
             {
                 "MapData" => typeof(MapData),
+                "ChildScenesAdjacentStates" => typeof(HashSet<(string, string)>),
                 _ => null,
             };
         }
@@ -171,6 +170,11 @@ namespace THLL.SceneSystem
             {
                 case "MapData":
                     MapData = subData as MapData;
+                    break;
+                case "ChildScenesAdjacentStates":
+                    ChildScenesAdjacentStates = subData as HashSet<(string, string)>;
+                    break;
+                default:
                     break;
             }
         }

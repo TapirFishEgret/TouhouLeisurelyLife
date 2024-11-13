@@ -5,27 +5,9 @@
   "Description": "幻想乡，东方Project故事发生的主舞台。",
   "SortOrder": 1,
   "SubDataFiles": [
-    "MapData"
+    "MapData",
+    "ChildScenesAdjacentStates"
   ],
   "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/Gensokyo/SceneData.json",
-  "ParentSceneID": "",
-  "ChildScenePathDatas": [],
-  "ChildSceneAdjacentStates": [
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    },
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    }
-  ]
+  "ParentSceneID": ""
 }

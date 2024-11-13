@@ -5,27 +5,9 @@
   "Description": "普通人类们生活，居住的村落，比起村落其实更接近于小镇，也许终有一天会发展为都市？",
   "SortOrder": 102,
   "SubDataFiles": [
-    "MapData"
+    "MapData",
+    "ChildScenesAdjacentStates"
   ],
   "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/Gensokyo/ChildScenes/Human Village/SceneData.json",
-  "ParentSceneID": "Scene_Gensokyo",
-  "ChildScenePathDatas": [],
-  "ChildSceneAdjacentStates": [
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    },
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    }
-  ]
+  "ParentSceneID": "Scene_Gensokyo"
 }

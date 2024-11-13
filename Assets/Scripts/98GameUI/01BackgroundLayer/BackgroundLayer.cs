@@ -86,7 +86,7 @@ namespace THLL.UISystem
         private IEnumerator CycleMainTitleBackgroundCoroutine()
         {
             //首先获取可用地点，此处为主界面循环，仅循环根场景
-            List<Scene> locations = GameScene.SceneDB.RootSceneStorage.Values.ToList();
+            List<Scene> locations = GameScene.SceneDB.RootScenesStorage.Values.ToList();
 
             //不设置终止条件，除非协程被强制终止，否则一直循环
             while (true)

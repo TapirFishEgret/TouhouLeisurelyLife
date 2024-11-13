@@ -5,27 +5,9 @@
   "Description": "博丽神社，灵梦小姐的家。",
   "SortOrder": 101,
   "SubDataFiles": [
-    "MapData"
+    "MapData",
+    "ChildScenesAdjacentStates"
   ],
   "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/Gensokyo/ChildScenes/Hakurei Shrine/SceneData.json",
-  "ParentSceneID": "Scene_Gensokyo",
-  "ChildScenePathDatas": [],
-  "ChildSceneAdjacentStates": [
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    },
-    {
-      "Item1": "Left",
-      "Item2": "Right"
-    },
-    {
-      "Item1": "Up",
-      "Item2": "Down"
-    }
-  ]
+  "ParentSceneID": "Scene_Gensokyo"
 }

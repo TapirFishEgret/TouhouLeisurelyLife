@@ -88,6 +88,8 @@ namespace THLL.EditorSystem.SceneEditor
                     await MainWindow.AssetsEditorPanel.ARefresh();
                     //刷新地图编辑面板
                     MainWindow.MapEditorPanel.MRefresh();
+                    //刷新子场景相邻状态编辑面板
+                    MainWindow.ChildScenesAdjacentStatesEditorPanel.CSASRefresh();
                 }
             };
 
@@ -137,7 +139,7 @@ namespace THLL.EditorSystem.SceneEditor
                         //若是，读取数据
                         SceneData sceneData = SceneData.LoadFromJson<SceneData>(filePath);
                         //设定读取地址
-                        sceneData.DataPath = filePath.Replace("\\","/");
+                        sceneData.DataPath = filePath.Replace("\\", "/");
                         //生成物体容器
                         SceneSystemDataContainer container = new(sceneData, null);
                         //生成其子级
@@ -367,6 +369,9 @@ namespace THLL.EditorSystem.SceneEditor
                 //重构树形图
                 TRefresh();
 
+                //向子场景面板上添加新数据点
+                MainWindow.ChildScenesAdjacentStatesEditorPanel.AddChordDiagramDataPoint(newSceneData.ID);
+
                 //设定地点类为脏
                 GameEditor.IsSceneDataDirty = true;
 
@@ -418,6 +423,15 @@ namespace THLL.EditorSystem.SceneEditor
 
                 //由于情况复杂且不好分类，所以直接重构面板
                 GenerateItems();
+
+                //重构后，检查下有无父级
+                if (!string.IsNullOrEmpty(ActiveSelection.Data.ParentSceneID))
+                {
+                    //若有父级，则从对其父级的子场景相邻状态列表进行修改以删除冗余数据
+                    ItemDicCache[ActiveSelection.Data.ParentSceneID.GetHashCode()]
+                        .data.Data.ChildScenesAdjacentStates
+                        .RemoveWhere(tuple => tuple.Item1 == ActiveSelection.Data.ID || tuple.Item2 == ActiveSelection.Data.ID);
+                }
 
                 //删除结束后，将活跃数据设为空
                 ActiveSelection = null;

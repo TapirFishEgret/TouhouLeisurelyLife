@@ -23,6 +23,9 @@ namespace THLL.EditorSystem.SceneEditor
         //地图编辑面板UXML文件
         [SerializeField]
         private VisualTreeAsset _mapEditorVisualTree;
+        //子场景相邻状态编辑面板UXML文件
+        [SerializeField]
+        private VisualTreeAsset _childScenesAdjacentStatesEditorVisualTree;
         //背景图容器UXML文件
         public VisualTreeAsset BackgroundAssetContainerVisualTree;
         //永久性存储文件
@@ -53,6 +56,8 @@ namespace THLL.EditorSystem.SceneEditor
         public AssetsEditorPanel AssetsEditorPanel { get; private set; }
         //地图编辑面板
         public MapEditorPanel MapEditorPanel { get; private set; }
+        //子场景相邻状态编辑面板
+        public ChildScenesAdjacentStatesEditorPanel ChildScenesAdjacentStatesEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("EditorSystem/SceneEditor")]
@@ -95,13 +100,16 @@ namespace THLL.EditorSystem.SceneEditor
             //创建地图编辑面板并添加
             MapEditorPanel = new MapEditorPanel(_mapEditorVisualTree, this);
             EditorContainer.Add(MapEditorPanel);
+            //创建子场景相邻状态编辑面板并添加
+            ChildScenesAdjacentStatesEditorPanel = new ChildScenesAdjacentStatesEditorPanel(_childScenesAdjacentStatesEditorVisualTree, this);
+            EditorContainer.Add(ChildScenesAdjacentStatesEditorPanel);
 
             //设定编辑器选择逻辑
             EditorSelector.RegisterValueChangedCallback(evt =>
             {
                 //关闭所有面板
                 EditorContainer.Children().ToList().ForEach(visualElement => visualElement.style.display = DisplayStyle.None);
-                //根据选择开启面板，0为数据编辑面板，1为资源编辑面板，2为地图编辑面板
+                //根据选择开启面板，0为数据编辑面板，1为资源编辑面板，2为地图编辑面板，3为子场景相邻状态编辑面板
                 if (evt.newValue[0])
                 {
                     DataEditorPanel.style.display = DisplayStyle.Flex;
@@ -113,6 +121,10 @@ namespace THLL.EditorSystem.SceneEditor
                 if (evt.newValue[2])
                 {
                     MapEditorPanel.style.display = DisplayStyle.Flex;
+                }
+                if (evt.newValue[3])
+                {
+                    ChildScenesAdjacentStatesEditorPanel.style.display = DisplayStyle.Flex;
                 }
             });
         }

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
-using THLL.BaseSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -246,6 +245,6 @@ namespace THLL.SceneSystem
             CellView.style.borderLeftColor = Color.clear;
             CellView.style.borderRightColor = Color.clear;
         }
-#endregion
+        #endregion
     }
 }

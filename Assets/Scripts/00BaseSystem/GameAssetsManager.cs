@@ -111,7 +111,7 @@ namespace THLL.BaseSystem
         private IEnumerator LoadAllRootSceneBackgroundsCoroutine()
         {
             //对根场景进行遍历
-            foreach (Scene scene in GameScene.SceneDB.RootSceneStorage.Values)
+            foreach (Scene scene in GameScene.SceneDB.RootScenesStorage.Values)
             {
                 //加载背景图片协程
                 yield return scene.LoadBackgroundsCoroutine();

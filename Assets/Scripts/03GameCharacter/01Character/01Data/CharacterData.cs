@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using THLL.BaseSystem;
-using THLL.SceneSystem;
 using UnityEngine;
 using UnityEngine.Networking;
 
