@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using THLL.BaseSystem;
+﻿using THLL.BaseSystem;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
@@ -10,17 +9,16 @@ namespace THLL.UISystem
         //构造函数
         public History(BaseGameInterface @interface,
             VisualTreeAsset visualTreeAsset,
-            VisualElement parent = null,
-            List<BaseGamePanel> storage = null)
-            : base(@interface, visualTreeAsset, parent, storage) { }
+            VisualElement parentPanel)
+            : base(@interface, visualTreeAsset, parentPanel) { }
         #endregion
 
         #region 显示及隐藏方法
         //显示
-        public override void ShowPanel(float animationDuration)
+        public override void ShowPanel()
         {
             //基础的显示
-            base.ShowPanel(animationDuration);
+            base.ShowPanel();
             //进阶的显示，添加历史记录进去
             foreach (Label log in GameHistory.Logs)
             {
@@ -29,10 +27,10 @@ namespace THLL.UISystem
             }
         }
         //隐藏
-        public override void HidePanel(float animationDuration)
+        public override void HidePanel()
         {
             //基础的隐藏
-            base.HidePanel(animationDuration);
+            base.HidePanel();
             //进阶的隐藏，清空面板
             ContainerPanel.Clear();
         }

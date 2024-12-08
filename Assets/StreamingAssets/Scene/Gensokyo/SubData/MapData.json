@@ -1,6 +1,6 @@
 {
   "IsEmpty": false,
-  "Preview": "場墻墻場墻墻墻墻\n水水水水水水水墻\n水水水樹樹樹水墻\n水水水樹樹樹水墻\n水水水水水水水墻\n墻墻墻墻墻墻墻墻\n",
+  "Preview": "場墻墻場墻墻墻墻\n水水水水水水水墻\n水水水場樹樹水墻\n水水水樹樹場水墻\n水水水水水水水墻\n墻墻墻墻墻墻墻墻\n",
   "Cells": {
     "(0,0)": {
       "Data": "墻",
@@ -103,9 +103,9 @@
       "ColorString": "104E8BFF"
     },
     "(3,2)": {
-      "Data": "樹",
-      "IsScene": false,
-      "ColorString": "228B22FF"
+      "Data": "Scene_Gensokyo_Hakurei-Shrine",
+      "IsScene": true,
+      "ColorString": "FFFFFFFF"
     },
     "(3,3)": {
       "Data": "樹",
@@ -168,9 +168,9 @@
       "ColorString": "228B22FF"
     },
     "(5,3)": {
-      "Data": "樹",
-      "IsScene": false,
-      "ColorString": "228B22FF"
+      "Data": "Scene_Gensokyo_Human-Village",
+      "IsScene": true,
+      "ColorString": "FFFFFFFF"
     },
     "(5,4)": {
       "Data": "水",

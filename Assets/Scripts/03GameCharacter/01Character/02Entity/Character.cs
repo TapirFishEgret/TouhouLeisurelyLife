@@ -20,23 +20,7 @@ namespace THLL.CharacterSystem
         public string Version => Data.Version;
 
         //颜色
-        public Color Color
-        {
-            get
-            {
-                //尝试获取颜色
-                if (ColorUtility.TryParseHtmlString("#" + Data.ColorString, out Color color))
-                {
-                    //如果成功，则返回颜色
-                    return color;
-                }
-                else
-                {
-                    //否则返回默认颜色
-                    return Color.white;
-                }
-            }
-        }
+        public Color Color => Data.Color;
         #endregion
 
         #region 资源

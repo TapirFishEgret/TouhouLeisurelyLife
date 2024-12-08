@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
 {
     public class BaseGamePanel : VisualElement
     {
+        #region 静态数据
+        //当前显示的面板
+        public static BaseGamePanel CurrentPanel { get; set; }
+        #endregion
+
         #region 数据
         //所属界面
         public BaseGameInterface BelongingInterface { get; private set; }
@@ -15,13 +19,11 @@ namespace THLL.UISystem
         public VisualElement ContainerPanel { get; private set; }
         //父级面板
         public VisualElement ParentPanel { get; private set; }
-        //其他面板
-        public List<BaseGamePanel> OtherPanels { get; private set; }
         #endregion
 
         #region 构建及初始化与相关方法
         //构建函数
-        public BaseGamePanel(BaseGameInterface @interface, VisualTreeAsset visualTreeAsset, VisualElement parent = null, List<BaseGamePanel> storage = null)
+        public BaseGamePanel(BaseGameInterface @interface, VisualTreeAsset visualTreeAsset, VisualElement parentPanel)
         {
             //指定所属界面
             BelongingInterface = @interface;
@@ -36,21 +38,12 @@ namespace THLL.UISystem
             style.opacity = 0f;
             //并设置自身动画
             style.transitionProperty = Enumerable.Repeat(new StylePropertyName("opacity"), 1).ToList();
-            //添加到父级中
-            ParentPanel = parent;
-            ParentPanel?.Add(this);
-            //添加到存储池中
-            OtherPanels = storage;
-            OtherPanels?.Add(this);
+            GameUI.SetVisualElementAllTransitionAnimationDuration(this, 0.5f);
+            //设置父级面板
+            ParentPanel = parentPanel;
+            parentPanel?.Add(this);
             //初始化
-            Init();
-        }
-        //初始化
-        protected virtual void Init()
-        {
-            //获取元素
             GetVisualElements();
-            //注册方法
             RegisterMethods();
         }
         //获取元素
@@ -65,32 +58,33 @@ namespace THLL.UISystem
         protected virtual void RegisterMethods()
         {
             //注册一下关闭按钮的关闭方法
-            this.Query<Button>("CloseButton").ForEach(button => button.clicked += () => HidePanel(1f));
+            this.Query<Button>("CloseButton").ForEach(button => button.clicked += () => HidePanel());
         }
         #endregion
 
         #region 显示及关闭面板
         //显示面板
-        public virtual void ShowPanel(float animationDuration)
+        public virtual void ShowPanel()
         {
-            //首先关闭其他面板显示
-            foreach (BaseGamePanel panel in OtherPanels)
+            //首先判断当前显示面板是否为自己
+            if (CurrentPanel == this)
             {
-                panel.HidePanel(animationDuration);
+                //如果是，则直接返回
+                return;
             }
+            //如果不是，则关闭当前显示的面板
+            CurrentPanel?.HidePanel();
+            //设置当前显示的面板为自己
+            CurrentPanel = this;
 
-            //设置动画时长
-            GameUI.SetVisualElementAllTransitionAnimationDuration(this, animationDuration);
             //让自己显示
             style.display = DisplayStyle.Flex;
             //然后，调整不透明度为1
             style.opacity = 1f;
         }
         //关闭面板
-        public virtual void HidePanel(float animationDuration)
+        public virtual void HidePanel()
         {
-            //设置动画时长
-            GameUI.SetVisualElementAllTransitionAnimationDuration(this, animationDuration);
             //调整不透明度为0
             style.opacity = 0f;
             //然后，让自己隐藏

@@ -48,9 +48,9 @@ namespace THLL.UISystem
         //°ó¶¨·½·¨
         protected override void RegisterMethods()
         {
-            NewGameButton.clicked += () => GameUI.ShowInterface(GameUI.NewGameInterface);
-            LoadGameButton.clicked += () => GameUI.ShowInterface(GameUI.SaveAndLoadGameInterface);
-            SettingsButton.clicked += () => GameUI.ShowInterface(GameUI.GameSettingsInterface);
+            NewGameButton.clicked += () => GameUI.NewGameInterface.Show();
+            LoadGameButton.clicked += () => GameUI.SaveAndLoadGameInterface.Show();
+            SettingsButton.clicked += () => GameUI.GameSettingsInterface.Show();
             QuitGameButton.clicked += QuitGame;
         }
         #endregion

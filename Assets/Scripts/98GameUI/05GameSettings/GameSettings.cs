@@ -30,9 +30,9 @@ namespace THLL.UISystem
         //绑定方法
         protected override void RegisterMethods()
         {
-            GameSystemButton.clicked += () => GameUI.ShowInterface(GameUI.GameSystemSettingsInterface);
-            GamePlayButton.clicked += () => GameUI.ShowInterface(GameUI.GameplaySettingsInterface);
-            GamePatchesButton.clicked += () => GameUI.ShowInterface(GameUI.GamePatchesSettingsInterface);
+            GameSystemButton.clicked += () => GameUI.GameSystemSettingsInterface.Show();
+            GamePlayButton.clicked += () => GameUI.GameplaySettingsInterface.Show();
+            GamePatchesButton.clicked += () => GameUI.GamePatchesSettingsInterface.Show();
         }
         #endregion
     }

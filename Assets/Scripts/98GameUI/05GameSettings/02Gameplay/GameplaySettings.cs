@@ -103,10 +103,10 @@ namespace THLL.UISystem.Settings
             //给选项加上悬停时显示选项描述的功能
             foreach (var kvp in OptionDescriptionDic)
             {
-                kvp.Key.RegisterCallback<PointerEnterEvent>(evt => GameUI.GradientDisplayText(this, OptionDescriptionLabel, kvp.Value, GameUI.DefaultUITextDisplayTime));
+                kvp.Key.RegisterCallback<PointerEnterEvent>(evt => OptionDescriptionLabel.GradientDisplayText(kvp.Value, 0.5f));
             }
             //给标签父级增添点击时显示全部文本功能
-            OptionDescriptionLabel.parent.RegisterCallback<PointerDownEvent>(evt => { if (evt.button == 0) GameUI.DirectlyDisplayText(this, OptionDescriptionLabel); });
+            OptionDescriptionLabel.parent.RegisterCallback<PointerDownEvent>(evt => { if (evt.button == 0) OptionDescriptionLabel.DirectlyDisplayText(); });
         }
         #endregion
     }

@@ -365,14 +365,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 ShowedCharacter.Version
             });
             //…Ë÷√—’…´
-            if (ColorUtility.TryParseHtmlString("#" + ShowedCharacter.ColorString, out Color color))
-            {
-                FullInfoLabel.style.color = color;
-            }
-            else
-            {
-                FullInfoLabel.style.color = Color.white;
-            }
+            FullInfoLabel.style.color = ShowedCharacter.Color;
         }
         #endregion
     }

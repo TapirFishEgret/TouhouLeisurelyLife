@@ -809,7 +809,7 @@ namespace THLL.EditorSystem.CharacterEditor
                         //版本名称，直接获取
                         Version = newCharacterVersionName,
                         //颜色，默认白色
-                        ColorString = ColorUtility.ToHtmlStringRGBA(Color.white)
+                        Color = Color.white,
                     };
 
                     //随后将其保存在硬盘上并创建标准配备文件夹

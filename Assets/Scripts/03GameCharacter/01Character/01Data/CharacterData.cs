@@ -29,6 +29,18 @@ namespace THLL.CharacterSystem
         //颜色
         [JsonProperty(Order = 105)]
         public string ColorString { get; set; }
+        [JsonIgnore]
+        public Color Color
+        {
+            get
+            {
+                return ColorUtility.TryParseHtmlString("#" + ColorString, out Color color)? color : Color.white;
+            }
+            set
+            {
+                ColorString = ColorUtility.ToHtmlStringRGBA(value);
+            }
+        }
         #endregion
 
         #region 资源

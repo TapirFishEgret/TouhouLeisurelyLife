@@ -103,14 +103,7 @@ namespace THLL.EditorSystem.CharacterEditor
             GroupField.SetValueWithoutNotify(ShowedCharacter.Group);
             CharaField.SetValueWithoutNotify(ShowedCharacter.Chara);
             VersionField.SetValueWithoutNotify(ShowedCharacter.Version);
-            if (ColorUtility.TryParseHtmlString("#" + ShowedCharacter.ColorString, out Color color))
-            {
-                ColorField.SetValueWithoutNotify(color);
-            }
-            else
-            {
-                ColorField.SetValueWithoutNotify(Color.white);
-            }
+            ColorField.SetValueWithoutNotify(ShowedCharacter.Color);
 
             //显示全部信息
             SetFullInfo();
@@ -190,14 +183,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 ShowedCharacter.Version
             });
             //设置颜色
-            if (ColorUtility.TryParseHtmlString("#" + ShowedCharacter.ColorString, out Color color))
-            {
-                FullInfoLabel.style.color = color;
-            }
-            else
-            {
-                FullInfoLabel.style.color = Color.white;
-            }
+            FullInfoLabel.style.color = ShowedCharacter.Color;
         }
         #endregion
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using THLL.TimeSystem;
+﻿using THLL.TimeSystem;
 using UnityEngine.UIElements;
 
 namespace THLL.UISystem
@@ -44,8 +43,6 @@ namespace THLL.UISystem
         public VisualElement FunctionPanel { get; private set; }
         //历史记录面板
         public History HistoryPanel { get; private set; }
-        //功能面板记录
-        public List<BaseGamePanel> FunctionPanels { get; } = new();
         #endregion
 
         #region 操作面板
@@ -53,10 +50,10 @@ namespace THLL.UISystem
         public VisualElement OperationPanel { get; private set; }
         //角色名称标签
         public Label CharacterNameLabel { get; private set; }
-        //动作按钮面板
-        public ScrollView ActionsButtonsPanel { get; private set; }
+        //交互按钮面板
+        public ScrollView InteractionButtonsArea { get; private set; }
         //对话面板
-        public VisualElement DialogPanel { get; private set; }
+        public VisualElement DialogArea { get; private set; }
         //对话
         public Label DialogLabel { get; private set; }
         #endregion
@@ -84,15 +81,15 @@ namespace THLL.UISystem
 
             //功能面板
             FunctionPanel = Document.rootVisualElement.Q<VisualElement>("FunctionPanel");
-            HistoryPanel = new(this, VTA_History, FunctionPanel, FunctionPanels);
+            HistoryPanel = new(this, VTA_History, FunctionPanel);
 
             //操作面板
             OperationPanel = Document.rootVisualElement.Q<VisualElement>("OperationPanel");
             CharacterNameLabel = OperationPanel.Q<Label>("CharacterNameLabel");
-            ActionsButtonsPanel = OperationPanel.Q<ScrollView>("ActionsButtonsPanel");
-            DialogPanel = OperationPanel.Q<VisualElement>("DialogPanel");
+            InteractionButtonsArea = OperationPanel.Q<ScrollView>("InteractionButtonsArea");
+            DialogArea = OperationPanel.Q<VisualElement>("DialogArea");
             DialogLabel = OperationPanel.Q<Label>("DialogLabel");
-            OperationPanel.Q<Button>("HistoryButton").clicked += () => HistoryPanel.ShowPanel(0.5f);
+            OperationPanel.Q<Button>("HistoryButton").clicked += () => HistoryPanel.ShowPanel();
         }
         #endregion
 
@@ -106,7 +103,7 @@ namespace THLL.UISystem
         }
         #endregion
 
-        #region 其他方法
+        #region UI更新方法
         //更新时间UI内容
         private void UpdateTimeInfo()
         {
@@ -140,6 +137,24 @@ namespace THLL.UISystem
             else
             {
                 YearLabel.text = $"第{GameTime.Year:D3}季";
+            }
+        }
+        #endregion
+
+        #region 外部方法
+        //操作区域切换
+        public void SwitchOperationArea()
+        {
+            //判断当前操作区域
+            if (InteractionButtonsArea.style.display == DisplayStyle.Flex)
+            {
+                //若当前操作区域为交互按钮，则切换到对话区域
+                InteractionButtonsArea.GradientSwitchElement(DialogArea, 0.5f);
+            }
+            else
+            {
+                //若当前操作区域为对话区域，则切换到交互按钮区域
+                InteractionButtonsArea.GradientSwitchElement(DialogArea, 0.5f);
             }
         }
         #endregion
