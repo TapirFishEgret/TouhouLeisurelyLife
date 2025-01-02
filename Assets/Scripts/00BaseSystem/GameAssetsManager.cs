@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using THLL.CharacterSystem;
+using THLL.PlaySystem;
 using THLL.SceneSystem;
 using THLL.UISystem;
 using UnityEngine;
@@ -18,7 +18,7 @@ namespace THLL.BaseSystem
         //默认立绘
         public Sprite DefaultPortrait;
         //资源加载事件
-        public event Action OnAllResourcesLoaded;
+        public event System.Action OnAllResourcesLoaded;
         #endregion
 
         #region 周期函数
@@ -41,7 +41,7 @@ namespace THLL.BaseSystem
             LoadAllCharacterData();
 
             //数据加载结束后启动资源加载流程
-            StartCoroutine(LoadAllRootSceneBackgroundsCoroutine());
+            StartCoroutine(LoadAllGameResources());
         }
         #endregion
 
@@ -67,13 +67,13 @@ namespace THLL.BaseSystem
                 if (Path.GetFileNameWithoutExtension(filePath).StartsWith("SceneData"))
                 {
                     //若是，加载并生成实例
-                    new Scene(filePath, GameScene.SceneDB);
+                    new Scene(filePath);
                 }
             }
             //场景数据一次加载完成后，进行数据库的初始化
-            GameScene.SceneDB.Init();
+            GameScene.Init();
             //并进行记录
-            GameHistory.LogNormal($"场景数据加载完成，共加载{GameScene.SceneDB.Count}个场景数据。");
+            GameHistory.LogNormal($"场景数据加载完成，共加载{GameScene.TotalCount}个场景数据，其中包含{GameScene.DuplicateSceneCount}个重复场景。");
         }
         //加载所有角色数据
         public void LoadAllCharacterData()
@@ -96,28 +96,38 @@ namespace THLL.BaseSystem
                 if (Path.GetFileNameWithoutExtension(filePath).StartsWith("CharacterData"))
                 {
                     //若是，加载并生成实例
-                    new Character(filePath, GameCharacter.CharacterDB);
+                    new Character(filePath);
                 }
             }
-            //角色数据一次加载完成后，进行数据库的初始化
-            GameCharacter.CharacterDB.Init();
-            //并进行记录
-            GameHistory.LogNormal($"角色数据加载完成，共加载{GameCharacter.CharacterDB.Count}个角色数据。");
+            //进行记录
+            GameHistory.LogNormal($"角色数据加载完成，共加载{GameCharacter.TotalCount}个角色数据，其中包含{GameCharacter.DuplicateCharacterCount}个重复角色。");
         }
         #endregion
 
         #region 辅助方法
-        //加载根场景背景图片协程
-        private IEnumerator LoadAllRootSceneBackgroundsCoroutine()
+        //加载所有游戏资源
+        private IEnumerator LoadAllGameResources()
         {
-            //对根场景进行遍历
-            foreach (Scene scene in GameScene.SceneDB.RootScenesStorage.Values)
+            //对使用场景进行遍历
+            foreach (Scene scene in GameScene.Storage.Values)
             {
-                //加载背景图片协程
-                yield return scene.LoadBackgroundsCoroutine();
+                //加载资源
+                yield return scene.LoadAllResourcesCoroutine();
+            }
+            //对使用角色进行遍历
+            foreach (Character character in GameCharacter.Storage.Values)
+            {
+                //加载资源
+                yield return character.LoadAllResourcesCoroutine();
             }
             //全部加载完成后，触发事件
             OnAllResourcesLoaded?.Invoke();
+            //将所有角色暂时放入博丽神社
+            foreach (Character character in GameCharacter.Storage.Values)
+            {
+                character.CurrentScene = GameScene.Storage["Scene_TouhouProject_Gensokyo_HakureiShrine"];
+                GameScene.Storage["Scene_TouhouProject_Gensokyo_HakureiShrine"].CharactersInScene.Add(character);
+            }
         }
         #endregion 
     }

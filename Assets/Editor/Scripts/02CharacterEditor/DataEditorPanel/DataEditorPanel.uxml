@@ -3,16 +3,16 @@
     <engine:VisualElement name="DataEditorRootPanel" class="editor-normal-field" style="flex-grow: 1; flex-direction: column; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;">
         <engine:Label text="Full Info" name="FullInfoLabel" style="-unity-text-align: middle-center; font-size: 32px; white-space: normal; overflow: hidden; text-overflow: clip; flex-shrink: 1; flex-grow: 0; height: auto; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px; flex-basis: auto; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgb(255, 255, 255); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; align-items: center; justify-content: flex-start; align-self: stretch; width: auto;" />
         <engine:ScrollView>
-            <engine:TextField label="ID" placeholder-text="ID" name="IDField" enabled="false" is-delayed="true" class="editor-normal-text-field" />
-            <engine:TextField label="ID Part" placeholder-text="ID Part" name="IDPartField" enabled="false" hide-placeholder-on-focus="false" is-delayed="false" class="editor-normal-text-field" />
-            <engine:TextField label="Name" placeholder-text="Name" name="NameField" is-delayed="false" class="editor-normal-text-field" />
-            <engine:TextField label="Description" name="DescriptionField" is-delayed="false" multiline="true" placeholder-text="Description" class="editor-normal-text-field" style="flex-direction: row;" />
-            <engine:IntegerField label="Sort Order" value="0" name="SortOrderField" max-length="10000" is-delayed="false" placeholder-text="Sort Order" class="editor-normal-text-field" />
+            <engine:TextField label="ID" name="IDField" enabled="true" is-delayed="true" readonly="true" class="editor-normal-text-field" />
+            <engine:TextField label="ID Part" name="IDPartField" enabled="true" hide-placeholder-on-focus="false" is-delayed="true" readonly="true" class="editor-normal-text-field" />
+            <engine:TextField label="Name" name="NameField" is-delayed="true" hide-placeholder-on-focus="false" class="editor-normal-text-field" />
+            <engine:TextField label="Description" name="DescriptionField" is-delayed="true" multiline="true" class="editor-normal-text-field" style="flex-direction: row;" />
+            <engine:IntegerField label="Sort Order" name="SortOrderField" max-length="10000" is-delayed="true" class="editor-normal-text-field" />
             <engine:VisualElement name="Space" style="width: auto; height: 10px;" />
-            <engine:TextField label="Series" placeholder-text="Series" name="SeriesField" is-delayed="false" class="editor-normal-text-field" />
-            <engine:TextField label="Group" placeholder-text="Group" name="GroupField" is-delayed="false" class="editor-normal-text-field" />
-            <engine:TextField label="Chara" placeholder-text="Chara" name="CharaField" is-delayed="false" class="editor-normal-text-field" />
-            <engine:TextField label="Version" placeholder-text="Version" name="VersionField" is-delayed="false" class="editor-normal-text-field" />
+            <engine:TextField label="Series" name="SeriesField" is-delayed="true" readonly="true" enabled="true" class="editor-normal-text-field" />
+            <engine:TextField label="Group" name="GroupField" is-delayed="true" readonly="true" enabled="true" class="editor-normal-text-field" />
+            <engine:TextField label="Chara" name="CharaField" is-delayed="true" readonly="true" enabled="true" class="editor-normal-text-field" />
+            <engine:TextField label="Version" name="VersionField" is-delayed="true" readonly="true" class="editor-normal-text-field" />
             <engine:VisualElement name="Space" style="width: auto; height: 10px;" />
             <editor:ColorField label="Color" value="#00FFFFFF" name="ColorField" show-eye-dropper="true" class="editor-normal-text-field" />
         </engine:ScrollView>

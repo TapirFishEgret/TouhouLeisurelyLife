@@ -44,6 +44,9 @@ namespace THLL.SceneSystem
         //对应视觉元素
         [JsonIgnore]
         private VisualElement CellView { get; set; }
+        //对应标签
+        [JsonIgnore]
+        private Label CellLabel { get; set; }
         #endregion
 
         #region 公共方法
@@ -73,7 +76,7 @@ namespace THLL.SceneSystem
             if (IsScene)
             {
                 //若是，首先尝试从场景数据库中获取数据
-                if (GameScene.SceneDB.TryGetValue(Data, out Scene scene))
+                if (GameScene.TryGetScene(Data, out Scene scene))
                 {
                     //若成功获取，则取场景名称
                     text = scene.Name;
@@ -124,18 +127,19 @@ namespace THLL.SceneSystem
                     width = CellSize,
                     //设置高度
                     height = CellSize,
-                    //设置窄边框
-                    borderTopWidth = 1,
-                    borderBottomWidth = 1,
-                    borderLeftWidth = 1,
-                    borderRightWidth = 1,
+                    //子元素垂直居中
+                    alignItems = Align.Center,
+                    //子元素水平居中
+                    justifyContent = Justify.Center,
+                    //不延展
+                    flexGrow = 0,
                 }
             };
 
             //获取显示文本
             string text = GetText(out float fontSize);
             //创建标签作为单元格内容
-            Label label = new()
+            CellLabel = new()
             {
                 //命名
                 name = "CellLabel",
@@ -146,13 +150,6 @@ namespace THLL.SceneSystem
                 //设置样式
                 style =
                 {
-                    //位置设置为绝对位置
-                    position = Position.Absolute,
-                    //所有间距设为0
-                    top = 0,
-                    bottom = 0,
-                    left = 0,
-                    right = 0,
                     //设置字体大小
                     fontSize = fontSize,
                     //设置文本颜色
@@ -171,12 +168,28 @@ namespace THLL.SceneSystem
                     paddingBottom = 0,
                     paddingLeft = 0,
                     paddingRight = 0,
+                    //设置边框
+                    borderTopWidth = 1,
+                    borderBottomWidth = 1,
+                    borderLeftWidth = 1,
+                    borderRightWidth = 1,
+                    //设置边框颜色
+                    borderTopColor = Color.clear,
+                    borderBottomColor = Color.clear,
+                    borderLeftColor = Color.clear,
+                    borderRightColor = Color.clear,
                 }
             };
+            //检测是否为场景单元格
+            if (IsScene)
+            {
+                //如果是，更改标签为Absolute
+                CellLabel.style.position = Position.Absolute;
+            }
             //注册事件
-            RegisterEvent(label);
+            RegisterEvent(CellLabel);
             //添加到容器
-            CellView.Add(label);
+            CellView.Add(CellLabel);
 
             //返回视觉元素
             return CellView;
@@ -223,27 +236,27 @@ namespace THLL.SceneSystem
         private void RefreshCell()
         {
             //刷新视觉元素
-            CellView.Q<Label>("CellLabel").text = GetText(out float fontSize);
-            CellView.Q<Label>("CellLabel").style.fontSize = fontSize;
-            CellView.Q<Label>("CellLabel").style.color = Color;
+            CellLabel.text = GetText(out float fontSize);
+            CellLabel.style.fontSize = fontSize;
+            CellLabel.style.color = Color;
         }
         //高亮单元格
         private void Highlight()
         {
             //设置样式
-            CellView.style.borderTopColor = Color.white;
-            CellView.style.borderBottomColor = Color.white;
-            CellView.style.borderLeftColor = Color.white;
-            CellView.style.borderRightColor = Color.white;
+            CellLabel.style.borderTopColor = Color.white;
+            CellLabel.style.borderBottomColor = Color.white;
+            CellLabel.style.borderLeftColor = Color.white;
+            CellLabel.style.borderRightColor = Color.white;
         }
         //取消高亮单元格
         private void Unhighlight()
         {
             //设置样式
-            CellView.style.borderTopColor = Color.clear;
-            CellView.style.borderBottomColor = Color.clear;
-            CellView.style.borderLeftColor = Color.clear;
-            CellView.style.borderRightColor = Color.clear;
+            CellLabel.style.borderTopColor = Color.clear;
+            CellLabel.style.borderBottomColor = Color.clear;
+            CellLabel.style.borderLeftColor = Color.clear;
+            CellLabel.style.borderRightColor = Color.clear;
         }
         #endregion
     }

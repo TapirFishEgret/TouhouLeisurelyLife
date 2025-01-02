@@ -23,9 +23,9 @@ namespace THLL.EditorSystem.SceneEditor
         //地图编辑面板UXML文件
         [SerializeField]
         private VisualTreeAsset _mapEditorVisualTree;
-        //子场景相邻状态编辑面板UXML文件
+        //场景内路径编辑面板UXML文件
         [SerializeField]
-        private VisualTreeAsset _childScenesAdjacentStatesEditorVisualTree;
+        private VisualTreeAsset _pathsInSceneEditorVisualTree;
         //背景图容器UXML文件
         public VisualTreeAsset BackgroundAssetContainerVisualTree;
         //永久性存储文件
@@ -57,7 +57,7 @@ namespace THLL.EditorSystem.SceneEditor
         //地图编辑面板
         public MapEditorPanel MapEditorPanel { get; private set; }
         //子场景相邻状态编辑面板
-        public ChildScenesAdjacentStatesEditorPanel ChildScenesAdjacentStatesEditorPanel { get; private set; }
+        public PathsInSceneEditorPanel ChildScenesAdjacentStatesEditorPanel { get; private set; }
 
         //窗口菜单
         [MenuItem("EditorSystem/SceneEditor")]
@@ -101,7 +101,7 @@ namespace THLL.EditorSystem.SceneEditor
             MapEditorPanel = new MapEditorPanel(_mapEditorVisualTree, this);
             EditorContainer.Add(MapEditorPanel);
             //创建子场景相邻状态编辑面板并添加
-            ChildScenesAdjacentStatesEditorPanel = new ChildScenesAdjacentStatesEditorPanel(_childScenesAdjacentStatesEditorVisualTree, this);
+            ChildScenesAdjacentStatesEditorPanel = new PathsInSceneEditorPanel(_pathsInSceneEditorVisualTree, this);
             EditorContainer.Add(ChildScenesAdjacentStatesEditorPanel);
 
             //设定编辑器选择逻辑

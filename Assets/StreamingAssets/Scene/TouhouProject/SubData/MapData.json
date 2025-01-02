@@ -1,0 +1,213 @@
+{
+  "IsEmpty": false,
+  "Preview": "┌──────┐\n│空空空空空空│\n│場空空空空場│\n│空空空空空空│\n└──────┘\n",
+  "PathsInScene": [
+    {
+      "SceneAID": "Scene_TouhouProject_Higan",
+      "SceneBID": "Scene_TouhouProject_Gensokyo",
+      "Distance": 3600
+    }
+  ],
+  "Cells": {
+    "(0,0)": {
+      "Data": "┌",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,1)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,2)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,3)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,4)": {
+      "Data": "└",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(1,2)": {
+      "Data": "Scene_TouhouProject_Higan",
+      "IsScene": true,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(1,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(2,2)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(2,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(2,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(3,2)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(3,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(3,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(4,2)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(4,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(4,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(5,2)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(5,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(5,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,0)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,1)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(6,2)": {
+      "Data": "Scene_TouhouProject_Gensokyo",
+      "IsScene": true,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,3)": {
+      "Data": "空",
+      "IsScene": false,
+      "ColorString": "00000000"
+    },
+    "(6,4)": {
+      "Data": "─",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,0)": {
+      "Data": "┐",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,1)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,2)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,3)": {
+      "Data": "│",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,4)": {
+      "Data": "┘",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    }
+  }
+}

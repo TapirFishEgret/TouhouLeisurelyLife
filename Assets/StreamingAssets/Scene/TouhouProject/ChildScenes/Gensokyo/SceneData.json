@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Gensokyo",
+  "IDPart": "Gensokyo",
+  "Name": "幻想乡",
+  "Description": "幻想乡是东方Project系列故事的主要舞台，很多时候被用来指代整个东方Project世界。\n在过去是被称为「东之国远离人类村落的边境之地」的场所，深藏于日本境内的某片群山之中。虽说如此，普通的手段是无法往来于幻想乡内外的，因为这里被常识的结界「博丽大结界」所隔断。要说幻想乡有什么特别之处，那自然是——在现实中被视为「非常识」、「不存在」的妖怪、神明、魔法等等幻想，在这里都是理所当然的东西。\n被否定、被遗忘、成为幻想之物的归宿，那就是幻想乡。在这里，人类仍然敬畏神明，仍然谈论着魍魉魑魅。巫女能在空中飞行也好、吸血鬼释放出血红雾气也好、冬天和夜晚不会结束也好、某位圣人突然复活也好……\n妖怪等非人之物掀起异变、人类中的英雄前去应对，这便是幻想乡的日常。",
+  "SortOrder": 0,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Gensokyo/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject"
+}

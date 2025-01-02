@@ -1,0 +1,14 @@
+{
+  "ID": "Character_TouhouProject_MainCharacter_HakureiReimu",
+  "IDPart": "0",
+  "Name": "博丽灵梦",
+  "Description": "东方Project系列的第一主角，也是东方系列的代表角色。初登场作品为东方灵异传，担任灵异传的自机；新作初登场作品为东方红魔乡，担任红魔乡的自机。\n她是博丽巫女，通称红白。\n所有官方游戏整数作的标题画面都是灵梦。同样地，官方漫画里灵梦也均会在封面与第一话登场。\n性格非常悠闲，缺乏危机感，对谁都既不亲切也不严厉地平等相待，但在工作上对妖怪是不问情由一律降伏的，常常一个人独处，实际上也说不定是个冷漠的人，不过有时候也会不分种族地去亲近别人，实际上其实感情丰富。她思想非常单纯，表里如一]，但也满脑子是春，并且因为不相信努力会得到回报而讨厌修行和全力以赴。\n从灵异传开始，灵梦一直作为大部分官方游戏可使用的自机角色登场，在所有官方出版物中也都是主角或常驻角色。她贯穿了东方系列的整个故事线，是东方剧情中最重要的角色之一。\r",
+  "SortOrder": 1,
+  "SubDataFiles": [],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Character/TouhouProject/MainCharacter/HakureiReimu/0/CharacterData.json",
+  "Series": "TouhouProject",
+  "Group": "MainCharacter",
+  "Chara": "HakureiReimu",
+  "Version": "0",
+  "ColorString": "FFFFFFFF"
+}

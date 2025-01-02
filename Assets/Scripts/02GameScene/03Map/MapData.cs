@@ -16,21 +16,23 @@ namespace THLL.SceneSystem
         public bool IsEmpty { get; set; } = true;
         //地图预览
         public string Preview { get; set; } = string.Empty;
+        //场景内路径
+        public List<ScenePath> PathsInScene { get; set; } = new();
         //单元格字典
         [JsonConverter(typeof(MapCellsDictConverter))]
         public Dictionary<(int, int), MapCell> Cells { get; set; } = new();
         #endregion
 
         #region 视觉显示
-        //地图视觉元素
-        [JsonIgnore]
-        public VisualElement MapView { get; set; }
         //已经标注的场景
         [JsonIgnore]
         public Dictionary<string, MapCell> DisplayedScenes { get; set; } = new();
+        //地图视觉元素
+        [JsonIgnore]
+        private VisualElement MapView { get; set; }
         //是否在拖动状态
         [JsonIgnore]
-        public bool IsDragging { get; set; } = false;
+        private bool IsDragging { get; set; } = false;
         #endregion
 
         #region 公开方法
@@ -147,6 +149,10 @@ namespace THLL.SceneSystem
         //生成地图
         private VisualElement GenerateMap()
         {
+            //获取列行数
+            int cols = Cells.Keys.Max(cell => cell.Item1) + 1;
+            int rows = Cells.Keys.Max(cell => cell.Item2) + 1;
+
             //创建视觉元素
             MapView = new VisualElement()
             {
@@ -155,26 +161,30 @@ namespace THLL.SceneSystem
                 //设置样式
                 style =
                 {
+                    //位置为绝对
+                    position = Position.Absolute,
                     //排布方式为横向
                     flexDirection = FlexDirection.Row,
+                    //设置地图大小
+                    width = cols * MapCell.CellSize,
+                    height = rows * MapCell.CellSize,
                     //设置边框为1
-                    borderTopWidth = 1,
-                    borderRightWidth = 1,
-                    borderBottomWidth = 1,
-                    borderLeftWidth = 1,
-                    //设置边框颜色为灰色
-                    borderTopColor = Color.gray,
-                    borderRightColor = Color.gray,
-                    borderBottomColor = Color.gray,
-                    borderLeftColor = Color.gray,
+                    borderTopWidth = 3,
+                    borderRightWidth = 3,
+                    borderBottomWidth = 3,
+                    borderLeftWidth = 3,
+                    //设置边框颜色为白色
+                    borderTopColor = Color.white,
+                    borderRightColor = Color.white,
+                    borderBottomColor = Color.white,
+                    borderLeftColor = Color.white,
+                    //设置背景颜色为黑色
+                    backgroundColor = Color.black,
                 }
             };
             //注册地图事件
             RegisterMapEvents();
 
-            //获取列行数
-            int cols = Cells.Keys.Max(cell => cell.Item1) + 1;
-            int rows = Cells.Keys.Max(cell => cell.Item2) + 1;
             //遍历列数
             for (int i = 0; i < cols; i++)
             {
@@ -183,6 +193,12 @@ namespace THLL.SceneSystem
                 {
                     //设置名称
                     name = "Column" + i,
+                    //设置样式
+                    style =
+                    {
+                        //设置大小
+                        width = rows * MapCell.CellSize,
+                    }
                 };
                 //遍历行数
                 for (int j = 0; j < rows; j++)

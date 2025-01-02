@@ -1,0 +1,14 @@
+{
+  "ID": "Character_System_Main_Player",
+  "IDPart": "0",
+  "Name": "你",
+  "Description": "大名鼎鼎的你先生。\n顺便也提示了大活儿这个游戏的起源。",
+  "SortOrder": 0,
+  "SubDataFiles": [],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Character/System/Main/Player/0/CharacterData.json",
+  "Series": "System",
+  "Group": "Main",
+  "Chara": "Player",
+  "Version": "0",
+  "ColorString": "FFFFFFFF"
+}

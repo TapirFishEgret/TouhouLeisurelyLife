@@ -76,7 +76,7 @@ namespace THLL.EditorSystem.SceneEditor
             AssetsContainerScrollView = AssetsEditorRootPanel.Q<ScrollView>("AssetsContainerScrollView");
 
             //注册事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            EditorApplication.update += OnGeometryChanged;
             AddBackgroundButton.clicked += AddBackground;
         }
         //刷新面板
@@ -104,7 +104,7 @@ namespace THLL.EditorSystem.SceneEditor
             }
         }
         //几何图形改变时手动容器大小
-        private void OnGeometryChanged(GeometryChangedEvent evt)
+        private void OnGeometryChanged()
         {
             //调整背景容器高度
             NameBackgroundContainerDict.Values.ToList().ForEach(backgroundContainer =>
@@ -153,7 +153,7 @@ namespace THLL.EditorSystem.SceneEditor
             //检测是否有数据被选择
             if (ShowedScene == null)
             {
-                EditorUtility.DisplayDialog("Error", "Please select a scene first!", "OK");
+                EditorUtility.DisplayDialog("错误", "请先选择一个场景!", "OK");
                 return;
             }
 
@@ -170,22 +170,22 @@ namespace THLL.EditorSystem.SceneEditor
             {
                 //显示输入窗口
                 backgroundName = await TextInputWindow.ShowWindowWithResult(
-                    "Add New Background",
-                    "Please Input New Background Name",
-                    "New Background Name",
-                    "New Name",
+                    "添加新场景背景",
+                    "请输入新场景背景名称",
+                    "新场景背景名称",
+                    "名称",
                     EditorWindow.focusedWindow
                     );
                 //检查输入的名称是否已存在或为空
                 if (string.IsNullOrEmpty(backgroundName) || NameBackgroundContainerDict.ContainsKey(backgroundName))
                 {
-                    EditorUtility.DisplayDialog("Error", "Background Name is already exists or is empty!", "OK");
+                    EditorUtility.DisplayDialog("错误", "背景图名称已存在或为空!", "OK");
                     return;
                 }
             }
 
             //确认名称后，选择目标文件
-            string sourceFilePath = EditorUtility.OpenFilePanel("Select Background Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+            string sourceFilePath = EditorUtility.OpenFilePanel("选择背景图", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
             //判断选择情况
             if (!string.IsNullOrEmpty(sourceFilePath))
             {

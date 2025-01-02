@@ -16,9 +16,6 @@ namespace THLL.SceneSystem
         //父级场景ID
         [JsonProperty(Order = 101)]
         public string ParentSceneID { get; set; } = string.Empty;
-        //子级场景相邻状态
-        [JsonIgnore]
-        public HashSet<(string, string)> ChildScenesAdjacentStates { get; set; } = new();
         //地图数据
         [JsonIgnore]
         public MapData MapData { get; set; } = new();
@@ -35,7 +32,7 @@ namespace THLL.SceneSystem
         public SceneData()
         {
             //将地图数据作为子数据添加到列表中
-            SubDataFiles = new HashSet<string>() { "MapData", "ChildScenesAdjacentStates" };
+            SubDataFiles = new HashSet<string>() { "MapData" };
         }
         #endregion
 
@@ -57,6 +54,14 @@ namespace THLL.SceneSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载
+                    if (BackgroundsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载，触发事件
+                        onBackgroundLoaded?.Invoke(fileName, BackgroundsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
                     //等待
@@ -66,7 +71,7 @@ namespace THLL.SceneSystem
                     if (request.result != UnityWebRequest.Result.Success)
                     {
                         //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load background image: " + filePath);
+                        GameHistory.LogError("读取此处背景图片失败: " + filePath);
                     }
                     else
                     {
@@ -101,16 +106,25 @@ namespace THLL.SceneSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载
+                    if (BackgroundsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载，触发事件
+                        onBackgroundLoaded?.Invoke(fileName, BackgroundsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(new Uri(filePath).AbsoluteUri);
 
                     //等待
                     await request.SendWebRequest();
+
                     //等待结束后判断结果
                     if (request.result != UnityWebRequest.Result.Success)
                     {
                         //若未成功，游戏内记录异常
-                        GameHistory.LogError("Failed to load background image: " + filePath);
+                        GameHistory.LogError("读取此处背景图片失败: " + filePath);
                     }
                     else
                     {
@@ -147,7 +161,6 @@ namespace THLL.SceneSystem
             return subDataFile switch
             {
                 "MapData" => MapData,
-                "ChildScenesAdjacentStates" => ChildScenesAdjacentStates,
                 _ => null,
             };
         }
@@ -158,7 +171,6 @@ namespace THLL.SceneSystem
             return subDataFile switch
             {
                 "MapData" => typeof(MapData),
-                "ChildScenesAdjacentStates" => typeof(HashSet<(string, string)>),
                 _ => null,
             };
         }
@@ -170,9 +182,6 @@ namespace THLL.SceneSystem
             {
                 case "MapData":
                     MapData = subData as MapData;
-                    break;
-                case "ChildScenesAdjacentStates":
-                    ChildScenesAdjacentStates = subData as HashSet<(string, string)>;
                     break;
                 default:
                     break;

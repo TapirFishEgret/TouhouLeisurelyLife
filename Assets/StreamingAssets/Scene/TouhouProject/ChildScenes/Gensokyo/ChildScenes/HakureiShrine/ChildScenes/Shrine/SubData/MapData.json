@@ -1,0 +1,207 @@
+{
+  "IsEmpty": false,
+  "Preview": "佔佔佔佔佔佔佔佔\n佔佔佔佔佔佔佔佔\n佔佔佔佔佔佔佔佔\n佔佔佔佔佔佔佔佔\n佔佔佔佔佔佔佔佔\n",
+  "PathsInScene": [],
+  "Cells": {
+    "(0,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(0,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(1,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(2,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(3,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(4,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(5,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(6,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,0)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,1)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,2)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,3)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    },
+    "(7,4)": {
+      "Data": "佔",
+      "IsScene": false,
+      "ColorString": "FFFFFFFF"
+    }
+  }
+}

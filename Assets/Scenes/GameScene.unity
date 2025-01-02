@@ -42,7 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -613,6 +614,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VTA_History: {fileID: 9197481963319205126, guid: a0a779117bf2d874a8aefcb40d1a65b5, type: 3}
+  VTA_CharacterSelector: {fileID: 9197481963319205126, guid: 7d602fd803e1f734bbbc755b1b0e1fcb, type: 3}
+  VTA_Map: {fileID: 9197481963319205126, guid: 8e99775a07e44f241be5460a1e1c8f05, type: 3}
 --- !u!1 &489939469
 GameObject:
   m_ObjectHideFlags: 0

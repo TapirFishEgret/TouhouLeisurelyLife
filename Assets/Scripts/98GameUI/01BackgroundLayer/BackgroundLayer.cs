@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using THLL.BaseSystem;
+using THLL.PlaySystem;
 using THLL.SceneSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -70,22 +72,26 @@ namespace THLL.UISystem
             //复原背景偏移
             MainTitleBackground.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0)));
         }
-        //切换主界面背景图
-        private void SwitchMainTitleBackground(Scene location)
-        {
-            //开始背景图切换协程
-            StartCoroutine(SwitchMainTitleBackgroundCoroutine(location));
-        }
         //切换主界面背景图协程
         private IEnumerator SwitchMainTitleBackgroundCoroutine(Scene scene)
         {
+            //背景图变量
+            Sprite background = scene.GetBackground();
+            //检测是否需要切换背景图
+            if (MainTitleBackground.resolvedStyle.backgroundImage.sprite == background)
+            {
+                //如果背景图相同，则不进行切换
+                GameUI.MainTitleInterface.LocationLabel.text = scene.FullName;
+                yield break;
+            }
+
             //更改背景图不透明度为0
             MainTitleBackground.style.opacity = 0;
             //协程等待1s(动画用时)
             yield return new WaitForSeconds(1.0f);
 
             //更换背景图
-            MainTitleBackground.style.backgroundImage = new StyleBackground(scene.BackgroundsDict.Values.ToList()[Random.Range(0, scene.BackgroundsDict.Count)]);
+            MainTitleBackground.style.backgroundImage = new StyleBackground(background);
             //更新主面板
             GameUI.MainTitleInterface.LocationLabel.text = scene.Name;
             //协程等待到当前帧结束
@@ -99,8 +105,8 @@ namespace THLL.UISystem
         //主界面背景图循环方法本体
         private IEnumerator CycleMainTitleBackgroundCoroutine()
         {
-            //首先获取可用地点，此处为主界面循环，仅循环根场景
-            List<Scene> locations = GameScene.SceneDB.RootScenesStorage.Values.ToList();
+            //首先获取可用地点，随便选
+            List<Scene> locations = GameScene.Storage.Values.ToList();
 
             //不设置终止条件，除非协程被强制终止，否则一直循环
             while (true)
@@ -117,10 +123,10 @@ namespace THLL.UISystem
                 {
                     //若小于0，更换背景图
                     //首先获取目标地点
-                    Scene location = locations[Random.Range(0, locations.Count)];
+                    Scene location = locations[UnityEngine.Random.Range(0, locations.Count)];
 
                     //然后切换背景图
-                    SwitchMainTitleBackground(location);
+                    StartCoroutine(SwitchMainTitleBackgroundCoroutine(location));
 
                     //更新持续时间
                     Duration = 180f;
@@ -158,21 +164,32 @@ namespace THLL.UISystem
 
         #region 场景背景图相关方法
         //切换场景背景图
-        public void SwitchSceneBackground(Scene scene)
+        public void SwitchSceneBackground(Scene scene, string backgroundName = "0", Action onSwitch = null)
         {
             //开始背景图切换协程
-            StartCoroutine(SwitchSceneBackgroundCoroutine(scene));
+            StartCoroutine(SwitchSceneBackgroundCoroutine(scene, backgroundName, onSwitch));
         }
         //切换场景背景图协程
-        private IEnumerator SwitchSceneBackgroundCoroutine(Scene scene)
+        private IEnumerator SwitchSceneBackgroundCoroutine(Scene scene, string backgroundName = "0", Action onSwitch = null)
         {
+            //获取背景图
+            Sprite background = scene.GetBackground(backgroundName);
+            //检测是否需要切换背景图
+            if (scene == GamePlay.CurrentScene && SceneBackground.resolvedStyle.backgroundImage.sprite == background)
+            {
+                //如果场景相同且背景图相同，则不进行切换
+                yield break;
+            }
+
             //更改背景图不透明度为0
             SceneBackground.style.opacity = 0;
             //协程等待1s(动画用时)
             yield return new WaitForSeconds(1.0f);
 
             //更换背景图
-            SceneBackground.style.backgroundImage = new StyleBackground(scene.BackgroundsDict.Values.ToList()[Random.Range(0, scene.BackgroundsDict.Count)]);
+            SceneBackground.style.backgroundImage = new StyleBackground(background);
+            //触发回调
+            onSwitch?.Invoke();
             //协程等待到当前帧结束
             yield return new WaitForEndOfFrame();
 

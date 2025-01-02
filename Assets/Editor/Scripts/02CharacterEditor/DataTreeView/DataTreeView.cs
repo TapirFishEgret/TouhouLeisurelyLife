@@ -17,23 +17,23 @@ namespace THLL.EditorSystem.CharacterEditor
         public MainWindow MainWindow { get; private set; }
 
         //根缓存
-        public List<TreeViewItemData<CharacterSystemDataContainer>> RootItemCache { get; } = new();
+        public List<TreeViewItemData<DataContainer>> RootItemCache { get; } = new();
         //系列-组织缓存
-        public Dictionary<int, List<TreeViewItemData<CharacterSystemDataContainer>>> SeriesGroupDicCache { get; } = new();
+        public Dictionary<int, List<TreeViewItemData<DataContainer>>> SeriesGroupDicCache { get; } = new();
         //组织-角色缓存
-        public Dictionary<int, List<TreeViewItemData<CharacterSystemDataContainer>>> GroupCharacterDicCache { get; } = new();
+        public Dictionary<int, List<TreeViewItemData<DataContainer>>> GroupCharaDicCache { get; } = new();
         //角色-版本缓存
-        public Dictionary<int, List<TreeViewItemData<CharacterSystemDataContainer>>> CharacterVersionDicCache { get; } = new();
+        public Dictionary<int, List<TreeViewItemData<DataContainer>>> CharaVersionDicCache { get; } = new();
         //ID-数据缓存
-        public Dictionary<int, TreeViewItemData<CharacterSystemDataContainer>> ItemDicCache { get; } = new();
+        public Dictionary<int, TreeViewItemData<DataContainer>> ItemDicCache { get; } = new();
+        //角色-排序
+        public Dictionary<int, int> CharaSortDic { get; } = new();
 
-        //名称-排序永久性存储
-        public Dictionary<string, int> StringSortingOrderPersistentData { get; } = new();
         //展开状态永久性存储
         public HashSet<int> ExpandedStatePersistentData { get; private set; } = new();
 
         //当前活跃选中项
-        public CharacterSystemDataContainer ActiveSelection { get; private set; }
+        public DataContainer ActiveSelection { get; private set; }
         #endregion
 
         #region 构造函数与刷新与初始化
@@ -84,12 +84,12 @@ namespace THLL.EditorSystem.CharacterEditor
             bindItem = (element, i) =>
             {
                 //获取数据与物体展示形态
-                CharacterSystemDataContainer itemDataContainer = GetItemDataForIndex<CharacterSystemDataContainer>(i);
+                DataContainer itemDataContainer = GetItemDataForIndex<DataContainer>(i);
                 Label label = element as Label;
                 //设置展示形态显示内容
                 label.text = itemDataContainer.StringData;
                 //检查容器数据
-                if (itemDataContainer.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                if (itemDataContainer.Type == DataContainer.ItemDataType.Version)
                 {
                     //若为版本数据，更改标签名称
                     label.name = "Version";
@@ -108,8 +108,8 @@ namespace THLL.EditorSystem.CharacterEditor
             //清除现有缓存
             RootItemCache.Clear();
             SeriesGroupDicCache.Clear();
-            GroupCharacterDicCache.Clear();
-            CharacterVersionDicCache.Clear();
+            GroupCharaDicCache.Clear();
+            CharaVersionDicCache.Clear();
             ItemDicCache.Clear();
 
             //数据存储路径
@@ -128,17 +128,17 @@ namespace THLL.EditorSystem.CharacterEditor
                     //获取文件夹名称作为系列名称
                     string seriesName = Path.GetFileName(firstLevelDir);
                     //创建系列名称物体数据容器
-                    CharacterSystemDataContainer seriesItemDataContainer = new(
+                    DataContainer seriesItemDataContainer = new(
                         seriesName,
                         seriesName,
-                        RootItemCache.Count + 1,
+                        RootItemCache.Count,
                         null,
-                        CharacterSystemDataContainer.ItemDataType.Series
+                        DataContainer.ItemDataType.Series
                         );
                     //创建其对应的子级集合
-                    List<TreeViewItemData<CharacterSystemDataContainer>> seriesChildren = new();
+                    List<TreeViewItemData<DataContainer>> seriesChildren = new();
                     //创建对应树状图物体
-                    TreeViewItemData<CharacterSystemDataContainer> seriesItem = new(
+                    TreeViewItemData<DataContainer> seriesItem = new(
                         seriesItemDataContainer.ID,
                         seriesItemDataContainer,
                         seriesChildren
@@ -158,55 +158,55 @@ namespace THLL.EditorSystem.CharacterEditor
                         //获取文件夹名称作为组织名称
                         string groupName = Path.GetFileName(secondLevelDir);
                         //创建组织名称物体数据容器
-                        CharacterSystemDataContainer groupItemDataContainer = new(
+                        DataContainer groupItemDataContainer = new(
                             seriesName + "_" + groupName,
                             groupName,
-                            SeriesGroupDicCache[seriesItemDataContainer.ID].Count + 1,
+                            SeriesGroupDicCache[seriesItemDataContainer.ID].Count,
                             seriesItemDataContainer,
-                            CharacterSystemDataContainer.ItemDataType.Group
+                            DataContainer.ItemDataType.Group
                             );
                         //创建其对应的子级集合
-                        List<TreeViewItemData<CharacterSystemDataContainer>> groupChildren = new();
+                        List<TreeViewItemData<DataContainer>> groupChildren = new();
                         //创建对应树状图物体
-                        TreeViewItemData<CharacterSystemDataContainer> groupItem = new(
+                        TreeViewItemData<DataContainer> groupItem = new(
                             groupItemDataContainer.ID,
                             groupItemDataContainer,
                             groupChildren
                             );
                         //设置对应缓存
-                        GroupCharacterDicCache[groupItemDataContainer.ID] = groupChildren;
+                        GroupCharaDicCache[groupItemDataContainer.ID] = groupChildren;
                         //添加到总集缓存
                         ItemDicCache[groupItemDataContainer.ID] = groupItem;
                         //将自己添加到上层的子级中
                         seriesChildren.Add(groupItem);
-
+                        
                         //获取第三层文件夹
                         string[] thirdLevelDirs = Directory.GetDirectories(secondLevelDir, "*", SearchOption.TopDirectoryOnly);
                         //遍历
                         foreach (string thirdLevelDir in thirdLevelDirs)
                         {
                             //获取文件夹名称作为角色名称
-                            string characterName = Path.GetFileName(thirdLevelDir);
+                            string charaName = Path.GetFileName(thirdLevelDir);
                             //创建角色名称物体数据容器
-                            CharacterSystemDataContainer characterItemDataContainer = new(
-                                (seriesName + "_" + groupName + "_" + characterName).Replace(" ", "-"),
-                                characterName,
-                                GroupCharacterDicCache[groupItemDataContainer.ID].Count + 1,
+                            DataContainer charaItemDataContainer = new(
+                                (seriesName + "_" + groupName + "_" + charaName).Replace(" ", "-"),
+                                charaName,
+                                GroupCharaDicCache[groupItemDataContainer.ID].Count,
                                 groupItemDataContainer,
-                                CharacterSystemDataContainer.ItemDataType.Character
+                                DataContainer.ItemDataType.Character
                                 );
                             //创建其对应的子级集合
-                            List<TreeViewItemData<CharacterSystemDataContainer>> characterChildren = new();
+                            List<TreeViewItemData<DataContainer>> characterChildren = new();
                             //创建对应树状图物体
-                            TreeViewItemData<CharacterSystemDataContainer> characterItem = new(
-                                characterItemDataContainer.ID,
-                                characterItemDataContainer,
+                            TreeViewItemData<DataContainer> characterItem = new(
+                                charaItemDataContainer.ID,
+                                charaItemDataContainer,
                                 characterChildren
                                 );
                             //设置对应缓存
-                            CharacterVersionDicCache[characterItemDataContainer.ID] = characterChildren;
+                            CharaVersionDicCache[charaItemDataContainer.ID] = characterChildren;
                             //添加到总集缓存
-                            ItemDicCache[characterItemDataContainer.ID] = characterItem;
+                            ItemDicCache[charaItemDataContainer.ID] = characterItem;
                             //将自己添加到上层的子级中
                             groupChildren.Add(characterItem);
 
@@ -228,18 +228,20 @@ namespace THLL.EditorSystem.CharacterEditor
                                         //设定其路径
                                         versionData.DataPath = filePath.Replace("\\", "/");
                                         //创建角色数据物体数据容器
-                                        CharacterSystemDataContainer versionItemDataContainer = new(
+                                        DataContainer versionItemDataContainer = new(
                                             versionData,
-                                            characterItemDataContainer
+                                            charaItemDataContainer
                                             );
                                         //创建角色数据物体
-                                        TreeViewItemData<CharacterSystemDataContainer> versionItem = new(
+                                        TreeViewItemData<DataContainer> versionItem = new(
                                             versionItemDataContainer.ID,
                                             versionItemDataContainer,
                                             null
                                             );
                                         //添加到总集缓存中
                                         ItemDicCache[versionItemDataContainer.ID] = versionItem;
+                                        //设定排序数值
+                                        CharaSortDic[charaItemDataContainer.ID] = versionData.SortOrder;
                                         //添加到上层子级中
                                         characterChildren.Add(versionItem);
                                     }
@@ -273,7 +275,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //首先绑定的是，当选择发生更改时，更改活跃选中项
             selectionChanged += async (selections) =>
             {
-                CharacterSystemDataContainer newSelection = selectedItems.Cast<CharacterSystemDataContainer>().FirstOrDefault();
+                DataContainer newSelection = selectedItems.Cast<DataContainer>().FirstOrDefault();
                 if (newSelection != null)
                 {
                     ActiveSelection = newSelection;
@@ -304,7 +306,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 if (evt.button == 0)
                 {
                     //若是，获取当前选中项
-                    CharacterSystemDataContainer newSelection = selectedItems.Cast<CharacterSystemDataContainer>().FirstOrDefault();
+                    DataContainer newSelection = selectedItems.Cast<DataContainer>().FirstOrDefault();
                     //判断与活跃选中项是否相同
                     if (newSelection == ActiveSelection)
                     {
@@ -381,17 +383,17 @@ namespace THLL.EditorSystem.CharacterEditor
                     else
                     {
                         //若不存在，则生成物体容器
-                        CharacterSystemDataContainer newDataContainer = new(
+                        DataContainer newDataContainer = new(
                             newSeriesName,
                             newSeriesName,
                             RootItemCache.Count + 1,
                             null,
-                            CharacterSystemDataContainer.ItemDataType.Series
+                            DataContainer.ItemDataType.Series
                             );
                         //生成子级列表
-                        List<TreeViewItemData<CharacterSystemDataContainer>> newChildren = new();
+                        List<TreeViewItemData<DataContainer>> newChildren = new();
                         //生成树状图物体
-                        TreeViewItemData<CharacterSystemDataContainer> newItem = new(
+                        TreeViewItemData<DataContainer> newItem = new(
                             newDataContainer.ID,
                             newDataContainer,
                             newChildren
@@ -400,24 +402,24 @@ namespace THLL.EditorSystem.CharacterEditor
                         ItemDicCache[newDataContainer.ID] = newItem;
                         //添加到根缓存中
                         RootItemCache.Add(newItem);
-                        //新增系列-组织键值对
+                        //对应子级列表
                         SeriesGroupDicCache[newDataContainer.ID] = newChildren;
 
                         //刷新
                         TRefresh();
                     }
                 },
-                "Create New Series",
-                "Please Input New Series ID Part",
-                "New Series ID Part",
-                "New ID Part",
+                "创建新系列",
+                "请输入新系列名称",
+                "新系列名称",
+                "名称",
                 EditorWindow.focusedWindow
                 );
             }
             else
             {
                 //若选中项不为空，则逐一判断情况
-                if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Series)
+                if (ActiveSelection.Type == DataContainer.ItemDataType.Series)
                 {
                     //选中系列的情况下，创建组织
                     TextInputWindow.ShowWindow(newAffiliationName =>
@@ -443,17 +445,17 @@ namespace THLL.EditorSystem.CharacterEditor
                         else
                         {
                             //若不存在，则生成物体容器
-                            CharacterSystemDataContainer newDataContainer = new(
+                            DataContainer newDataContainer = new(
                                 (ActiveSelection.StringData + "_" + newAffiliationName).Replace(" ", "-"),
                                 newAffiliationName,
                                 SeriesGroupDicCache[ActiveSelection.ID].Count + 1,
                                 ActiveSelection,
-                                CharacterSystemDataContainer.ItemDataType.Group
+                                DataContainer.ItemDataType.Group
                                 );
                             //生成子级列表
-                            List<TreeViewItemData<CharacterSystemDataContainer>> newChildren = new();
+                            List<TreeViewItemData<DataContainer>> newChildren = new();
                             //生成树状图物体
-                            TreeViewItemData<CharacterSystemDataContainer> newItem = new(
+                            TreeViewItemData<DataContainer> newItem = new(
                                 newDataContainer.ID,
                                 newDataContainer,
                                 newChildren
@@ -462,24 +464,24 @@ namespace THLL.EditorSystem.CharacterEditor
                             ItemDicCache[newDataContainer.ID] = newItem;
                             //添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
                             SeriesGroupDicCache[ActiveSelection.ID].Add(newItem);
-                            //将本数据添加到对应级别缓存中
-                            GroupCharacterDicCache[newDataContainer.ID] = newChildren;
+                            //对应子级列表
+                            GroupCharaDicCache[newDataContainer.ID] = newChildren;
 
                             //刷新
                             TRefresh();
                         }
                     },
-                    "Create New Group",
-                    "Please Input New Group ID Part",
-                    "New Group ID Part",
-                    "New ID Part",
+                    "创建新组",
+                    "请输入新组名称",
+                    "新组名称",
+                    "名称",
                     EditorWindow.focusedWindow
                     );
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Group)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Group)
                 {
                     //选中组织的情况下，创建角色
-                    TextInputWindow.ShowWindow(newCharacterName =>
+                    TextInputWindow.ShowWindow(newCharaName =>
                     {
                         //计时
                         using ExecutionTimer timer = new("创建新角色", MainWindow.TimerDebugLogToggle.value);
@@ -490,7 +492,7 @@ namespace THLL.EditorSystem.CharacterEditor
                             "Character",
                             ActiveSelection.Parent.StringData,
                             ActiveSelection.StringData,
-                            newCharacterName
+                            newCharaName
                             );
 
                         //检查新路径存在状态
@@ -503,17 +505,17 @@ namespace THLL.EditorSystem.CharacterEditor
                         else
                         {
                             //若不存在，则生成物体容器
-                            CharacterSystemDataContainer newDataContainer = new(
-                                (ActiveSelection.Parent.StringData + "_" + ActiveSelection.StringData + "_" + newCharacterName).Replace(" ", "-"),
-                                newCharacterName,
-                                GroupCharacterDicCache[ActiveSelection.ID].Count + 1,
+                            DataContainer newDataContainer = new(
+                                (ActiveSelection.Parent.StringData + "_" + ActiveSelection.StringData + "_" + newCharaName).Replace(" ", "-"),
+                                newCharaName,
+                                GroupCharaDicCache[ActiveSelection.ID].Count + 1,
                                 ActiveSelection,
-                                CharacterSystemDataContainer.ItemDataType.Character
+                                DataContainer.ItemDataType.Character
                                 );
                             //生成子级列表
-                            List<TreeViewItemData<CharacterSystemDataContainer>> newChildren = new();
+                            List<TreeViewItemData<DataContainer>> newChildren = new();
                             //生成树状图物体
-                            TreeViewItemData<CharacterSystemDataContainer> newItem = new(
+                            TreeViewItemData<DataContainer> newItem = new(
                                 newDataContainer.ID,
                                 newDataContainer,
                                 newChildren
@@ -521,30 +523,35 @@ namespace THLL.EditorSystem.CharacterEditor
                             //添加到总缓存中
                             ItemDicCache[newDataContainer.ID] = newItem;
                             //添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
-                            GroupCharacterDicCache[ActiveSelection.ID].Add(newItem);
-                            //将本数据添加到对应级别缓存中
-                            CharacterVersionDicCache[newDataContainer.ID] = newChildren;
+                            GroupCharaDicCache[ActiveSelection.ID].Add(newItem);
+                            //对应子级列表
+                            CharaVersionDicCache[newDataContainer.ID] = newChildren;
+                            //设定排序数值
+                            CharaSortDic[newDataContainer.ID] = CharaSortDic.Count;
+
+                            //直接新建角色
+                            CreateNewCharacterData(newDataContainer);
 
                             //刷新
                             TRefresh();
                         }
                     },
-                    "Create New Character",
-                    "Please Input New Character ID Part",
-                    "New Character ID Part",
-                    "New ID Part",
+                    "创建新角色",
+                    "请输入新角色名称",
+                    "新角色名称",
+                    "名称",
                     EditorWindow.focusedWindow
                     );
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Character)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Character)
                 {
                     //若选中了角色，创建角色
                     CreateNewCharacterData(ActiveSelection);
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Version)
                 {
                     //若选中了版本，同样创建角色
-                    CreateNewCharacterData(ActiveSelection.Parent as CharacterSystemDataContainer);
+                    CreateNewCharacterData(ActiveSelection.Parent);
                 }
             }
 
@@ -578,7 +585,7 @@ namespace THLL.EditorSystem.CharacterEditor
                 }
 
                 //若确认，则进行进一步判断
-                if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Series)
+                if (ActiveSelection.Type == DataContainer.ItemDataType.Series)
                 {
                     //若为作品系列，删除
                     //计时
@@ -600,7 +607,7 @@ namespace THLL.EditorSystem.CharacterEditor
                     //刷新
                     TRefresh();
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Group)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Group)
                 {
                     //若为组织，删除
                     //计时
@@ -623,7 +630,7 @@ namespace THLL.EditorSystem.CharacterEditor
                     //刷新
                     TRefresh();
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Character)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Character)
                 {
                     //若为角色名称，删除
                     //计时
@@ -647,7 +654,7 @@ namespace THLL.EditorSystem.CharacterEditor
                     //刷新
                     TRefresh();
                 }
-                else if (ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                else if (ActiveSelection.Type == DataContainer.ItemDataType.Version)
                 {
                     //若为角色版本，删除
                     //计时
@@ -665,7 +672,7 @@ namespace THLL.EditorSystem.CharacterEditor
 
                     //清除缓存
                     //父级存储的它
-                    CharacterVersionDicCache[ActiveSelection.Parent.ID]
+                    CharaVersionDicCache[ActiveSelection.Parent.ID]
                         .Remove(ItemDicCache[ActiveSelection.ID]);
                     //总缓存
                     ItemDicCache.Remove(ActiveSelection.ID);
@@ -753,115 +760,127 @@ namespace THLL.EditorSystem.CharacterEditor
             }
         }
         //生成新版本角色数据
-        private void CreateNewCharacterData(CharacterSystemDataContainer characterItemDataContainer)
+        private async void CreateNewCharacterData(DataContainer charaItemDataContainer)
         {
-            TextInputWindow.ShowWindow((Action<string>)(newCharacterVersionName =>
+            //声明新版本名称
+            string newCharacterVersionName;
+            //判断当前版本数量
+            if (CharaVersionDicCache[charaItemDataContainer.ID].Count == 0)
             {
-                //计时
-                using ExecutionTimer timer = new("创建新角色版本名称", MainWindow.TimerDebugLogToggle.value);
-
-                //构建新路径
-                string newFolderPath = Path.Combine(
-                    Application.streamingAssetsPath,
-                    "Character",
-                    ActiveSelection.Parent.Parent.StringData,
-                    ActiveSelection.Parent.StringData,
-                    ActiveSelection.StringData,
-                    newCharacterVersionName
-                    );
-
-                //检查新路径存在状态
-                if (GameEditor.MakeSureFolderPathExist(newFolderPath))
+                //若版本数量为0，则直接命名为0
+                newCharacterVersionName = "0";
+            }
+            else
+            {
+                //若版本数量不为0，则显示输入窗口并获取返回值
+                newCharacterVersionName = await TextInputWindow.ShowWindowWithResult
+                    ("创建新角色版本",
+                    "请输入新角色版本名称",
+                    "新角色版本名称",
+                    "名称",
+                    EditorWindow.focusedWindow);
+                //检查输入是否合法
+                if (string.IsNullOrEmpty(newCharacterVersionName))
                 {
-                    //若存在，提示并返回
-                    Debug.LogWarning("新角色版本名称已经存在，请重新创建！");
+                    //若为空，提示并返回
+                    EditorUtility.DisplayDialog("提示", "请输入一个版本名称", "OK");
                     return;
                 }
-                else
+            }
+            //构建新路径
+            string newFolderPath = Path.Combine(
+                Application.streamingAssetsPath,
+                "Character",
+                charaItemDataContainer.Parent.Parent.StringData,
+                charaItemDataContainer.Parent.StringData,
+                charaItemDataContainer.StringData,
+                newCharacterVersionName
+                );
+
+            //检查新路径存在状态
+            if (GameEditor.MakeSureFolderPathExist(newFolderPath))
+            {
+                //若存在，提示并返回
+                Debug.LogWarning("新角色版本名称已经存在，请重新创建！");
+                return;
+            }
+            else
+            {
+                //若不存在，开始生成数据
+                CharacterData newCharacterData = new()
                 {
-                    //若不存在，开始生成数据
-                    CharacterData newCharacterData = new()
+                    //ID，由系列、组织、角色组成，用下划线连接，并将空格替换为-
+                    ID = string.Join("_", new string[]
                     {
-                        //ID，由系列、组织、角色、版本组成，用下划线连接，并将空格替换为-
-                        ID = string.Join("_", new string[]
-                        {
                             "Character",
-                            characterItemDataContainer.Parent.Parent.StringData,
-                            characterItemDataContainer.Parent.StringData,
-                            characterItemDataContainer.StringData,
-                            newCharacterVersionName
-                        })
-                        .Replace(" ", "-"),
-                        //IDPart,此处应该是版本名称
-                        IDPart = newCharacterVersionName,
-                        //Name，暂时由角色名称代替
-                        Name = characterItemDataContainer.StringData,
-                        //Description，暂时为空
-                        Description = string.Empty,
-                        //排序，由角色数量决定
-                        SortOrder = CharacterVersionDicCache.Count,
-                        //系列名称，从容器中获取
-                        Series = characterItemDataContainer.Parent.Parent.StringData,
-                        //组名称，从容器中获取
-                        Group = characterItemDataContainer.Parent.StringData,
-                        //角色名称，从容器中获取
-                        Chara = characterItemDataContainer.StringData,
-                        //版本名称，直接获取
-                        Version = newCharacterVersionName,
-                        //颜色，默认白色
-                        Color = Color.white,
-                    };
+                            charaItemDataContainer.Parent.Parent.StringData,
+                            charaItemDataContainer.Parent.StringData,
+                            charaItemDataContainer.StringData,
+                    })
+                    .Replace(" ", "-"),
+                    //IDPart,此处应该是版本名称
+                    IDPart = newCharacterVersionName,
+                    //Name，暂时由角色名称代替
+                    Name = charaItemDataContainer.StringData,
+                    //Description，暂时为空
+                    Description = string.Empty,
+                    //排序，从字典中获取
+                    SortOrder = CharaSortDic[charaItemDataContainer.ID],
+                    //系列名称，从容器中获取
+                    Series = charaItemDataContainer.Parent.Parent.StringData,
+                    //组名称，从容器中获取
+                    Group = charaItemDataContainer.Parent.StringData,
+                    //角色名称，从容器中获取
+                    Chara = charaItemDataContainer.StringData,
+                    //版本名称，直接获取
+                    Version = newCharacterVersionName,
+                    //颜色，默认白色
+                    Color = Color.white,
+                };
 
-                    //随后将其保存在硬盘上并创建标准配备文件夹
-                    //首先获取存放路径
-                    string JsonFilePath = Path.Combine(newFolderPath, "CharacterData.json");
-                    //设定其存放路径
-                    newCharacterData.DataPath = JsonFilePath.Replace("\\", "/");
-                    //创建文件
-                    CharacterData.SaveToJson(newCharacterData, JsonFilePath);
-                    //新增占位文件
-                    GameEditor.GeneratePlaceHolderTextFile(newFolderPath);
-                    //创建配备文件夹并生成占位符
-                    Directory.CreateDirectory(Path.Combine(newFolderPath, "SubData"));
-                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "SubData"));
-                    Directory.CreateDirectory(Path.Combine(newFolderPath, "Avatars"));
-                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Avatars"));
-                    Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
-                    GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Portraits"));
+                //随后将其保存在硬盘上并创建标准配备文件夹
+                //首先获取存放路径
+                string JsonFilePath = Path.Combine(newFolderPath, "CharacterData.json");
+                //设定其存放路径
+                newCharacterData.DataPath = JsonFilePath.Replace("\\", "/");
+                //创建文件
+                CharacterData.SaveToJson(newCharacterData, JsonFilePath);
+                //新增占位文件
+                GameEditor.GeneratePlaceHolderTextFile(newFolderPath);
+                //创建配备文件夹并生成占位符
+                Directory.CreateDirectory(Path.Combine(newFolderPath, "SubData"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "SubData"));
+                Directory.CreateDirectory(Path.Combine(newFolderPath, "Avatars"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Avatars"));
+                Directory.CreateDirectory(Path.Combine(newFolderPath, "Portraits"));
+                GameEditor.GeneratePlaceHolderTextFile(Path.Combine(newFolderPath, "Portraits"));
 
-                    //随后处理树状图与缓存
-                    //新建物体容器
-                    CharacterSystemDataContainer newDataContainer = new(
-                        newCharacterData,
-                        characterItemDataContainer
-                        );
-                    //生成树状图物体
-                    TreeViewItemData<CharacterSystemDataContainer> newItem = new(
-                        newDataContainer.ID,
-                        newDataContainer,
-                        null
-                        );
-                    //添加到总缓存中
-                    ItemDicCache[newDataContainer.ID] = newItem;
-                    //添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
-                    CharacterVersionDicCache[characterItemDataContainer.ID].Add(newItem);
-                    //刷新
-                    TRefresh();
+                //随后处理树状图与缓存
+                //新建物体容器
+                DataContainer newDataContainer = new(
+                    newCharacterData,
+                    charaItemDataContainer
+                    );
+                //生成树状图物体
+                TreeViewItemData<DataContainer> newItem = new(
+                    newDataContainer.ID,
+                    newDataContainer,
+                    null
+                    );
+                //添加到总缓存中
+                ItemDicCache[newDataContainer.ID] = newItem;
+                //添加到其父级的子级中，由于该数据不可直接更改，而缓存中保存的是同一个引用，因此从缓存中进行更改
+                CharaVersionDicCache[charaItemDataContainer.ID].Add(newItem);
+                //刷新
+                TRefresh();
 
-                    //将角色数据标记为脏
-                    GameEditor.IsCharacterDataDirty = true;
+                //将角色数据标记为脏
+                GameEditor.IsCharacterDataDirty = true;
 
-                    //保存数据
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-                }
-            }),
-            "Create New Character Version",
-            "Please Input New Character Version ID Part",
-            "New Character Version ID Part",
-            "New Version ID Part",
-            EditorWindow.focusedWindow
-            );
+                //保存数据
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
         #endregion
     }

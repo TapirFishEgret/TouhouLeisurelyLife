@@ -1,5 +1,6 @@
 ﻿using System;
 using THLL.BaseSystem;
+using THLL.UISystem;
 using UnityEngine;
 
 namespace THLL.TimeSystem
@@ -123,7 +124,7 @@ namespace THLL.TimeSystem
             get
             {
                 //检测是否启用
-                if (UseDayOfWeekName)
+                if (GameUI.UseDayOfWeekName)
                 {
                     return DayOfWeekNameOld[DayOfWeek - 1];
                 }
@@ -152,17 +153,6 @@ namespace THLL.TimeSystem
         private static readonly string[] DayOfWeekNameOld = { "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日" };
         #endregion
 
-        #region 时间相关设置
-        //是否显示秒数
-        public static bool ShowSeconds { get; set; } = true;
-        //是否启用幻想乡纪年法
-        public static bool UseGensokyoYear { get; set; } = false;
-        //是否启用特殊月份名称
-        public static bool UseMonthName { get; set; } = true;
-        //是否启用特殊星期名称
-        public static bool UseDayOfWeekName { get; set; } = true;
-        #endregion
-
         #region 时间事件
         //秒
         public static event Action<int> SecondChangedEvent;
@@ -173,13 +163,13 @@ namespace THLL.TimeSystem
         //天
         public static event Action<int> DayChangedEvent;
         //星期
-        public static event Action WeekChangedEvent;
+        public static event Action<int> WeekChangedEvent;
         //月份
         public static event Action<int> MonthChangedEvent;
         //年份
         public static event Action<int> YearChangedEvent;
         //循环
-        public static event Action CycleChangedEvent;
+        public static event Action<int> CycleChangedEvent;
         #endregion
 
         #region 时间自然流逝方法
@@ -199,7 +189,7 @@ namespace THLL.TimeSystem
                 //重置毫秒数
                 Millisecond -= seconds * TimePerSecond;
                 //触发事件
-                SecondChangedEvent?.Invoke(Second);
+                SecondChangedEvent?.Invoke(seconds);
             }
         }
         //增加秒数
@@ -218,7 +208,7 @@ namespace THLL.TimeSystem
                 //重置秒数
                 Second -= minutes * SecondsPerMinute;
                 //触发事件
-                MinuteChangedEvent?.Invoke(Minute);
+                MinuteChangedEvent?.Invoke(minutes);
             }
         }
         //增加分钟
@@ -237,7 +227,7 @@ namespace THLL.TimeSystem
                 //重置分钟
                 Minute -= hours * MinutesPerHour;
                 //触发事件
-                HourChangedEvent?.Invoke(Hour);
+                HourChangedEvent?.Invoke(hours);
             }
         }
         //增加小时
@@ -256,7 +246,7 @@ namespace THLL.TimeSystem
                 //重置小时
                 Hour -= hours * HoursPerDay;
                 //触发事件
-                DayChangedEvent?.Invoke(Day);
+                DayChangedEvent?.Invoke(days);
             }
         }
         //增加天数
@@ -274,7 +264,7 @@ namespace THLL.TimeSystem
                 //重置星期
                 DayOfWeek -= weeks * DaysPerWeek;
                 //触发事件
-                WeekChangedEvent?.Invoke();
+                WeekChangedEvent?.Invoke(weeks);
             }
 
             //检测月份
@@ -287,7 +277,7 @@ namespace THLL.TimeSystem
                 //重置日期
                 Day -= months * DaysPerMonth;
                 //触发事件
-                MonthChangedEvent?.Invoke(Month);
+                MonthChangedEvent?.Invoke(months);
             }
         }
         //增加月份
@@ -306,7 +296,7 @@ namespace THLL.TimeSystem
                 //重置月份
                 Month -= years * MonthsPerYear;
                 //触发事件
-                YearChangedEvent?.Invoke(Year);
+                YearChangedEvent?.Invoke(years);
             }
         }
         //增加年份
@@ -318,8 +308,10 @@ namespace THLL.TimeSystem
             //检测循环
             if (Year > YearsPerCycle)
             {
+                //计算循环
+                int cycles = Mathf.FloorToInt(Year / YearsPerCycle);
                 //触发事件
-                CycleChangedEvent?.Invoke();
+                CycleChangedEvent?.Invoke(cycles);
             }
         }
         #endregion

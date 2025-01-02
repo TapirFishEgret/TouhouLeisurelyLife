@@ -116,7 +116,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //对数据进行保存
             foreach (var item in DataTreeView.ItemDicCache.Values)
             {
-                if (item.data.Type == CharacterSystemDataContainer.ItemDataType.Version)
+                if (item.data.Type == DataContainer.ItemDataType.Version)
                 {
                     CharacterData.SaveToJson(item.data.Data, item.data.Data.DataPath.Replace("\\", "/"));
                 }

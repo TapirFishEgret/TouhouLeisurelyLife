@@ -89,16 +89,16 @@ namespace THLL.UISystem.Settings
             //是否启用长年
             LongYearToggle.RegisterValueChangedCallback(evt => GameTime.MonthsPerYear = evt.newValue ? 12 : 0);
             //是否显示秒数
-            ShowSecondsToggle.RegisterValueChangedCallback(evt => GameTime.ShowSeconds = evt.newValue);
+            ShowSecondsToggle.RegisterValueChangedCallback(evt => GameUI.ShowSeconds = evt.newValue);
             //是否使用幻想乡年
-            UseGensokyoYearToggle.RegisterValueChangedCallback(evt => GameTime.UseGensokyoYear = evt.newValue);
+            UseGensokyoYearToggle.RegisterValueChangedCallback(evt => GameUI.UseGensokyoYear = evt.newValue);
             //是否使用月份名称
-            UseMonthNameToggle.RegisterValueChangedCallback(evt => GameTime.UseMonthName = evt.newValue);
+            UseMonthNameToggle.RegisterValueChangedCallback(evt => GameUI.UseMonthName = evt.newValue);
             //是否使用星期名称
-            UseDayOfWeekNameToggle.RegisterValueChangedCallback(evt => GameTime.UseDayOfWeekName = evt.newValue);
+            UseDayOfWeekNameToggle.RegisterValueChangedCallback(evt => GameUI.UseDayOfWeekName = evt.newValue);
 
             //UI相关
-            ShowCharacterPanelToggle.RegisterValueChangedCallback(evt => GameUI.BasicPlayInterface.CharacterPanel.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None);
+            ShowCharacterPanelToggle.RegisterValueChangedCallback(evt => GameUI.ShowCharacter = evt.newValue);
 
             //给选项加上悬停时显示选项描述的功能
             foreach (var kvp in OptionDescriptionDic)

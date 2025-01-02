@@ -12,7 +12,7 @@
                         <engine:Button text="Data Editor Panel" />
                         <engine:Button text="Assets Editor Panel " />
                         <engine:Button text="Map Editor Panel" />
-                        <engine:Button text="CSAS Editor  Panel" />
+                        <engine:Button text="PIS Editor  Panel" />
                     </engine:ToggleButtonGroup>
                 </engine:VisualElement>
                 <engine:VisualElement name="EditorContainer" style="flex-grow: 1; flex-basis: 95%;" />

@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Gensokyo_HakureiShrine_Shrine",
+  "IDPart": "Shrine",
+  "Name": "神社",
+  "Description": "",
+  "SortOrder": 1,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Gensokyo/ChildScenes/HakureiShrine/ChildScenes/Shrine/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject_Gensokyo_HakureiShrine"
+}

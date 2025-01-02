@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Higan",
+  "IDPart": "Higan",
+  "Name": "彼岸",
+  "Description": "彼岸为三途河对岸，与此岸相对。\n自幻想乡出发，经过中有之道来到三途河岸边的赛之河原，渡过河后即可到达彼岸。生者无法去往彼岸，亡者会在这里等待裁决，不能吃东西或睡觉，只能一直等待。\n彼岸本身是一片无边无尽的花原，没有日夜与季节的变化，长年被温暖柔和的光芒包围。\n是非曲直厅也设立在彼岸，这是一个对亡者进行裁决和管理的组织，主要成员包括鬼、阎魔、死神。在彼岸存在着通向其他异世界的口岸，譬如地狱、鬼之国或畜生界。庭渡久侘歌是口岸的守护神，负责区分鬼与人类，将他们分配到属于各自的地方。",
+  "SortOrder": 1,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Higan/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject"
+}

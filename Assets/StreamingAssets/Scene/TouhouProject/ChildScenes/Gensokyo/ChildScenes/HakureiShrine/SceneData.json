@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Gensokyo_HakureiShrine",
+  "IDPart": "HakureiShrine",
+  "Name": "博丽神社",
+  "Description": "博丽神社位于幻想乡的东侧，是幻想乡的标志性场景。境内的树林承担了划分幻想乡边界的作用，因灵梦的行为以及光之三妖精的入住，导致幻想乡的实际范围向着外面世界拓展了一部分。现在博丽神社境内丛林深处的三月精居住的大橡树是实际上的幻想乡边境。\r\n包括了妖怪兽道、神社本身、三妖精之家、梦幻遗迹、神社后山等场景。",
+  "SortOrder": 0,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Gensokyo/ChildScenes/HakureiShrine/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject_Gensokyo"
+}

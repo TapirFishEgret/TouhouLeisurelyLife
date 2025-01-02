@@ -16,16 +16,16 @@ namespace THLL.EditorSystem.SceneEditor
         public MainWindow MainWindow { get; private set; }
 
         //根数据缓存
-        public List<TreeViewItemData<SceneSystemDataContainer>> RootItemCache { get; private set; } = new();
+        public List<TreeViewItemData<DataContainer>> RootItemCache { get; private set; } = new();
         //ID-地点查询字典缓存
-        public Dictionary<int, TreeViewItemData<SceneSystemDataContainer>> ItemDicCache { get; private set; } = new();
+        public Dictionary<int, TreeViewItemData<DataContainer>> ItemDicCache { get; private set; } = new();
         //ID-子级查询字典缓存
-        public Dictionary<int, List<TreeViewItemData<SceneSystemDataContainer>>> ChildrenDicCache { get; private set; } = new();
+        public Dictionary<int, List<TreeViewItemData<DataContainer>>> ChildrenDicCache { get; private set; } = new();
         //展开状态缓存
         public HashSet<int> ExpandedStateCache { get; private set; } = new();
 
         //当前活跃选中项
-        public SceneSystemDataContainer ActiveSelection { get; private set; }
+        public DataContainer ActiveSelection { get; private set; }
         #endregion
 
         #region 树形图的初始化及数据更新
@@ -61,7 +61,7 @@ namespace THLL.EditorSystem.SceneEditor
             //绑定的话绑定ID节选
             bindItem = (element, i) =>
             {
-                SceneSystemDataContainer container = GetItemDataForIndex<SceneSystemDataContainer>(i);
+                DataContainer container = GetItemDataForIndex<DataContainer>(i);
                 Label label = element as Label;
                 label.text = container.Data.IDPart;
             };
@@ -76,7 +76,7 @@ namespace THLL.EditorSystem.SceneEditor
             selectionChanged += async (selections) =>
             {
                 //获取活跃数据
-                SceneSystemDataContainer activeSelection = selections.Cast<SceneSystemDataContainer>().FirstOrDefault();
+                DataContainer activeSelection = selections.Cast<DataContainer>().FirstOrDefault();
                 //检测活跃数据
                 if (activeSelection != null)
                 {
@@ -89,7 +89,7 @@ namespace THLL.EditorSystem.SceneEditor
                     //刷新地图编辑面板
                     MainWindow.MapEditorPanel.MRefresh();
                     //刷新子场景相邻状态编辑面板
-                    MainWindow.ChildScenesAdjacentStatesEditorPanel.CSASRefresh();
+                    MainWindow.ChildScenesAdjacentStatesEditorPanel.PISRefresh();
                 }
             };
 
@@ -141,18 +141,18 @@ namespace THLL.EditorSystem.SceneEditor
                         //设定读取地址
                         sceneData.DataPath = filePath.Replace("\\", "/");
                         //生成物体容器
-                        SceneSystemDataContainer container = new(sceneData, null);
+                        DataContainer container = new(sceneData, null);
                         //生成其子级
-                        List<TreeViewItemData<SceneSystemDataContainer>> children = new();
+                        List<TreeViewItemData<DataContainer>> children = new();
                         //生成树形图物体
-                        TreeViewItemData<SceneSystemDataContainer> item = new(container.ID, container, children);
+                        TreeViewItemData<DataContainer> item = new(container.ID, container, children);
                         //添加到缓存中
                         ItemDicCache[container.ID] = item;
                         ChildrenDicCache[container.ID] = children;
                     }
                 }
                 //遍历所有数据
-                foreach (TreeViewItemData<SceneSystemDataContainer> item in ItemDicCache.Values)
+                foreach (TreeViewItemData<DataContainer> item in ItemDicCache.Values)
                 {
                     //判断该地点数据是否有父级
                     if (string.IsNullOrEmpty(item.data.Data.ParentSceneID))
@@ -163,7 +163,7 @@ namespace THLL.EditorSystem.SceneEditor
                     else
                     {
                         //若有，则获取其父级树形图数据
-                        TreeViewItemData<SceneSystemDataContainer> parentItem = ItemDicCache[item.data.Data.ParentSceneID.GetHashCode()];
+                        TreeViewItemData<DataContainer> parentItem = ItemDicCache[item.data.Data.ParentSceneID.GetHashCode()];
                         //向父级树形图数据的子级列表中添加
                         ChildrenDicCache[parentItem.data.ID].Add(item);
                         //并设置其父级
@@ -233,7 +233,7 @@ namespace THLL.EditorSystem.SceneEditor
                 {
                     //当按下Ctrl+左键时
                     //获取新的选中项数据
-                    SceneSystemDataContainer newSelection = selectedItems.Cast<SceneSystemDataContainer>().FirstOrDefault();
+                    DataContainer newSelection = selectedItems.Cast<DataContainer>().FirstOrDefault();
                     //比较
                     if (newSelection == ActiveSelection)
                     {
@@ -259,7 +259,7 @@ namespace THLL.EditorSystem.SceneEditor
                 //声明新数据
                 SceneData newSceneData;
                 //与数据容器
-                SceneSystemDataContainer newContainer;
+                DataContainer newContainer;
 
                 //创建路径
                 string newDirectory = Path.Combine(Application.streamingAssetsPath, "Scene");
@@ -287,13 +287,13 @@ namespace THLL.EditorSystem.SceneEditor
                         Name = newIDPart,
                         //描述为空
                         Description = string.Empty,
-                        //排序为父级的序号加子级数 + 1(以序号的形式)
-                        SortOrder = int.Parse(ActiveSelection.Data.SortOrder.ToString("D2") + (ChildrenDicCache[ActiveSelection.ID].Count + 1).ToString("D2")),
+                        //排序为父级的子级数
+                        SortOrder = ChildrenDicCache[ActiveSelection.ID].Count,
                         //父级ID为选中项
                         ParentSceneID = ActiveSelection.Data.ID
                     };
                     //并生成数据容器
-                    newContainer = new SceneSystemDataContainer(newSceneData, ActiveSelection);
+                    newContainer = new DataContainer(newSceneData, ActiveSelection);
                 }
                 else
                 {
@@ -316,13 +316,13 @@ namespace THLL.EditorSystem.SceneEditor
                         Name = newIDPart,
                         //描述为空
                         Description = string.Empty,
-                        //排序为根存储的元素数量 + 1
-                        SortOrder = RootItemCache.Count + 1,
+                        //排序为根存储的元素数量
+                        SortOrder = RootItemCache.Count,
                         //父级ID为空
                         ParentSceneID = string.Empty
                     };
                     //并生成数据容器
-                    newContainer = new SceneSystemDataContainer(newSceneData, null);
+                    newContainer = new DataContainer(newSceneData, null);
                 }
                 //随后扩展路径
                 newDirectory = Path.Combine(newDirectory, newIDPart);
@@ -344,9 +344,9 @@ namespace THLL.EditorSystem.SceneEditor
 
                 //处理缓存数据
                 //创建新实例对应的树形图数据的子级
-                List<TreeViewItemData<SceneSystemDataContainer>> newChildren = new();
+                List<TreeViewItemData<DataContainer>> newChildren = new();
                 //创建新实例对应的树形图数据
-                TreeViewItemData<SceneSystemDataContainer> newItem = new(newContainer.ID, newContainer, newChildren);
+                TreeViewItemData<DataContainer> newItem = new(newContainer.ID, newContainer, newChildren);
                 //判断选中项是否为空
                 if (ActiveSelection != null)
                 {
@@ -380,10 +380,10 @@ namespace THLL.EditorSystem.SceneEditor
                 //并刷新一下Assets
                 AssetDatabase.Refresh();
             }),
-            "Create New Scene",
-            "Please Input New Scene ID Part",
-            "New Scene ID Part",
-            "New ID Part",
+            "创建新场景",
+            "请输入新场景ID分段",
+            "新场景ID分段",
+            "ID分段",
             EditorWindow.focusedWindow
             );
         }
@@ -427,10 +427,9 @@ namespace THLL.EditorSystem.SceneEditor
                 //重构后，检查下有无父级
                 if (!string.IsNullOrEmpty(ActiveSelection.Data.ParentSceneID))
                 {
-                    //若有父级，则从对其父级的子场景相邻状态列表进行修改以删除冗余数据
+                    //若有父级，则从其父级的路径列表中移除包含了该ID的项
                     ItemDicCache[ActiveSelection.Data.ParentSceneID.GetHashCode()]
-                        .data.Data.ChildScenesAdjacentStates
-                        .RemoveWhere(tuple => tuple.Item1 == ActiveSelection.Data.ID || tuple.Item2 == ActiveSelection.Data.ID);
+                        .data.Data.MapData.PathsInScene.RemoveAll(path => path.SceneAID == ActiveSelection.Data.ID || path.SceneBID == ActiveSelection.Data.ID);
                 }
 
                 //删除结束后，将活跃数据设为空

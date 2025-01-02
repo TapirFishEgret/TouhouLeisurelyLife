@@ -34,7 +34,7 @@ namespace THLL.CharacterSystem
         {
             get
             {
-                return ColorUtility.TryParseHtmlString("#" + ColorString, out Color color)? color : Color.white;
+                return ColorUtility.TryParseHtmlString("#" + ColorString, out Color color) ? color : Color.white;
             }
             set
             {
@@ -82,6 +82,15 @@ namespace THLL.CharacterSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载过
+                    if (AvatarsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载过，触发事件
+                        onAvatarLoaded?.Invoke(fileName, AvatarsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
+
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
                     //等待
@@ -126,6 +135,14 @@ namespace THLL.CharacterSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载过
+                    if (AvatarsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载过，触发事件
+                        onAvatarLoaded?.Invoke(fileName, AvatarsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
 
@@ -172,6 +189,14 @@ namespace THLL.CharacterSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载过
+                    if (PortraitsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载过，触发事件
+                        onPortraitLoaded?.Invoke(fileName, PortraitsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
                     //等待
@@ -216,6 +241,14 @@ namespace THLL.CharacterSystem
                 {
                     //若是，获取文件名
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    //检测是否已经加载过
+                    if (PortraitsDict.ContainsKey(fileName))
+                    {
+                        //若已经加载过，触发事件
+                        onPortraitLoaded?.Invoke(fileName, PortraitsDict[fileName]);
+                        //跳过
+                        continue;
+                    }
                     //然后，启动请求加载图片
                     UnityWebRequest request = UnityWebRequestTexture.GetTexture(filePath);
 

@@ -7,7 +7,8 @@ namespace THLL.UISystem
     {
         #region 构造及初始化及相关方法
         //构造函数
-        public History(BaseGameInterface @interface,
+        public History
+            (BaseGameInterface @interface,
             VisualTreeAsset visualTreeAsset,
             VisualElement parentPanel)
             : base(@interface, visualTreeAsset, parentPanel) { }
@@ -15,7 +16,7 @@ namespace THLL.UISystem
 
         #region 显示及隐藏方法
         //显示
-        public override void ShowPanel()
+        protected override void ShowPanel()
         {
             //基础的显示
             base.ShowPanel();
@@ -27,7 +28,7 @@ namespace THLL.UISystem
             }
         }
         //隐藏
-        public override void HidePanel()
+        protected override void HidePanel()
         {
             //基础的隐藏
             base.HidePanel();

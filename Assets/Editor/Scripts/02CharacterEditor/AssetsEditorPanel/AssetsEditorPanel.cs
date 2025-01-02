@@ -86,7 +86,7 @@ namespace THLL.EditorSystem.CharacterEditor
             PortraitContainerScrollView = AssetsEditorRootPanel.Q<ScrollView>("PortraitContainerScrollView");
 
             //注册事件
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            EditorApplication.update += OnGeometryChanged;
             //添加头像按钮点击事件
             AddAvatarButton.clicked += AddAvatar;
             //添加立绘按钮点击事件
@@ -109,7 +109,7 @@ namespace THLL.EditorSystem.CharacterEditor
             NamePortraitContainerDict.Clear();
 
             //检测是否有数据被选择
-            if (MainWindow.DataTreeView.ActiveSelection != null && MainWindow.DataTreeView.ActiveSelection.Type == CharacterSystemDataContainer.ItemDataType.Version)
+            if (MainWindow.DataTreeView.ActiveSelection != null && MainWindow.DataTreeView.ActiveSelection.Type == DataContainer.ItemDataType.Version)
             {
                 //若有
                 //设置全名
@@ -121,7 +121,7 @@ namespace THLL.EditorSystem.CharacterEditor
             }
         }
         //几何图形改变时手动容器大小
-        private void OnGeometryChanged(GeometryChangedEvent evt)
+        private void OnGeometryChanged()
         {
             //头像保持长宽一致
             NameAvatarContainerDict.Values.ToList().ForEach(avatarContainer =>
@@ -169,7 +169,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //判断是否有数据被选择
             if (ShowedCharacter == null)
             {
-                EditorUtility.DisplayDialog("Error", "Please select a character first!", "OK");
+                EditorUtility.DisplayDialog("错误", "请首先选择一个角色!", "OK");
                 return;
             }
 
@@ -186,21 +186,21 @@ namespace THLL.EditorSystem.CharacterEditor
             {
                 //显示输入窗口
                 avatarName = await TextInputWindow.ShowWindowWithResult(
-                    "Add New Avatar",
-                    "Please Input New Avatar Name",
-                    "New Avatar Name",
-                    "New Name",
+                    "添加新角色头像",
+                    "请输入新角色头像名称",
+                    "新角色头像名称",
+                    "名称",
                     EditorWindow.focusedWindow);
                 //判断输入结果是否为空或已存在
                 if (string.IsNullOrEmpty(avatarName) || NameAvatarContainerDict.ContainsKey(avatarName))
                 {
-                    EditorUtility.DisplayDialog("Error", "Avatar Name is already exists or is empty!", "OK");
+                    EditorUtility.DisplayDialog("错误", "头像名称已存在或为空!", "OK");
                     return;
                 }
             }
 
             //确认头像名称后，选择目标文件
-            string sourceFilePath = EditorUtility.OpenFilePanel("Select Avatar Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+            string sourceFilePath = EditorUtility.OpenFilePanel("请选择头像图片", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
             //判断选择情况
             if (!string.IsNullOrEmpty(sourceFilePath))
             {
@@ -278,7 +278,7 @@ namespace THLL.EditorSystem.CharacterEditor
             //判断是否有数据被选择
             if (ShowedCharacter == null)
             {
-                EditorUtility.DisplayDialog("Error", "Please select a character first!", "OK");
+                EditorUtility.DisplayDialog("错误", "请首先选择一个角色!", "OK");
                 return;
             }
 
@@ -295,22 +295,22 @@ namespace THLL.EditorSystem.CharacterEditor
             {
                 //显示输入窗口
                 portraitName = await TextInputWindow.ShowWindowWithResult(
-                    "Add New Portrait",
-                    "Please Input New Portrait Name",
-                    "New Portrait Name",
-                    "New Name",
+                    "添加新角色立绘",
+                    "请输入新角色立绘名称",
+                    "新角色立绘名称",
+                    "名称",
                     EditorWindow.focusedWindow
                     );
                 //判断输入结果是否为空或已存在
                 if (string.IsNullOrEmpty(portraitName) || NamePortraitContainerDict.ContainsKey(portraitName))
                 {
-                    EditorUtility.DisplayDialog("Error", "Portrait Name is already exists or is empty!", "OK");
+                    EditorUtility.DisplayDialog("错误", "立绘名称已存在或为空!", "OK");
                     return;
                 }
             }
 
             //确认立绘名称后，选择目标文件
-            string sourceFilePath = EditorUtility.OpenFilePanel("Select Portrait Image", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
+            string sourceFilePath = EditorUtility.OpenFilePanel("请选择立绘图片", "", "png,jpg,jpeg,bmp,webp,tiff,tif");
             //判断选择情况
             if (!string.IsNullOrEmpty(sourceFilePath))
             {

@@ -9,7 +9,7 @@ MonoImporter:
   - _dataEditorVisualTree: {fileID: 9197481963319205126, guid: 97b0ae019a817e741b2a7fa3d69127e0, type: 3}
   - _assetsEditorVisualTree: {fileID: 9197481963319205126, guid: 1d4164e14ffe9e64d98c7ec2a89931d4, type: 3}
   - _mapEditorVisualTree: {fileID: 9197481963319205126, guid: 8ab084fea8ff4ca4db297fa371e10c99, type: 3}
-  - _childScenesAdjacentStatesEditorVisualTree: {fileID: 9197481963319205126, guid: 7a1308c4bf92af246acb8cae800d688d, type: 3}
+  - _pathsInSceneEditorVisualTree: {fileID: 9197481963319205126, guid: 7a1308c4bf92af246acb8cae800d688d, type: 3}
   - BackgroundAssetContainerVisualTree: {fileID: 9197481963319205126, guid: 981fcebd25762ff4086dd8d0256471aa, type: 3}
   - _persistentDataFile: {fileID: 4900000, guid: 1d6194d49ad6b1c4287d74e9e351276e, type: 3}
   - _defaultLocationBackground: {fileID: 21300000, guid: 59c27a42b7d74214f9ebdb405e8665d4, type: 3}

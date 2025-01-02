@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Gensokyo_HakureiShrine_RuinOfFantasy",
+  "IDPart": "RuinOfFantasy",
+  "Name": "梦幻遗迹",
+  "Description": "冈崎梦美的“可能性空间移动船”在博丽神社附近降落后形成的景观。\n冈崎梦美宣称进入这里就能获得幸福，实际上这也不过是为了证明魔法的存在诱骗魔法使们前来的幌子。\n现在是梦时空时期角色们居住的场所。",
+  "SortOrder": 3,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Gensokyo/ChildScenes/HakureiShrine/ChildScenes/RuinOfFantasy/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject_Gensokyo_HakureiShrine"
+}

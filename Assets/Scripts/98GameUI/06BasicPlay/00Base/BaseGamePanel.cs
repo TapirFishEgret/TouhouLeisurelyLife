@@ -19,6 +19,8 @@ namespace THLL.UISystem
         public VisualElement ContainerPanel { get; private set; }
         //父级面板
         public VisualElement ParentPanel { get; private set; }
+        //标题
+        public Label TitleLabel { get; private set; }
         #endregion
 
         #region 构建及初始化与相关方法
@@ -53,6 +55,8 @@ namespace THLL.UISystem
             RootPanel = this.Q<VisualElement>("RootPanel");
             //找寻一下容器面板
             ContainerPanel = this.Q<VisualElement>("ContainerPanel");
+            //找寻一下标题
+            TitleLabel = this.Q<Label>("Title");
         }
         //注册方法
         protected virtual void RegisterMethods()
@@ -63,8 +67,23 @@ namespace THLL.UISystem
         #endregion
 
         #region 显示及关闭面板
+        //切换面板显示
+        public virtual void SwitchPanel()
+        {
+            //首先判断是否是自己
+            if (CurrentPanel == this)
+            {
+                //如果是，隐藏
+                HidePanel();
+            }
+            else
+            {
+                //如果不是，显示
+                ShowPanel();
+            }
+        }
         //显示面板
-        public virtual void ShowPanel()
+        protected virtual void ShowPanel()
         {
             //首先判断当前显示面板是否为自己
             if (CurrentPanel == this)
@@ -83,8 +102,16 @@ namespace THLL.UISystem
             style.opacity = 1f;
         }
         //关闭面板
-        public virtual void HidePanel()
+        protected virtual void HidePanel()
         {
+            //首先判断当前显示面板是否为自己
+            if (CurrentPanel != this)
+            {
+                //如果不是，则直接返回
+                return;
+            }
+            //设置当前显示的面板为null
+            CurrentPanel = null;
             //调整不透明度为0
             style.opacity = 0f;
             //然后，让自己隐藏

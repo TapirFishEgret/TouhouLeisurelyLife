@@ -1,0 +1,12 @@
+{
+  "ID": "Scene_TouhouProject_Gensokyo_HakureiShrine_YoukaiTrail",
+  "IDPart": "YoukaiTrail",
+  "Name": "妖怪兽道",
+  "Description": "连接博丽神社与人类村落的道路。道路两边是茂密的树林，许多妖怪在这附近活跃着。\n人类在神社和村子都受到保障，不会被妖怪袭击。但是在两者之间的兽道，无法保证行人的安全，这也导致这条道路上人烟稀少。",
+  "SortOrder": 0,
+  "SubDataFiles": [
+    "MapData"
+  ],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Scene/TouhouProject/ChildScenes/Gensokyo/ChildScenes/HakureiShrine/ChildScenes/YoukaiTrail/SceneData.json",
+  "ParentSceneID": "Scene_TouhouProject_Gensokyo_HakureiShrine"
+}

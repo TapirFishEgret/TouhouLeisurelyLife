@@ -40,14 +40,14 @@ namespace THLL.BaseSystem
 
         #region 游戏内周期函数
         //时间相关
-        protected virtual void OnSecondChanged(int currentSecond) { }
-        protected virtual void OnMinuteChanged(int currentMinute) { }
-        protected virtual void OnHourChanged(int currentHour) { }
-        protected virtual void OnDayChanged(int currentDay) { }
-        protected virtual void OnWeekChanged() { }
-        protected virtual void OnMonthChanged(int currentMonth) { }
-        protected virtual void OnYearChanged(int currentYear) { }
-        protected virtual void OnCycleChanged() { }
+        protected virtual void OnSecondChanged(int count) { }
+        protected virtual void OnMinuteChanged(int count) { }
+        protected virtual void OnHourChanged(int count) { }
+        protected virtual void OnDayChanged(int count) { }
+        protected virtual void OnWeekChanged(int count) { }
+        protected virtual void OnMonthChanged(int count) { }
+        protected virtual void OnYearChanged(int count) { }
+        protected virtual void OnCycleChanged(int count) { }
         #endregion
     }
 }

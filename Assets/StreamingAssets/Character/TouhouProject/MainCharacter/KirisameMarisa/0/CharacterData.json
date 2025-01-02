@@ -1,0 +1,14 @@
+{
+  "ID": "Character_TouhouProject_MainCharacter_KirisameMarisa",
+  "IDPart": "0",
+  "Name": "雾雨魔理沙",
+  "Description": "东方Project系列官方作品的第二主角，也是东方系列除博丽灵梦外的另一代表角色。初登场作品为东方封魔录，担任封魔录的四面Boss；新作初登场作品为东方红魔乡，担任红魔乡的自机。\n她的种族是人类，职业是魔法使。\n虽然看上去很别扭，但她容易亲近、有人情味，和她一起会很有意思，让人心情愉快，并且性格争强好胜不服输。虽然她稍有些扭曲、乖僻、爱戏弄人和心术不良，本性却很正直。她虽然头脑很灵活，态度看起来也很轻浮，但其实是个爱操心、认真的努力家类型的人。\n从东方梦时空开始，魔理沙一直作为大部分官方游戏可使用的自机角色登场，在所有官方出版物中也都是主角或常驻角色。她贯穿了东方系列的几乎整个故事线，是东方剧情中最重要的角色之一。",
+  "SortOrder": 2,
+  "SubDataFiles": [],
+  "DataPath": "C:/Users/TapirFishEgret/Documents/UnityProjects/TouhouLeisurelyLife/Assets/StreamingAssets/Character/TouhouProject/MainCharacter/KirisameMarisa/0/CharacterData.json",
+  "Series": "TouhouProject",
+  "Group": "MainCharacter",
+  "Chara": "KirisameMarisa",
+  "Version": "0",
+  "ColorString": "FFFFFFFF"
+}

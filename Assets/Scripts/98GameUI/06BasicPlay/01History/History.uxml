@@ -1,10 +1,14 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/98GameUI/UnityRuntimeStyles.uss?fileID=7433441132597879392&amp;guid=f2457bc296ee6f34fbbe238fcb556c27&amp;type=3#UnityRuntimeStyles" />
     <engine:VisualElement name="RootPanel" style="flex-grow: 1; border-left-color: rgba(255, 255, 255, 0.71); border-right-color: rgba(255, 255, 255, 0.71); border-top-color: rgba(255, 255, 255, 0.71); border-bottom-color: rgba(255, 255, 255, 0.71); background-color: rgba(0, 0, 0, 0.78); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;">
-        <engine:VisualElement name="TitlePanel" style="flex-grow: 1; flex-basis: 8%; flex-direction: row; justify-content: space-between; align-items: center;">
-            <engine:Label text="Game History" name="Title" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px; -unity-text-align: middle-left; font-size: 32px;" />
-            <engine:Button text="Close" name="CloseButton" class="menu-button" style="font-size: 32px;" />
+        <engine:VisualElement name="TitlePanel" style="flex-grow: 1; flex-basis: 10%; flex-direction: row; justify-content: flex-start; align-items: stretch;">
+            <engine:VisualElement style="flex-grow: 1; flex-basis: 80%;">
+                <engine:Label text="Game History" name="Title" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px; -unity-text-align: middle-center; font-size: 42px;" />
+            </engine:VisualElement>
+            <engine:VisualElement style="flex-grow: 1; flex-basis: 20%;">
+                <engine:Button text="Close" name="CloseButton" class="menu-button" style="font-size: 32px; margin-top: 4px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;" />
+            </engine:VisualElement>
         </engine:VisualElement>
-        <engine:ScrollView name="ContainerPanel" class="history-label" style="flex-grow: 1; flex-direction: column; background-color: rgba(0, 0, 0, 0); flex-basis: 92%;" />
+        <engine:ScrollView name="ContainerPanel" class="history-label" style="flex-grow: 1; flex-direction: column; background-color: rgba(0, 0, 0, 0); flex-basis: 90%;" />
     </engine:VisualElement>
 </engine:UXML>
